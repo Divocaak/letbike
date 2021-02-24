@@ -1,10 +1,11 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
+import 'package:letbike/part.dart';
 
 void main() {
   runApp(MyApp());
 }
+
 double volume = 0;
 
 class MyApp extends StatelessWidget {
@@ -23,7 +24,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage>
-    with SingleTickerProviderStateMixin{
+    with SingleTickerProviderStateMixin {
   AnimationController animationController;
   Animation degOneTranslationAnimation,
       degTwoTranslationAnimation,
@@ -111,106 +112,101 @@ class _MyHomePageState extends State<MyHomePage>
 
           IgnorePointer(
             ignoring: true,
-              child: Container(
-              color: Colors.black.withOpacity(volume),),
-          ),
-            
-            Stack(
-              children: <Widget>[
-                Positioned(
-                    right: 30,
-                    bottom: 30,
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: <Widget>[
-                        Transform.translate(
-                          offset: Offset.fromDirection(
-                              getRadiansFromDegree(270),
-                              degOneTranslationAnimation.value * 100),
-                          child: Transform(
-                            transform: Matrix4.rotationZ(
-                                getRadiansFromDegree(rotationAnimation.value))
-                              ..scale(degOneTranslationAnimation.value),
-                            alignment: Alignment.center,
-                            child: _CircularButton(
-                              color: Colors.green,
-                              width: 50,
-                              heigt: 50,
-                              icon: Icon(
-                                Icons.add,
-                                color: Colors.white,
-                              ),
-                              onClick: () {},
-                            ),
-                          ),
-                        ),
-                        Transform.translate(
-                          offset: Offset.fromDirection(
-                              getRadiansFromDegree(225),
-                              degTwoTranslationAnimation.value * 100),
-                          child: Transform(
-                            transform: Matrix4.rotationZ(
-                                getRadiansFromDegree(rotationAnimation.value))
-                              ..scale(degTwoTranslationAnimation.value),
-                            alignment: Alignment.center,
-                            child: _CircularButton(
-                              color: Colors.green,
-                              width: 50,
-                              heigt: 50,
-                              icon: Icon(
-                                Icons.home,
-                                color: Colors.white,
-                              ),
-                              onClick: () {},
-                            ),
-                          ),
-                        ),
-                        Transform.translate(
-                          offset: Offset.fromDirection(
-                              getRadiansFromDegree(180),
-                              degThreeTranslationAnimation.value * 100),
-                          child: Transform(
-                            transform: Matrix4.rotationZ(
-                                getRadiansFromDegree(rotationAnimation.value))
-                              ..scale(degThreeTranslationAnimation.value),
-                            alignment: Alignment.center,
-                            child: _CircularButton(
-                              color: Colors.green,
-                              width: 50,
-                              heigt: 50,
-                              icon: Icon(
-                                Icons.person,
-                                color: Colors.white,
-                              ),
-                              onClick: () {},
-                            ),
-                          ),
-                        ),
-                        _CircularButton(
-                          color: Colors.greenAccent,
-                          width: 60,
-                          heigt: 60,
-                          icon: Icon(
-                            Icons.menu,
-                            color: Colors.black,
-                          ),
-                          onClick: () {
-                            if (animationController.isCompleted) {
-                              animationController.reverse();
-                              volume = 0;
-                            } else {
-                              animationController.forward();
-                              volume = 0.5;
-                              
-                            }
-                          },
-                        ),
-                      
-                      ],
-                    ))
-              ],
+            child: Container(
+              color: Colors.black.withOpacity(volume),
             ),
-        
+          ),
+
+          Stack(
+            children: <Widget>[
+              Positioned(
+                  right: 30,
+                  bottom: 30,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: <Widget>[
+                      Transform.translate(
+                        offset: Offset.fromDirection(getRadiansFromDegree(270),
+                            degOneTranslationAnimation.value * 100),
+                        child: Transform(
+                          transform: Matrix4.rotationZ(
+                              getRadiansFromDegree(rotationAnimation.value))
+                            ..scale(degOneTranslationAnimation.value),
+                          alignment: Alignment.center,
+                          child: _CircularButton(
+                            color: Colors.green,
+                            width: 50,
+                            heigt: 50,
+                            icon: Icon(
+                              Icons.add,
+                              color: Colors.white,
+                            ),
+                            onClick: () {},
+                          ),
+                        ),
+                      ),
+                      Transform.translate(
+                        offset: Offset.fromDirection(getRadiansFromDegree(225),
+                            degTwoTranslationAnimation.value * 100),
+                        child: Transform(
+                          transform: Matrix4.rotationZ(
+                              getRadiansFromDegree(rotationAnimation.value))
+                            ..scale(degTwoTranslationAnimation.value),
+                          alignment: Alignment.center,
+                          child: _CircularButton(
+                            color: Colors.green,
+                            width: 50,
+                            heigt: 50,
+                            icon: Icon(
+                              Icons.home,
+                              color: Colors.white,
+                            ),
+                            onClick: () {},
+                          ),
+                        ),
+                      ),
+                      Transform.translate(
+                        offset: Offset.fromDirection(getRadiansFromDegree(180),
+                            degThreeTranslationAnimation.value * 100),
+                        child: Transform(
+                          transform: Matrix4.rotationZ(
+                              getRadiansFromDegree(rotationAnimation.value))
+                            ..scale(degThreeTranslationAnimation.value),
+                          alignment: Alignment.center,
+                          child: _CircularButton(
+                            color: Colors.green,
+                            width: 50,
+                            heigt: 50,
+                            icon: Icon(
+                              Icons.person,
+                              color: Colors.white,
+                            ),
+                            onClick: () {},
+                          ),
+                        ),
+                      ),
+                      _CircularButton(
+                        color: Colors.greenAccent,
+                        width: 60,
+                        heigt: 60,
+                        icon: Icon(
+                          Icons.menu,
+                          color: Colors.black,
+                        ),
+                        onClick: () {
+                          if (animationController.isCompleted) {
+                            animationController.reverse();
+                            volume = 0;
+                          } else {
+                            animationController.forward();
+                            volume = 0.5;
+                          }
+                        },
+                      ),
+                    ],
+                  ))
+            ],
+          ),
         ],
       ),
     );
@@ -223,110 +219,119 @@ class _MyHomePageState extends State<MyHomePage>
     bool vip,
   ) {
     return Card(
-      clipBehavior: Clip.antiAlias,
-      elevation: 0,
-      color: Colors.black,
-      margin: const EdgeInsets.fromLTRB(5, 0, 5, 10),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Stack(
-        children: [
-          Ink.image(
-            image: NetworkImage(
-                'http://www.hybrid.cz/i/auto/samorost-plzen-drevo-horske-kolo.jpeg'),
-            child: InkWell(
-              onTap: () {},
-            ),
-            height: 240,
-            fit: BoxFit.cover,
-            padding: const EdgeInsets.all(50),
-          ),
+        clipBehavior: Clip.antiAlias,
+        elevation: 0,
+        color: Colors.black,
+        margin: const EdgeInsets.fromLTRB(5, 0, 5, 10),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+          child: Stack(
+            children: [
+              Ink.image(
+                image: NetworkImage(
+                    'http://www.hybrid.cz/i/auto/samorost-plzen-drevo-horske-kolo.jpeg'),
+                child: InkWell(
+                  onTap: () {Navigator.push(
+              context,
+              new MaterialPageRoute(builder: (context) => new ProductPage()),
+            );},
+                ),
+                height: 240,
+                fit: BoxFit.cover,
+                padding: const EdgeInsets.all(50),
+              ),
 
-          //Název kola
+              //Název kola
 
-          Positioned(
-            left: 16,
-            bottom: 32,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                //buildBlur(
-                //  borderRadius: BorderRadius.circular(10),
-                //   child:
-                 Container(
-                 //   color: Colors.black.withOpacity(0.2),
-                 //   padding: EdgeInsets.fromLTRB(5, 2, 5, 0),
-                    child: Text(
-                      nazev,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 32,
-                        shadows: [Shadow(
-                          color: Colors.black,
-                          offset: Offset(4,1),
-                        ),],
+              Positioned(
+                left: 16,
+                bottom: 32,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    //buildBlur(
+                    //  borderRadius: BorderRadius.circular(10),
+                    //   child:
+                    Container(
+                      //   color: Colors.black.withOpacity(0.2),
+                      //   padding: EdgeInsets.fromLTRB(5, 2, 5, 0),
+                      child: Text(
+                        nazev,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontSize: 32,
+                          shadows: [
+                            Shadow(
+                              color: Colors.black,
+                              offset: Offset(4, 1),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-               // ),
-                //buildBlur(
-                  //borderRadius: BorderRadius.circular(10),
-                  //child: 
-                  Container(
-                 //   color: Colors.black.withOpacity(0.2),
-                 //   padding: EdgeInsets.fromLTRB(5, 0, 5, 2),
-                    child: Text(
-                      autor,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 18,
-                        shadows: [Shadow(
-                          color: Colors.black,
-                          offset: Offset(4,1),
-                        ),],
+                    // ),
+                    //buildBlur(
+                    //borderRadius: BorderRadius.circular(10),
+                    //child:
+                    Container(
+                      //   color: Colors.black.withOpacity(0.2),
+                      //   padding: EdgeInsets.fromLTRB(5, 0, 5, 2),
+                      child: Text(
+                        autor,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontSize: 18,
+                          shadows: [
+                            Shadow(
+                              color: Colors.black,
+                              offset: Offset(4, 1),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-               // ),
-              ],
-            ),
-          ),
+                    // ),
+                  ],
+                ),
+              ),
 
-          //Jméno autora
+              //Jméno autora
 
-          //Cena
+              //Cena
 
-          Positioned(
-            right: 16,
-            bottom: 32,
-            //child: buildBlur(
-              //borderRadius: BorderRadius.circular(20),
-              child: Container(
-                //color: Colors.black.withOpacity(0.2),
-                //padding: EdgeInsets.all(5),
-                child: Text(
-                  cena,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    fontSize: 32,
-                    fontFamily: "Montserrat",
-                    shadows: [Shadow(
+              Positioned(
+                right: 16,
+                bottom: 32,
+                //child: buildBlur(
+                //borderRadius: BorderRadius.circular(20),
+                child: Container(
+                  //color: Colors.black.withOpacity(0.2),
+                  //padding: EdgeInsets.all(5),
+                  child: Text(
+                    cena,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      fontSize: 32,
+                      fontFamily: "Montserrat",
+                      shadows: [
+                        Shadow(
                           color: Colors.black,
-                          offset: Offset(4,1),
-                        ),],
+                          offset: Offset(4, 1),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-        //  ),
-        ],
-      ),
-    );
+              //  ),
+            ],
+          ),
+        );
   }
 
   Widget buildBlur({
