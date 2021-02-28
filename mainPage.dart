@@ -1,6 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:letbike/part.dart';
+import 'package:letbike/partPage.dart';
 
 void main() {
   runApp(MyApp());
@@ -219,105 +219,53 @@ class _MyHomePageState extends State<MyHomePage>
     bool vip,
   ) {
     return Card(
-        clipBehavior: Clip.antiAlias,
-        elevation: 0,
-        color: Colors.black,
-        margin: const EdgeInsets.fromLTRB(5, 0, 5, 10),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-          child: Stack(
-            children: [
-              Ink.image(
-                image: NetworkImage(
-                    'http://www.hybrid.cz/i/auto/samorost-plzen-drevo-horske-kolo.jpeg'),
-                child: InkWell(
-                  onTap: () {Navigator.push(
-              context,
-              new MaterialPageRoute(builder: (context) => new ProductPage()),
-            );},
-                ),
-                height: 240,
-                fit: BoxFit.cover,
-                padding: const EdgeInsets.all(50),
-              ),
+      clipBehavior: Clip.antiAlias,
+      elevation: 0,
+      color: Colors.black,
+      margin: const EdgeInsets.fromLTRB(5, 0, 5, 10),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Stack(
+        children: [
+          Ink.image(
+            image: NetworkImage(
+                'http://www.hybrid.cz/i/auto/samorost-plzen-drevo-horske-kolo.jpeg'),
+            child: InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  new MaterialPageRoute(
+                      builder: (context) => new ProductPage()),
+                );
+              },
+            ),
+            height: 240,
+            fit: BoxFit.cover,
+            padding: const EdgeInsets.all(50),
+          ),
 
-              //Název kola
+          //Název kola
 
-              Positioned(
-                left: 16,
-                bottom: 32,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    //buildBlur(
-                    //  borderRadius: BorderRadius.circular(10),
-                    //   child:
-                    Container(
-                      //   color: Colors.black.withOpacity(0.2),
-                      //   padding: EdgeInsets.fromLTRB(5, 2, 5, 0),
-                      child: Text(
-                        nazev,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          fontSize: 32,
-                          shadows: [
-                            Shadow(
-                              color: Colors.black,
-                              offset: Offset(4, 1),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    // ),
-                    //buildBlur(
-                    //borderRadius: BorderRadius.circular(10),
-                    //child:
-                    Container(
-                      //   color: Colors.black.withOpacity(0.2),
-                      //   padding: EdgeInsets.fromLTRB(5, 0, 5, 2),
-                      child: Text(
-                        autor,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          fontSize: 18,
-                          shadows: [
-                            Shadow(
-                              color: Colors.black,
-                              offset: Offset(4, 1),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    // ),
-                  ],
-                ),
-              ),
-
-              //Jméno autora
-
-              //Cena
-
-              Positioned(
-                right: 16,
-                bottom: 32,
-                //child: buildBlur(
-                //borderRadius: BorderRadius.circular(20),
-                child: Container(
-                  //color: Colors.black.withOpacity(0.2),
-                  //padding: EdgeInsets.all(5),
+          Positioned(
+            left: 16,
+            bottom: 32,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                //buildBlur(
+                //  borderRadius: BorderRadius.circular(10),
+                //   child:
+                Container(
+                  //   color: Colors.black.withOpacity(0.2),
+                  //   padding: EdgeInsets.fromLTRB(5, 2, 5, 0),
                   child: Text(
-                    cena,
+                    nazev,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                       fontSize: 32,
-                      fontFamily: "Montserrat",
                       shadows: [
                         Shadow(
                           color: Colors.black,
@@ -327,11 +275,66 @@ class _MyHomePageState extends State<MyHomePage>
                     ),
                   ),
                 ),
-              ),
-              //  ),
-            ],
+                // ),
+                //buildBlur(
+                //borderRadius: BorderRadius.circular(10),
+                //child:
+                Container(
+                  //   color: Colors.black.withOpacity(0.2),
+                  //   padding: EdgeInsets.fromLTRB(5, 0, 5, 2),
+                  child: Text(
+                    autor,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      fontSize: 18,
+                      shadows: [
+                        Shadow(
+                          color: Colors.black,
+                          offset: Offset(4, 1),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                // ),
+              ],
+            ),
           ),
-        );
+
+          //Jméno autora
+
+          //Cena
+
+          Positioned(
+            right: 16,
+            bottom: 32,
+            //child: buildBlur(
+            //borderRadius: BorderRadius.circular(20),
+            child: Container(
+              //color: Colors.black.withOpacity(0.2),
+              //padding: EdgeInsets.all(5),
+              child: Text(
+                cena,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontSize: 32,
+                  fontFamily: "Montserrat",
+                  shadows: [
+                    Shadow(
+                      color: Colors.black,
+                      offset: Offset(4, 1),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          //  ),
+        ],
+      ),
+    );
   }
 
   Widget buildBlur({
