@@ -32,7 +32,9 @@ class ProductPage extends StatelessWidget {
           builder: (BuildContext context) {
             return IconButton(
               icon: const Icon(Icons.arrow_back_outlined),
-              onPressed: () {}, //vrácení zpět do menu (DODĚLAT)
+              onPressed: () {
+                Navigator.pop(context);
+              },
             );
           },
         ),

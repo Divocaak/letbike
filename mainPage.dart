@@ -1,9 +1,19 @@
+import 'dart:convert';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:letbike/partPage.dart';
+import "dbServices.dart";
 
-void main() {
+void main() async {
   runApp(MyApp());
+
+  /* ItemDB().addItem(0, "", "", 00.00, 0, 0,
+      DateTime.parse("1969-07-20 20:18:04Z"), "0.jpg|1.jpg|2.jpg", 0); */
+
+  var itemsJson = jsonDecode(await DatabaseServices().getItems());
+  print(itemsJson);
+  List dynList = itemsJson.map((partJson) => Item.fromJson(partJson)).toList();
+  List<Item> itemList = dynList.map((s) => s as Item).toList();
 }
 
 double volume = 0;
@@ -95,28 +105,47 @@ class _MyHomePageState extends State<MyHomePage>
         children: [
           Container(
             color: Colors.black,
-            child: ListView(
-              children: [
-                _buildCard("Karel ", "BMX", "12 000 Kč", true),
-                _buildCard("Karel", "BMX", "12 000 Kč", true),
-                _buildCard("Karel", "BMX", "12 000 Kč", true),
-                _buildCard("Karel", "BMX", "12 000 Kč", true),
-                _buildCard("Karel", "BMX", "12 000 Kč", true),
-                _buildCard("Karel", "BMX", "12 000 Kč", true),
-                _buildCard("Karel", "BMX", "12 000 Kč", true),
-              ],
+            child: //ListView(
+                //children: <Widget>[
+                FutureBuilder(
+              future: DatabaseServices().getItems(),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                List snap = snapshot.data;
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  print("loading data");
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+
+                if (snapshot.hasError) {
+                  print("error");
+                  return Center(
+                    child: Text(
+                      "Error fetching data",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.white),
+                    ),
+                  );
+                }
+
+                return ListView.builder(
+                    itemCount: snap.length,
+                    itemBuilder: (context, index) {
+                      return _buildCard(
+                          "asd", "dsa", 0.0, 0, 0, "dateEnd", "imgs");
+                    });
+              },
+              //)
+              //],
             ),
           ),
-
-          //Buttony a jejich background
-
           IgnorePointer(
             ignoring: true,
             child: Container(
               color: Colors.black.withOpacity(volume),
             ),
           ),
-
           Stack(
             children: <Widget>[
               Positioned(
@@ -212,12 +241,8 @@ class _MyHomePageState extends State<MyHomePage>
     );
   }
 
-  Widget _buildCard(
-    String autor,
-    String nazev,
-    String cena,
-    bool vip,
-  ) {
+  Widget _buildCard(String name, String description, double price, int score,
+      int paid, String dateEnd, String imgs) {
     return Card(
       clipBehavior: Clip.antiAlias,
       elevation: 0,
@@ -244,9 +269,6 @@ class _MyHomePageState extends State<MyHomePage>
             fit: BoxFit.cover,
             padding: const EdgeInsets.all(50),
           ),
-
-          //Název kola
-
           Positioned(
             left: 16,
             bottom: 32,
@@ -254,14 +276,9 @@ class _MyHomePageState extends State<MyHomePage>
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                //buildBlur(
-                //  borderRadius: BorderRadius.circular(10),
-                //   child:
                 Container(
-                  //   color: Colors.black.withOpacity(0.2),
-                  //   padding: EdgeInsets.fromLTRB(5, 2, 5, 0),
                   child: Text(
-                    nazev,
+                    name,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
@@ -275,15 +292,9 @@ class _MyHomePageState extends State<MyHomePage>
                     ),
                   ),
                 ),
-                // ),
-                //buildBlur(
-                //borderRadius: BorderRadius.circular(10),
-                //child:
                 Container(
-                  //   color: Colors.black.withOpacity(0.2),
-                  //   padding: EdgeInsets.fromLTRB(5, 0, 5, 2),
                   child: Text(
-                    autor,
+                    description,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
@@ -297,25 +308,15 @@ class _MyHomePageState extends State<MyHomePage>
                     ),
                   ),
                 ),
-                // ),
               ],
             ),
           ),
-
-          //Jméno autora
-
-          //Cena
-
           Positioned(
             right: 16,
             bottom: 32,
-            //child: buildBlur(
-            //borderRadius: BorderRadius.circular(20),
             child: Container(
-              //color: Colors.black.withOpacity(0.2),
-              //padding: EdgeInsets.all(5),
               child: Text(
-                cena,
+                price.toString(),
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
@@ -331,7 +332,6 @@ class _MyHomePageState extends State<MyHomePage>
               ),
             ),
           ),
-          //  ),
         ],
       ),
     );
