@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:letbike/partPage.dart';
@@ -6,14 +5,6 @@ import "dbServices.dart";
 
 void main() async {
   runApp(MyApp());
-
-  /* ItemDB().addItem(0, "", "", 00.00, 0, 0,
-      DateTime.parse("1969-07-20 20:18:04Z"), "0.jpg|1.jpg|2.jpg", 0); */
-
-  var itemsJson = jsonDecode(await DatabaseServices().getItems());
-  print(itemsJson);
-  List dynList = itemsJson.map((partJson) => Item.fromJson(partJson)).toList();
-  List<Item> itemList = dynList.map((s) => s as Item).toList();
 }
 
 double volume = 0;
@@ -35,6 +26,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage>
     with SingleTickerProviderStateMixin {
+  Future<List<Item>> items;
+
   AnimationController animationController;
   Animation degOneTranslationAnimation,
       degTwoTranslationAnimation,
@@ -48,6 +41,7 @@ class _MyHomePageState extends State<MyHomePage>
 
   @override
   void initState() {
+    items = DatabaseServices.getAllItems();
     animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 250));
     degOneTranslationAnimation = TweenSequence([
@@ -105,39 +99,29 @@ class _MyHomePageState extends State<MyHomePage>
         children: [
           Container(
             color: Colors.black,
-            child: //ListView(
-                //children: <Widget>[
-                FutureBuilder(
-              future: DatabaseServices().getItems(),
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                List snap = snapshot.data;
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  print("loading data");
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
+            child: FutureBuilder<List<Item>>(
+              future: items,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return ListView.builder(
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (context, i) {
+                        print(snapshot.data.length);
+                        return _buildCard(
+                            snapshot.data[i].id,
+                            snapshot.data[i].name,
+                            snapshot.data[i].description,
+                            snapshot.data[i].price,
+                            snapshot.data[i].score,
+                            snapshot.data[i].paid,
+                            snapshot.data[i].dateEnd,
+                            snapshot.data[i].imgs);
+                      });
+                } else if (snapshot.hasError) {
+                  Text('Sorry there is an error');
                 }
-
-                if (snapshot.hasError) {
-                  print("error");
-                  return Center(
-                    child: Text(
-                      "Error fetching data",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.white),
-                    ),
-                  );
-                }
-
-                return ListView.builder(
-                    itemCount: snap.length,
-                    itemBuilder: (context, index) {
-                      return _buildCard(
-                          "asd", "dsa", 0.0, 0, 0, "dateEnd", "imgs");
-                    });
+                return Center(child: CircularProgressIndicator());
               },
-              //)
-              //],
             ),
           ),
           IgnorePointer(
@@ -241,8 +225,8 @@ class _MyHomePageState extends State<MyHomePage>
     );
   }
 
-  Widget _buildCard(String name, String description, double price, int score,
-      int paid, String dateEnd, String imgs) {
+  Widget _buildCard(int id, String name, String description, double price,
+      int score, int paid, String dateEnd, String imgs) {
     return Card(
       clipBehavior: Clip.antiAlias,
       elevation: 0,
@@ -261,7 +245,7 @@ class _MyHomePageState extends State<MyHomePage>
                 Navigator.push(
                   context,
                   new MaterialPageRoute(
-                      builder: (context) => new ProductPage()),
+                      builder: (context) => new ProductPage(itemId: id)),
                 );
               },
             ),
