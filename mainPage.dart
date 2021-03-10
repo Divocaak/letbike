@@ -41,7 +41,7 @@ class _MyHomePageState extends State<MyHomePage>
 
   @override
   void initState() {
-    items = DatabaseServices.getAllItems();
+    items = DatabaseServices.getAllItems("id");
     animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 250));
     degOneTranslationAnimation = TweenSequence([
@@ -106,16 +106,7 @@ class _MyHomePageState extends State<MyHomePage>
                   return ListView.builder(
                       itemCount: snapshot.data.length,
                       itemBuilder: (context, i) {
-                        print(snapshot.data.length);
-                        return _buildCard(
-                            snapshot.data[i].id,
-                            snapshot.data[i].name,
-                            snapshot.data[i].description,
-                            snapshot.data[i].price,
-                            snapshot.data[i].score,
-                            snapshot.data[i].paid,
-                            snapshot.data[i].dateEnd,
-                            snapshot.data[i].imgs);
+                        return _buildCard(snapshot.data[i]);
                       });
                 } else if (snapshot.hasError) {
                   Text('Sorry there is an error');
@@ -225,8 +216,7 @@ class _MyHomePageState extends State<MyHomePage>
     );
   }
 
-  Widget _buildCard(int id, String name, String description, double price,
-      int score, int paid, String dateEnd, String imgs) {
+  Widget _buildCard(Item item) {
     return Card(
       clipBehavior: Clip.antiAlias,
       elevation: 0,
@@ -245,7 +235,7 @@ class _MyHomePageState extends State<MyHomePage>
                 Navigator.push(
                   context,
                   new MaterialPageRoute(
-                      builder: (context) => new ProductPage(itemId: id)),
+                      builder: (context) => new ProductPage(item: item)),
                 );
               },
             ),
@@ -262,7 +252,7 @@ class _MyHomePageState extends State<MyHomePage>
               children: [
                 Container(
                   child: Text(
-                    name,
+                    item.name,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
@@ -278,7 +268,7 @@ class _MyHomePageState extends State<MyHomePage>
                 ),
                 Container(
                   child: Text(
-                    description,
+                    item.description,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
@@ -300,7 +290,7 @@ class _MyHomePageState extends State<MyHomePage>
             bottom: 32,
             child: Container(
               child: Text(
-                price.toString(),
+                item.price.toString() + "Kč",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Colors.white,

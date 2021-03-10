@@ -1,28 +1,22 @@
 # LETBIKE
 
-
 ## Databáze
 
-mysql1: ^0.17.1
-import 'package:mysql1/mysql1.dart';
+INSERT INTO item (seller_id, name, description, price, score, paid, date_end, imgs, status) VALUES (0, "asd", "dsa", 1.1, 420, 0, "0000-00-00 00:00:00", "asd.jpg", 0);
 
 [Návrh_databáze](https://dbdiagram.io/d/603a99cdfcdcb6230b21cb94)
 
-### Item
+### Home Screen
 
-- [ ] dateEnd jako DateTime
+- [ ] zužitkování ostatních dat
+
+### Item Screen
+
+- [x] dateEnd jako DateTime
+- [ ] response (success || error)
+- [ ] zužitkování ostatních dat
 - [ ] jméno brázku = id + číslo obrázku + přípona
 
-### User
+### User Screen
 
-### Chat
-
-json["sellerId"] as int,
-        json["name"] as String,
-        json["description"] as String,
-        json["price"] as double,
-        json["score"] as int,
-        json["paid"] as int,
-        json["dateEnd"] as String,
-        json["imgs"] as String,
-        json["status"] as int);
+### Chat Screen

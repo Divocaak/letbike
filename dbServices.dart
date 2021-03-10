@@ -18,8 +18,9 @@ class DatabaseServices {
     }
   }
 
-  static Future<List<Item>> getAllItems() async {
-    final Response response = await get(Uri.encodeFull(url + "getParts.php"),
+  static Future<List<Item>> getAllItems(String id) async {
+    final Response response = await get(
+        Uri.encodeFull(url + "getParts.php/?id=" + id),
         headers: {"Accept": "application/json"});
     if (response.statusCode == 200) {
       final parsed = jsonDecode(response.body).cast<Map<String, dynamic>>();
@@ -38,12 +39,23 @@ class Item {
   double price;
   int score;
   int paid;
+  String dateStart;
   String dateEnd;
   String imgs;
   int status;
 
-  Item(this.id, this.sellerId, this.name, this.description, this.price,
-      this.score, this.paid, this.dateEnd, this.imgs, this.status);
+  Item(
+      this.id,
+      this.sellerId,
+      this.name,
+      this.description,
+      this.price,
+      this.score,
+      this.paid,
+      this.dateStart,
+      this.dateEnd,
+      this.imgs,
+      this.status);
 
   factory Item.fromJson(Map<String, dynamic> json) {
     return Item(
@@ -54,6 +66,7 @@ class Item {
         double.parse(json["price"]),
         int.parse(json["score"]),
         int.parse(json["paid"]),
+        json["dateStart"],
         json["dateEnd"],
         json["imgs"],
         int.parse(json["status"]));
@@ -67,6 +80,7 @@ class Item {
         "price": price,
         "score": score,
         "paid": paid,
+        "dateStart": dateStart,
         "dateEnd": dateEnd,
         "imgs": imgs,
         "status": status

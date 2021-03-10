@@ -1,38 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-
-/* void main() {
-  runApp(
-    MaterialApp(
-      home: ProductPage(),
-    ),
-  );
-} */
+import "dbServices.dart";
 
 //ignore: must_be_immutable
 class ProductPage extends StatelessWidget {
-  final int itemId;
-  ProductPage({Key key, @required this.itemId}) : super(key: key);
+  final Item item;
 
-  String jmenoApp = 'Aplikace';
-  String nadpis = 'Kolo';
-  String info = 'testovací informace';
-  int cena = 12345;
-  var image = 'assets/images/img.jpg';
-  List images = [
-    'assets/images/img.jpg',
-    'assets/images/img2.jpg',
-    'assets/images/img3.jpg'
-  ];
+  ProductPage({Key key, @required this.item}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    print(itemId);
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
-        title: Text(jmenoApp),
+        title: Text("delete me l8r"),
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(
@@ -52,9 +33,9 @@ class ProductPage extends StatelessWidget {
             Container(
               child: Swiper(
                 itemBuilder: (BuildContext context, int index) {
-                  return new Image.asset(images[index]);
+                  return Icon(Icons.error); //new Image.asset("");
                 },
-                itemCount: images.length,
+                itemCount: 1, //images.length,
                 pagination: new SwiperPagination(),
                 control: new SwiperControl(),
               ),
@@ -73,20 +54,20 @@ class ProductPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          '$nadpis',
+                          item.name,
                           style: TextStyle(
                               fontSize: 40, fontWeight: FontWeight.bold),
                           textAlign: TextAlign.left,
                         ),
                         Text(
-                          '\n$info $info $info \n$info\n$info \n$info \n$info \n$info \n$info \n$info \n$info \n$info \n$info \n$info \n$info \n$info ',
+                          item.description,
                           style: TextStyle(fontSize: 20),
                         ),
                         Container(
                           child: Align(
                             alignment: Alignment(0.20, 1.00),
                             child: Text(
-                              '$cena Kč',
+                              item.price.toString() + " Kč",
                               style: TextStyle(
                                   fontSize: 40, fontWeight: FontWeight.bold),
                             ),
