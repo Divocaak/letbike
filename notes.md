@@ -15,17 +15,20 @@
 - [x] dateEnd jako DateTime
 - [ ] zužitkování ostatních dat
 
-### User Screen
+### Login & Register
 
-### Chat Screen
-
-- [ ] skupina __A__
+- [x] skupina __A__
+- [ ] zbavit se zbytečných fontů a závislostí (fonty, ...)
 
 ### Add Item
 
 - [ ] skupina __B__
 - [ ] response (success || error)
 - [ ] jméno brázku = id + číslo obrázku + přípona
+
+### Chat Screen
+
+- [ ] skupina __A__
 
 ### Fitry
 

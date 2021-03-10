@@ -1,6 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:letbike/partPage.dart';
+import 'itemPage.dart';
 import "dbServices.dart";
 
 void main() async {
