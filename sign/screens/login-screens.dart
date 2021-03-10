@@ -104,6 +104,7 @@ class LogRoundedButton extends StatelessWidget {
       child: FlatButton(
         onPressed: () {
           if (_logformkey.currentState.validate()) {
+            print("login");
             return;
           } else {
             print("Unsuccesfull");

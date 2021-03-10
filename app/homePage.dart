@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'itemPage.dart';
-import "dbServices.dart";
+import "../dbServices.dart";
 
 void main() async {
   runApp(MyApp());

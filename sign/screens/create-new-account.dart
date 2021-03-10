@@ -124,20 +124,6 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
                             ),
                           ),
                         ),
-                        //                       Positioned(
-                        //                         top: size.height * 0.08,
-                        //                         left: size.width * 0.56,
-                        //                         child: Container(
-                        //                           height: size.width * 0.08,
-                        //                           width: size.width * 0.08,
-                        //                           decoration: BoxDecoration(
-                        //                             color: kGreen,
-                        //                             shape: BoxShape.circle,
-                        //                             border: Border.all(color: kWhite, width: 2),
-                        //                           ),
-                        //                           //child: Icon(FontAwesomeIcons.arrowUp, color: kWhite,),
-                        //                         ),
-                        //                       )
                         GestureDetector(
                           onTap: () {
                             _showChoiceDialog(context);

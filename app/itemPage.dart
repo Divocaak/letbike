@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-import "dbServices.dart";
+import "../dbServices.dart";
 
 //ignore: must_be_immutable
 class ProductPage extends StatelessWidget {
