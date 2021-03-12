@@ -9,6 +9,7 @@
 ### Home Screen
 
 - [x] skupina __A__ 
+- [ ] banner (doplnit uživatelské údaje)
 - [ ] zužitkování ostatních dat
 
 ### Item Screen
@@ -23,7 +24,7 @@
 - [ ] zbavit se zbytečných fontů a závislostí (fonty, ...)
 - [ ] alert box při špatné validaci
     - [ ] login
-    - [ ] register
+    - [x] register
 - [ ] zapomenuté heslo
 
 http://127.0.0.1/projects/letbike/userRegister.php?username=admin&&email=asd@asd.asd&&password=Pgema333

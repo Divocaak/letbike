@@ -7,6 +7,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import '../pallete.dart';
 import '../widgets.dart';
+import '../alertBox.dart';
+import '../../dbServices.dart';
 
 GlobalKey<FormState> _regformkey = GlobalKey<FormState>();
 TextEditingController _password = TextEditingController();
@@ -72,6 +74,7 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
         });
   }
 
+  String asd;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -199,6 +202,8 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
   }
 }
 
+Future<String> response;
+
 class RegRoundedButton extends StatelessWidget {
   const RegRoundedButton({
     Key key,
@@ -215,84 +220,44 @@ class RegRoundedButton extends StatelessWidget {
       width: size.width * 0.8,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16), color: Colors.green),
-      child: FlatButton(
+      child: TextButton(
         onPressed: () {
+          String failResponse = "";
+
           if (_regformkey.currentState.validate()) {
-            return;
+            response = DatabaseServices.registerUser(
+                TextInputField.getValue("Name"),
+                TextInputField.getValue("Email"),
+                RegPasswordInput.getValue("Password"));
           } else {
-            print("Unsuccesfull");
+            failResponse = "Některé údaje jsou špatně zadané.";
           }
+
+          AlertBox.showAlertBox(
+              context,
+              "Oznámení",
+              failResponse != ""
+                  ? new Text(failResponse)
+                  : FutureBuilder(
+                      future: response,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          print("hasData");
+                          return Text(snapshot.data);
+                        }
+
+                        if (snapshot.hasError) {
+                          print("hasError");
+                          return Text(
+                              "Někde se stala chyba, zkuste to prosím později");
+                        }
+
+                        return Center(child: CircularProgressIndicator());
+                      }));
         },
         child: Text(
           buttonName,
           style: kBodyText.copyWith(fontWeight: FontWeight.bold),
-        ),
-      ),
-    );
-  }
-}
-
-class RegPasswordInput extends StatelessWidget {
-  const RegPasswordInput({
-    Key key,
-    @required this.icon,
-    @required this.hint,
-    this.controller,
-    this.inputType,
-    this.inputAction,
-  }) : super(key: key);
-
-  final TextEditingController controller;
-  final IconData icon;
-  final String hint;
-  final TextInputType inputType;
-  final TextInputAction inputAction;
-
-  @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10.0),
-      child: Container(
-        height: size.height * 0.08,
-        width: size.width * 0.8,
-        decoration: BoxDecoration(
-          color: Colors.grey[500].withOpacity(0.5),
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Center(
-          child: TextFormField(
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              prefixIcon: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Icon(
-                  icon,
-                  size: 28,
-                  color: kWhite,
-                ),
-              ),
-              hintText: hint,
-              hintStyle: kBodyText,
-            ),
-            obscureText: false,
-            style: kBodyText,
-            keyboardType: inputType,
-            textInputAction: inputAction,
-            controller: controller,
-            validator: (String value) {
-              if (value.isEmpty) {
-                return "Please enter Password";
-              }
-              if (value.length < 8) {
-                return "Password is too short";
-              }
-              if (_password != _confirmpassword) {
-                return "Passwords are not equal";
-              }
-              return null;
-            },
-          ),
         ),
       ),
     );

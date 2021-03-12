@@ -1,27 +1,29 @@
 import 'package:flutter/material.dart';
 import '../pallete.dart';
 
-String _email, _name;
+String _pass, _confPass;
 
-class TextInputField extends StatelessWidget {
-  const TextInputField({
+class RegPasswordInput extends StatelessWidget {
+  const RegPasswordInput({
     Key key,
     @required this.icon,
     @required this.hint,
+    this.controller,
     this.inputType,
     this.inputAction,
   }) : super(key: key);
 
+  final TextEditingController controller;
   final IconData icon;
   final String hint;
   final TextInputType inputType;
   final TextInputAction inputAction;
 
   static String getValue(String hint) {
-    if (hint == "Name") {
-      return _name;
-    } else if (hint == "Email") {
-      return _email;
+    if (hint == "Password") {
+      return _pass;
+    } else if (hint == "Confirm Password") {
+      return _confPass;
     } else {
       return "";
     }
@@ -54,27 +56,29 @@ class TextInputField extends StatelessWidget {
               hintText: hint,
               hintStyle: kBodyText,
             ),
+            obscureText: false,
             style: kBodyText,
             keyboardType: inputType,
             textInputAction: inputAction,
+            controller: controller,
             validator: (String value) {
               if (value.isEmpty) {
-                return "Please enter " + hint;
+                return "Please enter Password";
               }
-              if (hint == "Email") {
-                if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
-                    .hasMatch(value)) {
-                  return "Please enter a valid Email";
-                }
+              if (value.length < 8) {
+                return "Password is too short";
+              }
+              if (_pass != _confPass) {
+                return "Passwords are not equal";
               }
               return null;
             },
             onChanged: (String content) {
-              if (hint == "Name") {
-                _name = content;
+              if (hint == "Password") {
+                _pass = content;
               }
-              if (hint == "Email") {
-                _email = content;
+              if (hint == "Confirm Password") {
+                _confPass = content;
               }
             },
           ),
