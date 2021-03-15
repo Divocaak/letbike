@@ -3,10 +3,6 @@ import 'package:flutter/material.dart';
 import 'itemPage.dart';
 import "../dbServices.dart";
 
-void main() async {
-  runApp(MyApp());
-}
-
 double volume = 0;
 
 class MyApp extends StatelessWidget {
@@ -72,6 +68,8 @@ class _MyHomePageState extends State<MyHomePage>
 
   @override
   Widget build(BuildContext context) {
+    final User loggedUser = ModalRoute.of(context).settings.arguments;
+
     return Scaffold(
       //AppBar
       appBar: new AppBar(

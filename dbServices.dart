@@ -48,6 +48,23 @@ class DatabaseServices {
       throw Exception("Can't register user");
     }
   }
+
+  static Future<User> loginUser(String email, String password) async {
+    final Response response = await get(
+        Uri.encodeFull(
+            url + "userLogin.php?email=" + email + "&&password=" + password),
+        headers: {"Accept": "application/json;charset=UTF-8"});
+    if (response.statusCode == 200) {
+      if (response.body != "error") {
+        final Map parsed = jsonDecode(response.body);
+        return User.fromJson(parsed);
+      } else {
+        return User(-1, "", "", "", -1, "", "", "", "", "", -1, -1);
+      }
+    } else {
+      throw Exception("Can't register user");
+    }
+  }
 }
 
 class Item {
@@ -110,6 +127,7 @@ class User {
   int id;
   String username;
   String email;
+  String password;
   int score;
   String fName;
   String lName;
@@ -119,14 +137,26 @@ class User {
   int postal;
   int status;
 
-  User(this.id, this.username, this.email, this.score, this.fName, this.lName,
-      this.addressA, this.addressB, this.addressC, this.postal, this.status);
+  User(
+      this.id,
+      this.username,
+      this.email,
+      this.password,
+      this.score,
+      this.fName,
+      this.lName,
+      this.addressA,
+      this.addressB,
+      this.addressC,
+      this.postal,
+      this.status);
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
         int.parse(json["id"]),
         json["username"],
         json["email"],
+        json["password"],
         int.parse(json["score"]),
         json["fName"],
         json["lName"],
@@ -141,6 +171,7 @@ class User {
         "id": id,
         "username": username,
         "email": email,
+        "password": password,
         "score": score,
         "fName": fName,
         "lName": lName,

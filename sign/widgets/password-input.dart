@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../pallete.dart';
 
+String _password;
+
 class PasswordInput extends StatelessWidget {
   const PasswordInput({
     Key key,
@@ -14,6 +16,14 @@ class PasswordInput extends StatelessWidget {
   final String hint;
   final TextInputType inputType;
   final TextInputAction inputAction;
+
+  static String getValue(String hint) {
+    if (hint == "Password") {
+      return _password;
+    } else {
+      return null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +56,11 @@ class PasswordInput extends StatelessWidget {
             style: kBodyText,
             keyboardType: inputType,
             textInputAction: inputAction,
+            onChanged: (String content) {
+              if (hint == "Password") {
+                _password = content;
+              }
+            },
           ),
         ),
       ),

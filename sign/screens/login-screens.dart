@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:letbike/sign/alertBox.dart';
 import '../pallete.dart';
 import '../widgets.dart';
+import '../../dbServices.dart';
+import '../../app/homePage.dart';
 
 GlobalKey<FormState> _logformkey = GlobalKey<FormState>();
 
@@ -40,7 +43,7 @@ class LoginScreen extends StatelessWidget {
                       inputType: TextInputType.emailAddress,
                       inputAction: TextInputAction.next,
                     ),
-                    LogPasswordInput(
+                    PasswordInput(
                       icon: FontAwesomeIcons.lock,
                       hint: "Password",
                       inputAction: TextInputAction.done,
@@ -85,6 +88,8 @@ class LoginScreen extends StatelessWidget {
   }
 }
 
+Future<User> logResponse;
+
 class LogRoundedButton extends StatelessWidget {
   const LogRoundedButton({
     Key key,
@@ -101,70 +106,44 @@ class LogRoundedButton extends StatelessWidget {
       width: size.width * 0.8,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16), color: Colors.green),
-      child: FlatButton(
+      child: TextButton(
         onPressed: () {
-          if (_logformkey.currentState.validate()) {
-            print("login");
-            return;
-          } else {
-            print("Unsuccesfull");
-          }
+          logResponse = DatabaseServices.loginUser(
+            TextInputField.getValue("Email"),
+            PasswordInput.getValue("Password"),
+          );
+
+          AlertBox.showAlertBox(
+              context,
+              "Oznámení",
+              FutureBuilder(
+                  future: logResponse,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      if (snapshot.data.id < 0) {
+                        return Text(
+                            "Špatně zadané uživatelské jméno nebo heslo.");
+                      }
+
+                      Navigator.push(
+                          context,
+                          new MaterialPageRoute(
+                              builder: (context) => MyHomePage(),
+                              settings:
+                                  RouteSettings(arguments: snapshot.data)));
+                    }
+
+                    if (snapshot.hasError) {
+                      return Text(
+                          "Někde se stala chyba, zkuste to prosím později.");
+                    }
+
+                    return Center(child: CircularProgressIndicator());
+                  }));
         },
         child: Text(
           buttonName,
           style: kBodyText.copyWith(fontWeight: FontWeight.bold),
-        ),
-      ),
-    );
-  }
-}
-
-class LogPasswordInput extends StatelessWidget {
-  const LogPasswordInput({
-    Key key,
-    @required this.icon,
-    @required this.hint,
-    this.inputType,
-    this.inputAction,
-  }) : super(key: key);
-
-  final IconData icon;
-  final String hint;
-  final TextInputType inputType;
-  final TextInputAction inputAction;
-
-  @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10.0),
-      child: Container(
-        height: size.height * 0.08,
-        width: size.width * 0.8,
-        decoration: BoxDecoration(
-          color: Colors.grey[500].withOpacity(0.5),
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Center(
-          child: TextField(
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              prefixIcon: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Icon(
-                  icon,
-                  size: 28,
-                  color: kWhite,
-                ),
-              ),
-              hintText: hint,
-              hintStyle: kBodyText,
-            ),
-            obscureText: true,
-            style: kBodyText,
-            keyboardType: inputType,
-            textInputAction: inputAction,
-          ),
         ),
       ),
     );
