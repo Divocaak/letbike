@@ -6,6 +6,8 @@
 
 - [ ] getItem a setItem => itemGet && itemSet
 
+## App Content
+
 ### Home Screen
 
 - [x] skupina __A__
@@ -32,7 +34,7 @@
     - [x] příjem na GitHubu
     - [x] staženo
     - [x] moje hotovo
-    - [ ] master na GitHubu
+    - [x] master na GitHubu
 - [ ] zbavit se zbytečných fontů a závislostí (fonty, ...)
 - [ ] alert box při špatné validaci
     - [ ] login
@@ -46,7 +48,7 @@ http://127.0.0.1/projects/letbike/userRegister.php?username=admin&&email=asd@asd
 ### Add Item
 
 - [ ] skupina __B__
-    - [ ] příjem na GitHubu
+    - [x] příjem na GitHubu
     - [ ] staženo
     - [ ] moje hotovo
     - [ ] master na GitHubu
@@ -68,3 +70,5 @@ http://127.0.0.1/projects/letbike/userRegister.php?username=admin&&email=asd@asd
     - [ ] staženo
     - [ ] moje hotovo
     - [ ] master na GitHubu
+
+### Account
