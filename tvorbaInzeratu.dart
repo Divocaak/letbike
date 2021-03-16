@@ -9,7 +9,7 @@ class TvorbaInzeratu extends StatefulWidget {
 }
 
 class _TvorbaInzeratu extends State<TvorbaInzeratu> {
-  List<Asset> images = List<Asset>();
+  List<Asset> images;
   String _error;
 
   @override
@@ -36,7 +36,7 @@ class _TvorbaInzeratu extends State<TvorbaInzeratu> {
 
   Future<void> loadAssets() async {
     setState(() {
-      images = List<Asset>();
+      images = List<Asset>.empty();
     });
 
     List<Asset> resultList;
@@ -89,13 +89,16 @@ class _TvorbaInzeratu extends State<TvorbaInzeratu> {
             keyboardType: TextInputType.number,
           ),
         ),
-        RaisedButton(
+        ElevatedButton(
           child: Text("Vybrat foto z úložiště"),
           onPressed: loadAssets,
         ),
-        RaisedButton(
+        ElevatedButton(
           child: Text('Další'),
-        ), //ON PRESSED DALŠÍ STRANA
+          onPressed: () {
+            print("next");
+          },
+        ),
         Expanded(
           child: buildGridView(),
         )

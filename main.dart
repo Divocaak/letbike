@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
+/* import 'dart:async';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
-//import 'package:product_settings/kategorie.dart';
-
+ */
 import 'kategorie.dart';
 import 'package:flutter/services.dart';
 import 'nastaveniKola.dart';
@@ -16,7 +15,6 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     List<String> kategorie;
@@ -64,7 +62,6 @@ class _MyHomePageState extends State<MyHomePage> {
                         setState(
                           () {
                             Kategorie.pouzite = value;
-                            print(Kategorie.pouzite);
                           },
                         );
                       },
@@ -76,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: ElevatedButton(
                         child: Text('Vytvořit inzerát'),
                         onPressed: () {
-                          Navigator.of(context).push(_StranaTvorbaInzeratu());
+                          Navigator.of(context).push(_stranaTvorbaInzeratu());
                         })),
                 Container(
                   height: MediaQuery.of(context).size.height * 0.5,
@@ -88,31 +85,33 @@ class _MyHomePageState extends State<MyHomePage> {
               height: MediaQuery.of(context).size.height * 0.05,
               width: MediaQuery.of(context).size.width,
               child: ElevatedButton(
-                child: Text('Další'),
+                child: Text('asd'),
                 onPressed: () {
+                  print(Kategorie.selectedKategorie);
                   switch (Kategorie.selectedKategorie) {
                     case 'Kola':
                       {
                         Kategorie.vyberKategorie = 'kola';
-                        Navigator.of(context).push(_StranaDruhKola());
+                        Navigator.of(context).push(_stranaDruhKola());
+                        print("kola");
                       }
                       break;
                     case 'Komponenty':
                       {
                         Kategorie.vyberKategorie = 'komponenty';
-                        Navigator.of(context).push(_StranaKomponenty());
+                        Navigator.of(context).push(_stranaKomponenty());
                       }
                       break;
                     case 'Doplňky':
                       {
                         Kategorie.vyberKategorie = 'doplnky';
-                        Navigator.of(context).push(_StranaDoplnky());
+                        Navigator.of(context).push(_stranaDoplnky());
                       }
                       break;
                     case 'Ostatní':
                       {
                         Kategorie.vyberKategorie = 'ostatni';
-                        Navigator.of(context).push(_StranaOstatni());
+                        Navigator.of(context).push(_stranaOstatni());
                       }
                       break;
                   }
@@ -126,8 +125,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-Route _StranaDruhKola() {
-  //TODO kola
+Route _stranaDruhKola() {
   return PageRouteBuilder(
     pageBuilder: (context, animation, secondaryAnimation) => StranaDruhKola(),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
@@ -157,37 +155,37 @@ class StranaDruhKola extends StatelessWidget {
                     switch (Kategorie.selectedKategorie) {
                       case 'Celoodpružené':
                         {
-                          Navigator.of(context).push(_StranaCeloodpruzene());
+                          Navigator.of(context).push(_stranaCeloodpruzene());
                         }
                         break;
                       case 'Elektrokola':
                         {
-                          Navigator.of(context).push(_StranaElektrokola());
+                          Navigator.of(context).push(_stranaElektrokola());
                         }
                         break;
                       case 'Trenažéry':
                         {
-                          Navigator.of(context).push(_StranaTrenazery());
+                          Navigator.of(context).push(_stranaTrenazery());
                         }
                         break;
                       case 'Koloběžky':
                         {
-                          Navigator.of(context).push(_StranaKolobezky());
+                          Navigator.of(context).push(_stranaKolobezky());
                         }
                         break;
                       case 'Odrážedla':
                         {
-                          Navigator.of(context).push(_StranaOdrazedla());
+                          Navigator.of(context).push(_stranaOdrazedla());
                         }
                         break;
                       case 'Singlespeed':
                         {
-                          Navigator.of(context).push(_StranaSinglespeed());
+                          Navigator.of(context).push(_stranaSinglespeed());
                         }
                         break;
                       default:
                         {
-                          Navigator.of(context).push(_StranaNastaveniKola());
+                          Navigator.of(context).push(_stranaNastaveniKola());
                         }
                     }
                   } else {
@@ -198,7 +196,7 @@ class StranaDruhKola extends StatelessWidget {
                             title: Text('Chyba'),
                             content: Text('Vyberte druh kola'),
                             actions: [
-                              FlatButton(
+                              TextButton(
                                 child: Text('Ok'),
                                 onPressed: () {
                                   Navigator.pop(context);
@@ -214,8 +212,7 @@ class StranaDruhKola extends StatelessWidget {
   }
 }
 
-Route _StranaCeloodpruzene() {
-  //TODO StranaCeloodpruzene
+Route _stranaCeloodpruzene() {
   return PageRouteBuilder(
     pageBuilder: (context, animation, secondaryAnimation) =>
         StranaCeloodpruzene(),
@@ -238,8 +235,7 @@ class StranaCeloodpruzene extends StatelessWidget {
   }
 }
 
-Route _StranaElektrokola() {
-  //TODO StranaElektrokola
+Route _stranaElektrokola() {
   return PageRouteBuilder(
     pageBuilder: (context, animation, secondaryAnimation) =>
         StranaElektrokola(),
@@ -261,8 +257,7 @@ class StranaElektrokola extends StatelessWidget {
   }
 }
 
-Route _StranaTrenazery() {
-  //TODO StranaTrenazery
+Route _stranaTrenazery() {
   return PageRouteBuilder(
     pageBuilder: (context, animation, secondaryAnimation) => StranaTrenazery(),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
@@ -305,7 +300,7 @@ class StranaTrenazery extends StatelessWidget {
               child: ElevatedButton(
                   child: Text('Další'),
                   onPressed: () {
-                    Navigator.of(context).push(_StranaTvorbaInzeratu());
+                    Navigator.of(context).push(_stranaTvorbaInzeratu());
                   }),
             ),
           ],
@@ -313,8 +308,7 @@ class StranaTrenazery extends StatelessWidget {
   }
 }
 
-Route _StranaKolobezky() {
-  //TODO StranaKolobezky
+Route _stranaKolobezky() {
   return PageRouteBuilder(
     pageBuilder: (context, animation, secondaryAnimation) => StranaKolobezky(),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
@@ -355,7 +349,7 @@ class StranaKolobezky extends StatelessWidget {
               child: ElevatedButton(
                   child: Text('Další'),
                   onPressed: () {
-                    Navigator.of(context).push(_StranaTvorbaInzeratu());
+                    Navigator.of(context).push(_stranaTvorbaInzeratu());
                   }),
             ),
           ],
@@ -363,8 +357,7 @@ class StranaKolobezky extends StatelessWidget {
   }
 }
 
-Route _StranaOdrazedla() {
-  //TODO StranaOdrazedla
+Route _stranaOdrazedla() {
   return PageRouteBuilder(
     pageBuilder: (context, animation, secondaryAnimation) => StranaOdrazedla(),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
@@ -384,8 +377,7 @@ class StranaOdrazedla extends StatelessWidget {
   }
 }
 
-Route _StranaSinglespeed() {
-  //TODO StranaSinglespeed
+Route _stranaSinglespeed() {
   return PageRouteBuilder(
     pageBuilder: (context, animation, secondaryAnimation) =>
         StranaSinglespeed(),
@@ -406,8 +398,7 @@ class StranaSinglespeed extends StatelessWidget {
   }
 }
 
-Route _StranaNastaveniKola() {
-  //TODO Nastaveni
+Route _stranaNastaveniKola() {
   return PageRouteBuilder(
     pageBuilder: (context, animation, secondaryAnimation) =>
         StranaNastaveniKola(),
@@ -428,8 +419,7 @@ class StranaNastaveniKola extends StatelessWidget {
   }
 }
 
-Route _StranaDetailKola() {
-  //TODO detail
+Route _stranaDetailKola() {
   return PageRouteBuilder(
     pageBuilder: (context, animation, secondaryAnimation) => StranaDetailKola(),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
@@ -464,8 +454,7 @@ class StranaDetailKola extends StatelessWidget {
   }
 }
 
-Route _StranaKomponenty() {
-  //TODO komponenty
+Route _stranaKomponenty() {
   return PageRouteBuilder(
     pageBuilder: (context, animation, secondaryAnimation) => StranaKomponenty(),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
@@ -500,35 +489,35 @@ class StranaKomponenty extends StatelessWidget {
                     {
                       Kategorie.vyberKategorie = 'kliky';
                       NastaveniKomponenty.kliky = true;
-                      Navigator.of(context).push(_StranaNastaveniKomponenty());
+                      Navigator.of(context).push(_stranaNastaveniKomponenty());
                     }
                     break;
                   case 'Převodníky':
                     {
                       Kategorie.vyberKomponenty = 'prevodniky';
                       NastaveniKomponenty.prevodniky = true;
-                      Navigator.of(context).push(_StranaNastaveniKomponenty());
+                      Navigator.of(context).push(_stranaNastaveniKomponenty());
                     }
                     break;
                   case 'Sedla':
                     {
                       Kategorie.vyberKomponenty = 'sedla';
                       NastaveniKomponenty.sedla = true;
-                      Navigator.of(context).push(_StranaNastaveniKomponenty());
+                      Navigator.of(context).push(_stranaNastaveniKomponenty());
                     }
                     break;
                   case 'Vidlice':
                     {
                       Kategorie.vyberKomponenty = 'vidlice';
                       NastaveniKomponenty.vidlice = true;
-                      Navigator.of(context).push(_StranaNastaveniKomponenty());
+                      Navigator.of(context).push(_stranaNastaveniKomponenty());
                     }
                     break;
                   case 'Zapletená kola':
                     {
                       Kategorie.vyberKomponenty = 'zapletenaKola';
                       NastaveniKomponenty.zapletenaKola = true;
-                      Navigator.of(context).push(_StranaNastaveniKomponenty());
+                      Navigator.of(context).push(_stranaNastaveniKomponenty());
                     }
                     break;
                 }
@@ -539,8 +528,7 @@ class StranaKomponenty extends StatelessWidget {
   }
 }
 
-Route _StranaDoplnky() {
-  //TODO doplňky
+Route _stranaDoplnky() {
   return PageRouteBuilder(
     pageBuilder: (context, animation, secondaryAnimation) => StranaDoplnky(),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
@@ -573,7 +561,7 @@ class StranaDoplnky extends StatelessWidget {
                             title: Text('Chyba'),
                             content: Text('Vyberte doplňek'),
                             actions: [
-                              FlatButton(
+                              TextButton(
                                 child: Text('Ok'),
                                 onPressed: () {
                                   Navigator.pop(context);
@@ -583,7 +571,7 @@ class StranaDoplnky extends StatelessWidget {
                           );
                         });
                   } else {
-                    Navigator.of(context).push(_StranaTvorbaInzeratu());
+                    Navigator.of(context).push(_stranaTvorbaInzeratu());
                   }
                 }))
       ]),
@@ -591,8 +579,7 @@ class StranaDoplnky extends StatelessWidget {
   }
 }
 
-Route _StranaOstatni() {
-  //TODO Ostatní
+Route _stranaOstatni() {
   return PageRouteBuilder(
     pageBuilder: (context, animation, secondaryAnimation) => StranaOstatni(),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
@@ -625,7 +612,7 @@ class StranaOstatni extends StatelessWidget {
                           title: Text('Chyba'),
                           content: Text('Vyberte typ produktu'),
                           actions: [
-                            FlatButton(
+                            TextButton(
                               child: Text('Ok'),
                               onPressed: () {
                                 Navigator.pop(context);
@@ -635,7 +622,7 @@ class StranaOstatni extends StatelessWidget {
                         );
                       });
                 } else {
-                  Navigator.of(context).push(_StranaTvorbaInzeratu());
+                  Navigator.of(context).push(_stranaTvorbaInzeratu());
                 }
               }),
         )
@@ -644,8 +631,7 @@ class StranaOstatni extends StatelessWidget {
   }
 }
 
-Route _StranaTvorbaInzeratu() {
-  //TODO kola
+Route _stranaTvorbaInzeratu() {
   return PageRouteBuilder(
     pageBuilder: (context, animation, secondaryAnimation) =>
         StranaTvorbaInzeratu(),
@@ -666,8 +652,7 @@ class StranaTvorbaInzeratu extends StatelessWidget {
   }
 }
 
-Route _StranaNastaveniKomponenty() {
-  //TODO Nastaveni
+Route _stranaNastaveniKomponenty() {
   return PageRouteBuilder(
     pageBuilder: (context, animation, secondaryAnimation) =>
         StranaNastaveniKomponenty(),

@@ -1,9 +1,7 @@
-import 'dart:math';
 import 'tvorbaInzeratu.dart';
 import 'package:flutter/material.dart';
 import 'kategorie.dart';
 import 'seznamy.dart';
-import 'main.dart';
 
 class NastaveniKola extends StatefulWidget {
   static String value;
@@ -124,98 +122,94 @@ class _NastaveniKolaState extends State<NastaveniKola> {
               TextInputTest(NastaveniKola.celoodpruzene,
                   Kategorie.vyberZdvihVidlice, 'Zdvih vidlice (v mm)'),
               Container(
-                child: true
-                    ? Padding(
-                        padding: EdgeInsets.only(
-                            top: 8, bottom: 4, right: 16, left: 16),
-                        child: InkWell(
-                          child: Container(
-                            height: 40,
-                            child: Center(
-                              child: Text('Brzdy',
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.bold)),
-                            ),
-                            color: Colors.blue,
+                  child: Padding(
+                      padding: EdgeInsets.only(
+                          top: 8, bottom: 4, right: 16, left: 16),
+                      child: InkWell(
+                        child: Container(
+                          height: 40,
+                          child: Center(
+                            child: Text('Brzdy',
+                                style: TextStyle(fontWeight: FontWeight.bold)),
                           ),
-                          onTap: () {
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: Text('Brzdy'),
-                                    content: Container(
-                                        height: 340,
-                                        width: 200,
-                                        child: Kategorie(
-                                            Seznamy().kategorieBrzdKolo)),
-                                    actions: [
-                                      FlatButton(
-                                        child: Text('Zrušit'),
+                          color: Colors.blue,
+                        ),
+                        onTap: () {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('Brzdy'),
+                                  content: Container(
+                                      height: 340,
+                                      width: 200,
+                                      child: Kategorie(
+                                          Seznamy().kategorieBrzdKolo)),
+                                  actions: [
+                                    TextButton(
+                                      child: Text('Zrušit'),
+                                      onPressed: () {
+                                        Kategorie.vyberKategorieBrzdKolo =
+                                            'prazdny';
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                    TextButton(
+                                        child: Text('Potvrdit'),
                                         onPressed: () {
                                           Kategorie.vyberKategorieBrzdKolo =
-                                              'prazdny';
+                                              Kategorie.selectedKategorie;
+                                          print(
+                                              Kategorie.vyberKategorieBrzdKolo);
                                           Navigator.pop(context);
-                                        },
-                                      ),
-                                      FlatButton(
-                                          child: Text('Potvrdit'),
-                                          onPressed: () {
-                                            Kategorie.vyberKategorieBrzdKolo =
-                                                Kategorie.selectedKategorie;
-                                            print(Kategorie
-                                                .vyberKategorieBrzdKolo);
-                                            Navigator.pop(context);
-                                            if (Kategorie.selectedKategorie ==
-                                                'Kotoučové brzdy') {
-                                              showDialog(
-                                                  context: context,
-                                                  builder:
-                                                      (BuildContext context) {
-                                                    return AlertDialog(
-                                                      title: Text(
-                                                          'Typ kotoučových brzd'),
-                                                      content: Container(
-                                                          height: 340,
-                                                          width: 200,
-                                                          child: Kategorie(Seznamy()
-                                                              .kotoucoveBrzdyKolo)),
-                                                      actions: [
-                                                        FlatButton(
-                                                          child: Text('Zrušit'),
+                                          if (Kategorie.selectedKategorie ==
+                                              'Kotoučové brzdy') {
+                                            showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return AlertDialog(
+                                                    title: Text(
+                                                        'Typ kotoučových brzd'),
+                                                    content: Container(
+                                                        height: 340,
+                                                        width: 200,
+                                                        child: Kategorie(Seznamy()
+                                                            .kotoucoveBrzdyKolo)),
+                                                    actions: [
+                                                      TextButton(
+                                                        child: Text('Zrušit'),
+                                                        onPressed: () {
+                                                          Kategorie
+                                                                  .vyberKategorieBrzdKolo =
+                                                              'prazdny';
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                      ),
+                                                      TextButton(
+                                                          child:
+                                                              Text('Potvrdit'),
                                                           onPressed: () {
                                                             Kategorie
                                                                     .vyberKategorieBrzdKolo =
-                                                                'prazdny';
+                                                                Kategorie
+                                                                    .selectedKategorie;
+                                                            print(Kategorie
+                                                                .vyberKategorieBrzdKolo);
                                                             Navigator.pop(
                                                                 context);
-                                                          },
-                                                        ),
-                                                        FlatButton(
-                                                            child: Text(
-                                                                'Potvrdit'),
-                                                            onPressed: () {
-                                                              Kategorie
-                                                                      .vyberKategorieBrzdKolo =
-                                                                  Kategorie
-                                                                      .selectedKategorie;
-                                                              print(Kategorie
-                                                                  .vyberKategorieBrzdKolo);
-                                                              Navigator.pop(
-                                                                  context);
-                                                            })
-                                                      ],
-                                                    );
-                                                  });
-                                            }
-                                          })
-                                    ],
-                                  );
-                                });
-                          },
-                        ))
-                    : Container(height: 0),
-              ),
+                                                          })
+                                                    ],
+                                                  );
+                                                });
+                                          }
+                                        })
+                                  ],
+                                );
+                              });
+                        },
+                      ))),
               NastaveniKolaTest(
                   NastaveniKola.upevneniKazetyPastorku,
                   Seznamy().upevneniKazetyPastorku,
@@ -295,7 +289,7 @@ class _NastaveniKolaState extends State<NastaveniKola> {
                                         child:
                                             Kategorie(Seznamy().typ1Vidlice)),
                                     actions: [
-                                      FlatButton(
+                                      TextButton(
                                         child: Text('Zrušit'),
                                         onPressed: () {
                                           Kategorie.vyberTyp1Vidlice =
@@ -303,7 +297,7 @@ class _NastaveniKolaState extends State<NastaveniKola> {
                                           Navigator.pop(context);
                                         },
                                       ),
-                                      FlatButton(
+                                      TextButton(
                                           child: Text('Potvrdit'),
                                           onPressed: () {
                                             Kategorie.vyberTyp1Vidlice =
@@ -325,7 +319,7 @@ class _NastaveniKolaState extends State<NastaveniKola> {
                                                           child: Kategorie(Seznamy()
                                                               .odpruzenaVidlice)),
                                                       actions: [
-                                                        FlatButton(
+                                                        TextButton(
                                                           child: Text('Zrušit'),
                                                           onPressed: () {
                                                             Kategorie
@@ -335,7 +329,7 @@ class _NastaveniKolaState extends State<NastaveniKola> {
                                                                 context);
                                                           },
                                                         ),
-                                                        FlatButton(
+                                                        TextButton(
                                                             child: Text(
                                                                 'Potvrdit'),
                                                             onPressed: () {
@@ -420,7 +414,7 @@ class _NastaveniKolaState extends State<NastaveniKola> {
           child: ElevatedButton(
               child: Text('Další'),
               onPressed: () {
-                Navigator.of(context).push(_StranaTvorbaInzeratu());
+                Navigator.of(context).push(_stranaTvorbaInzeratu());
               }),
         ),
       ],
@@ -489,13 +483,13 @@ class _TextInputTest extends State<TextInputTest> {
                             ),
                           ),
                           actions: [
-                            FlatButton(
+                            TextButton(
                                 child: Text('Zrušit'),
                                 onPressed: () {
                                   widget.vyber = 'prazdny';
                                   Navigator.pop(context);
                                 }),
-                            FlatButton(
+                            TextButton(
                                 child: Text('Potvrdit'),
                                 onPressed: () {
                                   widget.vyber = widget.vyberTemporary;
@@ -563,14 +557,14 @@ class _NastaveniKolaTest extends State<NastaveniKolaTest> {
                               width: 200,
                               child: Kategorie(widget.seznam)),
                           actions: [
-                            FlatButton(
+                            TextButton(
                               child: Text('Zrušit'),
                               onPressed: () {
                                 widget.vyber = 'prazdny';
                                 Navigator.pop(context);
                               },
                             ),
-                            FlatButton(
+                            TextButton(
                                 child: Text('Potvrdit'),
                                 onPressed: () {
                                   widget.vyber = Kategorie.selectedKategorie;
@@ -587,8 +581,7 @@ class _NastaveniKolaTest extends State<NastaveniKolaTest> {
   }
 }
 
-Route _StranaTvorbaInzeratu() {
-  //TODO kola
+Route _stranaTvorbaInzeratu() {
   return PageRouteBuilder(
     pageBuilder: (context, animation, secondaryAnimation) =>
         StranaTvorbaInzeratu(),

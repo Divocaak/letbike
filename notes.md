@@ -54,6 +54,8 @@ http://127.0.0.1/projects/letbike/userRegister.php?username=admin&&email=asd@asd
     - [ ] master na GitHubu
 - [ ] response (success || error)
 - [ ] jméno brázku = id + číslo obrázku + přípona
+- [ ] deprecated věci nahradit
+- [ ] upravit seznamy.dart na více Tříd, tohle je hnus
 
 ### Chat Screen
 

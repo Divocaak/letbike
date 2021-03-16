@@ -1,9 +1,6 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'kategorie.dart';
 import 'seznamy.dart';
-import 'main.dart';
 import 'tvorbaInzeratu.dart';
 
 class NastaveniKomponenty extends StatefulWidget {
@@ -73,7 +70,7 @@ class _NastaveniKomponentyState extends State<NastaveniKomponenty> {
                                         child: Kategorie(
                                             Seznamy().kategorieBrzdKolo)),
                                     actions: [
-                                      FlatButton(
+                                      TextButton(
                                         child: Text('Zrušit'),
                                         onPressed: () {
                                           Kategorie.vyberKategorieBrzdKolo =
@@ -81,7 +78,7 @@ class _NastaveniKomponentyState extends State<NastaveniKomponenty> {
                                           Navigator.pop(context);
                                         },
                                       ),
-                                      FlatButton(
+                                      TextButton(
                                           child: Text('Potvrdit'),
                                           onPressed: () {
                                             Kategorie.vyberKategorieBrzdKolo =
@@ -104,7 +101,7 @@ class _NastaveniKomponentyState extends State<NastaveniKomponenty> {
                                                           child: Kategorie(Seznamy()
                                                               .kotoucoveBrzdyKolo)),
                                                       actions: [
-                                                        FlatButton(
+                                                        TextButton(
                                                           child: Text('Zrušit'),
                                                           onPressed: () {
                                                             Kategorie
@@ -114,7 +111,7 @@ class _NastaveniKomponentyState extends State<NastaveniKomponenty> {
                                                                 context);
                                                           },
                                                         ),
-                                                        FlatButton(
+                                                        TextButton(
                                                             child: Text(
                                                                 'Potvrdit'),
                                                             onPressed: () {
@@ -249,7 +246,7 @@ class _NastaveniKomponentyState extends State<NastaveniKomponenty> {
                                         child:
                                             Kategorie(Seznamy().typ1Vidlice)),
                                     actions: [
-                                      FlatButton(
+                                      TextButton(
                                         child: Text('Zrušit'),
                                         onPressed: () {
                                           Kategorie.vyberTyp1Vidlice =
@@ -257,7 +254,7 @@ class _NastaveniKomponentyState extends State<NastaveniKomponenty> {
                                           Navigator.pop(context);
                                         },
                                       ),
-                                      FlatButton(
+                                      TextButton(
                                           child: Text('Potvrdit'),
                                           onPressed: () {
                                             Kategorie.vyberTyp1Vidlice =
@@ -279,7 +276,7 @@ class _NastaveniKomponentyState extends State<NastaveniKomponenty> {
                                                           child: Kategorie(Seznamy()
                                                               .odpruzenaVidlice)),
                                                       actions: [
-                                                        FlatButton(
+                                                        TextButton(
                                                           child: Text('Zrušit'),
                                                           onPressed: () {
                                                             Kategorie
@@ -289,7 +286,7 @@ class _NastaveniKomponentyState extends State<NastaveniKomponenty> {
                                                                 context);
                                                           },
                                                         ),
-                                                        FlatButton(
+                                                        TextButton(
                                                             child: Text(
                                                                 'Potvrdit'),
                                                             onPressed: () {
@@ -346,7 +343,7 @@ class _NastaveniKomponentyState extends State<NastaveniKomponenty> {
           child: ElevatedButton(
               child: Text('Další'),
               onPressed: () {
-                Navigator.of(context).push(_StranaTvorbaInzeratu());
+                Navigator.of(context).push(_stranaTvorbaInzeratu());
               }),
         ),
       ],
@@ -415,13 +412,13 @@ class _TextInputTestKomponenty extends State<TextInputTestKomponenty> {
                             ),
                           ),
                           actions: [
-                            FlatButton(
+                            TextButton(
                                 child: Text('Zrušit'),
                                 onPressed: () {
                                   widget.vyber = 'prazdny';
                                   Navigator.pop(context);
                                 }),
-                            FlatButton(
+                            TextButton(
                                 child: Text('Potvrdit'),
                                 onPressed: () {
                                   widget.vyber = widget.vyberTemporary;
@@ -489,12 +486,12 @@ class _NastaveniKomponentyTest extends State<NastaveniKomponentyTest> {
                               width: 200,
                               child: Kategorie(widget.seznam)),
                           actions: [
-                            FlatButton(
+                            TextButton(
                                 child: Text('Zrušit'),
                                 onPressed: () {
                                   Navigator.pop(context);
                                 }),
-                            FlatButton(
+                            TextButton(
                                 child: Text('Potvrdit'),
                                 onPressed: () {
                                   widget.vyber = Kategorie.selectedKategorie;
@@ -510,8 +507,7 @@ class _NastaveniKomponentyTest extends State<NastaveniKomponentyTest> {
   }
 }
 
-Route _StranaTvorbaInzeratu() {
-  //TODO kola
+Route _stranaTvorbaInzeratu() {
   return PageRouteBuilder(
     pageBuilder: (context, animation, secondaryAnimation) =>
         StranaTvorbaInzeratu(),

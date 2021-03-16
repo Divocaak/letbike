@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Kategorie extends StatefulWidget {
-  List<String> kategorie;
+  final List<String> kategorie;
 
   Kategorie(this.kategorie);
   static String selectedKategorie = 'prazdny';
