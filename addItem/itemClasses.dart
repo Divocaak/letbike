@@ -1,16 +1,41 @@
-class Seznamy {
-//Kategorie produktů
-  List<String> kategorie = ['Kola', 'Komponenty', 'Doplňky', 'Ostatní'];
+class Category {
+  int selectedCategory;
+  int selectedAccessory;
+  int selectedPart;
+  int selectedOther;
 
-  List<String> seznamKomponenty = [
+  Category(this.selectedCategory, this.selectedAccessory, this.selectedPart,
+      this.selectedOther);
+
+  static List<String> categories = ['Kola', 'Komponenty', 'Doplňky', 'Ostatní'];
+
+  static List<String> parts = [
+    "Zapletená kola",
     "Kliky",
     "Převodníky",
     "Sedla",
     "Vidlice",
-    "Zapletená kola",
+    "Bowdeny a lanka",
+    "Brzdy",
+    "Duše",
+    "Gripy a omotávky",
+    "Hlavová složení",
+    "Kazety a pastorky",
+    "Náboje a osy",
+    "Pedály",
+    "Pláště/Galusky",
+    "Představce",
+    "Příslušenství na elektrokola",
+    "Ráfky",
+    "Rámy",
+    "Řazení",
+    "Řídítka",
+    "Sedlovky",
+    "Tlumiče",
+    "Jiné"
   ];
 
-  List<String> seznamDoplnky = [
+  static List<String> accessories = [
     "Blatníky",
     "Brašny/batohy",
     "Brýle",
@@ -30,8 +55,16 @@ class Seznamy {
     "Zámky",
   ];
 
-//Kolo
-  List<String> druhKola = [
+  static List<String> other = ["E-Bike", "Tranažery", "Koloběžky"];
+}
+
+class Bike {
+  int selectedType;
+  int selectedBrand;
+
+  Bike(this.selectedType, this.selectedBrand);
+
+  static List<String> type = [
     "Horská kola",
     "Silniční kola",
     "Celoodpružené", // bez odpružení
@@ -58,7 +91,7 @@ class Seznamy {
     "Jiné"
   ];
 
-  List<String> znackaKola = [
+  static List<String> brand = [
     "4Ever",
     "Acra",
     "Amulet",
@@ -97,8 +130,35 @@ class Seznamy {
     "Trek",
     "Jiné"
   ];
-//Zapletené kola
-  List<String> znackaKolo = [
+}
+
+class Wheel {
+  int selectedBrand;
+  int selectedSize;
+  int selectedMaterial;
+  bool selectedSpokes;
+  bool selectedType;
+  int selectedAxis;
+  bool selectedBrakesType;
+  bool selectedBrakesDisc;
+  bool selectedCassette;
+  int selectedNut;
+  int selectedCompatibility;
+
+  Wheel(
+      this.selectedBrand,
+      this.selectedSize,
+      this.selectedMaterial,
+      this.selectedSpokes,
+      this.selectedType,
+      this.selectedAxis,
+      this.selectedBrakesType,
+      this.selectedBrakesDisc,
+      this.selectedCassette,
+      this.selectedNut,
+      this.selectedCompatibility);
+
+  static List<String> brand = [
     "Author",
     "Bontrager",
     "Campagnolo",
@@ -127,7 +187,7 @@ class Seznamy {
     "Zipp",
   ];
 
-  List<String> velikostKolo = [
+  static List<String> size = [
     "12’",
     "14’",
     "16’",
@@ -141,13 +201,9 @@ class Seznamy {
     "29’"
   ];
 
-  List<String> materialRafku = ["Karbon", "Hlíník", "ocel"];
+  static List<String> material = ["Karbon", "Hlíník", "ocel"];
 
-  List<String> dratyKolo = ["Ploché", "Kulaté"];
-
-  List<String> provedeniNaboje = ["Přední", "Zadní"];
-
-  List<String> osaKolo = [
+  static List<String> axis = [
     "Pevná 20 mm",
     "Pevná 15 mm",
     "Pevná 12mm",
@@ -155,15 +211,9 @@ class Seznamy {
     "Na matice"
   ];
 
-  List<String> kategorieBrzdKolo = ["Kotoučové brzdy", "V-brzdy"];
+  static List<String> nut = ["Shimano", "Sram", "Campagnolo"];
 
-  List<String> kotoucoveBrzdyKolo = ["CenterLock", "6 děr"]; //
-
-  List<String> upevneniKazetyPastorku = ["Závit - šroubovací kolečko", "Ořech"];
-
-  List<String> orechKolo = ["Shimano", "Sram", "Campagnolo"];
-
-  List<String> kompatibilitaKolo = [
+  static List<String> compatibility = [
     "12 rychlostí",
     "11 rychlostí",
     "10 rychlostí",
@@ -173,8 +223,18 @@ class Seznamy {
     "6 rychlostí",
     "1 rychlost"
   ];
-//Kliky
-  List<String> znackaKliky = [
+}
+
+class Cranks {
+  int selectedBrand;
+  int selectedCompatibility;
+  int selectedMaterial;
+  int selectedAxis;
+
+  Cranks(this.selectedBrand, this.selectedCompatibility, this.selectedMaterial,
+      this.selectedAxis);
+
+  static List<String> brand = [
     "Aerozine",
     "Campagnolo",
     "Force",
@@ -190,17 +250,25 @@ class Seznamy {
     "Truvativ",
     "Jiné"
   ];
-  List<String> kompatibilitaKliky = [
+
+  static List<String> compatibility = [
     "1 Převodník",
     "2 Převodníky",
     "3 Převodníky"
   ];
 
-  List<String> materialKliky = ["Karbon", "Ocel", "Hliník"];
+  static List<String> material = ["Karbon", "Ocel", "Hliník"];
 
-  List<String> osaKliky = ["DUB", "29 mm", "24 mm", "BB30", "4hran", "Isis"];
-//Prevodniky
-  List<String> znackaPrevodniky = [
+  static List<String> axis = ["DUB", "29 mm", "24 mm", "BB30", "4hran", "Isis"];
+}
+
+class Converter {
+  int selectedBrand;
+  int selectedNumOfSpeeds;
+
+  Converter(this.selectedBrand, this.selectedNumOfSpeeds);
+
+  static List<String> brand = [
     "absoluteBLACK",
     "Aerozine",
     "BBB",
@@ -227,18 +295,16 @@ class Seznamy {
     "Jiné"
   ];
 
-  List<String> pocetRychlostiPrevodniky = [
-    "1",
-    "2",
-    "7",
-    "8",
-    "9",
-    "10",
-    "11",
-    "12"
-  ];
-//Sedla
-  List<String> znackaSedla = [
+  static List<String> numOfSpeeds = ["1", "2", "7", "8", "9", "10", "11", "12"];
+}
+
+class Saddle {
+  int selectedBrand;
+  int selectedGender;
+
+  Saddle(this.selectedBrand, this.selectedGender);
+
+  static List<String> brand = [
     "Author",
     "BBB",
     "Bontrager",
@@ -269,9 +335,28 @@ class Seznamy {
     "Jiné"
   ];
 
-  List<String> pohlaviSedla = ["Unisex", "Pánské", "Dámské", "Dětské"];
-//Vidlice
-  List<String> znackaVidlice = [
+  static List<String> gender = ["Unisex", "Pánské", "Dámské", "Dětské"];
+}
+
+class Fork {
+  int selectedBrand;
+  int selectedSize;
+  bool selectedSuspensionType;
+  bool selectedSuspension;
+  int selectedWheelCoompatibility;
+  int selectedMaterial;
+  int selectedMaterialColumn;
+
+  Fork(
+      this.selectedBrand,
+      this.selectedSize,
+      this.selectedSuspensionType,
+      this.selectedSuspension,
+      this.selectedWheelCoompatibility,
+      this.selectedMaterial,
+      this.selectedMaterialColumn);
+
+  static List<String> brand = [
     "Cane Creek",
     "Cannondale",
     "Cyklo Žitný",
@@ -304,13 +389,7 @@ class Seznamy {
     "Jiné"
   ];
 
-  List<String> typ1Vidlice = ["Odpružená", "Pevná"];
-
-  List<String> odpruzenaVidlice = ["Vzduchová", "Pružinová"]; //
-
-  List<String> materialVidlice = ["Ocel", "Karbon", "Hliník", "Titan"];
-
-  List<String> velikostVidlice = [
+  static List<String> size = [
     "12’",
     "14’",
     "16’",
@@ -324,36 +403,24 @@ class Seznamy {
     "29’"
   ];
 
-  List<String> typ2Vidlice = ["Rychloupínák", "Pevná osa", "Matice"];
-
-  List<String> materialSloupkuVidlice = ["Karbon", "Ocel", "Hliník"];
-//Ostatní
-  List<String> ostatni = [
-    "Bowdeny a lanka",
-    "Brzdy",
-    "Duše",
-    "Gripy a omotávky",
-    "Hlavová složení",
-    "Kazety a pastorky",
-    "Náboje a osy",
-    "Pedály",
-    "Pláště/Galusky",
-    "Představce",
-    "Příslušenství na elektrokola",
-    "Ráfky",
-    "Rámy",
-    "Řazení",
-    "Řídítka",
-    "Sedlovky",
-    "Tlumiče",
-    "Jiné"
+  static List<String> wheelCompatibility = [
+    "Rychloupínák",
+    "Pevná osa",
+    "Matice"
   ];
 
-//Speciální
+  static List<String> material = ["Ocel", "Karbon", "Hliník", "Titan"];
 
-//Elektrokola
-  List<String> umisteniMotoru = ["Středový", "Nábojový"];
-  List<String> vyrobceElektrokola = [
+  static List<String> materialColumn = ["Karbon", "Ocel", "Hliník"];
+}
+
+class EBike {
+  int selectedBrand;
+  bool selectedMotorPos;
+
+  EBike(this.selectedBrand, this.selectedMotorPos);
+
+  static List<String> brand = [
     "Crussis",
     "Haibike",
     "Apache",
@@ -361,10 +428,15 @@ class Seznamy {
     "Leader Fox",
     "Jiné"
   ];
+}
 
-//Trenažéry
-  List<String> brzdnySystemTrenazery = ["magnetický", "indukční", "páskový"];
-  List<String> vyrobceTrenazery = [
+class Trainer {
+  int selectedBrand;
+  int selectedBrakes;
+
+  Trainer(this.selectedBrand, this.selectedBrakes);
+
+  static List<String> brand = [
     "HMS",
     "Tunturi",
     "BH Fitness",
@@ -373,8 +445,17 @@ class Seznamy {
     "Jiné"
   ];
 
-//Koloběžky
-  List<String> velikostKolecek = [
+  static List<String> brakes = ["magnetický", "indukční", "páskový"];
+}
+
+class Scooter {
+  int selectedBrand;
+  int selectedSize;
+  bool selectedComputer;
+
+  Scooter(this.selectedBrand, this.selectedSize, this.selectedComputer);
+
+  static List<String> size = [
     "přední 26’ a zadní 20’",
     "přední 16’ a zadní 12’",
     "přední 12’ a zadní 12’",
@@ -390,7 +471,8 @@ class Seznamy {
     "přední 22’ a zadní 12’",
     "přední 230 mm, zadní 180 mm",
   ];
-  List<String> vyrobceKolobezky = [
+
+  static List<String> brand = [
     "AO",
     "Bestial Wolf",
     "Blazer",
@@ -445,5 +527,4 @@ class Seznamy {
     "Yedoo",
     "Jiné"
   ];
-  List<String> pocitac = ["Ano", "Ne"];
 }
