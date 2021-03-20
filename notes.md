@@ -38,7 +38,7 @@
 - [x] alert box při špatné validaci
     - [x] login
     - [x] register
-- [ ] zbavit se zbytečných fontů a závislostí (fonty, ...)
+- [ ] zbavit se zbytečných závislostí (fonty, ...)
 - [ ] zapomenuté heslo
 - [ ] zapamatovat přihlášení
 - [ ] vyřešit error při úspešném loginu
@@ -53,7 +53,7 @@ http://127.0.0.1/projects/letbike/userRegister.php?username=admin&&email=asd@asd
     - [ ] moje hotovo
     - [ ] master na GitHubu
 - [ ] response (success || error)
-- [ ] jméno brázku = id + číslo obrázku + přípona
+- [ ] jméno brázku = ../imgs/id/číslo obrázku
 - [x] deprecated věci nahradit
 - [x] upravit seznamy.dart na více Tříd, tohle je hnus
 
@@ -61,9 +61,10 @@ http://127.0.0.1/projects/letbike/userRegister.php?username=admin&&email=asd@asd
 
 - [ ] skupina __A__
     - [x] příjem na GitHubu
-    - [ ] staženo
+    - [x] staženo
     - [ ] moje hotovo
     - [ ] master na GitHubu
+- [ ] načíst obrázek z databáze
 
 ### Fitry
 

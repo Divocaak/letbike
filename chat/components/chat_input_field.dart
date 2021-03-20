@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../constants.dart';
+import '../../general/pallete.dart';
 
 class ChatInputField extends StatefulWidget {
   const ChatInputField({
@@ -13,7 +13,7 @@ class ChatInputField extends StatefulWidget {
 }
 
 class _ChatInputFieldState extends State<ChatInputField> {
-   PickedFile _imageFile;
+  PickedFile _imageFile;
 
   final ImagePicker _picker = ImagePicker();
 
@@ -26,8 +26,6 @@ class _ChatInputFieldState extends State<ChatInputField> {
       Navigator.of(context).pop();
     });
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -90,9 +88,8 @@ class _ChatInputFieldState extends State<ChatInputField> {
                             .bodyText1
                             .color
                             .withOpacity(0.64),
-                            
                       ),
-                      onTap: (){
+                      onTap: () {
                         takePhoto(ImageSource.gallery);
                       },
                     ),
@@ -106,7 +103,7 @@ class _ChatInputFieldState extends State<ChatInputField> {
                             .color
                             .withOpacity(0.64),
                       ),
-                      onTap: (){
+                      onTap: () {
                         takePhoto(ImageSource.camera);
                       },
                     ),

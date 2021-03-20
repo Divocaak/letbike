@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-import "../dbServices.dart";
+import 'package:letbike/chat/chatScreen.dart';
+import 'homePage.dart';
 
 //ignore: must_be_immutable
-class ProductPage extends StatelessWidget {
-  final Item item;
-
-  ProductPage({Key key, @required this.item}) : super(key: key);
+class ItemPage extends StatelessWidget {
+  static const routeName = "/itemPage";
 
   @override
   Widget build(BuildContext context) {
+    final ItemInfo itemInfo = ModalRoute.of(context).settings.arguments;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
@@ -19,7 +20,7 @@ class ProductPage extends StatelessWidget {
             return IconButton(
               icon: const Icon(Icons.arrow_back_outlined),
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.of(context).pop();
               },
             );
           },
@@ -54,20 +55,20 @@ class ProductPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          item.name,
+                          itemInfo.item.name,
                           style: TextStyle(
                               fontSize: 40, fontWeight: FontWeight.bold),
                           textAlign: TextAlign.left,
                         ),
                         Text(
-                          item.description,
+                          itemInfo.item.description,
                           style: TextStyle(fontSize: 20),
                         ),
                         Container(
                           child: Align(
                             alignment: Alignment(0.20, 1.00),
                             child: Text(
-                              item.price.toString() + " Kč",
+                              itemInfo.item.price.toString() + " Kč",
                               style: TextStyle(
                                   fontSize: 40, fontWeight: FontWeight.bold),
                             ),
@@ -85,7 +86,10 @@ class ProductPage extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context)
+              .pushNamed(ChatScreen.routeName, arguments: itemInfo);
+        },
         child: const Icon(Icons.chat),
       ),
     );

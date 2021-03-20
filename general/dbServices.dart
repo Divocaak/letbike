@@ -14,7 +14,7 @@ class DatabaseServices {
     if (response.statusCode == 200) {
       return Item.fromJson(json.decode(response.body));
     } else {
-      throw Exception("Can't load author");
+      throw Exception("Can't add item");
     }
   }
 
@@ -26,7 +26,7 @@ class DatabaseServices {
       final parsed = jsonDecode(response.body).cast<Map<String, dynamic>>();
       return parsed.map<Item>((item) => Item.fromJson(item)).toList();
     } else {
-      throw Exception("Can't load author");
+      throw Exception("Can't get items");
     }
   }
 
@@ -62,7 +62,25 @@ class DatabaseServices {
         return User(-1, "", "", "", -1, "", "", "", "", "", -1, -1);
       }
     } else {
-      throw Exception("Can't register user");
+      throw Exception("Can't login user");
+    }
+  }
+
+  static Future<List<Message>> getMessagesBetween(int from, int to) async {
+    final Response response = await get(
+        Uri.encodeFull(url +
+            "getMessages.php/?from=" +
+            from.toString() +
+            "&&to=" +
+            to.toString()),
+        headers: {"Accept": "application/json"});
+    if (response.statusCode == 200) {
+      final parsed = jsonDecode(response.body).cast<Map<String, dynamic>>();
+      return parsed
+          .map<Message>((message) => Message.fromJson(message))
+          .toList();
+    } else {
+      throw Exception("Can't load messages");
     }
   }
 }
@@ -181,4 +199,20 @@ class User {
         "postal": postal,
         "status": status
       };
+}
+
+class Message {
+  int from;
+  int to;
+  String message;
+
+  Message(this.from, this.to, this.message);
+
+  factory Message.fromJson(Map<String, dynamic> json) {
+    return Message(
+        int.parse(json["from"]), int.parse(json["to"]), json["message"]);
+  }
+
+  Map<String, dynamic> toJson() =>
+      {"from_id": from, "to_id": to, "message": message};
 }

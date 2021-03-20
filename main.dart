@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'screens.dart';
+import 'sign/screens.dart';
+import 'app/homePage.dart';
+import 'app/itemPage.dart';
+import 'chat/chatScreen.dart';
 
 void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -23,6 +25,9 @@ class MyApp extends StatelessWidget {
         "/": (context) => LoginScreen(),
         "ForgotPassword": (context) => ForgotPassword(),
         "CreateNewAccount": (context) => CreateNewAccount(),
+        HomePage.routeName: (context) => HomePage(),
+        ItemPage.routeName: (context) => ItemPage(),
+        ChatScreen.routeName: (content) => ChatScreen()
       },
     );
   }
