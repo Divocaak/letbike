@@ -1,14 +1,12 @@
-import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:flutter/material.dart';
+import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:line_awesome_flutter/line_awesome_flutter.dart';
-import 'package:profile_app_ui/change_password.dart';
-import 'package:profile_app_ui/constants.dart';
-import 'package:profile_app_ui/widgets/profile_list_item.dart';
+import 'change_password.dart';
+import 'constants.dart';
+import 'widgets/profile_list_item.dart';
 import 'package:image_picker/image_picker.dart';
 import 'profile_info.dart';
-import 'constants.dart';
 
 void main() {
   runApp(MyApp());
@@ -145,8 +143,6 @@ class _ProfileScreenState extends State<ProfileScreen>
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context, height: 896, width: 414, allowFontScaling: true);
-
     var profileInfo = Expanded(
       child: Column(
         children: <Widget>[
@@ -184,7 +180,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                           heightFactor: kSpacingUnit.w * 1.5,
                           widthFactor: kSpacingUnit.w * 1.5,
                           child: Icon(
-                            LineAwesomeIcons.pen,
+                            Icons.create,
                             color: Colors.white,
                             size: ScreenUtil().setSp(kSpacingUnit.w * 1.5),
                           ),
@@ -247,19 +243,19 @@ class _ProfileScreenState extends State<ProfileScreen>
                       onTap: () =>
                           Navigator.pushNamed(context, "Change_password"),
                       child: ProfileListItem(
-                        icon: LineAwesomeIcons.lock,
+                        icon: Icons.lock,
                         text: 'Change Password',
                       ),
                     ),
                     GestureDetector(
                       onTap: () => Navigator.pushNamed(context, "ProfileInfo"),
                       child: ProfileListItem(
-                        icon: LineAwesomeIcons.user,
+                        icon: Icons.person,
                         text: 'Profile Info',
                       ),
                     ),
                     ProfileListItem(
-                      icon: LineAwesomeIcons.alternate_sign_out,
+                      icon: Icons.logout,
                       text: 'Logout',
                       hasNavigation: false,
                     ),
@@ -269,7 +265,7 @@ class _ProfileScreenState extends State<ProfileScreen>
             ],
           ),
           IgnorePointer(
-            ignoring: animationController.isCompleted ? false:true,
+            ignoring: animationController.isCompleted ? false : true,
             child: Container(
               color: Colors.black.withOpacity(volume),
             ),

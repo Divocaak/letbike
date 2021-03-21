@@ -4,9 +4,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:profile_app_ui/constants.dart';
+import 'constants.dart';
 import 'widgets/text-input-field.dart';
-import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
 double volume = 0;
 
@@ -157,7 +156,7 @@ class _ProfileInfoState extends State<ProfileInfo>
                           heightFactor: 15,
                           widthFactor: 15,
                           child: Icon(
-                            LineAwesomeIcons.pen,
+                            Icons.create,
                             color: Colors.white,
                             size: 15,
                           ),
@@ -211,37 +210,37 @@ class _ProfileInfoState extends State<ProfileInfo>
                 Column(
                   children: [
                     TextInputField(
-                      icon: LineAwesomeIcons.user,
+                      icon: Icons.create,
                       hint: "First Name",
                       inputType: TextInputType.name,
                       inputAction: TextInputAction.next,
                     ),
                     TextInputField(
-                      icon: LineAwesomeIcons.user,
+                      icon: Icons.create,
                       hint: "Last Name",
                       inputType: TextInputType.name,
                       inputAction: TextInputAction.next,
                     ),
                     TextInputField(
-                      icon: LineAwesomeIcons.phone,
+                      icon: Icons.phone,
                       hint: "Phone Number",
                       inputAction: TextInputAction.next,
                       inputType: TextInputType.phone,
                     ),
                     TextInputField(
-                      icon: LineAwesomeIcons.home,
+                      icon: Icons.home,
                       hint: "Address 1",
                       inputAction: TextInputAction.next,
                       inputType: TextInputType.streetAddress,
                     ),
                     TextInputField(
-                      icon: LineAwesomeIcons.home,
+                      icon: Icons.location_city,
                       hint: "Address 2",
                       inputAction: TextInputAction.next,
                       inputType: TextInputType.streetAddress,
                     ),
                     TextInputField(
-                      icon: LineAwesomeIcons.home,
+                      icon: Icons.flag,
                       hint: "Address 3",
                       inputAction: TextInputAction.next,
                       inputType: TextInputType.streetAddress,
@@ -256,8 +255,7 @@ class _ProfileInfoState extends State<ProfileInfo>
           ),
         ),
         IgnorePointer(
-          ignoring: animationController.isCompleted ? false
-          :true,
+          ignoring: animationController.isCompleted ? false : true,
           child: Container(
             color: Colors.black.withOpacity(volume),
           ),
@@ -299,8 +297,8 @@ class _ProfileInfoState extends State<ProfileInfo>
                           onClick: () {
                             Navigator.popAndPushNamed(
                                 context, "Profile_screen");
-                                animationController.reverse();
-                                 volume = 0;
+                            animationController.reverse();
+                            volume = 0;
                           },
                         ),
                       ),

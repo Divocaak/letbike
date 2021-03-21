@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:line_awesome_flutter/line_awesome_flutter.dart';
-import 'package:profile_app_ui/constants.dart';
+import '../constants.dart';
 
 class ProfileListItem extends StatelessWidget {
   final IconData icon;
@@ -47,7 +46,7 @@ class ProfileListItem extends StatelessWidget {
           Spacer(),
           if (this.hasNavigation)
             Icon(
-              LineAwesomeIcons.angle_right,
+              Icons.arrow_forward,
               size: 10 * 2.5,
             ),
         ],
