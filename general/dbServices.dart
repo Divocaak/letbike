@@ -66,13 +66,16 @@ class DatabaseServices {
     }
   }
 
-  static Future<List<Message>> getMessagesBetween(int from, int to) async {
+  static Future<List<Message>> getMessagesBetween(
+      int from, int to, int itemId) async {
     final Response response = await get(
         Uri.encodeFull(url +
-            "getMessages.php/?from=" +
+            "messageGet.php/?from=" +
             from.toString() +
             "&&to=" +
-            to.toString()),
+            to.toString() +
+            "&&itemId=" +
+            itemId.toString()),
         headers: {"Accept": "application/json"});
     if (response.statusCode == 200) {
       final parsed = jsonDecode(response.body).cast<Map<String, dynamic>>();
@@ -81,6 +84,46 @@ class DatabaseServices {
           .toList();
     } else {
       throw Exception("Can't load messages");
+    }
+  }
+
+  static Stream<List<Message>> getMessages(
+      Duration refreshTime, int from, int to, int itemId) async* {
+    while (true) {
+      await Future.delayed(refreshTime);
+      yield await getMessagesBetween(from, to, itemId);
+    }
+  }
+
+  static Future sendMessage(
+      int from, int to, int itemId, String message) async {
+    final Response response = await get(
+        Uri.encodeFull(url +
+            "messageSet.php/?from=" +
+            from.toString() +
+            "&&to=" +
+            to.toString() +
+            "&&itemId=" +
+            itemId.toString() +
+            "&&message=" +
+            message),
+        headers: {"Accept": "application/json"});
+    if (response.statusCode == 200) {
+      print("sent");
+    } else {
+      throw Exception("Something's wrong, I can feel it");
+    }
+  }
+
+  static Future<List<Chat>> getChats(int itemId) async {
+    final Response response = await get(
+        Uri.encodeFull(url + "chatsGet.php/?itemId=" + itemId.toString()),
+        headers: {"Accept": "application/json"});
+    if (response.statusCode == 200) {
+      final parsed = jsonDecode(response.body).cast<Map<String, dynamic>>();
+      return parsed.map<Chat>((chat) => Chat.fromJson(chat)).toList();
+    } else {
+      throw Exception("Can't load chats");
     }
   }
 }
@@ -210,9 +253,20 @@ class Message {
 
   factory Message.fromJson(Map<String, dynamic> json) {
     return Message(
-        int.parse(json["from"]), int.parse(json["to"]), json["message"]);
+        int.parse(json["from_id"]), int.parse(json["to_id"]), json["message"]);
   }
 
   Map<String, dynamic> toJson() =>
       {"from_id": from, "to_id": to, "message": message};
+}
+
+class Chat {
+  String email;
+  String username;
+
+  Chat(this.email, this.username);
+
+  factory Chat.fromJson(Map<String, dynamic> json) {
+    return Chat(json["email"], json["username"]);
+  }
 }

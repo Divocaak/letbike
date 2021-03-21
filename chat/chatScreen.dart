@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:letbike/general/dbServices.dart';
+import '../general/dbServices.dart';
 import '../app/homePage.dart';
 import '../general/pallete.dart';
 import 'components/chat_input_field.dart';
 import "components/messageImage.dart";
 import "components/messageText.dart";
+import 'dart:async';
 
 ItemInfo itemInfo;
 
@@ -17,17 +18,18 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen>
     with SingleTickerProviderStateMixin {
-  Future<List<Message>> messages;
+  Stream<List<Message>> messagesStream;
 
   @override
   void initState() {
-    itemInfo = ModalRoute.of(context).settings.arguments;
-    messages = DatabaseServices.getMessagesBetween(9, 10);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    itemInfo = ModalRoute.of(context).settings.arguments;
+    messagesStream = DatabaseServices.getMessages(Duration(seconds: 1),
+        itemInfo.item.sellerId, itemInfo.me.id, itemInfo.item.id);
     return Scaffold(
       appBar: buildAppBar(),
       body: buildChatBody(),
@@ -57,7 +59,7 @@ class _ChatScreenState extends State<ChatScreen>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                itemInfo.item.sellerId.toString(),
+                itemInfo.item.name,
                 style: TextStyle(fontSize: 20),
               ),
             ],
@@ -74,23 +76,22 @@ class _ChatScreenState extends State<ChatScreen>
           child: Padding(
               padding: const EdgeInsets.fromLTRB(
                   kDefaultPadding, 1, kDefaultPadding, 0),
-              child: FutureBuilder<List<Message>>(
-                future: messages,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
+              child: StreamBuilder(
+                stream: messagesStream,
+                builder: (context, stream) {
+                  if (stream.hasData) {
                     return ListView.builder(
-                        itemCount: snapshot.data.length,
+                        itemCount: stream.data.length,
                         itemBuilder: (context, i) {
-                          return buildMessage(snapshot.data[i]);
+                          return buildMessage(stream.data[i]);
                         });
-                  } else if (snapshot.hasError) {
-                    return Text('Sorry there is an error');
+                  } else {
+                    return Center(child: CircularProgressIndicator());
                   }
-                  return Center(child: CircularProgressIndicator());
                 },
               )),
         ),
-        ChatInputField(),
+        ChatInputField(itemInfo),
       ],
     );
   }

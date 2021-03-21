@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-
+import 'package:letbike/app/homePage.dart';
+import 'package:letbike/general/dbServices.dart';
+import '../../general/alertBox.dart';
 import '../../general/pallete.dart';
 
 class ChatInputField extends StatefulWidget {
-  const ChatInputField({
-    Key key,
-  }) : super(key: key);
+  final ItemInfo itemInfo;
+  const ChatInputField(this.itemInfo);
 
   @override
   _ChatInputFieldState createState() => _ChatInputFieldState();
@@ -14,7 +15,6 @@ class ChatInputField extends StatefulWidget {
 
 class _ChatInputFieldState extends State<ChatInputField> {
   PickedFile _imageFile;
-
   final ImagePicker _picker = ImagePicker();
 
   void takePhoto(ImageSource source) async {
@@ -49,7 +49,6 @@ class _ChatInputFieldState extends State<ChatInputField> {
       child: SafeArea(
         child: Row(
           children: [
-            Icon(Icons.mic, color: kPrimaryColor),
             SizedBox(width: kDefaultPadding),
             Expanded(
               child: Container(
@@ -74,11 +73,27 @@ class _ChatInputFieldState extends State<ChatInputField> {
                     SizedBox(width: kDefaultPadding / 4),
                     Expanded(
                       child: TextField(
-                        decoration: InputDecoration(
-                          hintText: "Type message",
-                          border: InputBorder.none,
-                        ),
-                      ),
+                          decoration: InputDecoration(
+                            hintText: "Type message",
+                            border: InputBorder.none,
+                          ),
+                          onSubmitted: (String message) {
+                            setState(() {
+                              if (message.length > 3) {
+                                DatabaseServices.sendMessage(
+                                    widget.itemInfo.me.id,
+                                    widget.itemInfo.item.sellerId,
+                                    widget.itemInfo.item.id,
+                                    message);
+                              } else {
+                                AlertBox.showAlertBox(
+                                    context,
+                                    "Upozornění",
+                                    Text(
+                                        "Zpráva musí obsahovat minimálně 4 znaky."));
+                              }
+                            });
+                          }),
                     ),
                     GestureDetector(
                       child: Icon(

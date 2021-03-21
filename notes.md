@@ -27,6 +27,7 @@
     - [x] master na GitHubu
 - [x] dateEnd jako DateTime
 - [ ] zužitkování ostatních dat
+- [ ] appbar odstranit, předělat na tlačítko (chaty, zpět)
 
 ### Login & Register
 
@@ -56,6 +57,7 @@ http://127.0.0.1/projects/letbike/userRegister.php?username=admin&&email=asd@asd
 - [ ] jméno brázku = ../imgs/id/číslo obrázku
 - [x] deprecated věci nahradit
 - [x] upravit seznamy.dart na více Tříd, tohle je hnus
+- [ ] appbar odstranit, předělat na tlačítko
 
 ### Chat Screen
 
@@ -65,6 +67,9 @@ http://127.0.0.1/projects/letbike/userRegister.php?username=admin&&email=asd@asd
     - [ ] moje hotovo
     - [ ] master na GitHubu
 - [ ] načíst obrázek z databáze
+- [ ] umožnit posílat zprávy menší než 4 znaky
+- [ ] mazat inputfield po odeslání zprávy
+- [x] zakázat chat sám se sebou
 
 ### Fitry
 
@@ -77,7 +82,7 @@ http://127.0.0.1/projects/letbike/userRegister.php?username=admin&&email=asd@asd
 ### Account
 
 - [ ] skupina __A__
-    - [ ] příjem na GitHubu
+    - [x] příjem na GitHubu
     - [ ] staženo
     - [ ] moje hotovo
     - [ ] master na GitHubu

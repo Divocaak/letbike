@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:letbike/sign/alertBox.dart';
+import '../../general/alertBox.dart';
 import '../../general/pallete.dart';
 import '../../general/dbServices.dart';
 import '../widgets.dart';

@@ -8,7 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import '../../general/pallete.dart';
 import '../../general/dbServices.dart';
 import '../widgets.dart';
-import '../alertBox.dart';
+import '../../general/alertBox.dart';
 
 GlobalKey<FormState> _regformkey = GlobalKey<FormState>();
 TextEditingController _password = TextEditingController();

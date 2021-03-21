@@ -30,7 +30,6 @@ class _HomePageState extends State<HomePage>
   @override
   void initState() {
     items = DatabaseServices.getAllItems("id");
-    loggedUser = ModalRoute.of(context).settings.arguments;
 
     animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 250));
@@ -62,6 +61,7 @@ class _HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
+    loggedUser = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       body: Stack(
         children: [

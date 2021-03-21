@@ -2,15 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:letbike/chat/chatScreen.dart';
 import 'homePage.dart';
+import '../general/alertBox.dart';
+import '../general/dbServices.dart';
 
-//ignore: must_be_immutable
-class ItemPage extends StatelessWidget {
+class ItemPage extends StatefulWidget {
+  @override
+  _ItemPageState createState() => _ItemPageState();
   static const routeName = "/itemPage";
+}
+
+class _ItemPageState extends State<ItemPage>
+    with SingleTickerProviderStateMixin {
+  Future<List<Chat>> chats;
+  ItemInfo itemInfo;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final ItemInfo itemInfo = ModalRoute.of(context).settings.arguments;
-
+    itemInfo = ModalRoute.of(context).settings.arguments;
+    chats = DatabaseServices.getChats(itemInfo.item.id);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
@@ -87,11 +101,49 @@ class ItemPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.of(context)
-              .pushNamed(ChatScreen.routeName, arguments: itemInfo);
+          if (itemInfo.item.sellerId == itemInfo.me.id) {
+            Navigator.of(context)
+                .pushNamed(ChatScreen.routeName, arguments: itemInfo);
+          } else {
+            AlertBox.showAlertBox(
+                context,
+                "Vyberte chat",
+                Container(
+                    height: 500,
+                    width: 500,
+                    child: FutureBuilder<List<Chat>>(
+                      future: chats,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return ListView.builder(
+                              itemCount: snapshot.data.length,
+                              itemBuilder: (context, i) {
+                                return _buildCard(snapshot.data[i], context);
+                              });
+                        } else if (snapshot.hasError) {
+                          return Text('Sorry there is an error');
+                        }
+                        return Center(child: CircularProgressIndicator());
+                      },
+                    )));
+          }
         },
         child: const Icon(Icons.chat),
       ),
     );
+  }
+
+  Widget _buildCard(Chat chat, context) {
+    if (chat.username == "0") {
+      return Text("Žádné chaty");
+    }
+    {
+      return TextButton(
+          onPressed: () {
+            Navigator.of(context)
+                .pushNamed(ChatScreen.routeName, arguments: itemInfo);
+          },
+          child: Text(chat.email + " (" + chat.username + ")"));
+    }
   }
 }
