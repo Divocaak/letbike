@@ -1,28 +1,20 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'itemPage.dart';
-import "../dbServices.dart";
+import "../general/dbServices.dart";
 
 double volume = 0;
 
-class MyApp extends StatelessWidget {
+class HomePage extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: MyHomePage(),
-    );
-  }
+  _HomePageState createState() => _HomePageState();
+  static const routeName = "/homePage";
 }
 
-class MyHomePage extends StatefulWidget {
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage>
+class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   Future<List<Item>> items;
+  User loggedUser;
 
   AnimationController animationController;
   Animation degOneTranslationAnimation,
@@ -38,6 +30,7 @@ class _MyHomePageState extends State<MyHomePage>
   @override
   void initState() {
     items = DatabaseServices.getAllItems("id");
+
     animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 250));
     degOneTranslationAnimation = TweenSequence([
@@ -68,31 +61,8 @@ class _MyHomePageState extends State<MyHomePage>
 
   @override
   Widget build(BuildContext context) {
-    final User loggedUser = ModalRoute.of(context).settings.arguments;
-
+    loggedUser = ModalRoute.of(context).settings.arguments;
     return Scaffold(
-      //AppBar
-      appBar: new AppBar(
-        title: new Text(
-          "Appka",
-          style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
-        ),
-        elevation: 0.0,
-        centerTitle: true,
-        backgroundColor: Colors.black87,
-        leading: IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.arrow_back),
-          color: Colors.grey,
-        ),
-        actions: <Widget>[
-          IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.search),
-            color: Colors.grey,
-          )
-        ],
-      ),
       body: Stack(
         children: [
           Container(
@@ -107,7 +77,7 @@ class _MyHomePageState extends State<MyHomePage>
                         return _buildCard(snapshot.data[i]);
                       });
                 } else if (snapshot.hasError) {
-                  Text('Sorry there is an error');
+                  return Text('Sorry there is an error');
                 }
                 return Center(child: CircularProgressIndicator());
               },
@@ -230,11 +200,8 @@ class _MyHomePageState extends State<MyHomePage>
                 'http://www.hybrid.cz/i/auto/samorost-plzen-drevo-horske-kolo.jpeg'),
             child: InkWell(
               onTap: () {
-                Navigator.push(
-                  context,
-                  new MaterialPageRoute(
-                      builder: (context) => new ProductPage(item: item)),
-                );
+                Navigator.of(context).pushNamed(ItemPage.routeName,
+                    arguments: new ItemInfo(item, loggedUser));
               },
             ),
             height: 240,
@@ -347,4 +314,11 @@ class _CircularButton extends StatelessWidget {
       ),
     );
   }
+}
+
+class ItemInfo {
+  Item item;
+  User me;
+
+  ItemInfo(this.item, this.me);
 }

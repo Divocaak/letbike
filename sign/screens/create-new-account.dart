@@ -5,10 +5,10 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import '../pallete.dart';
+import '../../general/pallete.dart';
+import '../../general/dbServices.dart';
 import '../widgets.dart';
-import '../alertBox.dart';
-import '../../dbServices.dart';
+import '../../general/alertBox.dart';
 
 GlobalKey<FormState> _regformkey = GlobalKey<FormState>();
 TextEditingController _password = TextEditingController();
@@ -177,7 +177,7 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
                           Text("Aleready have an account?", style: kBodyText),
                           GestureDetector(
                             onTap: () {
-                              Navigator.popAndPushNamed(context, "/");
+                              Navigator.of(context).pop();
                             },
                             child: Text(
                               "Login",

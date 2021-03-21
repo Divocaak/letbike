@@ -1,15 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-import "../dbServices.dart";
+import 'package:letbike/chat/chatScreen.dart';
+import 'homePage.dart';
+import '../general/alertBox.dart';
+import '../general/dbServices.dart';
 
-//ignore: must_be_immutable
-class ProductPage extends StatelessWidget {
-  final Item item;
+class ItemPage extends StatefulWidget {
+  @override
+  _ItemPageState createState() => _ItemPageState();
+  static const routeName = "/itemPage";
+}
 
-  ProductPage({Key key, @required this.item}) : super(key: key);
+class _ItemPageState extends State<ItemPage>
+    with SingleTickerProviderStateMixin {
+  Future<List<Chat>> chats;
+  ItemInfo itemInfo;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    itemInfo = ModalRoute.of(context).settings.arguments;
+    chats = DatabaseServices.getChats(itemInfo.item.id);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
@@ -19,7 +34,7 @@ class ProductPage extends StatelessWidget {
             return IconButton(
               icon: const Icon(Icons.arrow_back_outlined),
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.of(context).pop();
               },
             );
           },
@@ -54,20 +69,20 @@ class ProductPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          item.name,
+                          itemInfo.item.name,
                           style: TextStyle(
                               fontSize: 40, fontWeight: FontWeight.bold),
                           textAlign: TextAlign.left,
                         ),
                         Text(
-                          item.description,
+                          itemInfo.item.description,
                           style: TextStyle(fontSize: 20),
                         ),
                         Container(
                           child: Align(
                             alignment: Alignment(0.20, 1.00),
                             child: Text(
-                              item.price.toString() + " Kč",
+                              itemInfo.item.price.toString() + " Kč",
                               style: TextStyle(
                                   fontSize: 40, fontWeight: FontWeight.bold),
                             ),
@@ -85,9 +100,50 @@ class ProductPage extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          if (itemInfo.item.sellerId == itemInfo.me.id) {
+            Navigator.of(context)
+                .pushNamed(ChatScreen.routeName, arguments: itemInfo);
+          } else {
+            AlertBox.showAlertBox(
+                context,
+                "Vyberte chat",
+                Container(
+                    height: 500,
+                    width: 500,
+                    child: FutureBuilder<List<Chat>>(
+                      future: chats,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return ListView.builder(
+                              itemCount: snapshot.data.length,
+                              itemBuilder: (context, i) {
+                                return _buildCard(snapshot.data[i], context);
+                              });
+                        } else if (snapshot.hasError) {
+                          return Text('Sorry there is an error');
+                        }
+                        return Center(child: CircularProgressIndicator());
+                      },
+                    )));
+          }
+        },
         child: const Icon(Icons.chat),
       ),
     );
+  }
+
+  Widget _buildCard(Chat chat, context) {
+    if (chat.username == "0") {
+      return Text("Žádné chaty");
+    }
+    {
+      return TextButton(
+          onPressed: () {
+            Navigator.of(context)
+                .pushNamed(ChatScreen.routeName, arguments: itemInfo);
+          },
+          child: Text(chat.email + " (" + chat.username + ")"));
+    }
   }
 }

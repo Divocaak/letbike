@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:letbike/sign/alertBox.dart';
-import '../pallete.dart';
+import '../../general/alertBox.dart';
+import '../../general/pallete.dart';
+import '../../general/dbServices.dart';
 import '../widgets.dart';
-import '../../dbServices.dart';
 import '../../app/homePage.dart';
 
 GlobalKey<FormState> _logformkey = GlobalKey<FormState>();
@@ -50,7 +50,7 @@ class LoginScreen extends StatelessWidget {
                     ),
                     GestureDetector(
                         onTap: () =>
-                            Navigator.pushNamed(context, "ForgotPassword"),
+                            Navigator.of(context).pushNamed("ForgotPassword"),
                         child: Text("Forgot Password", style: kBodyText)),
                     SizedBox(
                       height: 25,
@@ -65,7 +65,7 @@ class LoginScreen extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () =>
-                      Navigator.popAndPushNamed(context, "CreateNewAccount"),
+                      Navigator.of(context).pushNamed("CreateNewAccount"),
                   child: Container(
                     child: Text(
                       "Create New Account",
@@ -123,14 +123,14 @@ class LogRoundedButton extends StatelessWidget {
                       if (snapshot.data.id < 0) {
                         return Text(
                             "Špatně zadané uživatelské jméno nebo heslo.");
+                      } else {
+                        Text("Probíhá přesměrování");
+                        Future.delayed(Duration.zero, () {
+                          Navigator.of(context).pushReplacementNamed(
+                              HomePage.routeName,
+                              arguments: snapshot.data);
+                        });
                       }
-
-                      Navigator.push(
-                          context,
-                          new MaterialPageRoute(
-                              builder: (context) => MyHomePage(),
-                              settings:
-                                  RouteSettings(arguments: snapshot.data)));
                     }
 
                     if (snapshot.hasError) {

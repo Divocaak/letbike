@@ -27,6 +27,7 @@
     - [x] master na GitHubu
 - [x] dateEnd jako DateTime
 - [ ] zužitkování ostatních dat
+- [ ] appbar odstranit, předělat na tlačítko (chaty, zpět)
 
 ### Login & Register
 
@@ -35,10 +36,10 @@
     - [x] staženo
     - [x] moje hotovo
     - [x] master na GitHubu
-- [ ] zbavit se zbytečných fontů a závislostí (fonty, ...)
-- [ ] alert box při špatné validaci
-    - [ ] login
+- [x] alert box při špatné validaci
+    - [x] login
     - [x] register
+- [ ] zbavit se zbytečných závislostí (fonty, ...)
 - [ ] zapomenuté heslo
 - [ ] zapamatovat přihlášení
 - [ ] vyřešit error při úspešném loginu
@@ -49,26 +50,39 @@ http://127.0.0.1/projects/letbike/userRegister.php?username=admin&&email=asd@asd
 
 - [ ] skupina __B__
     - [x] příjem na GitHubu
-    - [ ] staženo
+    - [x] staženo
     - [ ] moje hotovo
     - [ ] master na GitHubu
 - [ ] response (success || error)
-- [ ] jméno brázku = id + číslo obrázku + přípona
+- [ ] jméno brázku = ../imgs/id/číslo obrázku
+- [x] deprecated věci nahradit
+- [x] upravit seznamy.dart na více Tříd, tohle je hnus
+- [ ] appbar odstranit, předělat na tlačítko
 
 ### Chat Screen
 
 - [ ] skupina __A__
     - [x] příjem na GitHubu
-    - [ ] staženo
+    - [x] staženo
     - [ ] moje hotovo
     - [ ] master na GitHubu
+- [ ] načíst obrázek z databáze
+- [ ] umožnit posílat zprávy menší než 4 znaky
+- [ ] mazat inputfield po odeslání zprávy
+- [x] zakázat chat sám se sebou
 
 ### Fitry
 
-- [ ] skupina __B__
+- [ ] __JÁ__
     - [ ] příjem na GitHubu
     - [ ] staženo
     - [ ] moje hotovo
     - [ ] master na GitHubu
 
 ### Account
+
+- [ ] skupina __A__
+    - [x] příjem na GitHubu
+    - [ ] staženo
+    - [ ] moje hotovo
+    - [ ] master na GitHubu
