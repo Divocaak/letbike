@@ -1,7 +1,10 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'itemPage.dart';
+import '../general/pallete.dart';
 import "../general/dbServices.dart";
+import "../general/widgets.dart";
+import "../account/accountScreen.dart";
 
 double volume = 0;
 
@@ -17,46 +20,18 @@ class _HomePageState extends State<HomePage>
   User loggedUser;
 
   AnimationController animationController;
-  Animation degOneTranslationAnimation,
-      degTwoTranslationAnimation,
-      degThreeTranslationAnimation;
-  Animation rotationAnimation;
-
-  double getRadiansFromDegree(double degree) {
-    double unitRadian = 57.295779513;
-    return degree / unitRadian;
-  }
 
   @override
   void initState() {
-    items = DatabaseServices.getAllItems("id");
+    items = DatabaseServices.getAllItems("seller_id");
 
     animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 250));
-    degOneTranslationAnimation = TweenSequence([
-      TweenSequenceItem<double>(
-          tween: Tween<double>(begin: 0.0, end: 1.2), weight: 75.0),
-      TweenSequenceItem<double>(
-          tween: Tween<double>(begin: 1.2, end: 1.0), weight: 25.0)
-    ]).animate(animationController);
-    degTwoTranslationAnimation = TweenSequence([
-      TweenSequenceItem<double>(
-          tween: Tween<double>(begin: 0.0, end: 1.4), weight: 55.0),
-      TweenSequenceItem<double>(
-          tween: Tween<double>(begin: 1.4, end: 1.0), weight: 45.0)
-    ]).animate(animationController);
-    degThreeTranslationAnimation = TweenSequence([
-      TweenSequenceItem<double>(
-          tween: Tween<double>(begin: 0.0, end: 1.75), weight: 35.0),
-      TweenSequenceItem<double>(
-          tween: Tween<double>(begin: 1.75, end: 1.0), weight: 65.0)
-    ]).animate(animationController);
-    rotationAnimation = Tween<double>(begin: 180.0, end: 0.0).animate(
-        CurvedAnimation(parent: animationController, curve: Curves.easeOut));
-    super.initState();
     animationController.addListener(() {
       setState(() {});
     });
+
+    super.initState();
   }
 
   @override
@@ -66,7 +41,7 @@ class _HomePageState extends State<HomePage>
       body: Stack(
         children: [
           Container(
-            color: Colors.black,
+            color: kBlack,
             child: FutureBuilder<List<Item>>(
               future: items,
               builder: (context, snapshot) {
@@ -84,101 +59,65 @@ class _HomePageState extends State<HomePage>
             ),
           ),
           IgnorePointer(
-            ignoring: true,
+            ignoring: volume == 0 ? true : false,
             child: Container(
               color: Colors.black.withOpacity(volume),
+              child: Stack(
+                children: [
+                  Positioned(
+                      bottom: 40,
+                      right: 150,
+                      child: CircularButton(
+                          kSecondaryColor.withOpacity(volume * 2),
+                          45,
+                          Icons.add,
+                          kWhite.withOpacity(volume * 2), () {
+                        print("asd");
+                      })),
+                  Positioned(
+                      bottom: 120,
+                      right: 120,
+                      child: CircularButton(
+                          kSecondaryColor.withOpacity(volume * 2),
+                          45,
+                          Icons.home,
+                          kWhite.withOpacity(volume * 2), () {
+                        print("asd");
+                      })),
+                  Positioned(
+                      bottom: 150,
+                      right: 40,
+                      child: CircularButton(
+                          kSecondaryColor.withOpacity(volume * 2),
+                          45,
+                          Icons.person,
+                          kWhite.withOpacity(volume * 2), () {
+                        Navigator.pushNamed(context, AccountScreen.routeName,
+                            arguments: loggedUser);
+                      })),
+                ],
+              ),
             ),
           ),
-          Stack(
-            children: <Widget>[
-              Positioned(
-                  right: 30,
-                  bottom: 30,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: <Widget>[
-                      Transform.translate(
-                        offset: Offset.fromDirection(getRadiansFromDegree(270),
-                            degOneTranslationAnimation.value * 100),
-                        child: Transform(
-                          transform: Matrix4.rotationZ(
-                              getRadiansFromDegree(rotationAnimation.value))
-                            ..scale(degOneTranslationAnimation.value),
-                          alignment: Alignment.center,
-                          child: _CircularButton(
-                            color: Colors.green,
-                            width: 50,
-                            heigt: 50,
-                            icon: Icon(
-                              Icons.add,
-                              color: Colors.white,
-                            ),
-                            onClick: () {},
-                          ),
-                        ),
-                      ),
-                      Transform.translate(
-                        offset: Offset.fromDirection(getRadiansFromDegree(225),
-                            degTwoTranslationAnimation.value * 100),
-                        child: Transform(
-                          transform: Matrix4.rotationZ(
-                              getRadiansFromDegree(rotationAnimation.value))
-                            ..scale(degTwoTranslationAnimation.value),
-                          alignment: Alignment.center,
-                          child: _CircularButton(
-                            color: Colors.green,
-                            width: 50,
-                            heigt: 50,
-                            icon: Icon(
-                              Icons.home,
-                              color: Colors.white,
-                            ),
-                            onClick: () {},
-                          ),
-                        ),
-                      ),
-                      Transform.translate(
-                        offset: Offset.fromDirection(getRadiansFromDegree(180),
-                            degThreeTranslationAnimation.value * 100),
-                        child: Transform(
-                          transform: Matrix4.rotationZ(
-                              getRadiansFromDegree(rotationAnimation.value))
-                            ..scale(degThreeTranslationAnimation.value),
-                          alignment: Alignment.center,
-                          child: _CircularButton(
-                            color: Colors.green,
-                            width: 50,
-                            heigt: 50,
-                            icon: Icon(
-                              Icons.person,
-                              color: Colors.white,
-                            ),
-                            onClick: () {},
-                          ),
-                        ),
-                      ),
-                      _CircularButton(
-                        color: Colors.greenAccent,
-                        width: 60,
-                        heigt: 60,
-                        icon: Icon(
-                          Icons.menu,
-                          color: Colors.black,
-                        ),
-                        onClick: () {
-                          if (animationController.isCompleted) {
-                            animationController.reverse();
-                            volume = 0;
-                          } else {
-                            animationController.forward();
-                            volume = 0.5;
-                          }
-                        },
-                      ),
-                    ],
-                  ))
-            ],
-          ),
+          Positioned(
+              height: 275,
+              width: 275,
+              right: -75,
+              bottom: -75,
+              child: Stack(
+                alignment: Alignment.center,
+                children: <Widget>[
+                  CircularButton(kPrimaryColor, 60, Icons.menu, kWhite, () {
+                    if (animationController.isCompleted) {
+                      animationController.reverse();
+                      volume = 0;
+                    } else {
+                      animationController.forward();
+                      volume = 0.5;
+                    }
+                  })
+                ],
+              ))
         ],
       ),
     );
@@ -275,50 +214,4 @@ class _HomePageState extends State<HomePage>
       ),
     );
   }
-
-  Widget buildBlur({
-    @required Widget child,
-    BorderRadius borderRadius,
-    double sigmaX = 10,
-    double sigmaY = 10,
-  }) =>
-      ClipRRect(
-        borderRadius: borderRadius ?? BorderRadius.zero,
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: sigmaX, sigmaY: sigmaY),
-          child: child,
-        ),
-      );
-}
-
-class _CircularButton extends StatelessWidget {
-  final double width;
-  final double heigt;
-  final Color color;
-  final Icon icon;
-  final Function onClick;
-
-  _CircularButton(
-      {this.color, this.width, this.heigt, this.icon, this.onClick});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(color: color, shape: BoxShape.circle),
-      width: width,
-      height: heigt,
-      child: IconButton(
-        icon: icon,
-        enableFeedback: true,
-        onPressed: onClick,
-      ),
-    );
-  }
-}
-
-class ItemInfo {
-  Item item;
-  User me;
-
-  ItemInfo(this.item, this.me);
 }

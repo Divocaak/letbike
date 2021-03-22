@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../general/pallete.dart';
-import '../widgets.dart';
+import '../../general/widgets.dart';
 
 class ForgotPassword extends StatelessWidget {
   @override
@@ -50,9 +50,10 @@ class ForgotPassword extends StatelessWidget {
                     SizedBox(
                       height: 20,
                     ),
-                    TextInputField(
+                    TextInput(
                       icon: FontAwesomeIcons.envelope,
                       hint: "Email",
+                      identificator: "",
                       inputType: TextInputType.emailAddress,
                       inputAction: TextInputAction.done,
                     ),
