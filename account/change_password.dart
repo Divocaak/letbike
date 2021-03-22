@@ -4,8 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:profile_app_ui/constants.dart';
-import 'package:line_awesome_flutter/line_awesome_flutter.dart';
+import '../general/pallete.dart';
 
 GlobalKey<FormState> _chngpswrdformkey = GlobalKey<FormState>();
 TextEditingController _password = TextEditingController();
@@ -159,7 +158,7 @@ class _ChangePasswordState extends State<ChangePassword>
                           heightFactor: 15,
                           widthFactor: 15,
                           child: Icon(
-                            LineAwesomeIcons.pen,
+                            Icons.create,
                             color: Colors.white,
                             size: 15,
                           ),
@@ -211,7 +210,7 @@ class _ChangePasswordState extends State<ChangePassword>
     return new Scaffold(
       body: Stack(children: [
         Scaffold(
-          backgroundColor: kDarkPrimaryColor,
+          backgroundColor: kBlack,
           body: SingleChildScrollView(
             child: Form(
               key: _chngpswrdformkey,
@@ -227,18 +226,18 @@ class _ChangePasswordState extends State<ChangePassword>
                   Column(
                     children: [
                       RegPasswordInput(
-                        icon: LineAwesomeIcons.lock,
+                        icon: Icons.lock,
                         hint: "Password",
                         inputAction: TextInputAction.next,
                       ),
                       RegPasswordInput(
-                        icon: LineAwesomeIcons.lock_open,
+                        icon: Icons.lock_open,
                         hint: "New Password",
                         inputAction: TextInputAction.next,
                         controller: _password,
                       ),
                       RegPasswordInput(
-                        icon: LineAwesomeIcons.lock,
+                        icon: Icons.lock,
                         hint: "Confirm New Password",
                         inputAction: TextInputAction.done,
                         controller: _confirmpassword,
@@ -254,7 +253,7 @@ class _ChangePasswordState extends State<ChangePassword>
           ),
         ),
         IgnorePointer(
-          ignoring: animationController.isCompleted ? false:true,
+          ignoring: animationController.isCompleted ? false : true,
           child: Container(
             color: Colors.black.withOpacity(volume),
           ),
@@ -293,10 +292,10 @@ class _ChangePasswordState extends State<ChangePassword>
                             color: Colors.white,
                           ),
                           onClick: () {
-                           Navigator.popAndPushNamed(
+                            Navigator.popAndPushNamed(
                                 context, "Profile_screen");
-                                animationController.reverse();
-                                 volume = 0;
+                            animationController.reverse();
+                            volume = 0;
                           },
                         ),
                       ),

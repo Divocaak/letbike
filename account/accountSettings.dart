@@ -4,18 +4,22 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import 'constants.dart';
-import 'widgets/text-input-field.dart';
+import '../general/pallete.dart';
+import '../general/dbServices.dart';
+import '../general/widgets.dart';
 
 double volume = 0;
 
-class ProfileInfo extends StatefulWidget {
+class AccountSettings extends StatefulWidget {
   @override
-  _ProfileInfoState createState() => _ProfileInfoState();
+  _AccountSettingsState createState() => _AccountSettingsState();
+  static const routeName = "/accountSettings";
 }
 
-class _ProfileInfoState extends State<ProfileInfo>
+class _AccountSettingsState extends State<AccountSettings>
     with SingleTickerProviderStateMixin {
+  User user;
+
   AnimationController animationController;
   Animation degOneTranslationAnimation,
       degTwoTranslationAnimation,
@@ -169,21 +173,6 @@ class _ProfileInfoState extends State<ProfileInfo>
             ),
           ),
           SizedBox(height: 20),
-          Container(
-            height: 40,
-            width: 200,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30),
-              color: Colors.green,
-            ),
-            child: Center(
-              child: Text(
-                'Upgrade to PRO',
-                style: kButtonTextStyle,
-              ),
-            ),
-          ),
-          SizedBox(height: 20),
         ],
       ),
     );
@@ -199,7 +188,7 @@ class _ProfileInfoState extends State<ProfileInfo>
     return new Scaffold(
       body: Stack(children: [
         Scaffold(
-          backgroundColor: kDarkPrimaryColor,
+          backgroundColor: kBlack,
           body: SingleChildScrollView(
             child: Column(
               children: [
@@ -209,39 +198,45 @@ class _ProfileInfoState extends State<ProfileInfo>
                 header,
                 Column(
                   children: [
-                    TextInputField(
+                    TextInput(
                       icon: Icons.create,
                       hint: "First Name",
+                      identificator: "accFName",
                       inputType: TextInputType.name,
                       inputAction: TextInputAction.next,
                     ),
-                    TextInputField(
+                    TextInput(
                       icon: Icons.create,
                       hint: "Last Name",
+                      identificator: "accLName",
                       inputType: TextInputType.name,
                       inputAction: TextInputAction.next,
                     ),
-                    TextInputField(
+                    TextInput(
                       icon: Icons.phone,
                       hint: "Phone Number",
+                      identificator: "accPhone",
                       inputAction: TextInputAction.next,
                       inputType: TextInputType.phone,
                     ),
-                    TextInputField(
+                    TextInput(
                       icon: Icons.home,
                       hint: "Address 1",
+                      identificator: "accAddA",
                       inputAction: TextInputAction.next,
                       inputType: TextInputType.streetAddress,
                     ),
-                    TextInputField(
+                    TextInput(
                       icon: Icons.location_city,
                       hint: "Address 2",
+                      identificator: "acc",
                       inputAction: TextInputAction.next,
                       inputType: TextInputType.streetAddress,
                     ),
-                    TextInputField(
+                    TextInput(
                       icon: Icons.flag,
                       hint: "Address 3",
+                      identificator: "acc",
                       inputAction: TextInputAction.next,
                       inputType: TextInputType.streetAddress,
                     ),

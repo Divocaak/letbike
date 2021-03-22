@@ -7,8 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../general/pallete.dart';
 import '../../general/dbServices.dart';
-import '../widgets.dart';
-import '../../general/alertBox.dart';
+import '../../general/widgets.dart';
 
 GlobalKey<FormState> _regformkey = GlobalKey<FormState>();
 TextEditingController _password = TextEditingController();
@@ -41,16 +40,16 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
             elevation: 0,
             backgroundColor: Colors.black,
             title: Text(
-              "Make a choice",
+              "Vyberte si",
               style: kBodyText.copyWith(
-                  fontWeight: FontWeight.bold, color: Colors.green),
+                  fontWeight: FontWeight.bold, color: kPrimaryColor),
             ),
             content: SingleChildScrollView(
               child: ListBody(
                 children: <Widget>[
                   GestureDetector(
                     child: Text(
-                      "Gallery",
+                      "Galerie",
                       style: kBodyText,
                     ),
                     onTap: () {
@@ -60,7 +59,7 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
                   Padding(padding: EdgeInsets.all(16)),
                   GestureDetector(
                     child: Text(
-                      "Camera",
+                      "Fotoaparát",
                       style: kBodyText,
                     ),
                     onTap: () {
@@ -140,49 +139,52 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
                   ),
                   Column(
                     children: [
-                      TextInputField(
+                      TextInput(
                         icon: FontAwesomeIcons.user,
-                        hint: "Name",
+                        hint: "Uživatelské jméno",
+                        identificator: "regName",
                         inputType: TextInputType.name,
                         inputAction: TextInputAction.next,
                       ),
-                      TextInputField(
+                      TextInput(
                         icon: FontAwesomeIcons.envelope,
-                        hint: "Email",
+                        hint: "E-mail",
+                        identificator: "regMail",
                         inputType: TextInputType.emailAddress,
                         inputAction: TextInputAction.next,
                       ),
-                      RegPasswordInput(
+                      TextInput(
                         icon: FontAwesomeIcons.lock,
-                        hint: "Password",
+                        hint: "Heslo",
+                        identificator: "regPass",
                         inputAction: TextInputAction.next,
-                        controller: _password,
                       ),
-                      RegPasswordInput(
+                      TextInput(
                         icon: FontAwesomeIcons.lock,
-                        hint: "Confirm Password",
+                        hint: "Potvrdit heslo",
+                        identificator: "regPassConf",
                         inputAction: TextInputAction.done,
-                        controller: _confirmpassword,
                       ),
                       SizedBox(
                         height: 25,
                       ),
-                      RegRoundedButton(buttonName: "Register"),
+                      RegRoundedButton(buttonName: "Registrovat"),
                       SizedBox(
                         height: 30,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text("Aleready have an account?", style: kBodyText),
+                          Text("Už máte účet?  ", style: kBodyText),
                           GestureDetector(
                             onTap: () {
                               Navigator.of(context).pop();
                             },
                             child: Text(
-                              "Login",
+                              "Přihlaste se",
                               style: kBodyText.copyWith(
-                                  color: kGreen, fontWeight: FontWeight.bold),
+                                  color: kPrimaryColor,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
                         ],
@@ -219,16 +221,16 @@ class RegRoundedButton extends StatelessWidget {
       height: size.height * 0.08,
       width: size.width * 0.8,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16), color: Colors.green),
+          borderRadius: BorderRadius.circular(16), color: kPrimaryColor),
       child: TextButton(
         onPressed: () {
           String failResponse = "";
 
           if (_regformkey.currentState.validate()) {
             response = DatabaseServices.registerUser(
-                TextInputField.getValue("Name"),
-                TextInputField.getValue("Email"),
-                RegPasswordInput.getValue("Password"));
+                TextInput.getValue("regName"),
+                TextInput.getValue("regMail"),
+                TextInput.getValue("regPass"));
           } else {
             failResponse = "Některé údaje jsou špatně zadané.";
           }

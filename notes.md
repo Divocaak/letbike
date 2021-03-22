@@ -5,6 +5,29 @@
 [Návrh_databáze](https://dbdiagram.io/d/603a99cdfcdcb6230b21cb94)
 
 - [ ] getItem a setItem => itemGet && itemSet
+- [ ] vytvořit general.dart
+    - [ ] export objects.dart
+        - [ ] vztvorit objects.dart
+    - [ ] export widgets.dart
+        - [ ] vztvorit widgets.dart
+            - [ ] circularbutton od Lukáše
+            - [ ] imagepicker od Bčka
+            - [ ] roundedButton
+                - [ ] registrace
+                - [ ] login
+            - [ ] textinputfield
+                - [x] text
+                - [ ] heslo
+                    - [ ] zakrýt hesla!
+                - [x] email
+    - [ ] export dbServices.dart
+- [ ] snad všechny talčítka: po pushNamed sbalit
+- [ ] pošéfovat barvy
+
+* předěláno do češtiny
+* sjednocení widgetů
+* account screen
+* account settings
 
 ## App Content
 
@@ -61,11 +84,11 @@ http://127.0.0.1/projects/letbike/userRegister.php?username=admin&&email=asd@asd
 
 ### Chat Screen
 
-- [ ] skupina __A__
+- [x] skupina __A__
     - [x] příjem na GitHubu
     - [x] staženo
-    - [ ] moje hotovo
-    - [ ] master na GitHubu
+    - [x] moje hotovo
+    - [x] master na GitHubu
 - [ ] načíst obrázek z databáze
 - [ ] umožnit posílat zprávy menší než 4 znaky
 - [ ] mazat inputfield po odeslání zprávy
@@ -83,6 +106,7 @@ http://127.0.0.1/projects/letbike/userRegister.php?username=admin&&email=asd@asd
 
 - [ ] skupina __A__
     - [x] příjem na GitHubu
-    - [ ] staženo
+    - [x] staženo
     - [ ] moje hotovo
     - [ ] master na GitHubu
+- [ ] postavit, Lukáš je kokot

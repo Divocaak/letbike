@@ -23,8 +23,12 @@ class DatabaseServices {
         Uri.encodeFull(url + "getItems.php/?id=" + id),
         headers: {"Accept": "application/json"});
     if (response.statusCode == 200) {
-      final parsed = jsonDecode(response.body).cast<Map<String, dynamic>>();
-      return parsed.map<Item>((item) => Item.fromJson(item)).toList();
+      if (response.body == "[]") {
+        return null;
+      } else {
+        final parsed = jsonDecode(response.body).cast<Map<String, dynamic>>();
+        return parsed.map<Item>((item) => Item.fromJson(item)).toList();
+      }
     } else {
       throw Exception("Can't get items");
     }
@@ -269,4 +273,11 @@ class Chat {
   factory Chat.fromJson(Map<String, dynamic> json) {
     return Chat(json["email"], json["username"]);
   }
+}
+
+class ItemInfo {
+  Item item;
+  User me;
+
+  ItemInfo(this.item, this.me);
 }

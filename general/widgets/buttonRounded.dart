@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../general/pallete.dart';
+import '../pallete.dart';
 
 class RoundedButton extends StatelessWidget {
   const RoundedButton({
@@ -16,7 +16,7 @@ class RoundedButton extends StatelessWidget {
       height: size.height * 0.08,
       width: size.width * 0.8,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16), color: Colors.green),
+          borderRadius: BorderRadius.circular(16), color: kPrimaryColor),
       child: TextButton(
         onPressed: () {},
         child: Text(
