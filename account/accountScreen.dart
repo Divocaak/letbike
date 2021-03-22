@@ -4,6 +4,7 @@ import 'accountSettings.dart';
 import '../general/pallete.dart';
 import '../general/dbServices.dart';
 import '../app/itemPage.dart';
+import '../general/widgets.dart';
 
 double volume = 0;
 int textHeight = 50;
@@ -20,44 +21,16 @@ class _AccountScreenState extends State<AccountScreen>
   User user;
 
   AnimationController animationController;
-  Animation degOneTranslationAnimation,
-      degTwoTranslationAnimation,
-      degThreeTranslationAnimation;
-  Animation rotationAnimation;
-
-  double getRadiansFromDegree(double degree) {
-    double unitRadian = 57.295779513;
-    return degree / unitRadian;
-  }
 
   @override
   void initState() {
     animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 250));
-    degOneTranslationAnimation = TweenSequence([
-      TweenSequenceItem<double>(
-          tween: Tween<double>(begin: 0.0, end: 1.2), weight: 75.0),
-      TweenSequenceItem<double>(
-          tween: Tween<double>(begin: 1.2, end: 1.0), weight: 25.0)
-    ]).animate(animationController);
-    degTwoTranslationAnimation = TweenSequence([
-      TweenSequenceItem<double>(
-          tween: Tween<double>(begin: 0.0, end: 1.4), weight: 55.0),
-      TweenSequenceItem<double>(
-          tween: Tween<double>(begin: 1.4, end: 1.0), weight: 45.0)
-    ]).animate(animationController);
-    degThreeTranslationAnimation = TweenSequence([
-      TweenSequenceItem<double>(
-          tween: Tween<double>(begin: 0.0, end: 1.75), weight: 35.0),
-      TweenSequenceItem<double>(
-          tween: Tween<double>(begin: 1.75, end: 1.0), weight: 65.0)
-    ]).animate(animationController);
-    rotationAnimation = Tween<double>(begin: 180.0, end: 0.0).animate(
-        CurvedAnimation(parent: animationController, curve: Curves.easeOut));
-    super.initState();
     animationController.addListener(() {
       setState(() {});
     });
+
+    super.initState();
   }
 
   @override
@@ -65,163 +38,104 @@ class _AccountScreenState extends State<AccountScreen>
     user = ModalRoute.of(context).settings.arguments;
     items = DatabaseServices.getAllItems(user.id.toString());
     return Scaffold(
-        body: Stack(
-      children: [
-        ListView(
-          padding: const EdgeInsets.all(5),
-          children: [
-            Container(
-              height: 50,
-              margin: EdgeInsets.only(top: 50),
-              child: const Center(
-                child: CircleAvatar(
-                  backgroundImage: NetworkImage(
-                      "https://www.surforma.com/media/filer_public_thumbnails/filer_public/4b/00/4b007d44-3443-4338-ada5-47d0b99db7ad/l167.jpg__800x600_q95_crop_subsampling-2_upscale.jpg"),
-                  child: Icon(
-                    FontAwesomeIcons.user,
-                    color: Colors.white,
-                  ),
+        body: Stack(children: [
+      ListView(
+        padding: const EdgeInsets.all(5),
+        children: [
+          Container(
+            height: 50,
+            margin: EdgeInsets.only(top: 50),
+            child: const Center(
+              child: CircleAvatar(
+                backgroundImage: NetworkImage(
+                    "https://www.surforma.com/media/filer_public_thumbnails/filer_public/4b/00/4b007d44-3443-4338-ada5-47d0b99db7ad/l167.jpg__800x600_q95_crop_subsampling-2_upscale.jpg"),
+                child: Icon(
+                  FontAwesomeIcons.user,
+                  color: Colors.white,
                 ),
               ),
             ),
-            infoField("Uživatelské jméno: " + user.username),
-            infoField("E-mail: " + user.email),
-            infoField("Křestní jméno: " + user.fName),
-            infoField("Příjmení: " + user.lName),
-            infoField("Ulice a č.p.: " + user.addressA),
-            infoField("Obec: " + user.addressB),
-            infoField("Země: " + user.addressC),
-            infoField("PSČ: " + user.postal.toString()),
-            infoField("Moje inzeráty:"),
-            Container(
-              height: 600,
-              width: 600,
-              child: FutureBuilder<List<Item>>(
-                future: items,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return ListView.builder(
-                        itemCount: snapshot.data.length,
-                        itemBuilder: (context, i) {
-                          return _buildCard(context, snapshot.data[i], user);
-                        });
-                  } else if (!snapshot.hasData) {
-                    return Container(
-                        alignment: Alignment.topCenter,
-                        child: Text("Zatím tu nic není :("));
-                  } else if (snapshot.hasError) {
-                    return Text('Sorry there is an error');
-                  }
-                  return Center(child: CircularProgressIndicator());
-                },
-              ),
+          ),
+          infoField("Uživatelské jméno: " + user.username),
+          infoField("E-mail: " + user.email),
+          infoField("Křestní jméno: " + user.fName),
+          infoField("Příjmení: " + user.lName),
+          infoField("Telefon: " + user.phone.toString()),
+          infoField("Ulice a č.p.: " + user.addressA),
+          infoField("Obec: " + user.addressB),
+          infoField("Země: " + user.addressC),
+          infoField("PSČ: " + user.postal.toString()),
+          infoField("Moje inzeráty:"),
+          Container(
+            height: 600,
+            width: 600,
+            child: FutureBuilder<List<Item>>(
+              future: items,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return ListView.builder(
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (context, i) {
+                        return _buildCard(context, snapshot.data[i], user);
+                      });
+                } else if (!snapshot.hasData) {
+                  return Container(
+                      alignment: Alignment.topCenter,
+                      child: Text("Zatím tu nic není :("));
+                } else if (snapshot.hasError) {
+                  return Text('Sorry there is an error');
+                }
+                return Center(child: CircularProgressIndicator());
+              },
             ),
-          ],
-        ),
-        IgnorePointer(
-          ignoring: true,
-          child: Container(
-            color: Colors.black.withOpacity(volume),
+          ),
+        ],
+      ),
+      IgnorePointer(
+        ignoring: volume == 0 ? true : false,
+        child: Container(
+          color: Colors.black.withOpacity(volume),
+          child: Stack(
+            children: [
+              Positioned(
+                  bottom: 120,
+                  right: 120,
+                  child: CircularButton(kSecondaryColor.withOpacity(volume * 2),
+                      45, Icons.arrow_back, kWhite.withOpacity(volume * 2), () {
+                    Navigator.of(context).pop();
+                  })),
+              Positioned(
+                  bottom: 150,
+                  right: 40,
+                  child: CircularButton(kSecondaryColor.withOpacity(volume * 2),
+                      45, Icons.create, kWhite.withOpacity(volume * 2), () {
+                    Navigator.pushNamed(context, AccountSettings.routeName,
+                        arguments: user);
+                  })),
+            ],
           ),
         ),
-        Positioned(
-            height: 275,
-            width: 275,
-            right: -75,
-            bottom: -75,
-            child: Stack(
-              alignment: Alignment.center,
-              children: <Widget>[
-                Transform.translate(
-                  offset: Offset.fromDirection(getRadiansFromDegree(270),
-                      degOneTranslationAnimation.value * 100),
-                  child: Transform(
-                    transform: Matrix4.rotationZ(
-                        getRadiansFromDegree(rotationAnimation.value))
-                      ..scale(degOneTranslationAnimation.value),
-                    alignment: Alignment.center,
-                    child: _CircularButton(
-                      color: Colors.green,
-                      width: 50,
-                      heigt: 50,
-                      icon: Icon(
-                        Icons.logout,
-                        color: Colors.white,
-                      ),
-                      onClick: () {
-                        print("logout");
-                      },
-                    ),
-                  ),
-                ),
-                Transform.translate(
-                  offset: Offset.fromDirection(getRadiansFromDegree(225),
-                      degTwoTranslationAnimation.value * 100),
-                  child: Transform(
-                    transform: Matrix4.rotationZ(
-                        getRadiansFromDegree(rotationAnimation.value))
-                      ..scale(degTwoTranslationAnimation.value),
-                    alignment: Alignment.center,
-                    child: _CircularButton(
-                      color: Colors.green,
-                      width: 50,
-                      heigt: 50,
-                      icon: Icon(
-                        Icons.create,
-                        color: Colors.white,
-                      ),
-                      onClick: () {
-                        Navigator.of(context).pushNamed(
-                            AccountSettings.routeName,
-                            arguments: user);
-                      },
-                    ),
-                  ),
-                ),
-                Transform.translate(
-                  offset: Offset.fromDirection(getRadiansFromDegree(180),
-                      degThreeTranslationAnimation.value * 100),
-                  child: Transform(
-                    transform: Matrix4.rotationZ(
-                        getRadiansFromDegree(rotationAnimation.value))
-                      ..scale(degThreeTranslationAnimation.value),
-                    alignment: Alignment.center,
-                    child: _CircularButton(
-                      color: Colors.green,
-                      width: 50,
-                      heigt: 50,
-                      icon: Icon(
-                        Icons.arrow_back,
-                        color: Colors.white,
-                      ),
-                      onClick: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ),
-                ),
-                _CircularButton(
-                  color: Colors.greenAccent,
-                  width: 60,
-                  heigt: 60,
-                  icon: Icon(
-                    Icons.menu,
-                    color: Colors.black,
-                  ),
-                  onClick: () {
-                    if (animationController.isCompleted) {
-                      animationController.reverse();
-                      volume = 0;
-                    } else {
-                      animationController.forward();
-                      volume = 0.5;
-                    }
-                  },
-                ),
-              ],
-            ))
-      ],
-    ));
+      ),
+      Positioned(
+          height: 275,
+          width: 275,
+          right: -75,
+          bottom: -75,
+          child: Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              CircularButton(kPrimaryColor, 60, Icons.menu, kWhite, () {
+                if (animationController.isCompleted) {
+                  animationController.reverse();
+                  volume = 0;
+                } else {
+                  animationController.forward();
+                  volume = 0.5;
+                }
+              })
+            ],
+          ))
+    ]));
   }
 }
 

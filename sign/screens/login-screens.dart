@@ -44,11 +44,11 @@ class LoginScreen extends StatelessWidget {
                       inputAction: TextInputAction.next,
                     ),
                     TextInput(
-                      icon: FontAwesomeIcons.lock,
-                      hint: "Heslo",
-                      identificator: "logPass",
-                      inputAction: TextInputAction.done,
-                    ),
+                        icon: FontAwesomeIcons.lock,
+                        hint: "Heslo",
+                        identificator: "logPass",
+                        inputAction: TextInputAction.done,
+                        obscure: true),
                     GestureDetector(
                         onTap: () =>
                             Navigator.of(context).pushNamed("ForgotPassword"),

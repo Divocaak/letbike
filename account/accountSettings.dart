@@ -16,20 +16,14 @@ class AccountSettings extends StatefulWidget {
   static const routeName = "/accountSettings";
 }
 
+Future<String> saveResponse;
+List<String> fieldsValues;
+
 class _AccountSettingsState extends State<AccountSettings>
     with SingleTickerProviderStateMixin {
   User user;
 
   AnimationController animationController;
-  Animation degOneTranslationAnimation,
-      degTwoTranslationAnimation,
-      degThreeTranslationAnimation;
-  Animation rotationAnimation;
-
-  double getRadiansFromDegree(double degree) {
-    double unitRadian = 57.295779513;
-    return degree / unitRadian;
-  }
 
   PickedFile _imageFile;
   final ImagePicker _picker = ImagePicker();
@@ -89,34 +83,16 @@ class _AccountSettingsState extends State<AccountSettings>
   void initState() {
     animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 250));
-    degOneTranslationAnimation = TweenSequence([
-      TweenSequenceItem<double>(
-          tween: Tween<double>(begin: 0.0, end: 1.2), weight: 75.0),
-      TweenSequenceItem<double>(
-          tween: Tween<double>(begin: 1.2, end: 1.0), weight: 25.0)
-    ]).animate(animationController);
-    degTwoTranslationAnimation = TweenSequence([
-      TweenSequenceItem<double>(
-          tween: Tween<double>(begin: 0.0, end: 1.4), weight: 55.0),
-      TweenSequenceItem<double>(
-          tween: Tween<double>(begin: 1.4, end: 1.0), weight: 45.0)
-    ]).animate(animationController);
-    degThreeTranslationAnimation = TweenSequence([
-      TweenSequenceItem<double>(
-          tween: Tween<double>(begin: 0.0, end: 1.75), weight: 35.0),
-      TweenSequenceItem<double>(
-          tween: Tween<double>(begin: 1.75, end: 1.0), weight: 65.0)
-    ]).animate(animationController);
-    rotationAnimation = Tween<double>(begin: 180.0, end: 0.0).animate(
-        CurvedAnimation(parent: animationController, curve: Curves.easeOut));
-    super.initState();
     animationController.addListener(() {
       setState(() {});
     });
+
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    user = ModalRoute.of(context).settings.arguments;
     Size size = MediaQuery.of(context).size;
     var profileInfo = Expanded(
       child: Column(
@@ -186,206 +162,167 @@ class _AccountSettingsState extends State<AccountSettings>
     );
 
     return new Scaffold(
-      body: Stack(children: [
-        Scaffold(
-          backgroundColor: kBlack,
-          body: SingleChildScrollView(
-            child: Column(
-              children: [
-                SizedBox(
-                  height: size.width * 0.1,
-                ),
-                header,
-                Column(
-                  children: [
-                    TextInput(
-                      icon: Icons.create,
-                      hint: "First Name",
-                      identificator: "accFName",
-                      inputType: TextInputType.name,
+        body: Stack(children: [
+      Scaffold(
+        backgroundColor: kBlack,
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                height: size.width * 0.1,
+              ),
+              header,
+              Column(
+                children: [
+                  TextInput(
+                    icon: Icons.create,
+                    hint: "Křestní jméno: " + user.fName,
+                    identificator: "accFName",
+                    inputType: TextInputType.name,
+                    inputAction: TextInputAction.next,
+                  ),
+                  TextInput(
+                    icon: Icons.create,
+                    hint: "Příjmení: " + user.lName,
+                    identificator: "accLName",
+                    inputType: TextInputType.name,
+                    inputAction: TextInputAction.next,
+                  ),
+                  TextInput(
+                    icon: Icons.phone,
+                    hint: "Telefon: " + user.phone.toString(),
+                    identificator: "accPhone",
+                    inputAction: TextInputAction.next,
+                    inputType: TextInputType.phone,
+                  ),
+                  TextInput(
+                    icon: Icons.home,
+                    hint: "Ulice a č.p.: " + user.addressA,
+                    identificator: "accAddA",
+                    inputAction: TextInputAction.next,
+                    inputType: TextInputType.streetAddress,
+                  ),
+                  TextInput(
+                    icon: Icons.location_city,
+                    hint: "Obec: " + user.addressB,
+                    identificator: "accAddB",
+                    inputAction: TextInputAction.next,
+                    inputType: TextInputType.streetAddress,
+                  ),
+                  TextInput(
+                    icon: Icons.flag,
+                    hint: "Země: " + user.addressC,
+                    identificator: "accAddC",
+                    inputAction: TextInputAction.next,
+                    inputType: TextInputType.streetAddress,
+                  ),
+                  TextInput(
+                      icon: Icons.email,
+                      hint: "PSČ: " + user.postal.toString(),
+                      identificator: "accPostal",
                       inputAction: TextInputAction.next,
-                    ),
-                    TextInput(
-                      icon: Icons.create,
-                      hint: "Last Name",
-                      identificator: "accLName",
-                      inputType: TextInputType.name,
-                      inputAction: TextInputAction.next,
-                    ),
-                    TextInput(
-                      icon: Icons.phone,
-                      hint: "Phone Number",
-                      identificator: "accPhone",
-                      inputAction: TextInputAction.next,
-                      inputType: TextInputType.phone,
-                    ),
-                    TextInput(
-                      icon: Icons.home,
-                      hint: "Address 1",
-                      identificator: "accAddA",
-                      inputAction: TextInputAction.next,
-                      inputType: TextInputType.streetAddress,
-                    ),
-                    TextInput(
-                      icon: Icons.location_city,
-                      hint: "Address 2",
-                      identificator: "acc",
-                      inputAction: TextInputAction.next,
-                      inputType: TextInputType.streetAddress,
-                    ),
-                    TextInput(
-                      icon: Icons.flag,
-                      hint: "Address 3",
-                      identificator: "acc",
-                      inputAction: TextInputAction.next,
-                      inputType: TextInputType.streetAddress,
-                    ),
-                    SizedBox(
-                      height: 25,
-                    ),
-                  ],
-                )
-              ],
-            ),
+                      inputType: TextInputType.number),
+                  SizedBox(
+                    height: 25,
+                  ),
+                ],
+              )
+            ],
           ),
         ),
-        IgnorePointer(
-          ignoring: animationController.isCompleted ? false : true,
-          child: Container(
-            color: Colors.black.withOpacity(volume),
-          ),
-        ),
-
-        //Button
-        Stack(
-          children: <Widget>[
-            Positioned(
-                right: 30,
-                bottom: 30,
-                child: Stack(
-                  alignment: Alignment.bottomRight,
-                  children: <Widget>[
-                    IgnorePointer(
-                      ignoring: animationController.isCompleted ? true : false,
-                      child: Container(
-                        color: Colors.transparent,
-                        height: 150,
-                        width: 150,
-                      ),
-                    ),
-                    Transform.translate(
-                      offset: Offset.fromDirection(getRadiansFromDegree(270),
-                          degOneTranslationAnimation.value * 100),
-                      child: Transform(
-                        transform: Matrix4.rotationZ(
-                            getRadiansFromDegree(rotationAnimation.value))
-                          ..scale(degOneTranslationAnimation.value),
-                        alignment: Alignment.center,
-                        child: _CircularButton(
-                          color: Colors.green,
-                          width: 50,
-                          heigt: 50,
-                          icon: Icon(
-                            Icons.arrow_back,
-                            color: Colors.white,
-                          ),
-                          onClick: () {
-                            Navigator.popAndPushNamed(
-                                context, "Profile_screen");
-                            animationController.reverse();
-                            volume = 0;
-                          },
-                        ),
-                      ),
-                    ),
-                    Transform.translate(
-                      offset: Offset.fromDirection(getRadiansFromDegree(225),
-                          degTwoTranslationAnimation.value * 100),
-                      child: Transform(
-                        transform: Matrix4.rotationZ(
-                            getRadiansFromDegree(rotationAnimation.value))
-                          ..scale(degTwoTranslationAnimation.value),
-                        alignment: Alignment.center,
-                        child: _CircularButton(
-                          color: Colors.green,
-                          width: 50,
-                          heigt: 50,
-                          icon: Icon(
-                            Icons.save,
-                            color: Colors.white,
-                          ),
-                          onClick: () {},
-                        ),
-                      ),
-                    ),
-                    /*Transform.translate(
-                          offset: Offset.fromDirection(getRadiansFromDegree(180),
-                              degThreeTranslationAnimation.value * 100),
-                          child: Transform(
-                            transform: Matrix4.rotationZ(
-                                getRadiansFromDegree(rotationAnimation.value))
-                              ..scale(degThreeTranslationAnimation.value),
-                            alignment: Alignment.center,
-                            child: _CircularButton(
-                              color: Colors.green,
-                              width: 50,
-                              heigt: 50,
-                              icon: Icon(
-                                Icons.person,
-                                color: Colors.white,
-                              ),
-                              onClick: () {},
-                            ),
-                          ),
-                        ),*/
-                    _CircularButton(
-                      color: Colors.greenAccent,
-                      width: 60,
-                      heigt: 60,
-                      icon: Icon(
-                        Icons.menu,
-                        color: Colors.black,
-                      ),
-                      onClick: () {
-                        if (animationController.isCompleted) {
-                          animationController.reverse();
-                          volume = 0;
-                        } else {
-                          animationController.forward();
-                          volume = 0.5;
-                        }
-                      },
-                    ),
-                  ],
-                ))
-          ],
-        )
-      ]),
-    );
-  }
-}
-
-class _CircularButton extends StatelessWidget {
-  final double width;
-  final double heigt;
-  final Color color;
-  final Icon icon;
-  final Function onClick;
-
-  _CircularButton(
-      {this.color, this.width, this.heigt, this.icon, this.onClick});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(color: color, shape: BoxShape.circle),
-      width: width,
-      height: heigt,
-      child: IconButton(
-        icon: icon,
-        enableFeedback: true,
-        onPressed: onClick,
       ),
-    );
+      IgnorePointer(
+        ignoring: volume == 0 ? true : false,
+        child: Container(
+          color: Colors.black.withOpacity(volume),
+          child: Stack(
+            children: [
+              Positioned(
+                  bottom: 40,
+                  right: 150,
+                  child: CircularButton(kSecondaryColor.withOpacity(volume * 2),
+                      45, Icons.lock, kWhite.withOpacity(volume * 2), () {
+                    print("change pass");
+                  })),
+              Positioned(
+                  bottom: 120,
+                  right: 120,
+                  child: CircularButton(kSecondaryColor.withOpacity(volume * 2),
+                      45, Icons.arrow_back, kWhite.withOpacity(volume * 2), () {
+                    Navigator.of(context).pop();
+                  })),
+              Positioned(
+                  bottom: 150,
+                  right: 40,
+                  child: CircularButton(kSecondaryColor.withOpacity(volume * 2),
+                      45, Icons.save, kWhite.withOpacity(volume * 2), () {
+                    fieldsValues = [
+                      TextInput.getValue("accFName") != null
+                          ? TextInput.getValue("accFName")
+                          : user.fName,
+                      TextInput.getValue("accLName") != null
+                          ? TextInput.getValue("accLName")
+                          : user.lName,
+                      TextInput.getValue("accPhone") != null
+                          ? TextInput.getValue("accPhone")
+                          : user.phone.toString(),
+                      TextInput.getValue("accAddA") != null
+                          ? TextInput.getValue("accAddA")
+                          : user.addressA,
+                      TextInput.getValue("accAddB") != null
+                          ? TextInput.getValue("accAddB")
+                          : user.addressB,
+                      TextInput.getValue("accAddC") != null
+                          ? TextInput.getValue("accAddC")
+                          : user.addressC,
+                      TextInput.getValue("accPostal") != null
+                          ? TextInput.getValue("accPostal")
+                          : user.postal.toString()
+                    ];
+
+                    saveResponse = DatabaseServices.changeAccountDetails(
+                        user.id.toString(), fieldsValues);
+
+                    AlertBox.showAlertBox(
+                        context,
+                        "Oznámení",
+                        FutureBuilder<String>(
+                          future: saveResponse,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return Text(snapshot.data);
+                            } else if (snapshot.hasError) {
+                              return Text('Sorry there is an error');
+                            }
+                            return Center(child: CircularProgressIndicator());
+                          },
+                        ), () {
+                      print("asd");
+                    });
+                  })),
+            ],
+          ),
+        ),
+      ),
+      Positioned(
+          height: 275,
+          width: 275,
+          right: -75,
+          bottom: -75,
+          child: Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              CircularButton(kPrimaryColor, 60, Icons.menu, kWhite, () {
+                if (animationController.isCompleted) {
+                  animationController.reverse();
+                  volume = 0;
+                } else {
+                  animationController.forward();
+                  volume = 0.5;
+                }
+              })
+            ],
+          ))
+    ]));
   }
 }

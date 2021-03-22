@@ -20,19 +20,18 @@ class _HomePageState extends State<HomePage>
   User loggedUser;
 
   AnimationController animationController;
-  List<Animation> degTranslationAnimation;
-  Animation rotationAnimation;
 
   @override
   void initState() {
     items = DatabaseServices.getAllItems("seller_id");
 
-    CircularButton().initButton(
-        animationController, degTranslationAnimation, rotationAnimation);
-    super.initState();
+    animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 250));
     animationController.addListener(() {
       setState(() {});
     });
+
+    super.initState();
   }
 
   @override
@@ -42,7 +41,7 @@ class _HomePageState extends State<HomePage>
       body: Stack(
         children: [
           Container(
-            color: Colors.black,
+            color: kBlack,
             child: FutureBuilder<List<Item>>(
               future: items,
               builder: (context, snapshot) {
@@ -60,9 +59,44 @@ class _HomePageState extends State<HomePage>
             ),
           ),
           IgnorePointer(
-            ignoring: true,
+            ignoring: volume == 0 ? true : false,
             child: Container(
               color: Colors.black.withOpacity(volume),
+              child: Stack(
+                children: [
+                  Positioned(
+                      bottom: 40,
+                      right: 150,
+                      child: CircularButton(
+                          kSecondaryColor.withOpacity(volume * 2),
+                          45,
+                          Icons.add,
+                          kWhite.withOpacity(volume * 2), () {
+                        print("asd");
+                      })),
+                  Positioned(
+                      bottom: 120,
+                      right: 120,
+                      child: CircularButton(
+                          kSecondaryColor.withOpacity(volume * 2),
+                          45,
+                          Icons.home,
+                          kWhite.withOpacity(volume * 2), () {
+                        print("asd");
+                      })),
+                  Positioned(
+                      bottom: 150,
+                      right: 40,
+                      child: CircularButton(
+                          kSecondaryColor.withOpacity(volume * 2),
+                          45,
+                          Icons.person,
+                          kWhite.withOpacity(volume * 2), () {
+                        Navigator.pushNamed(context, AccountScreen.routeName,
+                            arguments: loggedUser);
+                      })),
+                ],
+              ),
             ),
           ),
           Positioned(
@@ -73,39 +107,7 @@ class _HomePageState extends State<HomePage>
               child: Stack(
                 alignment: Alignment.center,
                 children: <Widget>[
-                  CircularButton().createSubButton(
-                      270,
-                      degTranslationAnimation[0],
-                      rotationAnimation,
-                      kSecondaryColor,
-                      50,
-                      Icons.add,
-                      kWhite, () {
-                    print("add");
-                  }),
-                  CircularButton().createSubButton(
-                      225,
-                      degTranslationAnimation[1],
-                      rotationAnimation,
-                      kSecondaryColor,
-                      50,
-                      Icons.home,
-                      kWhite, () {
-                    print("home wtf");
-                  }),
-                  CircularButton().createSubButton(
-                      180,
-                      degTranslationAnimation[2],
-                      rotationAnimation,
-                      kSecondaryColor,
-                      50,
-                      Icons.person,
-                      kWhite, () {
-                    Navigator.of(context).pushNamed(AccountScreen.routeName,
-                        arguments: loggedUser);
-                  }),
-                  CircularButton()
-                      .createButton(kPrimaryColor, 60, Icons.menu, kWhite, () {
+                  CircularButton(kPrimaryColor, 60, Icons.menu, kWhite, () {
                     if (animationController.isCompleted) {
                       animationController.reverse();
                       volume = 0;

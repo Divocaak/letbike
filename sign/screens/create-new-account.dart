@@ -10,8 +10,6 @@ import '../../general/dbServices.dart';
 import '../../general/widgets.dart';
 
 GlobalKey<FormState> _regformkey = GlobalKey<FormState>();
-TextEditingController _password = TextEditingController();
-TextEditingController _confirmpassword = TextEditingController();
 
 class CreateNewAccount extends StatefulWidget {
   @override
@@ -154,17 +152,17 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
                         inputAction: TextInputAction.next,
                       ),
                       TextInput(
-                        icon: FontAwesomeIcons.lock,
-                        hint: "Heslo",
-                        identificator: "regPass",
-                        inputAction: TextInputAction.next,
-                      ),
+                          icon: FontAwesomeIcons.lock,
+                          hint: "Heslo",
+                          identificator: "regPass",
+                          inputAction: TextInputAction.next,
+                          obscure: true),
                       TextInput(
-                        icon: FontAwesomeIcons.lock,
-                        hint: "Potvrdit heslo",
-                        identificator: "regPassConf",
-                        inputAction: TextInputAction.done,
-                      ),
+                          icon: FontAwesomeIcons.lock,
+                          hint: "Potvrdit heslo",
+                          identificator: "regPassConf",
+                          inputAction: TextInputAction.done,
+                          obscure: true),
                       SizedBox(
                         height: 25,
                       ),
@@ -244,12 +242,10 @@ class RegRoundedButton extends StatelessWidget {
                       future: response,
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
-                          print("hasData");
                           return Text(snapshot.data);
                         }
 
                         if (snapshot.hasError) {
-                          print("hasError");
                           return Text(
                               "Někde se stala chyba, zkuste to prosím později");
                         }

@@ -10,24 +10,20 @@
         - [ ] vztvorit objects.dart
     - [ ] export widgets.dart
         - [ ] vztvorit widgets.dart
-            - [ ] circularbutton od Lukáše
+            - [x] circularbutton od Lukáše
             - [ ] imagepicker od Bčka
             - [ ] roundedButton
                 - [ ] registrace
                 - [ ] login
-            - [ ] textinputfield
+            - [x] textinputfield
                 - [x] text
-                - [ ] heslo
-                    - [ ] zakrýt hesla!
+                - [x] heslo
+                    - [x] zakrýt hesla!
                 - [x] email
     - [ ] export dbServices.dart
-- [ ] snad všechny talčítka: po pushNamed sbalit
-- [ ] pošéfovat barvy
-
-* předěláno do češtiny
-* sjednocení widgetů
-* account screen
-* account settings
+- [x] snad všechny talčítka: po pushNamed sbalit
+- [x] pošéfovat barvy
+- [ ] reload stránek po popu
 
 ## App Content
 
@@ -109,4 +105,4 @@ http://127.0.0.1/projects/letbike/userRegister.php?username=admin&&email=asd@asd
     - [x] staženo
     - [ ] moje hotovo
     - [ ] master na GitHubu
-- [ ] postavit, Lukáš je kokot
+- [x] postavit, Lukáš je kokot

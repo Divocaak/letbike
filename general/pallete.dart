@@ -9,7 +9,7 @@ final appBarTheme = AppBarTheme(centerTitle: false, elevation: 0);
 const kPrimaryColor = Color(0xFF75c8cc);
 const kSecondaryColor = Color(0xFFaedfdb);
 const kWhite = Color(0xFFf2f2f2);
-const kBlack = Color(0xFF404040);
+const kBlack = Color(0xFF1a1a1a);
 
 const kWarninngColor = Color(0xFFF3BB1C);
 const kErrorColor = Colors.redAccent;
