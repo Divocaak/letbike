@@ -7,9 +7,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../general/pallete.dart';
 import '../../general/dbServices.dart';
-import '../../general/widgets.dart';
+import '../widgets.dart';
+import '../../general/alertBox.dart';
 
 GlobalKey<FormState> _regformkey = GlobalKey<FormState>();
+TextEditingController _password = TextEditingController();
+TextEditingController _confirmpassword = TextEditingController();
 
 class CreateNewAccount extends StatefulWidget {
   @override
@@ -38,16 +41,16 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
             elevation: 0,
             backgroundColor: Colors.black,
             title: Text(
-              "Vyberte si",
+              "Make a choice",
               style: kBodyText.copyWith(
-                  fontWeight: FontWeight.bold, color: kPrimaryColor),
+                  fontWeight: FontWeight.bold, color: Colors.green),
             ),
             content: SingleChildScrollView(
               child: ListBody(
                 children: <Widget>[
                   GestureDetector(
                     child: Text(
-                      "Galerie",
+                      "Gallery",
                       style: kBodyText,
                     ),
                     onTap: () {
@@ -57,7 +60,7 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
                   Padding(padding: EdgeInsets.all(16)),
                   GestureDetector(
                     child: Text(
-                      "Fotoaparát",
+                      "Camera",
                       style: kBodyText,
                     ),
                     onTap: () {
@@ -137,52 +140,49 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
                   ),
                   Column(
                     children: [
-                      TextInput(
+                      TextInputField(
                         icon: FontAwesomeIcons.user,
-                        hint: "Uživatelské jméno",
-                        identificator: "regName",
+                        hint: "Name",
                         inputType: TextInputType.name,
                         inputAction: TextInputAction.next,
                       ),
-                      TextInput(
+                      TextInputField(
                         icon: FontAwesomeIcons.envelope,
-                        hint: "E-mail",
-                        identificator: "regMail",
+                        hint: "Email",
                         inputType: TextInputType.emailAddress,
                         inputAction: TextInputAction.next,
                       ),
-                      TextInput(
-                          icon: FontAwesomeIcons.lock,
-                          hint: "Heslo",
-                          identificator: "regPass",
-                          inputAction: TextInputAction.next,
-                          obscure: true),
-                      TextInput(
-                          icon: FontAwesomeIcons.lock,
-                          hint: "Potvrdit heslo",
-                          identificator: "regPassConf",
-                          inputAction: TextInputAction.done,
-                          obscure: true),
+                      RegPasswordInput(
+                        icon: FontAwesomeIcons.lock,
+                        hint: "Password",
+                        inputAction: TextInputAction.next,
+                        controller: _password,
+                      ),
+                      RegPasswordInput(
+                        icon: FontAwesomeIcons.lock,
+                        hint: "Confirm Password",
+                        inputAction: TextInputAction.done,
+                        controller: _confirmpassword,
+                      ),
                       SizedBox(
                         height: 25,
                       ),
-                      RegRoundedButton(buttonName: "Registrovat"),
+                      RegRoundedButton(buttonName: "Register"),
                       SizedBox(
                         height: 30,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text("Už máte účet?  ", style: kBodyText),
+                          Text("Aleready have an account?", style: kBodyText),
                           GestureDetector(
                             onTap: () {
                               Navigator.of(context).pop();
                             },
                             child: Text(
-                              "Přihlaste se",
+                              "Login",
                               style: kBodyText.copyWith(
-                                  color: kPrimaryColor,
-                                  fontWeight: FontWeight.bold),
+                                  color: kGreen, fontWeight: FontWeight.bold),
                             ),
                           ),
                         ],
@@ -219,16 +219,16 @@ class RegRoundedButton extends StatelessWidget {
       height: size.height * 0.08,
       width: size.width * 0.8,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16), color: kPrimaryColor),
+          borderRadius: BorderRadius.circular(16), color: Colors.green),
       child: TextButton(
         onPressed: () {
           String failResponse = "";
 
           if (_regformkey.currentState.validate()) {
             response = DatabaseServices.registerUser(
-                TextInput.getValue("regName"),
-                TextInput.getValue("regMail"),
-                TextInput.getValue("regPass"));
+                TextInputField.getValue("Name"),
+                TextInputField.getValue("Email"),
+                RegPasswordInput.getValue("Password"));
           } else {
             failResponse = "Některé údaje jsou špatně zadané.";
           }
@@ -242,10 +242,12 @@ class RegRoundedButton extends StatelessWidget {
                       future: response,
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
+                          print("hasData");
                           return Text(snapshot.data);
                         }
 
                         if (snapshot.hasError) {
+                          print("hasError");
                           return Text(
                               "Někde se stala chyba, zkuste to prosím později");
                         }

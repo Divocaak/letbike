@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:async';
 import 'package:http/http.dart';
-import 'package:flutter/material.dart';
 
 class DatabaseServices {
   static const String url = 'http://10.0.2.2/projects/letbike/';
@@ -24,12 +23,8 @@ class DatabaseServices {
         Uri.encodeFull(url + "getItems.php/?id=" + id),
         headers: {"Accept": "application/json"});
     if (response.statusCode == 200) {
-      if (response.body == "[]") {
-        return null;
-      } else {
-        final parsed = jsonDecode(response.body).cast<Map<String, dynamic>>();
-        return parsed.map<Item>((item) => Item.fromJson(item)).toList();
-      }
+      final parsed = jsonDecode(response.body).cast<Map<String, dynamic>>();
+      return parsed.map<Item>((item) => Item.fromJson(item)).toList();
     } else {
       throw Exception("Can't get items");
     }
@@ -64,7 +59,7 @@ class DatabaseServices {
         final Map parsed = jsonDecode(response.body);
         return User.fromJson(parsed);
       } else {
-        return User(-1, "", "", "", -1, -1, "", "", "", "", "", -1, -1);
+        return User(-1, "", "", "", -1, "", "", "", "", "", -1, -1);
       }
     } else {
       throw Exception("Can't login user");
@@ -131,34 +126,6 @@ class DatabaseServices {
       throw Exception("Can't load chats");
     }
   }
-
-  static Future<String> changeAccountDetails(
-      String id, List<String> values) async {
-    final Response response = await get(
-        Uri.encodeFull(url +
-            "userChangeDetails.php/?id=" +
-            id +
-            "&&fName=" +
-            values[0] +
-            "&&lName=" +
-            values[1] +
-            "&&phone=" +
-            values[2] +
-            "&&addA=" +
-            values[3] +
-            "&&addB=" +
-            values[4] +
-            "&&addC=" +
-            values[5] +
-            "&&postal=" +
-            values[6]),
-        headers: {"Accept": "application/json;charset=UTF-8"});
-    if (response.statusCode == 200) {
-      return response.body;
-    } else {
-      throw Exception("Can't register user");
-    }
-  }
 }
 
 class Item {
@@ -223,7 +190,6 @@ class User {
   String email;
   String password;
   int score;
-  int phone;
   String fName;
   String lName;
   String addressA;
@@ -238,7 +204,6 @@ class User {
       this.email,
       this.password,
       this.score,
-      this.phone,
       this.fName,
       this.lName,
       this.addressA,
@@ -254,7 +219,6 @@ class User {
         json["email"],
         json["password"],
         int.parse(json["score"]),
-        int.parse(json["phone"]),
         json["fName"],
         json["lName"],
         json["addressA"],
@@ -270,7 +234,6 @@ class User {
         "email": email,
         "password": password,
         "score": score,
-        "phone": phone,
         "fName": fName,
         "lName": lName,
         "addressA": addressA,
@@ -306,11 +269,4 @@ class Chat {
   factory Chat.fromJson(Map<String, dynamic> json) {
     return Chat(json["email"], json["username"]);
   }
-}
-
-class ItemInfo {
-  Item item;
-  User me;
-
-  ItemInfo(this.item, this.me);
 }

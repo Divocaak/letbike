@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import '../../general/widgets.dart';
+import '../../general/alertBox.dart';
 import '../../general/pallete.dart';
 import '../../general/dbServices.dart';
+import '../widgets.dart';
 import '../../app/homePage.dart';
 
 GlobalKey<FormState> _logformkey = GlobalKey<FormState>();
@@ -36,28 +37,26 @@ class LoginScreen extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    TextInput(
+                    TextInputField(
                       icon: FontAwesomeIcons.envelope,
-                      hint: "E-mail",
-                      identificator: "logMail",
+                      hint: "Email",
                       inputType: TextInputType.emailAddress,
                       inputAction: TextInputAction.next,
                     ),
-                    TextInput(
-                        icon: FontAwesomeIcons.lock,
-                        hint: "Heslo",
-                        identificator: "logPass",
-                        inputAction: TextInputAction.done,
-                        obscure: true),
+                    PasswordInput(
+                      icon: FontAwesomeIcons.lock,
+                      hint: "Password",
+                      inputAction: TextInputAction.done,
+                    ),
                     GestureDetector(
                         onTap: () =>
                             Navigator.of(context).pushNamed("ForgotPassword"),
-                        child: Text("Zapomenuté heslo", style: kBodyText)),
+                        child: Text("Forgot Password", style: kBodyText)),
                     SizedBox(
                       height: 25,
                     ),
                     LogRoundedButton(
-                      buttonName: "Přihlásit se",
+                      buttonName: "Login",
                     ),
                     SizedBox(
                       height: 25,
@@ -69,7 +68,7 @@ class LoginScreen extends StatelessWidget {
                       Navigator.of(context).pushNamed("CreateNewAccount"),
                   child: Container(
                     child: Text(
-                      "Zaregistrovat se",
+                      "Create New Account",
                       style: kBodyText,
                     ),
                     decoration: BoxDecoration(
@@ -106,12 +105,12 @@ class LogRoundedButton extends StatelessWidget {
       height: size.height * 0.08,
       width: size.width * 0.8,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16), color: kPrimaryColor),
+          borderRadius: BorderRadius.circular(16), color: Colors.green),
       child: TextButton(
         onPressed: () {
           logResponse = DatabaseServices.loginUser(
-            TextInput.getValue("logMail"),
-            TextInput.getValue("logPass"),
+            TextInputField.getValue("Email"),
+            PasswordInput.getValue("Password"),
           );
 
           AlertBox.showAlertBox(

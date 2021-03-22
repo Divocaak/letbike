@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:letbike/chat/chatScreen.dart';
 import 'homePage.dart';
-import '../general/widgets.dart';
+import '../general/alertBox.dart';
 import '../general/dbServices.dart';
 
 class ItemPage extends StatefulWidget {
@@ -101,7 +101,7 @@ class _ItemPageState extends State<ItemPage>
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          if (itemInfo.item.sellerId != itemInfo.me.id) {
+          if (itemInfo.item.sellerId == itemInfo.me.id) {
             Navigator.of(context)
                 .pushNamed(ChatScreen.routeName, arguments: itemInfo);
           } else {

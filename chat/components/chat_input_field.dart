@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:letbike/app/homePage.dart';
 import 'package:letbike/general/dbServices.dart';
-import '../../general/widgets.dart';
+import '../../general/alertBox.dart';
 import '../../general/pallete.dart';
 
 class ChatInputField extends StatefulWidget {
