@@ -8,6 +8,8 @@ import '../../general/pallete.dart';
 import '../../general/dbServices.dart';
 import '../../general/widgets.dart';
 
+Future<String> response;
+
 GlobalKey<FormState> _regformkey = GlobalKey<FormState>();
 
 class CreateNewAccount extends StatefulWidget {
@@ -164,7 +166,42 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
                       SizedBox(
                         height: 25,
                       ),
-                      RegRoundedButton(buttonName: "Registrovat"),
+                      RoundedButton(
+                        buttonName: "Registrovat",
+                        onClick: () {
+                          String failResponse = "";
+
+                          if (_regformkey.currentState.validate()) {
+                            response = DatabaseServices.registerUser(
+                                TextInput.getValue("regName"),
+                                TextInput.getValue("regMail"),
+                                TextInput.getValue("regPass"));
+                          } else {
+                            failResponse = "Některé údaje jsou špatně zadané.";
+                          }
+
+                          AlertBox.showAlertBox(
+                              context,
+                              "Oznámení",
+                              failResponse != ""
+                                  ? new Text(failResponse)
+                                  : FutureBuilder(
+                                      future: response,
+                                      builder: (context, snapshot) {
+                                        if (snapshot.hasData) {
+                                          return Text(snapshot.data);
+                                        }
+
+                                        if (snapshot.hasError) {
+                                          return Text(
+                                              "Někde se stala chyba, zkuste to prosím později");
+                                        }
+
+                                        return Center(
+                                            child: CircularProgressIndicator());
+                                      }));
+                        },
+                      ),
                       SizedBox(
                         height: 30,
                       ),
@@ -196,66 +233,6 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
           ),
         ),
       ],
-    );
-  }
-}
-
-Future<String> response;
-
-class RegRoundedButton extends StatelessWidget {
-  const RegRoundedButton({
-    Key key,
-    @required this.buttonName,
-  }) : super(key: key);
-
-  final String buttonName;
-
-  @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return Container(
-      height: size.height * 0.08,
-      width: size.width * 0.8,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16), color: kPrimaryColor),
-      child: TextButton(
-        onPressed: () {
-          String failResponse = "";
-
-          if (_regformkey.currentState.validate()) {
-            response = DatabaseServices.registerUser(
-                TextInput.getValue("regName"),
-                TextInput.getValue("regMail"),
-                TextInput.getValue("regPass"));
-          } else {
-            failResponse = "Některé údaje jsou špatně zadané.";
-          }
-
-          AlertBox.showAlertBox(
-              context,
-              "Oznámení",
-              failResponse != ""
-                  ? new Text(failResponse)
-                  : FutureBuilder(
-                      future: response,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return Text(snapshot.data);
-                        }
-
-                        if (snapshot.hasError) {
-                          return Text(
-                              "Někde se stala chyba, zkuste to prosím později");
-                        }
-
-                        return Center(child: CircularProgressIndicator());
-                      }));
-        },
-        child: Text(
-          buttonName,
-          style: kBodyText.copyWith(fontWeight: FontWeight.bold),
-        ),
-      ),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:letbike/account/accountSettings.dart';
 import '../general/pallete.dart';
 import "../general/dbServices.dart";
 import "../general/widgets.dart";
@@ -57,6 +58,7 @@ class _HomePageState extends State<HomePage>
               },
             ),
           ),
+          warningCard(),
           IgnorePointer(
             ignoring: volume == 0 ? true : false,
             child: Container(
@@ -120,5 +122,47 @@ class _HomePageState extends State<HomePage>
         ],
       ),
     );
+  }
+
+  Widget warningCard() {
+    if (checkUserData() < 7) {
+      return Container(
+          height: 125,
+          clipBehavior: Clip.antiAlias,
+          margin: const EdgeInsets.fromLTRB(5, 25, 5, 10),
+          decoration: BoxDecoration(
+              color: kWarninngColor.withOpacity(0.85),
+              border: Border.all(color: Colors.transparent),
+              borderRadius: BorderRadius.all(Radius.circular(20))),
+          child: ListView(children: [
+            Icon(
+              Icons.warning,
+              color: kWhite,
+            ),
+            SizedBox(height: 10),
+            Text("Doplňte si prosím uživatelské údaje",
+                textAlign: TextAlign.center),
+            TextButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, AccountSettings.routeName,
+                      arguments: loggedUser);
+                },
+                child: Text("Doplnit", textAlign: TextAlign.center)),
+          ]));
+    } else {
+      return SizedBox(height: 0, width: 0);
+    }
+  }
+
+  int checkUserData() {
+    int check = 0;
+    check += loggedUser.fName != "0" ? 1 : 0;
+    check += loggedUser.lName != "0" ? 1 : 0;
+    check += loggedUser.phone != 0 ? 1 : 0;
+    check += loggedUser.addressA != "0" ? 1 : 0;
+    check += loggedUser.addressB != "0" ? 1 : 0;
+    check += loggedUser.addressC != "0" ? 1 : 0;
+    check += loggedUser.postal != 0 ? 1 : 0;
+    return check;
   }
 }

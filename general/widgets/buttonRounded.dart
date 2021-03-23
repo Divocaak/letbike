@@ -5,9 +5,11 @@ class RoundedButton extends StatelessWidget {
   const RoundedButton({
     Key key,
     @required this.buttonName,
+    @required this.onClick,
   }) : super(key: key);
 
   final String buttonName;
+  final Function onClick;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +20,9 @@ class RoundedButton extends StatelessWidget {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16), color: kPrimaryColor),
       child: TextButton(
-        onPressed: () {},
+        onPressed: () {
+          onClick();
+        },
         child: Text(
           buttonName,
           style: kBodyText.copyWith(fontWeight: FontWeight.bold),

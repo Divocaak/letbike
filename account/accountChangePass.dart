@@ -187,9 +187,7 @@ class _ChangePasswordState extends State<ChangePassword>
                                     return Center(
                                         child: CircularProgressIndicator());
                                   },
-                                ), () {
-                        print("asd");
-                      });
+                                ));
                     })),
               ],
             ),

@@ -220,7 +220,7 @@ class _AccountSettingsState extends State<AccountSettings>
                       icon: Icons.email,
                       hint: "PSČ: " + user.postal.toString(),
                       identificator: "accPostal",
-                      inputAction: TextInputAction.next,
+                      inputAction: TextInputAction.done,
                       inputType: TextInputType.number),
                   SizedBox(
                     height: 25,
@@ -257,49 +257,7 @@ class _AccountSettingsState extends State<AccountSettings>
                   right: 40,
                   child: CircularButton(kSecondaryColor.withOpacity(volume * 2),
                       45, Icons.save, kWhite.withOpacity(volume * 2), () {
-                    fieldsValues = [
-                      TextInput.getValue("accFName") != null
-                          ? TextInput.getValue("accFName")
-                          : user.fName,
-                      TextInput.getValue("accLName") != null
-                          ? TextInput.getValue("accLName")
-                          : user.lName,
-                      TextInput.getValue("accPhone") != null
-                          ? TextInput.getValue("accPhone")
-                          : user.phone.toString(),
-                      TextInput.getValue("accAddA") != null
-                          ? TextInput.getValue("accAddA")
-                          : user.addressA,
-                      TextInput.getValue("accAddB") != null
-                          ? TextInput.getValue("accAddB")
-                          : user.addressB,
-                      TextInput.getValue("accAddC") != null
-                          ? TextInput.getValue("accAddC")
-                          : user.addressC,
-                      TextInput.getValue("accPostal") != null
-                          ? TextInput.getValue("accPostal")
-                          : user.postal.toString()
-                    ];
-
-                    saveResponse = DatabaseServices.changeAccountDetails(
-                        user.id.toString(), fieldsValues);
-
-                    AlertBox.showAlertBox(
-                        context,
-                        "Oznámení",
-                        FutureBuilder<String>(
-                          future: saveResponse,
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              return Text(snapshot.data);
-                            } else if (snapshot.hasError) {
-                              return Text('Sorry there is an error');
-                            }
-                            return Center(child: CircularProgressIndicator());
-                          },
-                        ), () {
-                      print("asd");
-                    });
+                    saveData();
                   })),
             ],
           ),
@@ -325,5 +283,49 @@ class _AccountSettingsState extends State<AccountSettings>
             ],
           ))
     ]));
+  }
+
+  void saveData() {
+    fieldsValues = [
+      TextInput.getValue("accFName") != null
+          ? TextInput.getValue("accFName")
+          : user.fName,
+      TextInput.getValue("accLName") != null
+          ? TextInput.getValue("accLName")
+          : user.lName,
+      TextInput.getValue("accPhone") != null
+          ? TextInput.getValue("accPhone")
+          : user.phone.toString(),
+      TextInput.getValue("accAddA") != null
+          ? TextInput.getValue("accAddA")
+          : user.addressA,
+      TextInput.getValue("accAddB") != null
+          ? TextInput.getValue("accAddB")
+          : user.addressB,
+      TextInput.getValue("accAddC") != null
+          ? TextInput.getValue("accAddC")
+          : user.addressC,
+      TextInput.getValue("accPostal") != null
+          ? TextInput.getValue("accPostal")
+          : user.postal.toString()
+    ];
+
+    saveResponse =
+        DatabaseServices.changeAccountDetails(user.id.toString(), fieldsValues);
+
+    AlertBox.showAlertBox(
+        context,
+        "Oznámení",
+        FutureBuilder<String>(
+          future: saveResponse,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Text(snapshot.data);
+            } else if (snapshot.hasError) {
+              return Text('Sorry there is an error');
+            }
+            return Center(child: CircularProgressIndicator());
+          },
+        ));
   }
 }

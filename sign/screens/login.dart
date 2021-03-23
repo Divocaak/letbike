@@ -4,6 +4,8 @@ import '../../general/pallete.dart';
 import '../../general/dbServices.dart';
 import '../../app/homePage.dart';
 
+Future<User> logResponse;
+
 GlobalKey<FormState> _logformkey = GlobalKey<FormState>();
 
 class LoginScreen extends StatelessWidget {
@@ -55,8 +57,44 @@ class LoginScreen extends StatelessWidget {
                     SizedBox(
                       height: 25,
                     ),
-                    LogRoundedButton(
+                    RoundedButton(
                       buttonName: "Přihlásit se",
+                      onClick: () {
+                        logResponse = DatabaseServices.loginUser(
+                          TextInput.getValue("logMail"),
+                          TextInput.getValue("logPass"),
+                        );
+
+                        AlertBox.showAlertBox(
+                            context,
+                            "Oznámení",
+                            FutureBuilder(
+                                future: logResponse,
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    if (snapshot.data.id < 0) {
+                                      return Text(
+                                          "Špatně zadané uživatelské jméno nebo heslo.");
+                                    } else {
+                                      Text("Probíhá přesměrování");
+                                      Future.delayed(Duration.zero, () {
+                                        Navigator.of(context)
+                                            .pushReplacementNamed(
+                                                HomePage.routeName,
+                                                arguments: snapshot.data);
+                                      });
+                                    }
+                                  }
+
+                                  if (snapshot.hasError) {
+                                    return Text(
+                                        "Někde se stala chyba, zkuste to prosím později.");
+                                  }
+
+                                  return Center(
+                                      child: CircularProgressIndicator());
+                                }));
+                      },
                     ),
                     SizedBox(
                       height: 25,
@@ -84,68 +122,6 @@ class LoginScreen extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-Future<User> logResponse;
-
-class LogRoundedButton extends StatelessWidget {
-  const LogRoundedButton({
-    Key key,
-    @required this.buttonName,
-  }) : super(key: key);
-
-  final String buttonName;
-
-  @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return Container(
-      height: size.height * 0.08,
-      width: size.width * 0.8,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16), color: kPrimaryColor),
-      child: TextButton(
-        onPressed: () {
-          logResponse = DatabaseServices.loginUser(
-            TextInput.getValue("logMail"),
-            TextInput.getValue("logPass"),
-          );
-
-          AlertBox.showAlertBox(
-              context,
-              "Oznámení",
-              FutureBuilder(
-                  future: logResponse,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      if (snapshot.data.id < 0) {
-                        return Text(
-                            "Špatně zadané uživatelské jméno nebo heslo.");
-                      } else {
-                        Text("Probíhá přesměrování");
-                        Future.delayed(Duration.zero, () {
-                          Navigator.of(context).pushReplacementNamed(
-                              HomePage.routeName,
-                              arguments: snapshot.data);
-                        });
-                      }
-                    }
-
-                    if (snapshot.hasError) {
-                      return Text(
-                          "Někde se stala chyba, zkuste to prosím později.");
-                    }
-
-                    return Center(child: CircularProgressIndicator());
-                  }));
-        },
-        child: Text(
-          buttonName,
-          style: kBodyText.copyWith(fontWeight: FontWeight.bold),
-        ),
-      ),
     );
   }
 }

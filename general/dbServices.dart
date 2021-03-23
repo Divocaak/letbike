@@ -20,7 +20,7 @@ class DatabaseServices {
 
   static Future<List<Item>> getAllItems(String id) async {
     final Response response = await get(
-        Uri.encodeFull(url + "getItems.php/?id=" + id),
+        Uri.encodeFull(url + "itemGetAll.php/?id=" + id),
         headers: {"Accept": "application/json"});
     if (response.statusCode == 200) {
       if (response.body == "[]") {

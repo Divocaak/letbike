@@ -29,6 +29,7 @@ class _ChatScreenState extends State<ChatScreen>
         itemInfo.item.sellerId, itemInfo.me.id, itemInfo.item.id);
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: kPrimaryColor,
         automaticallyImplyLeading: false,
         title: Row(
           children: [
@@ -41,7 +42,7 @@ class _ChatScreenState extends State<ChatScreen>
                   "https://www.surforma.com/media/filer_public_thumbnails/filer_public/4b/00/4b007d44-3443-4338-ada5-47d0b99db7ad/l167.jpg__800x600_q95_crop_subsampling-2_upscale.jpg"),
               child: Icon(
                 Icons.person,
-                color: Colors.white,
+                color: kWhite,
                 size: 20,
               ),
             ),
