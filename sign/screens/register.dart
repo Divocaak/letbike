@@ -3,7 +3,6 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../general/pallete.dart';
 import '../../general/dbServices.dart';
@@ -71,7 +70,6 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
         });
   }
 
-  String asd;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -113,7 +111,7 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
                                         Colors.grey[400].withOpacity(0.5),
                                     child: _imageFile == null
                                         ? Icon(
-                                            FontAwesomeIcons.user,
+                                            Icons.person,
                                             color: kWhite,
                                             size: size.width * 0.1,
                                           )
@@ -138,27 +136,27 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
                   Column(
                     children: [
                       TextInput(
-                        icon: FontAwesomeIcons.user,
+                        icon: Icons.person,
                         hint: "Uživatelské jméno",
                         identificator: "regName",
                         inputType: TextInputType.name,
                         inputAction: TextInputAction.next,
                       ),
                       TextInput(
-                        icon: FontAwesomeIcons.envelope,
+                        icon: Icons.mail,
                         hint: "E-mail",
                         identificator: "regMail",
                         inputType: TextInputType.emailAddress,
                         inputAction: TextInputAction.next,
                       ),
                       TextInput(
-                          icon: FontAwesomeIcons.lock,
+                          icon: Icons.lock,
                           hint: "Heslo",
                           identificator: "regPass",
                           inputAction: TextInputAction.next,
                           obscure: true),
                       TextInput(
-                          icon: FontAwesomeIcons.lock,
+                          icon: Icons.lock,
                           hint: "Potvrdit heslo",
                           identificator: "regPassConf",
                           inputAction: TextInputAction.done,

@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:async';
 import 'package:http/http.dart';
-import 'package:flutter/material.dart';
 
 class DatabaseServices {
   static const String url = 'http://10.0.2.2/projects/letbike/';
@@ -152,6 +151,23 @@ class DatabaseServices {
             values[5] +
             "&&postal=" +
             values[6]),
+        headers: {"Accept": "application/json;charset=UTF-8"});
+    if (response.statusCode == 200) {
+      return response.body;
+    } else {
+      throw Exception("Can't register user");
+    }
+  }
+
+  static Future<String> changePassword(String id, newPass, currPass) async {
+    final Response response = await get(
+        Uri.encodeFull(url +
+            "userChangePassword.php/?id=" +
+            id +
+            "&&newPass=" +
+            newPass +
+            "&&currPass=" +
+            currPass),
         headers: {"Accept": "application/json;charset=UTF-8"});
     if (response.statusCode == 200) {
       return response.body;

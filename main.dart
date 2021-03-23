@@ -7,6 +7,7 @@ import 'app/itemPage.dart';
 import 'chat/chatScreen.dart';
 import 'account/accountScreen.dart';
 import 'account/accountSettings.dart';
+import 'account/accountChangePass.dart';
 
 void main() {
   runApp(MyApp());
@@ -32,7 +33,8 @@ class MyApp extends StatelessWidget {
         ItemPage.routeName: (context) => ItemPage(),
         ChatScreen.routeName: (content) => ChatScreen(),
         AccountScreen.routeName: (context) => AccountScreen(),
-        AccountSettings.routeName: (context) => AccountSettings()
+        AccountSettings.routeName: (context) => AccountSettings(),
+        ChangePassword.routeName: (context) => ChangePassword()
       },
     );
   }

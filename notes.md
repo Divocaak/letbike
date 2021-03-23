@@ -24,6 +24,11 @@
 - [x] snad všechny talčítka: po pushNamed sbalit
 - [x] pošéfovat barvy
 - [ ] reload stránek po popu
+- [ ] classes.dart
+
+- [x] fontawesome mrdka
+- [x] password change
+- [x] buildCard do widgets.dart
 
 ## App Content
 

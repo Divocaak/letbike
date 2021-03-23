@@ -2,8 +2,8 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'accountChangePass.dart';
 import '../general/pallete.dart';
 import '../general/dbServices.dart';
 import '../general/widgets.dart';
@@ -113,7 +113,7 @@ class _AccountSettingsState extends State<AccountSettings>
                     backgroundColor: Colors.grey[400].withOpacity(0.5),
                     child: _imageFile == null
                         ? Icon(
-                            FontAwesomeIcons.user,
+                            Icons.person,
                             color: Colors.white,
                             size: 30,
                           )
@@ -242,7 +242,8 @@ class _AccountSettingsState extends State<AccountSettings>
                   right: 150,
                   child: CircularButton(kSecondaryColor.withOpacity(volume * 2),
                       45, Icons.lock, kWhite.withOpacity(volume * 2), () {
-                    print("change pass");
+                    Navigator.of(context)
+                        .pushNamed(ChangePassword.routeName, arguments: user);
                   })),
               Positioned(
                   bottom: 120,

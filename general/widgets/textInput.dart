@@ -13,7 +13,10 @@ String regMail,
     accAddA,
     accAddB,
     accAddC,
-    accPostal;
+    accPostal,
+    changePassCurr,
+    changePassNew,
+    changePassConf;
 
 class TextInput extends StatelessWidget {
   const TextInput(
@@ -75,13 +78,21 @@ class TextInput extends StatelessWidget {
                 }
               }
 
-              if (identificator == "regPass" && value.length < 8) {
+              if ((identificator == "regPass" && value.length < 8) ||
+                  (identificator == "changePassNew" && value.length < 8)) {
                 return "Heslo musí obsahovat minimálně 8 znaků";
               }
 
               if (identificator == "regPass" ||
                   identificator == "regPassConf") {
                 if (regPass != regPassConf) {
+                  return "Hesla se neshodují";
+                }
+              }
+
+              if (identificator == "changePassNew" ||
+                  identificator == "changePassConf") {
+                if (changePassNew != changePassConf) {
                   return "Hesla se neshodují";
                 }
               }
@@ -163,6 +174,21 @@ class TextInput extends StatelessWidget {
           return accPostal;
         }
         break;
+      case "changePassCurr":
+        {
+          return changePassCurr;
+        }
+        break;
+      case "changePassNew":
+        {
+          return changePassNew;
+        }
+        break;
+      case "changePassConf":
+        {
+          return changePassConf;
+        }
+        break;
     }
     return "";
   }
@@ -232,6 +258,21 @@ class TextInput extends StatelessWidget {
       case "accPostal":
         {
           accPostal = content;
+        }
+        break;
+      case "changePassCurr":
+        {
+          changePassCurr = content;
+        }
+        break;
+      case "changePassNew":
+        {
+          changePassNew = content;
+        }
+        break;
+      case "changePassConf":
+        {
+          changePassConf = content;
         }
         break;
     }

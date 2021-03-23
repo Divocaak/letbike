@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:letbike/app/homePage.dart';
-import 'package:letbike/general/dbServices.dart';
-import '../../general/widgets.dart';
-import '../../general/pallete.dart';
+import '../dbServices.dart';
+import '../widgets.dart';
+import '../pallete.dart';
 
 class ChatInputField extends StatefulWidget {
   final ItemInfo itemInfo;

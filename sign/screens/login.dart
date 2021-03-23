@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../general/widgets.dart';
 import '../../general/pallete.dart';
 import '../../general/dbServices.dart';
@@ -37,14 +36,14 @@ class LoginScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     TextInput(
-                      icon: FontAwesomeIcons.envelope,
+                      icon: Icons.mail,
                       hint: "E-mail",
                       identificator: "logMail",
                       inputType: TextInputType.emailAddress,
                       inputAction: TextInputAction.next,
                     ),
                     TextInput(
-                        icon: FontAwesomeIcons.lock,
+                        icon: Icons.lock,
                         hint: "Heslo",
                         identificator: "logPass",
                         inputAction: TextInputAction.done,
