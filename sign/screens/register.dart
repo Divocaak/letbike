@@ -3,16 +3,14 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import '../pallete.dart';
-import '../widgets.dart';
-import '../alertBox.dart';
-import '../../dbServices.dart';
+import '../../general/pallete.dart';
+import '../../general/dbServices.dart';
+import '../../general/widgets.dart';
+
+Future<String> response;
 
 GlobalKey<FormState> _regformkey = GlobalKey<FormState>();
-TextEditingController _password = TextEditingController();
-TextEditingController _confirmpassword = TextEditingController();
 
 class CreateNewAccount extends StatefulWidget {
   @override
@@ -41,16 +39,16 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
             elevation: 0,
             backgroundColor: Colors.black,
             title: Text(
-              "Make a choice",
+              "Vyberte si",
               style: kBodyText.copyWith(
-                  fontWeight: FontWeight.bold, color: Colors.green),
+                  fontWeight: FontWeight.bold, color: kPrimaryColor),
             ),
             content: SingleChildScrollView(
               child: ListBody(
                 children: <Widget>[
                   GestureDetector(
                     child: Text(
-                      "Gallery",
+                      "Galerie",
                       style: kBodyText,
                     ),
                     onTap: () {
@@ -60,7 +58,7 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
                   Padding(padding: EdgeInsets.all(16)),
                   GestureDetector(
                     child: Text(
-                      "Camera",
+                      "Fotoaparát",
                       style: kBodyText,
                     ),
                     onTap: () {
@@ -74,7 +72,6 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
         });
   }
 
-  String asd;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -116,7 +113,7 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
                                         Colors.grey[400].withOpacity(0.5),
                                     child: _imageFile == null
                                         ? Icon(
-                                            FontAwesomeIcons.user,
+                                            Icons.person,
                                             color: kWhite,
                                             size: size.width * 0.1,
                                           )
@@ -140,49 +137,87 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
                   ),
                   Column(
                     children: [
-                      TextInputField(
-                        icon: FontAwesomeIcons.user,
-                        hint: "Name",
+                      TextInput(
+                        icon: Icons.person,
+                        hint: "Uživatelské jméno",
+                        identificator: "regName",
                         inputType: TextInputType.name,
                         inputAction: TextInputAction.next,
                       ),
-                      TextInputField(
-                        icon: FontAwesomeIcons.envelope,
-                        hint: "Email",
+                      TextInput(
+                        icon: Icons.mail,
+                        hint: "E-mail",
+                        identificator: "regMail",
                         inputType: TextInputType.emailAddress,
                         inputAction: TextInputAction.next,
                       ),
-                      RegPasswordInput(
-                        icon: FontAwesomeIcons.lock,
-                        hint: "Password",
-                        inputAction: TextInputAction.next,
-                        controller: _password,
-                      ),
-                      RegPasswordInput(
-                        icon: FontAwesomeIcons.lock,
-                        hint: "Confirm Password",
-                        inputAction: TextInputAction.done,
-                        controller: _confirmpassword,
-                      ),
+                      TextInput(
+                          icon: Icons.lock,
+                          hint: "Heslo",
+                          identificator: "regPass",
+                          inputAction: TextInputAction.next,
+                          obscure: true),
+                      TextInput(
+                          icon: Icons.lock,
+                          hint: "Potvrdit heslo",
+                          identificator: "regPassConf",
+                          inputAction: TextInputAction.done,
+                          obscure: true),
                       SizedBox(
                         height: 25,
                       ),
-                      RegRoundedButton(buttonName: "Register"),
+                      RoundedButton(
+                        buttonName: "Registrovat",
+                        onClick: () {
+                          String failResponse = "";
+
+                          if (_regformkey.currentState.validate()) {
+                            response = DatabaseServices.registerUser(
+                                TextInput.getValue("regName"),
+                                TextInput.getValue("regMail"),
+                                TextInput.getValue("regPass"));
+                          } else {
+                            failResponse = "Některé údaje jsou špatně zadané.";
+                          }
+
+                          AlertBox.showAlertBox(
+                              context,
+                              "Oznámení",
+                              failResponse != ""
+                                  ? new Text(failResponse)
+                                  : FutureBuilder(
+                                      future: response,
+                                      builder: (context, snapshot) {
+                                        if (snapshot.hasData) {
+                                          return Text(snapshot.data);
+                                        }
+
+                                        if (snapshot.hasError) {
+                                          return Text(
+                                              "Někde se stala chyba, zkuste to prosím později");
+                                        }
+
+                                        return Center(
+                                            child: CircularProgressIndicator());
+                                      }));
+                        },
+                      ),
                       SizedBox(
                         height: 30,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text("Aleready have an account?", style: kBodyText),
+                          Text("Už máte účet?  ", style: kBodyText),
                           GestureDetector(
                             onTap: () {
-                              Navigator.popAndPushNamed(context, "/");
+                              Navigator.of(context).pop();
                             },
                             child: Text(
-                              "Login",
+                              "Přihlaste se",
                               style: kBodyText.copyWith(
-                                  color: kGreen, fontWeight: FontWeight.bold),
+                                  color: kPrimaryColor,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
                         ],
@@ -198,68 +233,6 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
           ),
         ),
       ],
-    );
-  }
-}
-
-Future<String> response;
-
-class RegRoundedButton extends StatelessWidget {
-  const RegRoundedButton({
-    Key key,
-    @required this.buttonName,
-  }) : super(key: key);
-
-  final String buttonName;
-
-  @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return Container(
-      height: size.height * 0.08,
-      width: size.width * 0.8,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16), color: Colors.green),
-      child: TextButton(
-        onPressed: () {
-          String failResponse = "";
-
-          if (_regformkey.currentState.validate()) {
-            response = DatabaseServices.registerUser(
-                TextInputField.getValue("Name"),
-                TextInputField.getValue("Email"),
-                RegPasswordInput.getValue("Password"));
-          } else {
-            failResponse = "Některé údaje jsou špatně zadané.";
-          }
-
-          AlertBox.showAlertBox(
-              context,
-              "Oznámení",
-              failResponse != ""
-                  ? new Text(failResponse)
-                  : FutureBuilder(
-                      future: response,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          print("hasData");
-                          return Text(snapshot.data);
-                        }
-
-                        if (snapshot.hasError) {
-                          print("hasError");
-                          return Text(
-                              "Někde se stala chyba, zkuste to prosím později");
-                        }
-
-                        return Center(child: CircularProgressIndicator());
-                      }));
-        },
-        child: Text(
-          buttonName,
-          style: kBodyText.copyWith(fontWeight: FontWeight.bold),
-        ),
-      ),
     );
   }
 }

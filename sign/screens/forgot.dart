@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import '../pallete.dart';
-import '../widgets/background-image.dart';
-import '../widgets/rounded-button.dart';
-import '../widgets/text-input-field.dart';
+import '../../general/pallete.dart';
+import '../../general/widgets.dart';
 
 class ForgotPassword extends StatelessWidget {
   @override
@@ -21,7 +18,7 @@ class ForgotPassword extends StatelessWidget {
             elevation: 0,
             leading: IconButton(
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.of(context).pop();
               },
               icon: Icon(
                 Icons.arrow_back_ios,
@@ -52,16 +49,20 @@ class ForgotPassword extends StatelessWidget {
                     SizedBox(
                       height: 20,
                     ),
-                    TextInputField(
-                      icon: FontAwesomeIcons.envelope,
+                    TextInput(
+                      icon: Icons.mail,
                       hint: "Email",
+                      identificator: "",
                       inputType: TextInputType.emailAddress,
                       inputAction: TextInputAction.done,
                     ),
                     SizedBox(
                       height: 20,
                     ),
-                    RoundedButton(buttonName: "Send")
+                    RoundedButton(
+                      buttonName: "Send",
+                      onClick: () {},
+                    )
                   ],
                 ),
               ),

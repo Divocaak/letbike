@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
 class AlertBox {
-  static showAlertBox(BuildContext context, String title, Widget body) {
+  static showAlertBox(
+    BuildContext context,
+    String title,
+    Widget body,
+  ) {
     AlertDialog alert = AlertDialog(
       title: Text(title),
       content: body,
