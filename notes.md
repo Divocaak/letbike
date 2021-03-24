@@ -27,6 +27,22 @@
 - [x] fontawesome mrdka
 - [x] password change
 - [x] buildCard do widgets.dart
+- [ ] obrázky
+    - [ ] nahrávání
+        - [ ] item
+        - [ ] accountSettings
+        - [ ] chat zpráva
+    - [ ] zobrazování
+        - [ ] item
+            - [ ] homepage
+            - [ ] account
+            - [ ] itempage
+        - [ ] accountSettings
+            - [ ] settings
+            - [ ] details
+        - [ ] chat
+            - [ ] zpráva
+            - [ ] profil
 
 ## App Content
 
