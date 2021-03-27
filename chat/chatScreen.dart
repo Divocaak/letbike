@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import '../general/widgets/chatBuildMessage.dart';
-import '../general/dbServices.dart';
-import '../general/pallete.dart';
-import '../general/widgets.dart';
+import '../general/general.dart';
 import 'dart:async';
 
 ItemInfo itemInfo;

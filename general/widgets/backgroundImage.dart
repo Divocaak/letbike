@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
 
 class BackgroundImage extends StatelessWidget {
-  const BackgroundImage({Key key, @required this.image}) : super(key: key);
-
-  final String image;
-
   @override
   Widget build(BuildContext context) {
     return ShaderMask(
@@ -17,7 +14,9 @@ class BackgroundImage extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-              image: NetworkImage(image),
+              image: NetworkImage('http://10.0.2.2/projects/letbike/imgs/app/' +
+                  new Random().nextInt(8).toString() +
+                  '.jpg'),
               fit: BoxFit.cover,
               colorFilter: ColorFilter.mode(Colors.black54, BlendMode.darken)),
         ),

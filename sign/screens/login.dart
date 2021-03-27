@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../general/widgets.dart';
-import '../../general/pallete.dart';
-import '../../general/dbServices.dart';
+import '../../general/general.dart';
 import '../../app/homePage.dart';
 
 Future<User> logResponse;
@@ -13,9 +11,7 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        BackgroundImage(
-            image:
-                'https://mtbs.cz/media/clanky/63713/titulka/1_Qayron_perex.jpg'),
+        BackgroundImage(),
         Form(
           key: _logformkey,
           child: Scaffold(
@@ -81,7 +77,8 @@ class LoginScreen extends StatelessWidget {
                                         Navigator.of(context)
                                             .pushReplacementNamed(
                                                 HomePage.routeName,
-                                                arguments: snapshot.data);
+                                                arguments: new HomeArguments(
+                                                    snapshot.data, null));
                                       });
                                     }
                                   }

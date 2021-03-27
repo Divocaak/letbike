@@ -1,8 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import '../general/pallete.dart';
-import '../general/widgets.dart';
-import '../general/dbServices.dart';
+import '../general/general.dart';
 
 double volume = 0;
 

@@ -78,9 +78,7 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
 
     return Stack(
       children: [
-        BackgroundImage(
-            image:
-                'https://mtbs.cz/media/clanky/63713/titulka/1_Qayron_perex.jpg'),
+        BackgroundImage(),
         Form(
           key: _regformkey,
           child: Scaffold(

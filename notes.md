@@ -6,8 +6,8 @@
 
 - [x] getItem a setItem => itemGet && itemSet
 - [ ] vytvořit general.dart
-    - [ ] export classes.dart
-        - [ ] vztvorit classes.dart
+    - [x] export objects.dart
+        - [x] vztvorit objects.dart
     - [ ] export widgets.dart
         - [ ] vztvorit widgets.dart
             - [x] circularbutton od Lukáše
@@ -20,10 +20,14 @@
                 - [x] heslo
                     - [x] zakrýt hesla!
                 - [x] email
-    - [ ] export dbServices.dart
+    - [x] export dbServices.dart
 - [x] snad všechny talčítka: po pushNamed sbalit
 - [x] pošéfovat barvy
 - [ ] reload stránek po popu
+    - [x] accSett => accScreen
+    - [x] accScreen => homePage
+    - [x] addItem => homePage
+    - [ ] filters => homePage
 - [x] fontawesome mrdka
 - [x] password change
 - [x] buildCard do widgets.dart
@@ -43,6 +47,16 @@
         - [ ] chat
             - [ ] zpráva
             - [ ] profil
+- [ ] animace tlačítek na všech stránkách
+- [ ] test na jiných emulátorech (jiné rozlišení)
+- [ ] logout (někde)
+- [ ] charset response ze serveru
+- [ ] hodnocení
+    - [ ] v chatu tlačítko "prodat"
+        - [ ] skryje se
+    - [ ] u kupujícího se zobrazí inzerát v listu koupeno
+        - [ ] po kliknutí formulář na hodnocení  
+
 
 ## App Content
 
@@ -56,6 +70,7 @@
     - [x] master na GitHubu
 - [x] banner (doplnit uživatelské údaje)
 - [x] zužitkování ostatních dat
+- [ ] tlačítko na filtry
 
 
 ### Item Screen
@@ -68,9 +83,14 @@
 - [x] dateEnd jako DateTime
 - [x] zužitkování ostatních dat
 - [ ] appbar odstranit, předělat na tlačítko
-    - [ ] parametry (alertbox)
+    - [x] parametry (alertbox)
     - [x] chat(y)
     - [x] zpět
+    - [ ] pokud jsem autor
+        - [ ] skrýt pro ostatní (Skrýt/Rezerováno)
+            - [ ] + potvrzení
+        - [ ] prodáno
+            - [ ] + potvrzení
 
 
 ### Login & Register
@@ -87,6 +107,7 @@
 - [ ] zapomenuté heslo
 - [ ] zapamatovat přihlášení
 - [x] vyřešit error při úspešném loginu
+- [x] náhodný obrázek na pozadí
 
 
 ### Add Item
@@ -96,11 +117,20 @@
     - [x] staženo
     - [ ] moje hotovo
     - [ ] master na GitHubu
-- [ ] response (success || error)
-- [ ] jméno brázku = ../imgs/id/číslo obrázku
+- [x] response (success || error)
+- [ ] obrázky
+    * jméno brázku = ../imgs/id/číslo obrázku
+    - [ ] úvodní (1)
+    - [ ] detaily (víc, id = id + 1);
 - [x] deprecated věci nahradit
 - [x] upravit seznamy.dart na více Tříd, tohle je hnus
-- [ ] appbar odstranit, předělat na tlačítko
+- [x] appbar odstranit, předělat na tlačítko
+- [x] TextField upravit na můj custom input
+- [ ] upravit, zkrátit
+    - [ ] Dropdown
+    - [ ] Switch
+- [ ] upravit zobrazování parametrů (např. Odpružená == true {zobrazit typ odpuržení}, ...)
+- [ ] náhodný obrázek na pozadí
 
 
 ### Chat Screen
@@ -111,12 +141,13 @@
     - [x] moje hotovo
     - [x] master na GitHubu
 - [ ] načíst obrázek z databáze
-- [ ] umožnit posílat zprávy menší než 4 znaky
+- [ ] umožnit posílat zprávy menší než 2 znaky
 - [ ] mazat inputfield po odeslání zprávy
 - [x] zakázat chat sám se sebou
 - [ ] opravit seznam chatů (idk, bugnul)
 - [ ] opravit zobrazování zpráv
 - [ ] udělat něco s refreshem? zpráva se zobrazí po dlouhé době;
+- [ ] proklik na account info
 
 
 ### Fitry

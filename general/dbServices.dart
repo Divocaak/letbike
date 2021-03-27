@@ -1,26 +1,43 @@
 import 'dart:convert';
 import 'dart:async';
 import 'package:http/http.dart';
+import 'objects.dart';
 
 class DatabaseServices {
   static const String url = 'http://10.0.2.2/projects/letbike/';
-  static Future<Item> createItem(Item item) async {
-    final Response response = await post(url,
+  static Future<String> createItem(Item item) async {
+    final Response response = await post(
+        url +
+            "itemSet.php/?" +
+            "&&seller_id=" +
+            item.sellerId.toString() +
+            "&&name=" +
+            item.name +
+            "&&description=" +
+            item.description +
+            "&&price=" +
+            item.price.toString() +
+            "&&" +
+            passParamsToDb(item.itemParams),
         headers: <String, String>{
           'Content-Type': 'application/json;charset=UTF-8'
         },
         body: jsonEncode(item.toJson()));
 
     if (response.statusCode == 200) {
-      return Item.fromJson(json.decode(response.body));
+      return response.body;
     } else {
       throw Exception("Can't add item");
     }
   }
 
-  static Future<List<Item>> getAllItems(String id) async {
+  static Future<List<Item>> getAllItems(
+      String userId, ItemParams itemParams) async {
     final Response response = await get(
-        Uri.encodeFull(url + "itemGetAll.php/?id=" + id),
+        Uri.encodeFull(url +
+            "itemGetAll.php/?userId=" +
+            userId +
+            (itemParams != null ? "&&" + passParamsToDb(itemParams) : "")),
         headers: {"Accept": "application/json"});
     if (response.statusCode == 200) {
       if (response.body == "[]") {
@@ -46,7 +63,6 @@ class DatabaseServices {
             password),
         headers: {"Accept": "application/json;charset=UTF-8"});
     if (response.statusCode == 200) {
-      print(response.body);
       return response.body;
     } else {
       throw Exception("Can't register user");
@@ -177,156 +193,85 @@ class DatabaseServices {
   }
 }
 
-class Item {
-  int id;
-  int sellerId;
-  String name;
-  String description;
-  double price;
-  int score;
-  int paid;
-  String dateStart;
-  String dateEnd;
-  String imgs;
-  int status;
-
-  Item(
-      this.id,
-      this.sellerId,
-      this.name,
-      this.description,
-      this.price,
-      this.score,
-      this.paid,
-      this.dateStart,
-      this.dateEnd,
-      this.imgs,
-      this.status);
-
-  factory Item.fromJson(Map<String, dynamic> json) {
-    return Item(
-        int.parse(json["id"]),
-        int.parse(json["sellerId"]),
-        json["name"],
-        json["description"],
-        double.parse(json["price"]),
-        int.parse(json["score"]),
-        int.parse(json["paid"]),
-        json["dateStart"],
-        json["dateEnd"],
-        json["imgs"],
-        int.parse(json["status"]));
-  }
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "sellerId": sellerId,
-        "name": name,
-        "description": description,
-        "price": price,
-        "score": score,
-        "paid": paid,
-        "dateStart": dateStart,
-        "dateEnd": dateEnd,
-        "imgs": imgs,
-        "status": status
-      };
-}
-
-class User {
-  int id;
-  String username;
-  String email;
-  String password;
-  int score;
-  int phone;
-  String fName;
-  String lName;
-  String addressA;
-  String addressB;
-  String addressC;
-  int postal;
-  int status;
-
-  User(
-      this.id,
-      this.username,
-      this.email,
-      this.password,
-      this.score,
-      this.phone,
-      this.fName,
-      this.lName,
-      this.addressA,
-      this.addressB,
-      this.addressC,
-      this.postal,
-      this.status);
-
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
-        int.parse(json["id"]),
-        json["username"],
-        json["email"],
-        json["password"],
-        int.parse(json["score"]),
-        int.parse(json["phone"]),
-        json["fName"],
-        json["lName"],
-        json["addressA"],
-        json["addressB"],
-        json["addressC"],
-        int.parse(json["postal"]),
-        int.parse(json["status"]));
-  }
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "username": username,
-        "email": email,
-        "password": password,
-        "score": score,
-        "phone": phone,
-        "fName": fName,
-        "lName": lName,
-        "addressA": addressA,
-        "addressB": addressB,
-        "addressC": addressC,
-        "postal": postal,
-        "status": status
-      };
-}
-
-class Message {
-  int from;
-  int to;
-  String message;
-
-  Message(this.from, this.to, this.message);
-
-  factory Message.fromJson(Map<String, dynamic> json) {
-    return Message(
-        int.parse(json["from_id"]), int.parse(json["to_id"]), json["message"]);
-  }
-
-  Map<String, dynamic> toJson() =>
-      {"from_id": from, "to_id": to, "message": message};
-}
-
-class Chat {
-  String email;
-  String username;
-
-  Chat(this.email, this.username);
-
-  factory Chat.fromJson(Map<String, dynamic> json) {
-    return Chat(json["email"], json["username"]);
-  }
-}
-
-class ItemInfo {
-  Item item;
-  User me;
-
-  ItemInfo(this.item, this.me);
+String passParamsToDb(ItemParams itemParams) {
+  return "selectedCategory=" +
+      itemParams.params["selectedCategory"].toString() +
+      "&&selectedParts=" +
+      itemParams.params["selectedParts"].toString() +
+      "&&selectedAccessories=" +
+      itemParams.params["selectedAccessories"].toString() +
+      "&&selectedOther=" +
+      itemParams.params["selectedOther"].toString() +
+      "&&bikeType=" +
+      itemParams.params["bikeType"].toString() +
+      "&&bikeBrand=" +
+      itemParams.params["bikeBrand"].toString() +
+      "&&wheelBrand=" +
+      itemParams.params["wheelBrand"].toString() +
+      "&&wheelSize=" +
+      itemParams.params["wheelSize"].toString() +
+      "&&wheelMaterial=" +
+      itemParams.params["wheelMaterial"].toString() +
+      "&&wheeldSpokes=" +
+      itemParams.params["wheeldSpokes"].toString() +
+      "&&wheeldType=" +
+      itemParams.params["wheeldType"].toString() +
+      "&&wheelAxis=" +
+      itemParams.params["wheelAxis"].toString() +
+      "&&wheeldBrakesType=" +
+      itemParams.params["wheeldBrakesType"].toString() +
+      "&&wheeldBrakesDisc=" +
+      itemParams.params["wheeldBrakesDisc"].toString() +
+      "&&wheeldCassette=" +
+      itemParams.params["wheeldCassette"].toString() +
+      "&&wheelNut=" +
+      itemParams.params["wheelNut"].toString() +
+      "&&wheelCompatibility=" +
+      itemParams.params["wheelCompatibility"].toString() +
+      "&&cranksBrand=" +
+      itemParams.params["cranksBrand"].toString() +
+      "&&cranksCompatibility=" +
+      itemParams.params["cranksCompatibility"].toString() +
+      "&&cranksMaterial=" +
+      itemParams.params["cranksMaterial"].toString() +
+      "&&cranksAxis=" +
+      itemParams.params["cranksAxis"].toString() +
+      "&&converterBrand=" +
+      itemParams.params["converterBrand"].toString() +
+      "&&converterNumOfSpeeds=" +
+      itemParams.params["converterNumOfSpeeds"].toString() +
+      "&&saddleBrand=" +
+      itemParams.params["saddleBrand"].toString() +
+      "&&saddleGender=" +
+      itemParams.params["saddleGender"].toString() +
+      "&&forkBrand=" +
+      itemParams.params["forkBrand"].toString() +
+      "&&forkSize=" +
+      itemParams.params["forkSize"].toString() +
+      "&&forkSuspensionType=" +
+      itemParams.params["forkSuspensionType"].toString() +
+      "&&forkSuspension=" +
+      itemParams.params["forkSuspension"].toString() +
+      "&&forkWheelCoompatibility=" +
+      itemParams.params["forkWheelCoompatibility"].toString() +
+      "&&forkMaterial=" +
+      itemParams.params["forkMaterial"].toString() +
+      "&&forkMaterialColumn=" +
+      itemParams.params["forkMaterialColumn"].toString() +
+      "&&eBikeBrand=" +
+      itemParams.params["eBikeBrand"].toString() +
+      "&&eBikeMotorPos=" +
+      itemParams.params["eBikeMotorPos"].toString() +
+      "&&trainerBrand=" +
+      itemParams.params["trainerBrand"].toString() +
+      "&&trainerBrakes=" +
+      itemParams.params["trainerBrakes"].toString() +
+      "&&scooterBrand=" +
+      itemParams.params["scooterBrand"].toString() +
+      "&&scooterSize=" +
+      itemParams.params["scooterSize"].toString() +
+      "&&scooterComputer=" +
+      itemParams.params["scooterComputer"].toString() +
+      "&&used=" +
+      itemParams.params["used"].toString();
 }

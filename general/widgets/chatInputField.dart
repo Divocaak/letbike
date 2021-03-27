@@ -3,6 +3,7 @@ import 'package:image_picker/image_picker.dart';
 import '../dbServices.dart';
 import '../widgets.dart';
 import '../pallete.dart';
+import '../general.dart';
 
 class ChatInputField extends StatefulWidget {
   final ItemInfo itemInfo;

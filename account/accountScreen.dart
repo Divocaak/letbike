@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:letbike/app/homePage.dart';
 import 'accountSettings.dart';
-import '../general/pallete.dart';
-import '../general/dbServices.dart';
-import '../general/widgets.dart';
+import '../general/general.dart';
 
 double volume = 0;
 int textHeight = 50;
@@ -34,7 +33,7 @@ class _AccountScreenState extends State<AccountScreen>
   @override
   Widget build(BuildContext context) {
     user = ModalRoute.of(context).settings.arguments;
-    items = DatabaseServices.getAllItems(user.id.toString());
+    items = DatabaseServices.getAllItems(user.id.toString(), null);
     return Scaffold(
         body: Stack(children: [
       ListView(
@@ -101,14 +100,17 @@ class _AccountScreenState extends State<AccountScreen>
                   right: 120,
                   child: CircularButton(kSecondaryColor.withOpacity(volume * 2),
                       45, Icons.arrow_back, kWhite.withOpacity(volume * 2), () {
-                    Navigator.of(context).pop();
+                    Navigator.of(context).pushReplacementNamed(
+                        HomePage.routeName,
+                        arguments: user);
                   })),
               Positioned(
                   bottom: 150,
                   right: 40,
                   child: CircularButton(kSecondaryColor.withOpacity(volume * 2),
                       45, Icons.create, kWhite.withOpacity(volume * 2), () {
-                    Navigator.pushNamed(context, AccountSettings.routeName,
+                    Navigator.pushReplacementNamed(
+                        context, AccountSettings.routeName,
                         arguments: user);
                   })),
             ],

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../dbServices.dart';
 import '../../app/itemPage.dart';
+import '../general.dart';
 
 class ItemCard {
   static Widget buildCard(context, Item item, User loggedUser) {

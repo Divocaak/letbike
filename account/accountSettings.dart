@@ -3,10 +3,9 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:letbike/account/accountScreen.dart';
 import 'accountChangePass.dart';
-import '../general/pallete.dart';
-import '../general/dbServices.dart';
-import '../general/widgets.dart';
+import '../general/general.dart';
 
 double volume = 0;
 
@@ -250,7 +249,20 @@ class _AccountSettingsState extends State<AccountSettings>
                   right: 120,
                   child: CircularButton(kSecondaryColor.withOpacity(volume * 2),
                       45, Icons.arrow_back, kWhite.withOpacity(volume * 2), () {
-                    Navigator.of(context).pop();
+                    setState(() {
+                      user.fName = getVal("accFName", user.fName);
+                      user.lName = getVal("accLName", user.lName);
+                      user.phone =
+                          int.parse(getVal("accPhone", user.phone.toString()));
+                      user.addressA = getVal("accAddA", user.addressA);
+                      user.addressB = getVal("accAddB", user.addressB);
+                      user.addressC = getVal("accAddC", user.addressC);
+                      user.postal = int.parse(
+                          getVal("accPostal", user.postal.toString()));
+                    });
+                    Navigator.of(context).pushReplacementNamed(
+                        AccountScreen.routeName,
+                        arguments: user);
                   })),
               Positioned(
                   bottom: 150,
@@ -287,27 +299,13 @@ class _AccountSettingsState extends State<AccountSettings>
 
   void saveData() {
     fieldsValues = [
-      TextInput.getValue("accFName") != null
-          ? TextInput.getValue("accFName")
-          : user.fName,
-      TextInput.getValue("accLName") != null
-          ? TextInput.getValue("accLName")
-          : user.lName,
-      TextInput.getValue("accPhone") != null
-          ? TextInput.getValue("accPhone")
-          : user.phone.toString(),
-      TextInput.getValue("accAddA") != null
-          ? TextInput.getValue("accAddA")
-          : user.addressA,
-      TextInput.getValue("accAddB") != null
-          ? TextInput.getValue("accAddB")
-          : user.addressB,
-      TextInput.getValue("accAddC") != null
-          ? TextInput.getValue("accAddC")
-          : user.addressC,
-      TextInput.getValue("accPostal") != null
-          ? TextInput.getValue("accPostal")
-          : user.postal.toString()
+      getVal("accFName", user.fName),
+      getVal("accLName", user.lName),
+      getVal("accPhone", user.phone.toString()),
+      getVal("accAddA", user.addressA),
+      getVal("accAddB", user.addressB),
+      getVal("accAddC", user.addressC),
+      getVal("accPostal", user.postal.toString()),
     ];
 
     saveResponse =
@@ -327,5 +325,11 @@ class _AccountSettingsState extends State<AccountSettings>
             return Center(child: CircularProgressIndicator());
           },
         ));
+  }
+
+  String getVal(String textInput, String current) {
+    return TextInput.getValue(textInput) != null
+        ? TextInput.getValue(textInput)
+        : current;
   }
 }

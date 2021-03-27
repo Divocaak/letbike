@@ -16,7 +16,10 @@ String regMail,
     accPostal,
     changePassCurr,
     changePassNew,
-    changePassConf;
+    changePassConf,
+    addName,
+    addDesc,
+    addPrice;
 
 class TextInput extends StatelessWidget {
   const TextInput(
@@ -189,6 +192,21 @@ class TextInput extends StatelessWidget {
           return changePassConf;
         }
         break;
+      case "addName":
+        {
+          return addName;
+        }
+        break;
+      case "addDesc":
+        {
+          return addDesc;
+        }
+        break;
+      case "addPric":
+        {
+          return addPrice;
+        }
+        break;
     }
     return "";
   }
@@ -273,6 +291,21 @@ class TextInput extends StatelessWidget {
       case "changePassConf":
         {
           changePassConf = content;
+        }
+        break;
+      case "addName":
+        {
+          addName = content;
+        }
+        break;
+      case "addDesc":
+        {
+          addDesc = content;
+        }
+        break;
+      case "addPric":
+        {
+          addPrice = content;
         }
         break;
     }
