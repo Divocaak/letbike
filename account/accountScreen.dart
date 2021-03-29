@@ -96,13 +96,21 @@ class _AccountScreenState extends State<AccountScreen>
           child: Stack(
             children: [
               Positioned(
+                  bottom: 40,
+                  right: 150,
+                  child: CircularButton(kSecondaryColor.withOpacity(volume * 2),
+                      45, Icons.logout, kWhite.withOpacity(volume * 2), () {
+                    Navigator.of(context).popUntil(ModalRoute.withName('/'));
+                  })),
+              Positioned(
                   bottom: 120,
                   right: 120,
                   child: CircularButton(kSecondaryColor.withOpacity(volume * 2),
                       45, Icons.arrow_back, kWhite.withOpacity(volume * 2), () {
                     Navigator.of(context).pushReplacementNamed(
                         HomePage.routeName,
-                        arguments: user);
+                        arguments:
+                            new HomeArguments(user, ItemParams.createEmpty()));
                   })),
               Positioned(
                   bottom: 150,

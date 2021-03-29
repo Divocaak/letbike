@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import '../dbServices.dart';
 import '../widgets.dart';
 import '../pallete.dart';
 import '../general.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
 
 class ChatInputField extends StatefulWidget {
   final ItemInfo itemInfo;
@@ -14,16 +14,46 @@ class ChatInputField extends StatefulWidget {
 }
 
 class _ChatInputFieldState extends State<ChatInputField> {
-  PickedFile _imageFile;
-  final ImagePicker _picker = ImagePicker();
+  List<Asset> images = [];
 
-  void takePhoto(ImageSource source) async {
-    final pickedFile = await _picker.getImage(
-      source: source,
-    );
+  Widget buildGridView() {
+    if (images != null)
+      return GridView.count(
+        crossAxisCount: 3,
+        children: List.generate(images.length, (index) {
+          Asset asset = images[index];
+          return AssetThumb(
+            asset: asset,
+            width: 300,
+            height: 300,
+          );
+        }),
+      );
+    else
+      return Container(color: Colors.white);
+  }
+
+  Future<void> loadAssets() async {
     setState(() {
-      _imageFile = pickedFile;
-      Navigator.of(context).pop();
+      images = [];
+    });
+
+    List<Asset> resultList;
+    String error;
+
+    try {
+      resultList = await MultiImagePicker.pickImages(
+        maxImages: 1,
+        enableCamera: true,
+      );
+    } on Exception catch (e) {
+      error = e.toString();
+    }
+    if (!mounted) return;
+
+    setState(() {
+      images = resultList;
+      if (error != null) AlertBox.showAlertBox(context, "Error", Text("Error"));
     });
   }
 
@@ -95,33 +125,29 @@ class _ChatInputFieldState extends State<ChatInputField> {
                             });
                           }),
                     ),
-                    GestureDetector(
-                      child: Icon(
-                        Icons.attach_file,
-                        color: Theme.of(context)
-                            .textTheme
-                            .bodyText1
-                            .color
-                            .withOpacity(0.64),
-                      ),
-                      onTap: () {
-                        takePhoto(ImageSource.gallery);
-                      },
-                    ),
-                    SizedBox(width: kDefaultPadding / 4),
-                    GestureDetector(
-                      child: Icon(
-                        Icons.camera_alt_outlined,
-                        color: Theme.of(context)
-                            .textTheme
-                            .bodyText1
-                            .color
-                            .withOpacity(0.64),
-                      ),
-                      onTap: () {
-                        takePhoto(ImageSource.camera);
-                      },
-                    ),
+                    Container(
+                        height: 200,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(
+                            color: Colors.white,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        child: Column(
+                          children: [
+                            Container(
+                              child: TextButton(
+                                child: Icon(Icons.attach_file),
+                                onPressed: loadAssets,
+                              ),
+                            ),
+                            Expanded(
+                              child: buildGridView(),
+                            )
+                          ],
+                        ))
                   ],
                 ),
               ),

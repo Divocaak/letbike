@@ -1,11 +1,35 @@
 import 'dart:convert';
 import 'dart:async';
+import 'dart:typed_data';
 import 'package:http/http.dart';
 import 'objects.dart';
+import 'dart:io';
+import 'dart:convert';
+import 'package:multi_image_picker/multi_image_picker.dart';
 
 class DatabaseServices {
   static const String url = 'http://10.0.2.2/projects/letbike/';
-  static Future<String> createItem(Item item) async {
+  static const String uploadEndPoint = url + 'uploadImage.php';
+
+  static uploadImages(
+      List<Asset> images, String imgFolder, String folderIdentificator) async {
+    var request = MultipartRequest('POST', Uri.parse(uploadEndPoint));
+
+    for (int i = 0; i < images.length; i++) {
+      var byteData = await images[i].getByteData();
+      List<int> imageData = byteData.buffer.asUint8List();
+
+      request.files.add(MultipartFile.fromBytes(
+          'picture', File(imageData.toString()).readAsBytesSync(),
+          filename: i.toString()));
+    }
+    var res = await request.send();
+    print(res);
+  }
+
+  static Future<String> createItem(Item item, List<Asset> images) async {
+    uploadImages(images, "items", item.name.hashCode.toString());
+
     final Response response = await post(
         url +
             "itemSet.php/?" +
@@ -35,10 +59,11 @@ class DatabaseServices {
       String userId, ItemParams itemParams) async {
     final Response response = await get(
         Uri.encodeFull(url +
-            "itemGetAll.php/?userId=" +
+            "itemGetAll.php/?id=" +
             userId +
-            (itemParams != null ? "&&" + passParamsToDb(itemParams) : "")),
-        headers: {"Accept": "application/json"});
+            "&&" +
+            passParamsToDb(itemParams)),
+        headers: {"Accept": "application/json;charset=UTF-8"});
     if (response.statusCode == 200) {
       if (response.body == "[]") {
         return null;
@@ -96,7 +121,7 @@ class DatabaseServices {
             to.toString() +
             "&&itemId=" +
             itemId.toString()),
-        headers: {"Accept": "application/json"});
+        headers: {"Accept": "application/json;charset=UTF-8"});
     if (response.statusCode == 200) {
       final parsed = jsonDecode(response.body).cast<Map<String, dynamic>>();
       return parsed
@@ -127,7 +152,7 @@ class DatabaseServices {
             itemId.toString() +
             "&&message=" +
             message),
-        headers: {"Accept": "application/json"});
+        headers: {"Accept": "application/json;charset=UTF-8"});
     if (response.statusCode == 200) {
       print("sent");
     } else {
@@ -138,7 +163,7 @@ class DatabaseServices {
   static Future<List<Chat>> getChats(int itemId) async {
     final Response response = await get(
         Uri.encodeFull(url + "chatsGet.php/?itemId=" + itemId.toString()),
-        headers: {"Accept": "application/json"});
+        headers: {"Accept": "application/json;charset=UTF-8"});
     if (response.statusCode == 200) {
       final parsed = jsonDecode(response.body).cast<Map<String, dynamic>>();
       return parsed.map<Chat>((chat) => Chat.fromJson(chat)).toList();

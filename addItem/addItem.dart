@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:letbike/app/homePage.dart';
 import '../general/general.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class AddItem extends StatefulWidget {
   @override
@@ -16,12 +17,6 @@ Future<String> addResponse;
 class _AddItem extends State<AddItem> with TickerProviderStateMixin {
   User user;
   List<Asset> images = [];
-  String _error;
-
-  @override
-  void initState2() {
-    super.initState();
-  }
 
   Widget buildGridView() {
     if (images != null)
@@ -40,28 +35,41 @@ class _AddItem extends State<AddItem> with TickerProviderStateMixin {
       return Container(color: Colors.white);
   }
 
+  Future<int> checkPerm() async {
+    var status = await Permission.camera.status;
+    if (status != PermissionStatus.granted) {
+      await Permission.camera.request();
+      return Permission.camera.value;
+    } else {
+      return 1;
+    }
+  }
+
   Future<void> loadAssets() async {
     setState(() {
-      images = List<Asset>();
+      images = [];
     });
 
     List<Asset> resultList;
     String error;
 
-    try {
-      resultList = await MultiImagePicker.pickImages(
-        maxImages: 10,
-        enableCamera: true,
-      );
-    } on Exception catch (e) {
-      error = e.toString();
-    }
-    if (!mounted) return;
+    if (await checkPerm() == 1) {
+      try {
+        resultList = await MultiImagePicker.pickImages(
+          maxImages: 10,
+          enableCamera: true,
+        );
+      } on Exception catch (e) {
+        error = e.toString();
+      }
+      if (!mounted) return;
 
-    setState(() {
-      images = resultList;
-      if (error == null) _error = 'No Error Dectected';
-    });
+      setState(() {
+        images = resultList;
+        if (error != null)
+          AlertBox.showAlertBox(context, "Error", Text("Error"));
+      });
+    }
   }
 
   double volume = 0;
@@ -1090,137 +1098,141 @@ class _AddItem extends State<AddItem> with TickerProviderStateMixin {
                             45,
                             Icons.add,
                             kWhite.withOpacity(volume * 2), () {
-                          addResponse = DatabaseServices.createItem(new Item(
-                              -1,
-                              user.id,
-                              TextInput.getValue("addName"),
-                              TextInput.getValue("addDesc"),
-                              double.parse(TextInput.getValue("addPric")),
-                              0,
-                              0,
-                              "",
-                              "",
-                              "",
-                              0,
-                              new ItemParams({
-                                "used": used ? 1 : 0,
-                                "selectedCategory": category.selectedCategory,
-                                "selectedParts": category.selectedPart,
-                                "selectedAccessories":
-                                    category.selectedAccessory,
-                                "selectedOther": category.selectedOther,
-                                "bikeType": bike.selectedType,
-                                "bikeBrand": bike.selectedBrand,
-                                "wheelBrand": wheel.selectedBrand,
-                                "wheelSize": wheel.selectedSize,
-                                "wheelMaterial": wheel.selectedMaterial,
-                                "wheeldSpokes":
-                                    ((wheel.selectedSpokes ? 1 : 0) +
-                                        (category.selectedPart != null
-                                            ? category.selectedPart
-                                            : 0) +
-                                        (category.selectedOther != null
-                                            ? category.selectedOther
-                                            : 0) +
-                                        999),
-                                "wheeldType": ((wheel.selectedType ? 1 : 0) +
-                                    (category.selectedPart != null
-                                        ? category.selectedPart
-                                        : 0) +
-                                    (category.selectedOther != null
-                                        ? category.selectedOther
-                                        : 0) +
-                                    999),
-                                "wheelAxis": wheel.selectedAxis,
-                                "wheeldBrakesType":
-                                    ((wheel.selectedBrakesType ? 1 : 0) +
-                                        (category.selectedPart != null
-                                            ? category.selectedPart
-                                            : 0) +
-                                        (category.selectedOther != null
-                                            ? category.selectedOther
-                                            : 0) +
-                                        999),
-                                "wheeldBrakesDisc":
-                                    ((wheel.selectedBrakesDisc ? 1 : 0) +
-                                        (category.selectedPart != null
-                                            ? category.selectedPart
-                                            : 0) +
-                                        (category.selectedOther != null
-                                            ? category.selectedOther
-                                            : 0) +
-                                        999),
-                                "wheeldCassette":
-                                    ((wheel.selectedCassette ? 1 : 0) +
-                                        (category.selectedPart != null
-                                            ? category.selectedPart
-                                            : 0) +
-                                        (category.selectedOther != null
-                                            ? category.selectedOther
-                                            : 0) +
-                                        999),
-                                "wheelNut": wheel.selectedNut,
-                                "wheelCompatibility":
-                                    wheel.selectedCompatibility,
-                                "cranksBrand": cranks.selectedBrand,
-                                "cranksCompatibility":
-                                    cranks.selectedCompatibility,
-                                "cranksMaterial": cranks.selectedMaterial,
-                                "cranksAxis": cranks.selectedAxis,
-                                "converterBrand": converter.selectedBrand,
-                                "converterNumOfSpeeds":
-                                    converter.selectedNumOfSpeeds,
-                                "saddleBrand": saddle.selectedBrand,
-                                "saddleGender": saddle.selectedGender,
-                                "forkBrand": fork.selectedBrand,
-                                "forkSize": fork.selectedSize,
-                                "forkSuspensionType":
-                                    ((fork.selectedSuspensionType ? 1 : 0) +
-                                        (category.selectedPart != null
-                                            ? category.selectedPart
-                                            : 0) +
-                                        (category.selectedOther != null
-                                            ? category.selectedOther
-                                            : 0) +
-                                        999),
-                                "forkSuspension":
-                                    ((fork.selectedSuspension ? 1 : 0) +
-                                        (category.selectedPart != null
-                                            ? category.selectedPart
-                                            : 0) +
-                                        (category.selectedOther != null
-                                            ? category.selectedOther
-                                            : 0) +
-                                        999),
-                                "forkWheelCoompatibility":
-                                    fork.selectedWheelCoompatibility,
-                                "forkMaterial": fork.selectedMaterial,
-                                "forkMaterialColumn":
-                                    fork.selectedMaterialColumn,
-                                "eBikeBrand": eBike.selectedBrand,
-                                "eBikeMotorPos":
-                                    ((eBike.selectedMotorPos ? 1 : 0) +
-                                        (category.selectedPart != null
-                                            ? category.selectedPart
-                                            : 0) +
-                                        (category.selectedOther != null
-                                            ? category.selectedOther
-                                            : 0) +
-                                        999),
-                                "trainerBrand": trainer.selectedBrand,
-                                "trainerBrakes": trainer.selectedBrakes,
-                                "scooterBrand": scooter.selectedBrand,
-                                "scooterSize": scooter.selectedSize,
-                                "scooterComputer":
-                                    ((scooter.selectedComputer ? 1 : 0) +
-                                        (category.selectedPart != null
-                                            ? category.selectedPart
-                                            : 0) +
-                                        (category.selectedOther != null
-                                            ? category.selectedOther
-                                            : 0) +
-                                        999),
-                              })));
+                          addResponse = DatabaseServices.createItem(
+                              new Item(
+                                  -1,
+                                  user.id,
+                                  TextInput.getValue("addName"),
+                                  TextInput.getValue("addDesc"),
+                                  double.parse(TextInput.getValue("addPric")),
+                                  0,
+                                  0,
+                                  "",
+                                  "",
+                                  "",
+                                  0,
+                                  new ItemParams({
+                                    "used": used ? 1 : 0,
+                                    "selectedCategory":
+                                        category.selectedCategory,
+                                    "selectedParts": category.selectedPart,
+                                    "selectedAccessories":
+                                        category.selectedAccessory,
+                                    "selectedOther": category.selectedOther,
+                                    "bikeType": bike.selectedType,
+                                    "bikeBrand": bike.selectedBrand,
+                                    "wheelBrand": wheel.selectedBrand,
+                                    "wheelSize": wheel.selectedSize,
+                                    "wheelMaterial": wheel.selectedMaterial,
+                                    "wheeldSpokes":
+                                        ((wheel.selectedSpokes ? 1 : 0) +
+                                            (category.selectedPart != null
+                                                ? category.selectedPart
+                                                : 0) +
+                                            (category.selectedOther != null
+                                                ? category.selectedOther
+                                                : 0) +
+                                            999),
+                                    "wheeldType":
+                                        ((wheel.selectedType ? 1 : 0) +
+                                            (category.selectedPart != null
+                                                ? category.selectedPart
+                                                : 0) +
+                                            (category.selectedOther != null
+                                                ? category.selectedOther
+                                                : 0) +
+                                            999),
+                                    "wheelAxis": wheel.selectedAxis,
+                                    "wheeldBrakesType":
+                                        ((wheel.selectedBrakesType ? 1 : 0) +
+                                            (category.selectedPart != null
+                                                ? category.selectedPart
+                                                : 0) +
+                                            (category.selectedOther != null
+                                                ? category.selectedOther
+                                                : 0) +
+                                            999),
+                                    "wheeldBrakesDisc":
+                                        ((wheel.selectedBrakesDisc ? 1 : 0) +
+                                            (category.selectedPart != null
+                                                ? category.selectedPart
+                                                : 0) +
+                                            (category.selectedOther != null
+                                                ? category.selectedOther
+                                                : 0) +
+                                            999),
+                                    "wheeldCassette":
+                                        ((wheel.selectedCassette ? 1 : 0) +
+                                            (category.selectedPart != null
+                                                ? category.selectedPart
+                                                : 0) +
+                                            (category.selectedOther != null
+                                                ? category.selectedOther
+                                                : 0) +
+                                            999),
+                                    "wheelNut": wheel.selectedNut,
+                                    "wheelCompatibility":
+                                        wheel.selectedCompatibility,
+                                    "cranksBrand": cranks.selectedBrand,
+                                    "cranksCompatibility":
+                                        cranks.selectedCompatibility,
+                                    "cranksMaterial": cranks.selectedMaterial,
+                                    "cranksAxis": cranks.selectedAxis,
+                                    "converterBrand": converter.selectedBrand,
+                                    "converterNumOfSpeeds":
+                                        converter.selectedNumOfSpeeds,
+                                    "saddleBrand": saddle.selectedBrand,
+                                    "saddleGender": saddle.selectedGender,
+                                    "forkBrand": fork.selectedBrand,
+                                    "forkSize": fork.selectedSize,
+                                    "forkSuspensionType":
+                                        ((fork.selectedSuspensionType ? 1 : 0) +
+                                            (category.selectedPart != null
+                                                ? category.selectedPart
+                                                : 0) +
+                                            (category.selectedOther != null
+                                                ? category.selectedOther
+                                                : 0) +
+                                            999),
+                                    "forkSuspension":
+                                        ((fork.selectedSuspension ? 1 : 0) +
+                                            (category.selectedPart != null
+                                                ? category.selectedPart
+                                                : 0) +
+                                            (category.selectedOther != null
+                                                ? category.selectedOther
+                                                : 0) +
+                                            999),
+                                    "forkWheelCoompatibility":
+                                        fork.selectedWheelCoompatibility,
+                                    "forkMaterial": fork.selectedMaterial,
+                                    "forkMaterialColumn":
+                                        fork.selectedMaterialColumn,
+                                    "eBikeBrand": eBike.selectedBrand,
+                                    "eBikeMotorPos":
+                                        ((eBike.selectedMotorPos ? 1 : 0) +
+                                            (category.selectedPart != null
+                                                ? category.selectedPart
+                                                : 0) +
+                                            (category.selectedOther != null
+                                                ? category.selectedOther
+                                                : 0) +
+                                            999),
+                                    "trainerBrand": trainer.selectedBrand,
+                                    "trainerBrakes": trainer.selectedBrakes,
+                                    "scooterBrand": scooter.selectedBrand,
+                                    "scooterSize": scooter.selectedSize,
+                                    "scooterComputer":
+                                        ((scooter.selectedComputer ? 1 : 0) +
+                                            (category.selectedPart != null
+                                                ? category.selectedPart
+                                                : 0) +
+                                            (category.selectedOther != null
+                                                ? category.selectedOther
+                                                : 0) +
+                                            999),
+                                  })),
+                              images);
 
                           AlertBox.showAlertBox(
                               context,

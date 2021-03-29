@@ -5,13 +5,13 @@
 [Návrh_databáze](https://dbdiagram.io/d/603a99cdfcdcb6230b21cb94)
 
 - [x] getItem a setItem => itemGet && itemSet
-- [ ] vytvořit general.dart
+- [x] vytvořit general.dart
     - [x] export objects.dart
         - [x] vztvorit objects.dart
-    - [ ] export widgets.dart
-        - [ ] vztvorit widgets.dart
+    - [x] export widgets.dart
+        - [x] vztvorit widgets.dart
             - [x] circularbutton od Lukáše
-            - [ ] imagepicker od Bčka
+            - [x] imagepicker od Bčka
             - [x] roundedButton
                 - [x] registrace
                 - [x] login
@@ -23,11 +23,11 @@
     - [x] export dbServices.dart
 - [x] snad všechny talčítka: po pushNamed sbalit
 - [x] pošéfovat barvy
-- [ ] reload stránek po popu
+- [x] reload stránek po popu
     - [x] accSett => accScreen
     - [x] accScreen => homePage
     - [x] addItem => homePage
-    - [ ] filters => homePage
+    - [x] filters => homePage
 - [x] fontawesome mrdka
 - [x] password change
 - [x] buildCard do widgets.dart
@@ -47,15 +47,15 @@
         - [ ] chat
             - [ ] zpráva
             - [ ] profil
-- [ ] animace tlačítek na všech stránkách
 - [ ] test na jiných emulátorech (jiné rozlišení)
-- [ ] logout (někde)
+- [x] logout (někde)
 - [ ] charset response ze serveru
 - [ ] hodnocení
     - [ ] v chatu tlačítko "prodat"
         - [ ] skryje se
     - [ ] u kupujícího se zobrazí inzerát v listu koupeno
         - [ ] po kliknutí formulář na hodnocení  
+- [ ] image picker do samostatného widgetu!
 
 
 ## App Content
@@ -70,7 +70,7 @@
     - [x] master na GitHubu
 - [x] banner (doplnit uživatelské údaje)
 - [x] zužitkování ostatních dat
-- [ ] tlačítko na filtry
+- [x] tlačítko na filtry
 
 
 ### Item Screen

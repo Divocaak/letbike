@@ -142,6 +142,52 @@ class Item {
 class ItemParams {
   ItemParams(this.params);
 
+  factory ItemParams.createEmpty() {
+    Map<String, int> toReturn = {
+      "used": -1,
+      "selectedCategory": -1,
+      "bikeBrand": -1,
+      "bikeType": -1,
+      "selectedParts": -1,
+      "wheelBrand": -1,
+      "wheelSize": -1,
+      "wheelMaterial": -1,
+      "wheeldSpokes": -1,
+      "wheeldType": -1,
+      "wheelAxis": -1,
+      "wheeldBrakesType": -1,
+      "wheeldBrakesDisc": -1,
+      "wheeldCassette": -1,
+      "wheelNut": -1,
+      "wheelCompatibility": -1,
+      "cranksBrand": -1,
+      "cranksCompatibility": -1,
+      "cranksMaterial": -1,
+      "cranksAxis": -1,
+      "converterBrand": -1,
+      "converterNumOfSpeeds": -1,
+      "saddleBrand": -1,
+      "saddleGender": -1,
+      "forkBrand": -1,
+      "forkSize": -1,
+      "forkSuspension": -1,
+      "forkSuspensionType": -1,
+      "forkWheelCoompatibility": -1,
+      "forkMaterial": -1,
+      "forkMaterialColumn": -1,
+      "selectedAccessories": -1,
+      "selectedOther": -1,
+      "eBikeBrand": -1,
+      "eBikeMotorPos": -1,
+      "trainerBrand": -1,
+      "trainerBrakes": -1,
+      "scooterBrand": -1,
+      "scooterSize": -1,
+      "scooterComputer": -1
+    };
+    return ItemParams(toReturn);
+  }
+
   Map<String, int> params = {
     "used": 0,
     "selectedCategory": 0,

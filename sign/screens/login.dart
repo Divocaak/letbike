@@ -78,7 +78,8 @@ class LoginScreen extends StatelessWidget {
                                             .pushReplacementNamed(
                                                 HomePage.routeName,
                                                 arguments: new HomeArguments(
-                                                    snapshot.data, null));
+                                                    snapshot.data,
+                                                    ItemParams.createEmpty()));
                                       });
                                     }
                                   }
