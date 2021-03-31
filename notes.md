@@ -50,17 +50,22 @@
 - [ ] test na jiných emulátorech (jiné rozlišení)
 - [x] logout (někde)
 - [ ] charset response ze serveru
-- [ ] hodnocení
+- [x] hodnocení
     - [x] v chatu tlačítko "prodat"
         - [x] skryje se
-    - [ ] u kupujícího se zobrazí inzerát v listu koupeno
-        - [ ] po kliknutí formulář na hodnocení  
+    - [x] u kupujícího se zobrazí inzerát v listu koupeno
+        - [x] po kliknutí formulář na hodnocení  
 - [ ] image picker do samostatného widgetu!
 - [ ] textfields utf8 encoding, háčky a čárky pls
     - [ ] account settings
     - [ ] chat
 - [ ] doplnit kategorie
-- [ ] chat list - nezobrazovat sám sebe xd
+- [x] chat list - nezobrazovat sám sebe xd
+- [x] ohodnocené (tzn. uzavřené) předměty na accScreen
+- [x] zorbrazení ratingů
+    - [x] account screen
+    - [x] v chatu (otherUser info nebo jak);
+
  
 
 ## App Content

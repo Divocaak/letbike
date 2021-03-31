@@ -203,45 +203,92 @@ class _ChatScreenState extends State<ChatScreen>
   }
 
   Widget otherPersonInfo() {
-    Future<User> otherUser = DatabaseServices.getUserInfo(chatUsers.userB);
     return AlertBox.showAlertBox(
         context,
         "Informace",
-        FutureBuilder<User>(
-          future: otherUser,
+        Column(
+          children: [
+            TextButton(
+              child: Text("Kontaktní údaje"),
+              onPressed: () {
+                AlertBox.showAlertBox(
+                    context, "Kontaktní údaje", otherUserInfo());
+              },
+            ),
+            TextButton(
+              child: Text("Recenze"),
+              onPressed: () {
+                AlertBox.showAlertBox(context, "Recenze", otherUserRating());
+              },
+            )
+          ],
+        ));
+  }
+
+  Widget otherUserInfo() {
+    Future<User> otherUser = DatabaseServices.getUserInfo(chatUsers.userB);
+    return Expanded(
+        child: FutureBuilder<User>(
+            future: otherUser,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Container(
+                    width: 200,
+                    height: 200,
+                    child: ListView(children: [
+                      Center(
+                          child: FadeInImage.assetNetwork(
+                              placeholder:
+                                  "Načítám obrázek (možná neexsituje :/)",
+                              image: imgsFolder +
+                                  "/users/" +
+                                  snapshot.data.id.toString() +
+                                  "/0.jpg")),
+                      AccountInfoField.infoField(
+                          "Uživatelské jméno: " + snapshot.data.username),
+                      AccountInfoField.infoField(
+                          "E-mail: " + snapshot.data.email),
+                      AccountInfoField.infoField(
+                          "Křestní jméno: " + snapshot.data.fName),
+                      AccountInfoField.infoField(
+                          "Příjmení: " + snapshot.data.lName),
+                      AccountInfoField.infoField(
+                          "Telefon: " + snapshot.data.phone.toString()),
+                      AccountInfoField.infoField(
+                          "Ulice a č.p.: " + snapshot.data.addressA),
+                      AccountInfoField.infoField(
+                          "Obec: " + snapshot.data.addressB),
+                      AccountInfoField.infoField(
+                          "Země: " + snapshot.data.addressC),
+                      AccountInfoField.infoField(
+                          "PSČ: " + snapshot.data.postal.toString())
+                    ]));
+              } else if (snapshot.hasError) {
+                return Text('Sorry there is an error');
+              }
+              return Center(child: CircularProgressIndicator());
+            }));
+  }
+
+  Widget otherUserRating() {
+    Future<List<Rating>> ratings = DatabaseServices.getRatings(chatUsers.userB);
+    return Container(
+        height: 300,
+        width: 400,
+        child: FutureBuilder<List<Rating>>(
+          future: ratings,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
+              return ListView.builder(
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (context, i) {
+                    return RatingRow.buildRow(snapshot.data[i].ratingValue,
+                        snapshot.data[i].ratingText);
+                  });
+            } else if (!snapshot.hasData) {
               return Container(
-                  width: 200,
-                  height: 200,
-                  child: ListView(children: [
-                    Center(
-                        child: FadeInImage.assetNetwork(
-                            placeholder:
-                                "Načítám obrázek (možná neexsituje :/)",
-                            image: imgsFolder +
-                                "/users/" +
-                                snapshot.data.id.toString() +
-                                "/0.jpg")),
-                    AccountInfoField.infoField(
-                        "Uživatelské jméno: " + snapshot.data.username),
-                    AccountInfoField.infoField(
-                        "E-mail: " + snapshot.data.email),
-                    AccountInfoField.infoField(
-                        "Křestní jméno: " + snapshot.data.fName),
-                    AccountInfoField.infoField(
-                        "Příjmení: " + snapshot.data.lName),
-                    AccountInfoField.infoField(
-                        "Telefon: " + snapshot.data.phone.toString()),
-                    AccountInfoField.infoField(
-                        "Ulice a č.p.: " + snapshot.data.addressA),
-                    AccountInfoField.infoField(
-                        "Obec: " + snapshot.data.addressB),
-                    AccountInfoField.infoField(
-                        "Země: " + snapshot.data.addressC),
-                    AccountInfoField.infoField(
-                        "PSČ: " + snapshot.data.postal.toString())
-                  ]));
+                  alignment: Alignment.topCenter,
+                  child: Text("Zatím tu nic není :("));
             } else if (snapshot.hasError) {
               return Text('Sorry there is an error');
             }

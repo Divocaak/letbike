@@ -218,14 +218,22 @@ class _ItemPageState extends State<ItemPage>
   }
 
   Widget _buildCard(Chat chat, context) {
-    return (chat.username == "0"
-        ? Text("Žádné chaty")
-        : TextButton(
+    if (chat.username == "0") {
+      return Text("Žádné chaty");
+    } else {
+      if (chat.email != itemInfo.me.username) {
+        return TextButton(
             onPressed: () {
               Navigator.of(context).pushNamed(ChatScreen.routeName,
                   arguments: ChatUsers(itemInfo, itemInfo.me, chat.id));
             },
-            child: Text(chat.email + " (" + chat.username + ")")));
+            child: Text(chat.email + " (" + chat.username + ")"));
+      } else {
+        return SizedBox(
+          height: 1,
+        );
+      }
+    }
   }
 
   Widget itemParam(context, int i, Item item) {

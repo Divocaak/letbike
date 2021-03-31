@@ -7,3 +7,4 @@ export 'widgets/itemCard.dart';
 export 'widgets/accountInfoField.dart';
 export 'widgets/chatMessages.dart';
 export 'widgets/chatInputField.dart';
+export 'widgets/ratingRow.dart';

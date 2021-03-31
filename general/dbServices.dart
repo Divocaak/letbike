@@ -63,7 +63,7 @@ class DatabaseServices {
   }
 
   static Future<List<Item>> getAllItems(
-      int status, String userId, ItemParams itemParams, int soldTo) async {
+      int status, String userId, ItemParams itemParams, String soldTo) async {
     final Response response = await get(
         Uri.encodeFull(url +
             "itemGetAll.php/?id=" +
@@ -71,7 +71,7 @@ class DatabaseServices {
             "&&status=" +
             status.toString() +
             "&&soldTo=" +
-            soldTo.toString() +
+            soldTo +
             "&&" +
             passParamsToDb(itemParams)),
         headers: {"Accept": "application/json;charset=UTF-8"});
@@ -100,6 +100,45 @@ class DatabaseServices {
         headers: {"Accept": "application/json;charset=UTF-8"});
     if (response.statusCode == 200) {
       return response.body;
+    } else {
+      throw Exception("Can't get items");
+    }
+  }
+
+  static Future<String> setRating(
+      int userId, double ratingVal, String ratingText) async {
+    final Response response = await post(
+      url +
+          "ratingSet.php/?" +
+          "&&userId=" +
+          userId.toString() +
+          "&&ratingVal=" +
+          ratingVal.toString() +
+          "&&ratingText=" +
+          ratingText,
+      headers: <String, String>{
+        'Content-Type': 'application/json;charset=UTF-8'
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return response.body;
+    } else {
+      throw Exception("Can't add rating");
+    }
+  }
+
+  static Future<List<Rating>> getRatings(int userId) async {
+    final Response response = await get(
+        Uri.encodeFull(url + "ratingGet.php/?userId=" + userId.toString()),
+        headers: {"Accept": "application/json;charset=UTF-8"});
+    if (response.statusCode == 200) {
+      if (response.body == "[]") {
+        return null;
+      } else {
+        final parsed = jsonDecode(response.body).cast<Map<String, dynamic>>();
+        return parsed.map<Rating>((rating) => Rating.fromJson(rating)).toList();
+      }
     } else {
       throw Exception("Can't get items");
     }

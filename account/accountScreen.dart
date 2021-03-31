@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:letbike/app/homePage.dart';
+import 'package:letbike/general/widgets/ratingRow.dart';
 import 'accountSettings.dart';
 import '../general/general.dart';
 
@@ -17,6 +18,8 @@ class _AccountScreenState extends State<AccountScreen>
   Future<List<Item>> items;
   Future<List<Item>> soldItems;
   Future<List<Item>> boughtItems;
+  Future<List<Item>> ratedItems;
+  Future<List<Rating>> ratings;
   User user;
 
   AnimationController animationController;
@@ -36,11 +39,14 @@ class _AccountScreenState extends State<AccountScreen>
   Widget build(BuildContext context) {
     user = ModalRoute.of(context).settings.arguments;
     items = DatabaseServices.getAllItems(
-        0, user.id.toString(), ItemParams.createEmpty(), 0);
+        0, user.id.toString(), ItemParams.createEmpty(), "sold_to");
     soldItems = DatabaseServices.getAllItems(
-        1, user.id.toString(), ItemParams.createEmpty(), 0);
+        1, user.id.toString(), ItemParams.createEmpty(), "sold_to");
     boughtItems = DatabaseServices.getAllItems(
-        1, user.id.toString(), ItemParams.createEmpty(), user.id);
+        1, "seller_id", ItemParams.createEmpty(), user.id.toString());
+    ratedItems = DatabaseServices.getAllItems(
+        2, "seller_id", ItemParams.createEmpty(), user.id.toString());
+    ratings = DatabaseServices.getRatings(user.id);
     return Scaffold(
         body: Stack(children: [
       ListView(
@@ -77,7 +83,7 @@ class _AccountScreenState extends State<AccountScreen>
                       itemCount: snapshot.data.length,
                       itemBuilder: (context, i) {
                         return ItemCard.buildCard(
-                            context, snapshot.data[i], user);
+                            context, snapshot.data[i], user, false, true);
                       });
                 } else if (!snapshot.hasData) {
                   return Container(
@@ -102,7 +108,7 @@ class _AccountScreenState extends State<AccountScreen>
                       itemCount: snapshot.data.length,
                       itemBuilder: (context, i) {
                         return ItemCard.buildCard(
-                            context, snapshot.data[i], user);
+                            context, snapshot.data[i], user, false, true);
                       });
                 } else if (!snapshot.hasData) {
                   return Container(
@@ -127,7 +133,58 @@ class _AccountScreenState extends State<AccountScreen>
                       itemCount: snapshot.data.length,
                       itemBuilder: (context, i) {
                         return ItemCard.buildCard(
-                            context, snapshot.data[i], user);
+                            context, snapshot.data[i], user, true, true);
+                      });
+                } else if (!snapshot.hasData) {
+                  return Container(
+                      alignment: Alignment.topCenter,
+                      child: Text("Zatím tu nic není :("));
+                } else if (snapshot.hasError) {
+                  return Text('Sorry there is an error');
+                }
+                return Center(child: CircularProgressIndicator());
+              },
+            ),
+          ),
+          AccountInfoField.infoField(
+              "Ohodnocené předměty (již přijaté, uzavřené):"),
+          Container(
+            height: 300,
+            width: 600,
+            child: FutureBuilder<List<Item>>(
+              future: ratedItems,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return ListView.builder(
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (context, i) {
+                        return ItemCard.buildCard(
+                            context, snapshot.data[i], user, false, false);
+                      });
+                } else if (!snapshot.hasData) {
+                  return Container(
+                      alignment: Alignment.topCenter,
+                      child: Text("Zatím tu nic není :("));
+                } else if (snapshot.hasError) {
+                  return Text('Sorry there is an error');
+                }
+                return Center(child: CircularProgressIndicator());
+              },
+            ),
+          ),
+          AccountInfoField.infoField("Hodnocení: "),
+          Container(
+            height: 300,
+            width: 400,
+            child: FutureBuilder<List<Rating>>(
+              future: ratings,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return ListView.builder(
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (context, i) {
+                        return RatingRow.buildRow(snapshot.data[i].ratingValue,
+                            snapshot.data[i].ratingText);
                       });
                 } else if (!snapshot.hasData) {
                   return Container(
