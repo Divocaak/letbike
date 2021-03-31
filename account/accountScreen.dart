@@ -15,6 +15,8 @@ class AccountScreen extends StatefulWidget {
 class _AccountScreenState extends State<AccountScreen>
     with SingleTickerProviderStateMixin {
   Future<List<Item>> items;
+  Future<List<Item>> soldItems;
+  Future<List<Item>> boughtItems;
   User user;
 
   AnimationController animationController;
@@ -33,26 +35,27 @@ class _AccountScreenState extends State<AccountScreen>
   @override
   Widget build(BuildContext context) {
     user = ModalRoute.of(context).settings.arguments;
-    items = DatabaseServices.getAllItems(user.id.toString(), null);
+    items = DatabaseServices.getAllItems(
+        0, user.id.toString(), ItemParams.createEmpty(), 0);
+    soldItems = DatabaseServices.getAllItems(
+        1, user.id.toString(), ItemParams.createEmpty(), 0);
+    boughtItems = DatabaseServices.getAllItems(
+        1, user.id.toString(), ItemParams.createEmpty(), user.id);
     return Scaffold(
         body: Stack(children: [
       ListView(
         padding: const EdgeInsets.all(5),
         children: [
           Container(
-            height: 50,
-            margin: EdgeInsets.only(top: 50),
-            child: const Center(
-              child: CircleAvatar(
-                backgroundImage: NetworkImage(
-                    "https://www.surforma.com/media/filer_public_thumbnails/filer_public/4b/00/4b007d44-3443-4338-ada5-47d0b99db7ad/l167.jpg__800x600_q95_crop_subsampling-2_upscale.jpg"),
-                child: Icon(
-                  Icons.person,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
+              height: 50,
+              margin: EdgeInsets.only(top: 50),
+              child: Center(
+                  child: FadeInImage.assetNetwork(
+                      placeholder: "Načítám obrázek (možná neexsituje :/)",
+                      image: imgsFolder +
+                          "/users/" +
+                          user.id.toString() +
+                          "/0.jpg"))),
           AccountInfoField.infoField("Uživatelské jméno: " + user.username),
           AccountInfoField.infoField("E-mail: " + user.email),
           AccountInfoField.infoField("Křestní jméno: " + user.fName),
@@ -64,10 +67,60 @@ class _AccountScreenState extends State<AccountScreen>
           AccountInfoField.infoField("PSČ: " + user.postal.toString()),
           AccountInfoField.infoField("Moje inzeráty:"),
           Container(
-            height: 600,
+            height: 300,
             width: 600,
             child: FutureBuilder<List<Item>>(
               future: items,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return ListView.builder(
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (context, i) {
+                        return ItemCard.buildCard(
+                            context, snapshot.data[i], user);
+                      });
+                } else if (!snapshot.hasData) {
+                  return Container(
+                      alignment: Alignment.topCenter,
+                      child: Text("Zatím tu nic není :("));
+                } else if (snapshot.hasError) {
+                  return Text('Sorry there is an error');
+                }
+                return Center(child: CircularProgressIndicator());
+              },
+            ),
+          ),
+          AccountInfoField.infoField("Prodané předměty:"),
+          Container(
+            height: 300,
+            width: 600,
+            child: FutureBuilder<List<Item>>(
+              future: soldItems,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return ListView.builder(
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (context, i) {
+                        return ItemCard.buildCard(
+                            context, snapshot.data[i], user);
+                      });
+                } else if (!snapshot.hasData) {
+                  return Container(
+                      alignment: Alignment.topCenter,
+                      child: Text("Zatím tu nic není :("));
+                } else if (snapshot.hasError) {
+                  return Text('Sorry there is an error');
+                }
+                return Center(child: CircularProgressIndicator());
+              },
+            ),
+          ),
+          AccountInfoField.infoField("Zakoupené předměty:"),
+          Container(
+            height: 300,
+            width: 600,
+            child: FutureBuilder<List<Item>>(
+              future: boughtItems,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return ListView.builder(

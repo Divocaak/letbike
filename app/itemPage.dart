@@ -44,11 +44,19 @@ class _ItemPageState extends State<ItemPage>
               Container(
                 child: Swiper(
                   itemBuilder: (BuildContext context, int index) {
-                    return Icon(Icons.error); //new Image.asset("");
+                    return Ink.image(
+                        image: NetworkImage(imgsFolder +
+                            "/items/" +
+                            (itemInfo.item.name.hashCode +
+                                    itemInfo.item.sellerId)
+                                .toString() +
+                            "/" +
+                            index.toString() +
+                            ".jpg"));
                   },
-                  itemCount: 1, //images.length,
+                  itemCount: int.parse(itemInfo.item.imgs),
                   pagination: new SwiperPagination(),
-                  control: new SwiperControl(),
+                  control: new SwiperControl(color: kPrimaryColor),
                 ),
                 width: MediaQuery.of(context).size.width,
                 height: 400,
@@ -182,8 +190,8 @@ class _ItemPageState extends State<ItemPage>
 
   void startChat() {
     if (itemInfo.item.sellerId != itemInfo.me.id) {
-      Navigator.of(context)
-          .pushNamed(ChatScreen.routeName, arguments: itemInfo);
+      Navigator.of(context).pushReplacementNamed(ChatScreen.routeName,
+          arguments: ChatUsers(itemInfo, itemInfo.me, itemInfo.item.sellerId));
     } else {
       AlertBox.showAlertBox(
           context,
@@ -214,8 +222,8 @@ class _ItemPageState extends State<ItemPage>
         ? Text("Žádné chaty")
         : TextButton(
             onPressed: () {
-              Navigator.of(context)
-                  .pushNamed(ChatScreen.routeName, arguments: itemInfo);
+              Navigator.of(context).pushNamed(ChatScreen.routeName,
+                  arguments: ChatUsers(itemInfo, itemInfo.me, chat.id));
             },
             child: Text(chat.email + " (" + chat.username + ")")));
   }

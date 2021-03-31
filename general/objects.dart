@@ -11,6 +11,7 @@ class Item {
   String imgs;
   int status;
   ItemParams itemParams;
+  int soldTo;
 
   Item(
       this.id,
@@ -24,64 +25,65 @@ class Item {
       this.dateEnd,
       this.imgs,
       this.status,
-      this.itemParams);
+      this.itemParams,
+      this.soldTo);
 
   factory Item.fromJson(Map<String, dynamic> json) {
     return Item(
-      int.parse(json["id"]),
-      int.parse(json["sellerId"]),
-      json["name"],
-      json["description"],
-      double.parse(json["price"]),
-      int.parse(json["score"]),
-      int.parse(json["paid"]),
-      json["dateStart"],
-      json["dateEnd"],
-      json["imgs"],
-      int.parse(json["status"]),
-      new ItemParams({
-        "used": int.parse(json["used"]),
-        "selectedCategory": int.parse(json["selectedCategory"]),
-        "selectedParts": int.parse(json["selectedParts"]),
-        "selectedAccessories": int.parse(json["selectedAccessories"]),
-        "selectedOther": int.parse(json["selectedOther"]),
-        "bikeType": int.parse(json["bikeType"]),
-        "bikeBrand": int.parse(json["bikeBrand"]),
-        "wheelBrand": int.parse(json["wheelBrand"]),
-        "wheelSize": int.parse(json["wheelSize"]),
-        "wheelMaterial": int.parse(json["wheelMaterial"]),
-        "wheeldSpokes": int.parse(json["wheeldSpokes"]),
-        "wheeldType": int.parse(json["wheeldType"]),
-        "wheelAxis": int.parse(json["wheelAxis"]),
-        "wheeldBrakesType": int.parse(json["wheeldBrakesType"]),
-        "wheeldBrakesDisc": int.parse(json["wheeldBrakesDisc"]),
-        "wheeldCassette": int.parse(json["wheeldCassette"]),
-        "wheelNut": int.parse(json["wheelNut"]),
-        "wheelCompatibility": int.parse(json["wheelCompatibility"]),
-        "cranksBrand": int.parse(json["cranksBrand"]),
-        "cranksCompatibility": int.parse(json["cranksCompatibility"]),
-        "cranksMaterial": int.parse(json["cranksMaterial"]),
-        "cranksAxis": int.parse(json["cranksAxis"]),
-        "converterBrand": int.parse(json["converterBrand"]),
-        "converterNumOfSpeeds": int.parse(json["converterNumOfSpeeds"]),
-        "saddleBrand": int.parse(json["saddleBrand"]),
-        "saddleGender": int.parse(json["saddleGender"]),
-        "forkBrand": int.parse(json["forkBrand"]),
-        "forkSize": int.parse(json["forkSize"]),
-        "forkSuspensionType": int.parse(json["forkSuspensionType"]),
-        "forkSuspension": int.parse(json["forkSuspension"]),
-        "forkWheelCoompatibility": int.parse(json["forkWheelCoompatibility"]),
-        "forkMaterial": int.parse(json["forkMaterial"]),
-        "forkMaterialColumn": int.parse(json["forkMaterialColumn"]),
-        "eBikeBrand": int.parse(json["eBikeBrand"]),
-        "eBikeMotorPos": int.parse(json["eBikeMotorPos"]),
-        "trainerBrand": int.parse(json["trainerBrand"]),
-        "trainerBrakes": int.parse(json["trainerBrakes"]),
-        "scooterBrand": int.parse(json["scooterBrand"]),
-        "scooterSize": int.parse(json["scooterSize"]),
-        "scooterComputer": int.parse(json["scooterComputer"]),
-      }),
-    );
+        int.parse(json["id"]),
+        int.parse(json["sellerId"]),
+        json["name"],
+        json["description"],
+        double.parse(json["price"]),
+        int.parse(json["score"]),
+        int.parse(json["paid"]),
+        json["dateStart"],
+        json["dateEnd"],
+        json["imgs"],
+        int.parse(json["status"]),
+        new ItemParams({
+          "used": int.parse(json["used"]),
+          "selectedCategory": int.parse(json["selectedCategory"]),
+          "selectedParts": int.parse(json["selectedParts"]),
+          "selectedAccessories": int.parse(json["selectedAccessories"]),
+          "selectedOther": int.parse(json["selectedOther"]),
+          "bikeType": int.parse(json["bikeType"]),
+          "bikeBrand": int.parse(json["bikeBrand"]),
+          "wheelBrand": int.parse(json["wheelBrand"]),
+          "wheelSize": int.parse(json["wheelSize"]),
+          "wheelMaterial": int.parse(json["wheelMaterial"]),
+          "wheeldSpokes": int.parse(json["wheeldSpokes"]),
+          "wheeldType": int.parse(json["wheeldType"]),
+          "wheelAxis": int.parse(json["wheelAxis"]),
+          "wheeldBrakesType": int.parse(json["wheeldBrakesType"]),
+          "wheeldBrakesDisc": int.parse(json["wheeldBrakesDisc"]),
+          "wheeldCassette": int.parse(json["wheeldCassette"]),
+          "wheelNut": int.parse(json["wheelNut"]),
+          "wheelCompatibility": int.parse(json["wheelCompatibility"]),
+          "cranksBrand": int.parse(json["cranksBrand"]),
+          "cranksCompatibility": int.parse(json["cranksCompatibility"]),
+          "cranksMaterial": int.parse(json["cranksMaterial"]),
+          "cranksAxis": int.parse(json["cranksAxis"]),
+          "converterBrand": int.parse(json["converterBrand"]),
+          "converterNumOfSpeeds": int.parse(json["converterNumOfSpeeds"]),
+          "saddleBrand": int.parse(json["saddleBrand"]),
+          "saddleGender": int.parse(json["saddleGender"]),
+          "forkBrand": int.parse(json["forkBrand"]),
+          "forkSize": int.parse(json["forkSize"]),
+          "forkSuspensionType": int.parse(json["forkSuspensionType"]),
+          "forkSuspension": int.parse(json["forkSuspension"]),
+          "forkWheelCoompatibility": int.parse(json["forkWheelCoompatibility"]),
+          "forkMaterial": int.parse(json["forkMaterial"]),
+          "forkMaterialColumn": int.parse(json["forkMaterialColumn"]),
+          "eBikeBrand": int.parse(json["eBikeBrand"]),
+          "eBikeMotorPos": int.parse(json["eBikeMotorPos"]),
+          "trainerBrand": int.parse(json["trainerBrand"]),
+          "trainerBrakes": int.parse(json["trainerBrakes"]),
+          "scooterBrand": int.parse(json["scooterBrand"]),
+          "scooterSize": int.parse(json["scooterSize"]),
+          "scooterComputer": int.parse(json["scooterComputer"]),
+        }),
+        int.parse(json["soldTo"]));
   }
 
   Map<String, dynamic> toJson() => {
@@ -136,6 +138,7 @@ class Item {
         "scooterBrand": itemParams.params["scooterBrand"],
         "scooterSize": itemParams.params["scooterSize"],
         "scooterComputer": itemParams.params["scooterComputer"],
+        "soldTo": soldTo
       };
 }
 
@@ -300,27 +303,37 @@ class Message {
   int from;
   int to;
   String message;
+  int img;
 
-  Message(this.from, this.to, this.message);
+  Message(this.from, this.to, this.message, this.img);
 
   factory Message.fromJson(Map<String, dynamic> json) {
-    return Message(
-        int.parse(json["from_id"]), int.parse(json["to_id"]), json["message"]);
+    return Message(int.parse(json["from_id"]), int.parse(json["to_id"]),
+        json["message"], int.parse(json["img"]));
   }
 
   Map<String, dynamic> toJson() =>
-      {"from_id": from, "to_id": to, "message": message};
+      {"from_id": from, "to_id": to, "message": message, "img": img};
 }
 
 class Chat {
   String email;
   String username;
+  int id;
 
-  Chat(this.email, this.username);
+  Chat(this.email, this.username, this.id);
 
   factory Chat.fromJson(Map<String, dynamic> json) {
-    return Chat(json["email"], json["username"]);
+    return Chat(json["email"], json["username"], int.parse(json["id"]));
   }
+}
+
+class ChatUsers {
+  ItemInfo itemInfo;
+  User userA;
+  int userB;
+
+  ChatUsers(this.itemInfo, this.userA, this.userB);
 }
 
 class ItemInfo {

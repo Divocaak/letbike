@@ -90,44 +90,32 @@ class _AccountSettingsState extends State<AccountSettings>
               margin: EdgeInsets.only(top: 30),
               child: Stack(
                 children: <Widget>[
-                  CircleAvatar(
-                    radius: 70,
-                    backgroundImage: images.length < 1 //images[0] == null
-                        ? NetworkImage(
-                            "https://www.surforma.com/media/filer_public_thumbnails/filer_public/4b/00/4b007d44-3443-4338-ada5-47d0b99db7ad/l167.jpg__800x600_q95_crop_subsampling-2_upscale.jpg")
-                        : NetworkImage("url"),
-                    backgroundColor: Colors.grey[400].withOpacity(0.5),
-                    child: images.length < 1 //images[0] == null
-                        ? Icon(
-                            Icons.person,
-                            color: Colors.white,
-                            size: 30,
-                          )
-                        : Container(),
+                  Text(
+                    images.length < 1
+                        ? "Aktualizovat profilovou fotku"
+                        : "Fotografie nahrána",
+                    style: TextStyle(color: kWhite),
                   ),
                   Align(
                     alignment: Alignment.bottomRight,
                     child: Container(
-                        height: 200,
+                        height: 50,
+                        width: 50,
                         decoration: BoxDecoration(
-                          color: kBlack,
-                          border: Border.all(
-                            color: Colors.white,
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.circular(25),
+                          color: kPrimaryColor,
+                          borderRadius: BorderRadius.circular(50),
                         ),
                         child: Column(
                           children: [
                             Container(
                               child: TextButton(
-                                child: Icon(Icons.add),
+                                child: Icon(
+                                  Icons.upload_rounded,
+                                  color: kWhite,
+                                ),
                                 onPressed: loadAssets,
                               ),
                             ),
-                            Expanded(
-                              child: buildGridView(),
-                            )
                           ],
                         )),
                   ),
@@ -296,8 +284,8 @@ class _AccountSettingsState extends State<AccountSettings>
       getVal("accPostal", user.postal.toString()),
     ];
 
-    saveResponse =
-        DatabaseServices.changeAccountDetails(user.id.toString(), fieldsValues);
+    saveResponse = DatabaseServices.changeAccountDetails(
+        user.id.toString(), fieldsValues, images);
 
     AlertBox.showAlertBox(
         context,

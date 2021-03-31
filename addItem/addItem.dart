@@ -1056,6 +1056,8 @@ class _AddItem extends State<AddItem> with TickerProviderStateMixin {
                           ),
                           child: Column(
                             children: [
+                              Text(
+                                  "První vybraný obrázek se bude zobrazovat na domovské stránce."),
                               Container(
                                 child: TextButton(
                                   child: Text("Vybrat foto z úložiště"),
@@ -1088,7 +1090,8 @@ class _AddItem extends State<AddItem> with TickerProviderStateMixin {
                             kWhite.withOpacity(volume * 2), () {
                           Navigator.of(context).pushReplacementNamed(
                               HomePage.routeName,
-                              arguments: user);
+                              arguments: HomeArguments(
+                                  user, ItemParams.createEmpty()));
                         })),
                     Positioned(
                         bottom: 150,
@@ -1231,7 +1234,8 @@ class _AddItem extends State<AddItem> with TickerProviderStateMixin {
                                                 ? category.selectedOther
                                                 : 0) +
                                             999),
-                                  })),
+                                  }),
+                                  0),
                               images);
 
                           AlertBox.showAlertBox(

@@ -1,4 +1,7 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../dbServices.dart';
 import '../widgets.dart';
 import '../pallete.dart';
@@ -6,8 +9,8 @@ import '../general.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 
 class ChatInputField extends StatefulWidget {
-  final ItemInfo itemInfo;
-  const ChatInputField(this.itemInfo);
+  final ChatUsers chatUsers;
+  const ChatInputField(this.chatUsers);
 
   @override
   _ChatInputFieldState createState() => _ChatInputFieldState();
@@ -15,23 +18,6 @@ class ChatInputField extends StatefulWidget {
 
 class _ChatInputFieldState extends State<ChatInputField> {
   List<Asset> images = [];
-
-  Widget buildGridView() {
-    if (images != null)
-      return GridView.count(
-        crossAxisCount: 3,
-        children: List.generate(images.length, (index) {
-          Asset asset = images[index];
-          return AssetThumb(
-            asset: asset,
-            width: 300,
-            height: 300,
-          );
-        }),
-      );
-    else
-      return Container(color: Colors.white);
-  }
 
   Future<void> loadAssets() async {
     setState(() {
@@ -52,19 +38,21 @@ class _ChatInputFieldState extends State<ChatInputField> {
     if (!mounted) return;
 
     setState(() {
-      images = resultList;
+      images = resultList.length < 1 ? [] : resultList;
       if (error != null) AlertBox.showAlertBox(context, "Error", Text("Error"));
     });
   }
 
+  TextEditingController chatInputController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+    chatInputController.text = "";
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: kDefaultPadding,
         vertical: kDefaultPadding / 2,
       ),
-
       //Barva dolní části
       decoration: BoxDecoration(
         color: Color(0xFF1E1F1D),
@@ -79,7 +67,6 @@ class _ChatInputFieldState extends State<ChatInputField> {
       child: SafeArea(
         child: Row(
           children: [
-            SizedBox(width: kDefaultPadding),
             Expanded(
               child: Container(
                 padding: EdgeInsets.symmetric(
@@ -92,62 +79,75 @@ class _ChatInputFieldState extends State<ChatInputField> {
                 ),
                 child: Row(
                   children: [
-                    Icon(
-                      Icons.sentiment_satisfied_alt_outlined,
-                      color: Theme.of(context)
-                          .textTheme
-                          .bodyText1
-                          .color
-                          .withOpacity(0.64),
-                    ),
-                    SizedBox(width: kDefaultPadding / 4),
+                    SizedBox(width: kDefaultPadding / 2),
                     Expanded(
                       child: TextField(
-                          decoration: InputDecoration(
-                            hintText: "Type message",
+                        controller: chatInputController,
+                        decoration: InputDecoration(
+                            hintText: "Napište zprávu",
                             border: InputBorder.none,
-                          ),
-                          onSubmitted: (String message) {
-                            setState(() {
-                              if (message.length > 3) {
-                                DatabaseServices.sendMessage(
-                                    widget.itemInfo.me.id,
-                                    widget.itemInfo.item.sellerId,
-                                    widget.itemInfo.item.id,
-                                    message);
-                              } else {
-                                AlertBox.showAlertBox(
-                                    context,
-                                    "Upozornění",
-                                    Text(
-                                        "Zpráva musí obsahovat minimálně 4 znaky."));
-                              }
-                            });
-                          }),
+                            hintStyle:
+                                TextStyle(color: kWhite.withOpacity(.5))),
+                        style: TextStyle(color: kWhite),
+                      ),
                     ),
-                    Container(
-                        height: 200,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(
-                            color: Colors.white,
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.circular(25),
-                        ),
-                        child: Column(
-                          children: [
-                            Container(
-                              child: TextButton(
-                                child: Icon(Icons.attach_file),
-                                onPressed: loadAssets,
-                              ),
+                    SizedBox(
+                      width: kDefaultPadding,
+                    ),
+                    Stack(children: [
+                      TextButton(
+                        child: Icon(Icons.attach_file, color: kWhite),
+                        onPressed: () {
+                          loadAssets();
+                        },
+                      ),
+                      Positioned(
+                          top: 5,
+                          right: 5,
+                          child: Container(
+                            width: 20,
+                            height: 20,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                                color: kPrimaryColor,
+                                border: Border.all(color: kSecondaryColor),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(50))),
+                            child: Text(
+                              images != null ? images.length.toString() : "0",
+                              style: TextStyle(
+                                  color: kWhite, fontWeight: FontWeight.bold),
                             ),
-                            Expanded(
-                              child: buildGridView(),
-                            )
-                          ],
-                        ))
+                          ))
+                    ]),
+                    Container(
+                        child: TextButton(
+                            child: Icon(Icons.send, color: kWhite),
+                            onPressed: () {
+                              if (images.length != 0 ||
+                                  chatInputController.text != "") {
+                                setState(() {
+                                  DatabaseServices.sendMessage(
+                                      widget.chatUsers.userA.id,
+                                      widget.chatUsers.userB,
+                                      widget.chatUsers.itemInfo.item.id,
+                                      chatInputController.text,
+                                      images);
+                                });
+
+                                if (images.length != 0) {
+                                  setState(() {
+                                    images = [];
+                                  });
+                                }
+
+                                if (chatInputController.text != "") {
+                                  chatInputController.clear();
+                                }
+                              } else {
+                                print("Message is empty");
+                              }
+                            }))
                   ],
                 ),
               ),

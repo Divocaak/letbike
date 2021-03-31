@@ -14,17 +14,21 @@ class ItemCard {
       ),
       child: Stack(
         children: [
-          Ink.image(
-            image: NetworkImage(
-                'http://www.hybrid.cz/i/auto/samorost-plzen-drevo-horske-kolo.jpeg'),
+          Ink(
             child: InkWell(
+              child: FadeInImage.assetNetwork(
+                  fit: BoxFit.fill,
+                  placeholder: "Načítám obrázek (možná neexsituje :/)",
+                  image: imgsFolder +
+                      "/items/" +
+                      (item.name.hashCode + item.sellerId).toString() +
+                      "/0.jpg"),
               onTap: () {
                 Navigator.of(context).pushNamed(ItemPage.routeName,
                     arguments: new ItemInfo(item, loggedUser));
               },
             ),
             height: 240,
-            fit: BoxFit.cover,
             padding: const EdgeInsets.all(50),
           ),
           Positioned(

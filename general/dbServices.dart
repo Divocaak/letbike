@@ -1,10 +1,7 @@
 import 'dart:convert';
 import 'dart:async';
-import 'dart:typed_data';
 import 'package:http/http.dart';
 import 'objects.dart';
-import 'dart:io';
-import 'dart:convert';
 import 'package:multi_image_picker/multi_image_picker.dart';
 
 class DatabaseServices {
@@ -13,22 +10,30 @@ class DatabaseServices {
 
   static uploadImages(
       List<Asset> images, String imgFolder, String folderIdentificator) async {
-    var request = MultipartRequest('POST', Uri.parse(uploadEndPoint));
+    var request = MultipartRequest(
+        'POST', Uri.parse('http://10.0.2.2/projects/letbike/uploadImage.php/'));
 
     for (int i = 0; i < images.length; i++) {
       var byteData = await images[i].getByteData();
       List<int> imageData = byteData.buffer.asUint8List();
 
-      request.files.add(MultipartFile.fromBytes(
-          'picture', File(imageData.toString()).readAsBytesSync(),
-          filename: i.toString()));
+      request.fields["img" + i.toString()] = base64Encode(imageData);
     }
+
+    request.fields["imgCount"] = images.length.toString();
+    request.fields["imgFolder"] = imgFolder;
+    request.fields["folderIdentificator"] = folderIdentificator;
+
     var res = await request.send();
-    print(res);
+    print(await res.stream.bytesToString());
+    if (res.statusCode != 200) {
+      print("error");
+    }
   }
 
   static Future<String> createItem(Item item, List<Asset> images) async {
-    uploadImages(images, "items", item.name.hashCode.toString());
+    uploadImages(
+        images, "items", (item.name.hashCode + item.sellerId).toString());
 
     final Response response = await post(
         url +
@@ -41,6 +46,8 @@ class DatabaseServices {
             item.description +
             "&&price=" +
             item.price.toString() +
+            "&&images=" +
+            images.length.toString() +
             "&&" +
             passParamsToDb(item.itemParams),
         headers: <String, String>{
@@ -56,11 +63,15 @@ class DatabaseServices {
   }
 
   static Future<List<Item>> getAllItems(
-      String userId, ItemParams itemParams) async {
+      int status, String userId, ItemParams itemParams, int soldTo) async {
     final Response response = await get(
         Uri.encodeFull(url +
             "itemGetAll.php/?id=" +
             userId +
+            "&&status=" +
+            status.toString() +
+            "&&soldTo=" +
+            soldTo.toString() +
             "&&" +
             passParamsToDb(itemParams)),
         headers: {"Accept": "application/json;charset=UTF-8"});
@@ -71,6 +82,24 @@ class DatabaseServices {
         final parsed = jsonDecode(response.body).cast<Map<String, dynamic>>();
         return parsed.map<Item>((item) => Item.fromJson(item)).toList();
       }
+    } else {
+      throw Exception("Can't get items");
+    }
+  }
+
+  static Future<String> updateItemStatus(
+      int itemId, int newStatus, int soldTo) async {
+    final Response response = await get(
+        Uri.encodeFull(url +
+            "itemUpdateStatus.php/?id=" +
+            itemId.toString() +
+            "&&status=" +
+            newStatus.toString() +
+            "&&soldTo=" +
+            soldTo.toString()),
+        headers: {"Accept": "application/json;charset=UTF-8"});
+    if (response.statusCode == 200) {
+      return response.body;
     } else {
       throw Exception("Can't get items");
     }
@@ -111,14 +140,26 @@ class DatabaseServices {
     }
   }
 
+  static Future<User> getUserInfo(int id) async {
+    final Response response = await get(
+        Uri.encodeFull(url + "userInfo.php?id=" + id.toString()),
+        headers: {"Accept": "application/json;charset=UTF-8"});
+    if (response.statusCode == 200) {
+      final Map parsed = jsonDecode(response.body);
+      return User.fromJson(parsed);
+    } else {
+      throw Exception("Can't login user");
+    }
+  }
+
   static Future<List<Message>> getMessagesBetween(
-      int from, int to, int itemId) async {
+      int seller, int buyer, int itemId) async {
     final Response response = await get(
         Uri.encodeFull(url +
             "messageGet.php/?from=" +
-            from.toString() +
+            seller.toString() +
             "&&to=" +
-            to.toString() +
+            buyer.toString() +
             "&&itemId=" +
             itemId.toString()),
         headers: {"Accept": "application/json;charset=UTF-8"});
@@ -133,15 +174,21 @@ class DatabaseServices {
   }
 
   static Stream<List<Message>> getMessages(
-      Duration refreshTime, int from, int to, int itemId) async* {
+      Duration refreshTime, int seller, int buyer, int itemId) async* {
     while (true) {
       await Future.delayed(refreshTime);
-      yield await getMessagesBetween(from, to, itemId);
+      yield await getMessagesBetween(seller, buyer, itemId);
     }
   }
 
   static Future sendMessage(
-      int from, int to, int itemId, String message) async {
+      int from, int to, int itemId, String message, List<Asset> images) async {
+    if (images.length != 0) {
+      uploadImages(images, "messages",
+          (from.toString() + to.toString() + message.hashCode.toString()));
+    }
+
+    String hasImg = images.length != 0 ? "1" : "0";
     final Response response = await get(
         Uri.encodeFull(url +
             "messageSet.php/?from=" +
@@ -151,7 +198,9 @@ class DatabaseServices {
             "&&itemId=" +
             itemId.toString() +
             "&&message=" +
-            message),
+            message +
+            "&&img=" +
+            hasImg),
         headers: {"Accept": "application/json;charset=UTF-8"});
     if (response.statusCode == 200) {
       print("sent");
@@ -173,7 +222,9 @@ class DatabaseServices {
   }
 
   static Future<String> changeAccountDetails(
-      String id, List<String> values) async {
+      String id, List<String> values, List<Asset> images) async {
+    uploadImages(images, "users", id.toString());
+
     final Response response = await get(
         Uri.encodeFull(url +
             "userChangeDetails.php/?id=" +
