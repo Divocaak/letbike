@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:letbike/account/accountSettings.dart';
-import '../general/pallete.dart';
-import "../general/dbServices.dart";
-import "../general/widgets.dart";
+import 'package:letbike/addItem/addItem.dart';
+import '../general/general.dart';
 import "../account/accountScreen.dart";
+import 'filterPage.dart';
 
 double volume = 0;
 
@@ -16,14 +16,13 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   Future<List<Item>> items;
-  User loggedUser;
+
+  HomeArguments homeArguments;
 
   AnimationController animationController;
 
   @override
   void initState() {
-    items = DatabaseServices.getAllItems("seller_id");
-
     animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 250));
     animationController.addListener(() {
@@ -35,7 +34,9 @@ class _HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
-    loggedUser = ModalRoute.of(context).settings.arguments;
+    homeArguments = ModalRoute.of(context).settings.arguments;
+    items =
+        DatabaseServices.getAllItems(0, "seller_id", homeArguments.filters, 0);
     return Scaffold(
       body: Stack(
         children: [
@@ -49,7 +50,7 @@ class _HomePageState extends State<HomePage>
                       itemCount: snapshot.data.length,
                       itemBuilder: (context, i) {
                         return ItemCard.buildCard(
-                            context, snapshot.data[i], loggedUser);
+                            context, snapshot.data[i], homeArguments.user);
                       });
                 } else if (snapshot.hasError) {
                   return Text('Sorry there is an error');
@@ -73,7 +74,9 @@ class _HomePageState extends State<HomePage>
                           45,
                           Icons.add,
                           kWhite.withOpacity(volume * 2), () {
-                        print("asd");
+                        Navigator.pushReplacementNamed(
+                            context, AddItem.routeName,
+                            arguments: homeArguments.user);
                       })),
                   Positioned(
                       bottom: 120,
@@ -81,9 +84,11 @@ class _HomePageState extends State<HomePage>
                       child: CircularButton(
                           kSecondaryColor.withOpacity(volume * 2),
                           45,
-                          Icons.home,
+                          Icons.filter_alt,
                           kWhite.withOpacity(volume * 2), () {
-                        print("asd");
+                        Navigator.pushReplacementNamed(
+                            context, FilterPage.routeName,
+                            arguments: homeArguments);
                       })),
                   Positioned(
                       bottom: 150,
@@ -93,8 +98,9 @@ class _HomePageState extends State<HomePage>
                           45,
                           Icons.person,
                           kWhite.withOpacity(volume * 2), () {
-                        Navigator.pushNamed(context, AccountScreen.routeName,
-                            arguments: loggedUser);
+                        Navigator.pushReplacementNamed(
+                            context, AccountScreen.routeName,
+                            arguments: homeArguments.user);
                       })),
                 ],
               ),
@@ -145,7 +151,7 @@ class _HomePageState extends State<HomePage>
             TextButton(
                 onPressed: () {
                   Navigator.pushNamed(context, AccountSettings.routeName,
-                      arguments: loggedUser);
+                      arguments: homeArguments.user);
                 },
                 child: Text("Doplnit", textAlign: TextAlign.center)),
           ]));
@@ -156,13 +162,13 @@ class _HomePageState extends State<HomePage>
 
   int checkUserData() {
     int check = 0;
-    check += loggedUser.fName != "0" ? 1 : 0;
-    check += loggedUser.lName != "0" ? 1 : 0;
-    check += loggedUser.phone != 0 ? 1 : 0;
-    check += loggedUser.addressA != "0" ? 1 : 0;
-    check += loggedUser.addressB != "0" ? 1 : 0;
-    check += loggedUser.addressC != "0" ? 1 : 0;
-    check += loggedUser.postal != 0 ? 1 : 0;
+    check += homeArguments.user.fName != "0" ? 1 : 0;
+    check += homeArguments.user.lName != "0" ? 1 : 0;
+    check += homeArguments.user.phone != 0 ? 1 : 0;
+    check += homeArguments.user.addressA != "0" ? 1 : 0;
+    check += homeArguments.user.addressB != "0" ? 1 : 0;
+    check += homeArguments.user.addressC != "0" ? 1 : 0;
+    check += homeArguments.user.postal != 0 ? 1 : 0;
     return check;
   }
 }

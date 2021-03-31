@@ -5,13 +5,13 @@
 [Návrh_databáze](https://dbdiagram.io/d/603a99cdfcdcb6230b21cb94)
 
 - [x] getItem a setItem => itemGet && itemSet
-- [ ] vytvořit general.dart
-    - [ ] export classes.dart
-        - [ ] vztvorit classes.dart
-    - [ ] export widgets.dart
-        - [ ] vztvorit widgets.dart
+- [x] vytvořit general.dart
+    - [x] export objects.dart
+        - [x] vztvorit objects.dart
+    - [x] export widgets.dart
+        - [x] vztvorit widgets.dart
             - [x] circularbutton od Lukáše
-            - [ ] imagepicker od Bčka
+            - [x] imagepicker od Bčka
             - [x] roundedButton
                 - [x] registrace
                 - [x] login
@@ -20,29 +20,48 @@
                 - [x] heslo
                     - [x] zakrýt hesla!
                 - [x] email
-    - [ ] export dbServices.dart
+    - [x] export dbServices.dart
 - [x] snad všechny talčítka: po pushNamed sbalit
 - [x] pošéfovat barvy
-- [ ] reload stránek po popu
+- [x] reload stránek po popu
+    - [x] accSett => accScreen
+    - [x] accScreen => homePage
+    - [x] addItem => homePage
+    - [x] filters => homePage
 - [x] fontawesome mrdka
 - [x] password change
 - [x] buildCard do widgets.dart
-- [ ] obrázky
-    - [ ] nahrávání
-        - [ ] item
-        - [ ] accountSettings
-        - [ ] chat zpráva
-    - [ ] zobrazování
-        - [ ] item
-            - [ ] homepage
-            - [ ] account
-            - [ ] itempage
-        - [ ] accountSettings
-            - [ ] settings
-            - [ ] details
-        - [ ] chat
-            - [ ] zpráva
-            - [ ] profil
+- [x] obrázky
+    - [x] nahrávání
+        - [x] item
+        - [x] accountSettings
+        - [x] chat zpráva
+            - [x] imgs/messages/itemId + from + to/ identifikátor obrázku (možná index zprávy)
+                - [x] itemId, from a to nejprve převést na string, poté spojit (ne sečíst čísla)
+    - [x] zobrazování
+        - [x] item
+            - [x] homepage
+            - [x] account
+            - [x] itempage
+        - [x] account
+            - [x] settings
+            - [x] details
+        - [x] zpráva v chatu 
+- [ ] test na jiných emulátorech (jiné rozlišení)
+- [x] logout (někde)
+- [ ] charset response ze serveru
+- [ ] hodnocení
+    - [x] v chatu tlačítko "prodat"
+        - [x] skryje se
+    - [ ] u kupujícího se zobrazí inzerát v listu koupeno
+        - [ ] po kliknutí formulář na hodnocení  
+- [ ] image picker do samostatného widgetu!
+- [ ] textfields utf8 encoding, háčky a čárky pls
+    - [ ] account settings
+    - [ ] chat
+- [ ] doplnit kategorie
+- [ ] chat list - nezobrazovat sám sebe xd
+ 
 
 ## App Content
 
@@ -56,6 +75,7 @@
     - [x] master na GitHubu
 - [x] banner (doplnit uživatelské údaje)
 - [x] zužitkování ostatních dat
+- [x] tlačítko na filtry
 
 
 ### Item Screen
@@ -68,9 +88,14 @@
 - [x] dateEnd jako DateTime
 - [x] zužitkování ostatních dat
 - [ ] appbar odstranit, předělat na tlačítko
-    - [ ] parametry (alertbox)
+    - [x] parametry (alertbox)
     - [x] chat(y)
     - [x] zpět
+    - [ ] pokud jsem autor
+        - [ ] skrýt pro ostatní (Skrýt/Rezerováno)
+            - [ ] + potvrzení
+        - [ ] prodáno
+            - [ ] + potvrzení
 
 
 ### Login & Register
@@ -87,20 +112,29 @@
 - [ ] zapomenuté heslo
 - [ ] zapamatovat přihlášení
 - [x] vyřešit error při úspešném loginu
+- [x] náhodný obrázek na pozadí
 
 
 ### Add Item
 
-- [ ] skupina __B__
+- [x] skupina __B__
     - [x] příjem na GitHubu
     - [x] staženo
-    - [ ] moje hotovo
-    - [ ] master na GitHubu
-- [ ] response (success || error)
-- [ ] jméno brázku = ../imgs/id/číslo obrázku
+    - [x] moje hotovo
+    - [x] master na GitHubu
+- [x] response (success || error)
+- [x] obrázky
+    - [x] úvodní (1)
+    - [x] detaily (víc, id = id + 1);
 - [x] deprecated věci nahradit
 - [x] upravit seznamy.dart na více Tříd, tohle je hnus
-- [ ] appbar odstranit, předělat na tlačítko
+- [x] appbar odstranit, předělat na tlačítko
+- [x] TextField upravit na můj custom input
+- [ ] upravit, zkrátit
+    - [ ] Dropdown
+    - [ ] Switch
+- [ ] upravit zobrazování parametrů (např. Odpružená == true {zobrazit typ odpuržení}, ...)
+- [ ] náhodný obrázek na pozadí
 
 
 ### Chat Screen
@@ -110,13 +144,14 @@
     - [x] staženo
     - [x] moje hotovo
     - [x] master na GitHubu
-- [ ] načíst obrázek z databáze
-- [ ] umožnit posílat zprávy menší než 4 znaky
-- [ ] mazat inputfield po odeslání zprávy
+- [x] umožnit posílat zprávy menší než 2 znaky
+- [x] mazat inputfield po odeslání zprávy
 - [x] zakázat chat sám se sebou
-- [ ] opravit seznam chatů (idk, bugnul)
-- [ ] opravit zobrazování zpráv
+- [x] opravit seznam chatů (idk, bugnul)
+- [x] opravit zobrazování zpráv (pokud jsem inzerent)
 - [ ] udělat něco s refreshem? zpráva se zobrazí po dlouhé době;
+- [x] zamezit odesílání prázdných zpráv, asi povolit poslání obrázku s textem
+- [x] tlačítko na zobrazení userInfo toho druhého
 
 
 ### Fitry

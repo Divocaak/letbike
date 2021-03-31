@@ -2,75 +2,18 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:letbike/app/homePage.dart';
 import '../general/general.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
-import 'package:permission_handler/permission_handler.dart';
 
-class AddItem extends StatefulWidget {
+class FilterPage extends StatefulWidget {
   @override
-  _AddItem createState() => _AddItem();
+  _FilterPage createState() => _FilterPage();
 
-  static const routeName = "/addItem";
+  static const routeName = "/filterPage";
 }
 
 Future<String> addResponse;
 
-class _AddItem extends State<AddItem> with TickerProviderStateMixin {
-  User user;
-  List<Asset> images = [];
-
-  Widget buildGridView() {
-    if (images != null)
-      return GridView.count(
-        crossAxisCount: 3,
-        children: List.generate(images.length, (index) {
-          Asset asset = images[index];
-          return AssetThumb(
-            asset: asset,
-            width: 300,
-            height: 300,
-          );
-        }),
-      );
-    else
-      return Container(color: Colors.white);
-  }
-
-  Future<int> checkPerm() async {
-    var status = await Permission.camera.status;
-    if (status != PermissionStatus.granted) {
-      await Permission.camera.request();
-      return Permission.camera.value;
-    } else {
-      return 1;
-    }
-  }
-
-  Future<void> loadAssets() async {
-    setState(() {
-      images = [];
-    });
-
-    List<Asset> resultList;
-    String error;
-
-    if (await checkPerm() == 1) {
-      try {
-        resultList = await MultiImagePicker.pickImages(
-          maxImages: 10,
-          enableCamera: true,
-        );
-      } on Exception catch (e) {
-        error = e.toString();
-      }
-      if (!mounted) return;
-
-      setState(() {
-        images = resultList;
-        if (error != null)
-          AlertBox.showAlertBox(context, "Error", Text("Error"));
-      });
-    }
-  }
+class _FilterPage extends State<FilterPage> with TickerProviderStateMixin {
+  HomeArguments homeArgs;
 
   double volume = 0;
 
@@ -103,10 +46,10 @@ class _AddItem extends State<AddItem> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    user = ModalRoute.of(context).settings.arguments;
+    homeArgs = ModalRoute.of(context).settings.arguments;
 
     return MaterialApp(
-      title: 'Přidat předmět',
+      title: 'Filtry',
       home: Scaffold(
         body: Stack(
           children: [
@@ -142,28 +85,6 @@ class _AddItem extends State<AddItem> with TickerProviderStateMixin {
                       Container(
                         height: 20,
                       ),
-                      TextInput(
-                        icon: Icons.text_fields,
-                        hint: "Název předmětu",
-                        identificator: "addName",
-                        inputAction: TextInputAction.next,
-                      ),
-                      TextInput(
-                        icon: Icons.text_fields,
-                        hint: "Popis předmětu",
-                        identificator: "addDesc",
-                        inputAction: TextInputAction.next,
-                      ),
-                      TextInput(
-                        icon: Icons.attach_money,
-                        hint: "Cena",
-                        identificator: "addPric",
-                        inputAction: TextInputAction.done,
-                        inputType: TextInputType.number,
-                      ),
-                      Container(
-                        height: 20,
-                      ),
                       Container(
                           decoration: BoxDecoration(
                             color: Colors.white,
@@ -175,11 +96,6 @@ class _AddItem extends State<AddItem> with TickerProviderStateMixin {
                           ),
                           child: Column(
                             children: [
-                              Padding(
-                                padding: EdgeInsets.all(7.0),
-                                child: Text(
-                                    "Následující parametry jsou volitelné, avšak zvyšují šanci prodeje."),
-                              ),
                               DropdownButton(
                                 hint: Text("Kategorie"),
                                 value: category.selectedCategory,
@@ -1043,32 +959,6 @@ class _AddItem extends State<AddItem> with TickerProviderStateMixin {
                               ),
                             ],
                           )),
-                      Container(height: 20),
-                      Container(
-                          height: 200,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(
-                              color: Colors.white,
-                              width: 2,
-                            ),
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                          child: Column(
-                            children: [
-                              Text(
-                                  "První vybraný obrázek se bude zobrazovat na domovské stránce."),
-                              Container(
-                                child: TextButton(
-                                  child: Text("Vybrat foto z úložiště"),
-                                  onPressed: loadAssets,
-                                ),
-                              ),
-                              Expanded(
-                                child: buildGridView(),
-                              )
-                            ],
-                          )),
                     ],
                   ),
                 ),
@@ -1090,8 +980,7 @@ class _AddItem extends State<AddItem> with TickerProviderStateMixin {
                             kWhite.withOpacity(volume * 2), () {
                           Navigator.of(context).pushReplacementNamed(
                               HomePage.routeName,
-                              arguments: HomeArguments(
-                                  user, ItemParams.createEmpty()));
+                              arguments: homeArgs);
                         })),
                     Positioned(
                         bottom: 150,
@@ -1099,160 +988,11 @@ class _AddItem extends State<AddItem> with TickerProviderStateMixin {
                         child: CircularButton(
                             kSecondaryColor.withOpacity(volume * 2),
                             45,
-                            Icons.add,
+                            Icons.filter_alt,
                             kWhite.withOpacity(volume * 2), () {
-                          addResponse = DatabaseServices.createItem(
-                              new Item(
-                                  -1,
-                                  user.id,
-                                  TextInput.getValue("addName"),
-                                  TextInput.getValue("addDesc"),
-                                  double.parse(TextInput.getValue("addPric")),
-                                  0,
-                                  0,
-                                  "",
-                                  "",
-                                  "",
-                                  0,
-                                  new ItemParams({
-                                    "used": used ? 1 : 0,
-                                    "selectedCategory":
-                                        category.selectedCategory,
-                                    "selectedParts": category.selectedPart,
-                                    "selectedAccessories":
-                                        category.selectedAccessory,
-                                    "selectedOther": category.selectedOther,
-                                    "bikeType": bike.selectedType,
-                                    "bikeBrand": bike.selectedBrand,
-                                    "wheelBrand": wheel.selectedBrand,
-                                    "wheelSize": wheel.selectedSize,
-                                    "wheelMaterial": wheel.selectedMaterial,
-                                    "wheeldSpokes":
-                                        ((wheel.selectedSpokes ? 1 : 0) +
-                                            (category.selectedPart != null
-                                                ? category.selectedPart
-                                                : 0) +
-                                            (category.selectedOther != null
-                                                ? category.selectedOther
-                                                : 0) +
-                                            999),
-                                    "wheeldType":
-                                        ((wheel.selectedType ? 1 : 0) +
-                                            (category.selectedPart != null
-                                                ? category.selectedPart
-                                                : 0) +
-                                            (category.selectedOther != null
-                                                ? category.selectedOther
-                                                : 0) +
-                                            999),
-                                    "wheelAxis": wheel.selectedAxis,
-                                    "wheeldBrakesType":
-                                        ((wheel.selectedBrakesType ? 1 : 0) +
-                                            (category.selectedPart != null
-                                                ? category.selectedPart
-                                                : 0) +
-                                            (category.selectedOther != null
-                                                ? category.selectedOther
-                                                : 0) +
-                                            999),
-                                    "wheeldBrakesDisc":
-                                        ((wheel.selectedBrakesDisc ? 1 : 0) +
-                                            (category.selectedPart != null
-                                                ? category.selectedPart
-                                                : 0) +
-                                            (category.selectedOther != null
-                                                ? category.selectedOther
-                                                : 0) +
-                                            999),
-                                    "wheeldCassette":
-                                        ((wheel.selectedCassette ? 1 : 0) +
-                                            (category.selectedPart != null
-                                                ? category.selectedPart
-                                                : 0) +
-                                            (category.selectedOther != null
-                                                ? category.selectedOther
-                                                : 0) +
-                                            999),
-                                    "wheelNut": wheel.selectedNut,
-                                    "wheelCompatibility":
-                                        wheel.selectedCompatibility,
-                                    "cranksBrand": cranks.selectedBrand,
-                                    "cranksCompatibility":
-                                        cranks.selectedCompatibility,
-                                    "cranksMaterial": cranks.selectedMaterial,
-                                    "cranksAxis": cranks.selectedAxis,
-                                    "converterBrand": converter.selectedBrand,
-                                    "converterNumOfSpeeds":
-                                        converter.selectedNumOfSpeeds,
-                                    "saddleBrand": saddle.selectedBrand,
-                                    "saddleGender": saddle.selectedGender,
-                                    "forkBrand": fork.selectedBrand,
-                                    "forkSize": fork.selectedSize,
-                                    "forkSuspensionType":
-                                        ((fork.selectedSuspensionType ? 1 : 0) +
-                                            (category.selectedPart != null
-                                                ? category.selectedPart
-                                                : 0) +
-                                            (category.selectedOther != null
-                                                ? category.selectedOther
-                                                : 0) +
-                                            999),
-                                    "forkSuspension":
-                                        ((fork.selectedSuspension ? 1 : 0) +
-                                            (category.selectedPart != null
-                                                ? category.selectedPart
-                                                : 0) +
-                                            (category.selectedOther != null
-                                                ? category.selectedOther
-                                                : 0) +
-                                            999),
-                                    "forkWheelCoompatibility":
-                                        fork.selectedWheelCoompatibility,
-                                    "forkMaterial": fork.selectedMaterial,
-                                    "forkMaterialColumn":
-                                        fork.selectedMaterialColumn,
-                                    "eBikeBrand": eBike.selectedBrand,
-                                    "eBikeMotorPos":
-                                        ((eBike.selectedMotorPos ? 1 : 0) +
-                                            (category.selectedPart != null
-                                                ? category.selectedPart
-                                                : 0) +
-                                            (category.selectedOther != null
-                                                ? category.selectedOther
-                                                : 0) +
-                                            999),
-                                    "trainerBrand": trainer.selectedBrand,
-                                    "trainerBrakes": trainer.selectedBrakes,
-                                    "scooterBrand": scooter.selectedBrand,
-                                    "scooterSize": scooter.selectedSize,
-                                    "scooterComputer":
-                                        ((scooter.selectedComputer ? 1 : 0) +
-                                            (category.selectedPart != null
-                                                ? category.selectedPart
-                                                : 0) +
-                                            (category.selectedOther != null
-                                                ? category.selectedOther
-                                                : 0) +
-                                            999),
-                                  }),
-                                  0),
-                              images);
-
-                          AlertBox.showAlertBox(
-                              context,
-                              "Oznámení",
-                              FutureBuilder<String>(
-                                future: addResponse,
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasData) {
-                                    return Text(snapshot.data);
-                                  } else if (snapshot.hasError) {
-                                    return Text('Sorry there is an error');
-                                  }
-                                  return Center(
-                                      child: CircularProgressIndicator());
-                                },
-                              ));
+                          Navigator.of(context).pushReplacementNamed(
+                              HomePage.routeName,
+                              arguments: getArguments());
                         })),
                   ],
                 ),
@@ -1281,5 +1021,79 @@ class _AddItem extends State<AddItem> with TickerProviderStateMixin {
         ),
       ),
     );
+  }
+
+  HomeArguments getArguments() {
+    return new HomeArguments(
+        homeArgs.user,
+        new ItemParams({
+          "used": used ? 1 : 0,
+          "selectedCategory": category.selectedCategory,
+          "selectedParts": category.selectedPart,
+          "selectedAccessories": category.selectedAccessory,
+          "selectedOther": category.selectedOther,
+          "bikeType": bike.selectedType,
+          "bikeBrand": bike.selectedBrand,
+          "wheelBrand": wheel.selectedBrand,
+          "wheelSize": wheel.selectedSize,
+          "wheelMaterial": wheel.selectedMaterial,
+          "wheeldSpokes": ((wheel.selectedSpokes ? 1 : 0) +
+              (category.selectedPart != null ? category.selectedPart : 0) +
+              (category.selectedOther != null ? category.selectedOther : 0) +
+              999),
+          "wheeldType": ((wheel.selectedType ? 1 : 0) +
+              (category.selectedPart != null ? category.selectedPart : 0) +
+              (category.selectedOther != null ? category.selectedOther : 0) +
+              999),
+          "wheelAxis": wheel.selectedAxis,
+          "wheeldBrakesType": ((wheel.selectedBrakesType ? 1 : 0) +
+              (category.selectedPart != null ? category.selectedPart : 0) +
+              (category.selectedOther != null ? category.selectedOther : 0) +
+              999),
+          "wheeldBrakesDisc": ((wheel.selectedBrakesDisc ? 1 : 0) +
+              (category.selectedPart != null ? category.selectedPart : 0) +
+              (category.selectedOther != null ? category.selectedOther : 0) +
+              999),
+          "wheeldCassette": ((wheel.selectedCassette ? 1 : 0) +
+              (category.selectedPart != null ? category.selectedPart : 0) +
+              (category.selectedOther != null ? category.selectedOther : 0) +
+              999),
+          "wheelNut": wheel.selectedNut,
+          "wheelCompatibility": wheel.selectedCompatibility,
+          "cranksBrand": cranks.selectedBrand,
+          "cranksCompatibility": cranks.selectedCompatibility,
+          "cranksMaterial": cranks.selectedMaterial,
+          "cranksAxis": cranks.selectedAxis,
+          "converterBrand": converter.selectedBrand,
+          "converterNumOfSpeeds": converter.selectedNumOfSpeeds,
+          "saddleBrand": saddle.selectedBrand,
+          "saddleGender": saddle.selectedGender,
+          "forkBrand": fork.selectedBrand,
+          "forkSize": fork.selectedSize,
+          "forkSuspensionType": ((fork.selectedSuspensionType ? 1 : 0) +
+              (category.selectedPart != null ? category.selectedPart : 0) +
+              (category.selectedOther != null ? category.selectedOther : 0) +
+              999),
+          "forkSuspension": ((fork.selectedSuspension ? 1 : 0) +
+              (category.selectedPart != null ? category.selectedPart : 0) +
+              (category.selectedOther != null ? category.selectedOther : 0) +
+              999),
+          "forkWheelCoompatibility": fork.selectedWheelCoompatibility,
+          "forkMaterial": fork.selectedMaterial,
+          "forkMaterialColumn": fork.selectedMaterialColumn,
+          "eBikeBrand": eBike.selectedBrand,
+          "eBikeMotorPos": ((eBike.selectedMotorPos ? 1 : 0) +
+              (category.selectedPart != null ? category.selectedPart : 0) +
+              (category.selectedOther != null ? category.selectedOther : 0) +
+              999),
+          "trainerBrand": trainer.selectedBrand,
+          "trainerBrakes": trainer.selectedBrakes,
+          "scooterBrand": scooter.selectedBrand,
+          "scooterSize": scooter.selectedSize,
+          "scooterComputer": ((scooter.selectedComputer ? 1 : 0) +
+              (category.selectedPart != null ? category.selectedPart : 0) +
+              (category.selectedOther != null ? category.selectedOther : 0) +
+              999),
+        }));
   }
 }

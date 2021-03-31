@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:letbike/chat/chatScreen.dart';
-import '../general/widgets.dart';
-import '../general/dbServices.dart';
-import '../general/pallete.dart';
+import '../general/general.dart';
 
 double volume = 0;
 
@@ -46,11 +44,19 @@ class _ItemPageState extends State<ItemPage>
               Container(
                 child: Swiper(
                   itemBuilder: (BuildContext context, int index) {
-                    return Icon(Icons.error); //new Image.asset("");
+                    return Ink.image(
+                        image: NetworkImage(imgsFolder +
+                            "/items/" +
+                            (itemInfo.item.name.hashCode +
+                                    itemInfo.item.sellerId)
+                                .toString() +
+                            "/" +
+                            index.toString() +
+                            ".jpg"));
                   },
-                  itemCount: 1, //images.length,
+                  itemCount: int.parse(itemInfo.item.imgs),
                   pagination: new SwiperPagination(),
-                  control: new SwiperControl(),
+                  control: new SwiperControl(color: kPrimaryColor),
                 ),
                 width: MediaQuery.of(context).size.width,
                 height: 400,
@@ -119,8 +125,20 @@ class _ItemPageState extends State<ItemPage>
                           kSecondaryColor.withOpacity(volume * 2),
                           45,
                           Icons.info,
-                          kWhite.withOpacity(volume * 2),
-                          () {})),
+                          kWhite.withOpacity(volume * 2), () {
+                        AlertBox.showAlertBox(
+                            context,
+                            "Parametry",
+                            Container(
+                                height: 300,
+                                width: 250,
+                                child: ListView.builder(
+                                    itemCount: ParamRow.names.length,
+                                    itemBuilder: (context, i) {
+                                      return itemParam(
+                                          context, i, itemInfo.item);
+                                    })));
+                      })),
                   Positioned(
                       bottom: 120,
                       right: 120,
@@ -172,8 +190,8 @@ class _ItemPageState extends State<ItemPage>
 
   void startChat() {
     if (itemInfo.item.sellerId != itemInfo.me.id) {
-      Navigator.of(context)
-          .pushNamed(ChatScreen.routeName, arguments: itemInfo);
+      Navigator.of(context).pushReplacementNamed(ChatScreen.routeName,
+          arguments: ChatUsers(itemInfo, itemInfo.me, itemInfo.item.sellerId));
     } else {
       AlertBox.showAlertBox(
           context,
@@ -204,9 +222,177 @@ class _ItemPageState extends State<ItemPage>
         ? Text("Žádné chaty")
         : TextButton(
             onPressed: () {
-              Navigator.of(context)
-                  .pushNamed(ChatScreen.routeName, arguments: itemInfo);
+              Navigator.of(context).pushNamed(ChatScreen.routeName,
+                  arguments: ChatUsers(itemInfo, itemInfo.me, chat.id));
             },
             child: Text(chat.email + " (" + chat.username + ")")));
   }
+
+  Widget itemParam(context, int i, Item item) {
+    int index = item.itemParams.params[ParamRow.keys[i]];
+    if (index > 999) {
+      index -= (999 +
+          (item.itemParams.params["selecetedOther"] != null
+              ? item.itemParams.params["selecetedOther"]
+              : 0) +
+          (item.itemParams.params["selectedParts"] != null
+              ? item.itemParams.params["selectedParts"]
+              : 0));
+    }
+
+    if (index > -1 && index < 999) {
+      return Row(
+        children: [
+          Container(
+              height: 40,
+              width: 100,
+              color: kPrimaryColor,
+              alignment: Alignment.center,
+              child: Text(ParamRow.names[i])),
+          Container(
+            height: 40,
+            width: 100,
+            color: kSecondaryColor,
+            alignment: Alignment.center,
+            child: Text(ParamRow.options[i][index]),
+          )
+        ],
+      );
+    } else {
+      return SizedBox(
+        height: 1,
+      );
+    }
+  }
+}
+
+class ParamRow {
+  static List<String> names = [
+    "Použité",
+    "Kategorie",
+    "Typ komponentu",
+    "Typ doplňku",
+    "Jiné",
+    "Typ kola",
+    "Značka kola",
+    "Značka výpletu",
+    "Velikost kola",
+    "Materiál",
+    "Typ drátů",
+    "Provedení náboje",
+    "Provedení osy",
+    "Typ brzd",
+    "Uchycení disku",
+    "Provedení kazety",
+    "Značka ořechu",
+    "Kompatibilita",
+    "Značka",
+    "Kompatibilita",
+    "Materiál",
+    "Osa",
+    "Značka",
+    "Počet rychlostí",
+    "Značka",
+    "Pohlaví",
+    "Značka",
+    "Velikost",
+    "Typ vidlice",
+    "Odpružení",
+    "Kompatibilita",
+    "Materiál",
+    "Materiál sloupku",
+    "Značka",
+    "Umístění motoru",
+    "Značka",
+    "Typ brždění",
+    "Značka",
+    "Velikost koleček",
+    "Počítač",
+  ];
+
+  static List<List<String>> options = [
+    ["Ne", "Ano"],
+    Category.categories,
+    Category.parts,
+    Category.accessories,
+    Category.other,
+    Bike.type,
+    Bike.brand,
+    Wheel.brand,
+    Wheel.size,
+    Wheel.material,
+    ["Kulaté", "Ploché"],
+    ["Přední", "Zadní"],
+    Wheel.axis,
+    ["Kotoučové", "V-Brzdy"],
+    ["CenterLock", "6 děr"],
+    ["Závit", "Ořech"],
+    Wheel.nut,
+    Wheel.compatibility,
+    Cranks.brand,
+    Cranks.compatibility,
+    Cranks.material,
+    Cranks.axis,
+    Converter.brand,
+    Converter.numOfSpeeds,
+    Saddle.brand,
+    Saddle.gender,
+    Fork.brand,
+    Fork.size,
+    ["Odpružená", "Pevná"],
+    ["Vzduchové", "Pružinové"],
+    Fork.wheelCompatibility,
+    Fork.material,
+    Fork.materialColumn,
+    EBike.brand,
+    ["Středový", "Nábojový"],
+    Trainer.brand,
+    Trainer.brakes,
+    Scooter.brand,
+    Scooter.size,
+    ["Ne", "Ano"]
+  ];
+
+  static List keys = [
+    "used",
+    "selectedCategory",
+    "selectedParts",
+    "selectedAccessories",
+    "selectedOther",
+    "bikeType",
+    "bikeBrand",
+    "wheelBrand",
+    "wheelSize",
+    "wheelMaterial",
+    "wheeldSpokes",
+    "wheeldType",
+    "wheelAxis",
+    "wheeldBrakesType",
+    "wheeldBrakesDisc",
+    "wheeldCassette",
+    "wheelNut",
+    "wheelCompatibility",
+    "cranksBrand",
+    "cranksCompatibility",
+    "cranksMaterial",
+    "cranksAxis",
+    "converterBrand",
+    "converterNumOfSpeeds",
+    "saddleBrand",
+    "saddleGender",
+    "forkBrand",
+    "forkSize",
+    "forkSuspensionType",
+    "forkSuspension",
+    "forkWheelCoompatibility",
+    "forkMaterial",
+    "forkMaterialColumn",
+    "eBikeBrand",
+    "eBikeMotorPos",
+    "trainerBrand",
+    "trainerBrakes",
+    "scooterBrand",
+    "scooterSize",
+    "scooterComputer"
+  ];
 }

@@ -8,9 +8,7 @@ class ForgotPassword extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Stack(
       children: [
-        BackgroundImage(
-            image:
-                'https://mtbs.cz/media/clanky/63713/titulka/1_Qayron_perex.jpg'),
+        BackgroundImage(),
         Scaffold(
           backgroundColor: Colors.transparent,
           appBar: AppBar(

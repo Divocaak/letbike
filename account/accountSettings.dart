@@ -1,12 +1,9 @@
-import 'dart:io';
 import 'dart:ui';
-
+import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:letbike/account/accountScreen.dart';
 import 'accountChangePass.dart';
-import '../general/pallete.dart';
-import '../general/dbServices.dart';
-import '../general/widgets.dart';
+import '../general/general.dart';
 
 double volume = 0;
 
@@ -25,58 +22,47 @@ class _AccountSettingsState extends State<AccountSettings>
 
   AnimationController animationController;
 
-  PickedFile _imageFile;
-  final ImagePicker _picker = ImagePicker();
+  List<Asset> images = [];
 
-  void takePhoto(ImageSource source) async {
-    final pickedFile = await _picker.getImage(
-      source: source,
-    );
-    setState(() {
-      _imageFile = pickedFile;
-      Navigator.of(context).pop();
-    });
+  Widget buildGridView() {
+    if (images != null)
+      return GridView.count(
+        crossAxisCount: 3,
+        children: List.generate(images.length, (index) {
+          Asset asset = images[index];
+          return AssetThumb(
+            asset: asset,
+            width: 300,
+            height: 300,
+          );
+        }),
+      );
+    else
+      return Container(color: Colors.white);
   }
 
-  Future<void> _showChoiceDialog(BuildContext context) {
-    return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            elevation: 0,
-            backgroundColor: Colors.black,
-            title: Text(
-              "Make a choice",
-              style: kTitleTextStyle.copyWith(
-                  fontWeight: FontWeight.bold, color: Colors.green),
-            ),
-            content: SingleChildScrollView(
-              child: ListBody(
-                children: <Widget>[
-                  GestureDetector(
-                    child: Text(
-                      "Gallery",
-                      style: kTitleTextStyle,
-                    ),
-                    onTap: () {
-                      takePhoto(ImageSource.gallery);
-                    },
-                  ),
-                  Padding(padding: EdgeInsets.all(16)),
-                  GestureDetector(
-                    child: Text(
-                      "Camera",
-                      style: kTitleTextStyle,
-                    ),
-                    onTap: () {
-                      takePhoto(ImageSource.camera);
-                    },
-                  )
-                ],
-              ),
-            ),
-          );
-        });
+  Future<void> loadAssets() async {
+    setState(() {
+      images = [];
+    });
+
+    List<Asset> resultList;
+    String error;
+
+    try {
+      resultList = await MultiImagePicker.pickImages(
+        maxImages: 1,
+        enableCamera: true,
+      );
+    } on Exception catch (e) {
+      error = e.toString();
+    }
+    if (!mounted) return;
+
+    setState(() {
+      images = resultList;
+      if (error != null) AlertBox.showAlertBox(context, "Error", Text("Error"));
+    });
   }
 
   @override
@@ -104,45 +90,34 @@ class _AccountSettingsState extends State<AccountSettings>
               margin: EdgeInsets.only(top: 30),
               child: Stack(
                 children: <Widget>[
-                  CircleAvatar(
-                    radius: 70,
-                    backgroundImage: _imageFile == null
-                        ? NetworkImage(
-                            "https://www.surforma.com/media/filer_public_thumbnails/filer_public/4b/00/4b007d44-3443-4338-ada5-47d0b99db7ad/l167.jpg__800x600_q95_crop_subsampling-2_upscale.jpg")
-                        : FileImage(File(_imageFile.path)),
-                    backgroundColor: Colors.grey[400].withOpacity(0.5),
-                    child: _imageFile == null
-                        ? Icon(
-                            Icons.person,
-                            color: Colors.white,
-                            size: 30,
-                          )
-                        : Container(),
+                  Text(
+                    images.length < 1
+                        ? "Aktualizovat profilovou fotku"
+                        : "Fotografie nahrána",
+                    style: TextStyle(color: kWhite),
                   ),
                   Align(
                     alignment: Alignment.bottomRight,
                     child: Container(
-                      height: 25,
-                      width: 25,
-                      decoration: BoxDecoration(
-                        color: Colors.green,
-                        shape: BoxShape.circle,
-                      ),
-                      child: GestureDetector(
-                        onTap: () {
-                          _showChoiceDialog(context);
-                        },
-                        child: Center(
-                          heightFactor: 15,
-                          widthFactor: 15,
-                          child: Icon(
-                            Icons.create,
-                            color: Colors.white,
-                            size: 15,
-                          ),
+                        height: 50,
+                        width: 50,
+                        decoration: BoxDecoration(
+                          color: kPrimaryColor,
+                          borderRadius: BorderRadius.circular(50),
                         ),
-                      ),
-                    ),
+                        child: Column(
+                          children: [
+                            Container(
+                              child: TextButton(
+                                child: Icon(
+                                  Icons.upload_rounded,
+                                  color: kWhite,
+                                ),
+                                onPressed: loadAssets,
+                              ),
+                            ),
+                          ],
+                        )),
                   ),
                 ],
               ),
@@ -250,7 +225,20 @@ class _AccountSettingsState extends State<AccountSettings>
                   right: 120,
                   child: CircularButton(kSecondaryColor.withOpacity(volume * 2),
                       45, Icons.arrow_back, kWhite.withOpacity(volume * 2), () {
-                    Navigator.of(context).pop();
+                    setState(() {
+                      user.fName = getVal("accFName", user.fName);
+                      user.lName = getVal("accLName", user.lName);
+                      user.phone =
+                          int.parse(getVal("accPhone", user.phone.toString()));
+                      user.addressA = getVal("accAddA", user.addressA);
+                      user.addressB = getVal("accAddB", user.addressB);
+                      user.addressC = getVal("accAddC", user.addressC);
+                      user.postal = int.parse(
+                          getVal("accPostal", user.postal.toString()));
+                    });
+                    Navigator.of(context).pushReplacementNamed(
+                        AccountScreen.routeName,
+                        arguments: user);
                   })),
               Positioned(
                   bottom: 150,
@@ -287,31 +275,17 @@ class _AccountSettingsState extends State<AccountSettings>
 
   void saveData() {
     fieldsValues = [
-      TextInput.getValue("accFName") != null
-          ? TextInput.getValue("accFName")
-          : user.fName,
-      TextInput.getValue("accLName") != null
-          ? TextInput.getValue("accLName")
-          : user.lName,
-      TextInput.getValue("accPhone") != null
-          ? TextInput.getValue("accPhone")
-          : user.phone.toString(),
-      TextInput.getValue("accAddA") != null
-          ? TextInput.getValue("accAddA")
-          : user.addressA,
-      TextInput.getValue("accAddB") != null
-          ? TextInput.getValue("accAddB")
-          : user.addressB,
-      TextInput.getValue("accAddC") != null
-          ? TextInput.getValue("accAddC")
-          : user.addressC,
-      TextInput.getValue("accPostal") != null
-          ? TextInput.getValue("accPostal")
-          : user.postal.toString()
+      getVal("accFName", user.fName),
+      getVal("accLName", user.lName),
+      getVal("accPhone", user.phone.toString()),
+      getVal("accAddA", user.addressA),
+      getVal("accAddB", user.addressB),
+      getVal("accAddC", user.addressC),
+      getVal("accPostal", user.postal.toString()),
     ];
 
-    saveResponse =
-        DatabaseServices.changeAccountDetails(user.id.toString(), fieldsValues);
+    saveResponse = DatabaseServices.changeAccountDetails(
+        user.id.toString(), fieldsValues, images);
 
     AlertBox.showAlertBox(
         context,
@@ -327,5 +301,11 @@ class _AccountSettingsState extends State<AccountSettings>
             return Center(child: CircularProgressIndicator());
           },
         ));
+  }
+
+  String getVal(String textInput, String current) {
+    return TextInput.getValue(textInput) != null
+        ? TextInput.getValue(textInput)
+        : current;
   }
 }
