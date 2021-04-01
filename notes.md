@@ -47,20 +47,31 @@
             - [x] settings
             - [x] details
         - [x] zpráva v chatu 
-- [ ] test na jiných emulátorech (jiné rozlišení)
 - [x] logout (někde)
-- [ ] charset response ze serveru
-- [ ] hodnocení
+- [x] hodnocení
     - [x] v chatu tlačítko "prodat"
         - [x] skryje se
-    - [ ] u kupujícího se zobrazí inzerát v listu koupeno
-        - [ ] po kliknutí formulář na hodnocení  
-- [ ] image picker do samostatného widgetu!
-- [ ] textfields utf8 encoding, háčky a čárky pls
-    - [ ] account settings
-    - [ ] chat
+    - [x] u kupujícího se zobrazí inzerát v listu koupeno
+        - [x] po kliknutí formulář na hodnocení  
+- [x] textfields utf8 encoding, háčky a čárky pls
+    - [x] account settings
+    - [x] chat
+- [x] chat list - nezobrazovat sám sebe xd
+- [x] ohodnocené (tzn. uzavřené) předměty na accScreen
+- [x] zorbrazení ratingů
+    - [x] account screen
+    - [x] v chatu (otherUser info nebo jak);
+- [x] nahrávání prof pic háže chypu při žádném obrázku
+- [x] charset response ze serveru
+- [x] barvy (všechno do černý) nebo obrázky na pozadí
+    - [x] app
+    - [x] alertbox
 - [ ] doplnit kategorie
-- [ ] chat list - nezobrazovat sám sebe xd
+- [ ] filtry opravit
+- [ ] article
+- [ ] test na jiných emulátorech (jiné rozlišení)
+- [ ] image picker do samostatného widgetu!
+
  
 
 ## App Content
@@ -87,15 +98,15 @@
     - [x] master na GitHubu
 - [x] dateEnd jako DateTime
 - [x] zužitkování ostatních dat
-- [ ] appbar odstranit, předělat na tlačítko
+- [x] appbar odstranit, předělat na tlačítko
     - [x] parametry (alertbox)
     - [x] chat(y)
     - [x] zpět
-    - [ ] pokud jsem autor
-        - [ ] skrýt pro ostatní (Skrýt/Rezerováno)
-            - [ ] + potvrzení
-        - [ ] prodáno
-            - [ ] + potvrzení
+    - [x] pokud jsem autor
+        - [x] skrýt pro ostatní (Skrýt/Rezerováno)
+            - [x] + potvrzení
+        - [x] prodáno
+            - [x] + potvrzení
 
 
 ### Login & Register

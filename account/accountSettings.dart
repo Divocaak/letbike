@@ -60,8 +60,10 @@ class _AccountSettingsState extends State<AccountSettings>
     if (!mounted) return;
 
     setState(() {
-      images = resultList;
-      if (error != null) AlertBox.showAlertBox(context, "Error", Text("Error"));
+      images = resultList.length < 1 ? [] : resultList;
+      if (error != null)
+        AlertBox.showAlertBox(
+            context, "Error", Text("Error", style: TextStyle(color: kWhite)));
     });
   }
 
@@ -294,9 +296,10 @@ class _AccountSettingsState extends State<AccountSettings>
           future: saveResponse,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return Text(snapshot.data);
+              return Text(snapshot.data, style: TextStyle(color: kWhite));
             } else if (snapshot.hasError) {
-              return Text('Sorry there is an error');
+              return Text('Sorry there is an error',
+                  style: TextStyle(color: kWhite));
             }
             return Center(child: CircularProgressIndicator());
           },

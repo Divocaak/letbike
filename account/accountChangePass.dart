@@ -33,54 +33,6 @@ class _ChangePasswordState extends State<ChangePassword>
   @override
   Widget build(BuildContext context) {
     user = ModalRoute.of(context).settings.arguments;
-    Size size = MediaQuery.of(context).size;
-    var profileInfo = Expanded(
-      child: Column(
-        children: <Widget>[
-          Center(
-            child: Container(
-              height: 100,
-              width: 100,
-              margin: EdgeInsets.only(top: 30),
-              child: Stack(
-                children: <Widget>[
-                  CircleAvatar(
-                    radius: 70,
-                    backgroundImage: NetworkImage(
-                        "https://www.surforma.com/media/filer_public_thumbnails/filer_public/4b/00/4b007d44-3443-4338-ada5-47d0b99db7ad/l167.jpg__800x600_q95_crop_subsampling-2_upscale.jpg"),
-                    backgroundColor: Colors.grey[400].withOpacity(0.5),
-                    child: Icon(
-                      Icons.person,
-                      color: Colors.white,
-                      size: 30,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          SizedBox(height: 20),
-          Text(
-            user.username,
-            style: TextStyle(color: kWhite),
-          ),
-          SizedBox(height: 5),
-          Text(
-            user.email,
-            style: TextStyle(color: kWhite),
-          ),
-          SizedBox(height: 20),
-        ],
-      ),
-    );
-
-    var header = Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        profileInfo,
-      ],
-    );
 
     return new Scaffold(
       body: Stack(children: [
@@ -89,14 +41,11 @@ class _ChangePasswordState extends State<ChangePassword>
           body: SingleChildScrollView(
             child: Form(
               key: _changePassKey,
-              child: Column(
+              child: Center(
+                  child: Column(
                 children: [
                   SizedBox(
-                    height: size.width * 0.1,
-                  ),
-                  header,
-                  SizedBox(
-                    height: size.width * 0.1,
+                    height: 100,
                   ),
                   Column(
                     children: [
@@ -130,7 +79,7 @@ class _ChangePasswordState extends State<ChangePassword>
                     ],
                   )
                 ],
-              ),
+              )),
             ),
           ),
         ),
@@ -178,9 +127,11 @@ class _ChangePasswordState extends State<ChangePassword>
                                   future: changeResponse,
                                   builder: (context, snapshot) {
                                     if (snapshot.hasData) {
-                                      return Text(snapshot.data);
+                                      return Text(snapshot.data,
+                                          style: TextStyle(color: kWhite));
                                     } else if (snapshot.hasError) {
-                                      return Text('Sorry there is an error');
+                                      return Text('Sorry there is an error',
+                                          style: TextStyle(color: kWhite));
                                     }
                                     return Center(
                                         child: CircularProgressIndicator());
