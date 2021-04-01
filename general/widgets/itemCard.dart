@@ -12,7 +12,7 @@ class ItemCard {
     return Card(
       clipBehavior: Clip.antiAlias,
       elevation: 0,
-      color: Colors.black,
+      color: Colors.white.withOpacity(.05),
       margin: const EdgeInsets.fromLTRB(5, 0, 5, 10),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
@@ -43,7 +43,8 @@ class ItemCard {
                             child: ListView(
                               children: [
                                 Text(
-                                    "Prodejce ohodnoťte až poté, co Vám přijde zakoupený předmět."),
+                                    "Prodejce ohodnoťte až poté, co Vám přijde zakoupený předmět.",
+                                    style: TextStyle(color: kWhite)),
                                 RatingBar(),
                                 Expanded(
                                     child: TextField(
@@ -71,9 +72,11 @@ class ItemCard {
                             future: rateResponse,
                             builder: (context, snapshot) {
                               if (snapshot.hasData) {
-                                return Text(snapshot.data);
+                                return Text(snapshot.data,
+                                    style: TextStyle(color: kWhite));
                               } else if (snapshot.hasError) {
-                                return Text('Sorry there is an error');
+                                return Text('Sorry there is an error',
+                                    style: TextStyle(color: kWhite));
                               }
                               return Center(child: CircularProgressIndicator());
                             },

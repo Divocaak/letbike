@@ -38,7 +38,9 @@ class _ChatInputFieldState extends State<ChatInputField> {
 
     setState(() {
       images = resultList.length < 1 ? [] : resultList;
-      if (error != null) AlertBox.showAlertBox(context, "Error", Text("Error"));
+      if (error != null)
+        AlertBox.showAlertBox(
+            context, "Error", Text("Error", style: TextStyle(color: kWhite)));
     });
   }
 

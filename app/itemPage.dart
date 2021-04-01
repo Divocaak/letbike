@@ -37,81 +37,85 @@ class _ItemPageState extends State<ItemPage>
       body: Stack(
         children: [
           Scaffold(
+              backgroundColor: kBlack,
               body: Column(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                child: Swiper(
-                  itemBuilder: (BuildContext context, int index) {
-                    return Ink.image(
-                        image: NetworkImage(imgsFolder +
-                            "/items/" +
-                            (itemInfo.item.name.hashCode +
-                                    itemInfo.item.sellerId)
-                                .toString() +
-                            "/" +
-                            index.toString() +
-                            ".jpg"));
-                  },
-                  itemCount: int.parse(itemInfo.item.imgs),
-                  pagination: new SwiperPagination(),
-                  control: new SwiperControl(color: kPrimaryColor),
-                ),
-                width: MediaQuery.of(context).size.width,
-                height: 400,
-              ),
-              Row(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Expanded(
-                    flex: 1,
-                    child: Container(),
+                  Container(
+                    child: Swiper(
+                      itemBuilder: (BuildContext context, int index) {
+                        return Ink.image(
+                            image: NetworkImage(imgsFolder +
+                                "/items/" +
+                                (itemInfo.item.name.hashCode +
+                                        itemInfo.item.sellerId)
+                                    .toString() +
+                                "/" +
+                                index.toString() +
+                                ".jpg"));
+                      },
+                      itemCount: int.parse(itemInfo.item.imgs),
+                      pagination: new SwiperPagination(),
+                      control: new SwiperControl(color: kPrimaryColor),
+                    ),
+                    width: MediaQuery.of(context).size.width,
+                    height: 400,
                   ),
-                  Expanded(
-                    flex: 25,
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            itemInfo.item.name,
-                            style: TextStyle(
-                                fontSize: 40, fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.left,
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Text(
-                            itemInfo.item.description,
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Text(
-                            "Přidáno: " + itemInfo.item.dateStart,
-                            style: TextStyle(fontSize: 15),
-                          ),
-                          Container(
-                            child: Align(
-                              alignment: Alignment.centerRight,
-                              child: Text(
-                                itemInfo.item.price.toString() + " Kč",
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        flex: 1,
+                        child: Container(),
+                      ),
+                      Expanded(
+                        flex: 25,
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                itemInfo.item.name,
                                 style: TextStyle(
-                                    fontSize: 35, fontWeight: FontWeight.bold),
+                                    fontSize: 40,
+                                    fontWeight: FontWeight.bold,
+                                    color: kWhite),
+                                textAlign: TextAlign.left,
                               ),
-                            ),
-                          ),
-                        ]),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Container(),
-                  ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Text(
+                                itemInfo.item.description,
+                                style: TextStyle(fontSize: 20, color: kWhite),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Text("Přidáno: " + itemInfo.item.dateStart,
+                                  style:
+                                      TextStyle(fontSize: 15, color: kWhite)),
+                              Container(
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Text(
+                                    itemInfo.item.price.toString() + " Kč",
+                                    style: TextStyle(
+                                        fontSize: 35,
+                                        fontWeight: FontWeight.bold,
+                                        color: kWhite),
+                                  ),
+                                ),
+                              ),
+                            ]),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Container(),
+                      ),
+                    ],
+                  )
                 ],
-              )
-            ],
-          )),
+              )),
           IgnorePointer(
             ignoring: volume == 0 ? true : false,
             child: Container(
@@ -219,7 +223,7 @@ class _ItemPageState extends State<ItemPage>
 
   Widget _buildCard(Chat chat, context) {
     if (chat.username == "0") {
-      return Text("Žádné chaty");
+      return Text("Žádné chaty", style: TextStyle(color: kWhite));
     } else {
       if (chat.email != itemInfo.me.username) {
         return TextButton(
@@ -227,7 +231,8 @@ class _ItemPageState extends State<ItemPage>
               Navigator.of(context).pushNamed(ChatScreen.routeName,
                   arguments: ChatUsers(itemInfo, itemInfo.me, chat.id));
             },
-            child: Text(chat.email + " (" + chat.username + ")"));
+            child: Text(chat.email + " (" + chat.username + ")",
+                style: TextStyle(color: kWhite)));
       } else {
         return SizedBox(
           height: 1,
@@ -256,13 +261,14 @@ class _ItemPageState extends State<ItemPage>
               width: 100,
               color: kPrimaryColor,
               alignment: Alignment.center,
-              child: Text(ParamRow.names[i])),
+              child: Text(ParamRow.names[i], style: TextStyle(color: kWhite))),
           Container(
             height: 40,
             width: 100,
             color: kSecondaryColor,
             alignment: Alignment.center,
-            child: Text(ParamRow.options[i][index]),
+            child: Text(ParamRow.options[i][index],
+                style: TextStyle(color: kBlack)),
           )
         ],
       );

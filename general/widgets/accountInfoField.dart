@@ -11,11 +11,10 @@ class AccountInfoField {
           text: TextSpan(style: kCaptionTextStyle, children: <TextSpan>[
             TextSpan(
                 text: inputString.substring(0, divider),
-                style: TextStyle(color: Colors.black)),
+                style: TextStyle(color: kWhite)),
             TextSpan(
               text: inputString.substring(divider, inputString.length),
-              style:
-                  TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+              style: TextStyle(fontWeight: FontWeight.bold, color: kWhite),
             ),
           ]),
         ),

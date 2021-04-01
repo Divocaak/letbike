@@ -12,7 +12,8 @@ class RatingRow {
             textAlign: TextAlign.center,
             style: TextStyle(fontWeight: FontWeight.bold, color: kPrimaryColor),
           )),
-      Expanded(flex: 8, child: Text(ratingText))
+      Expanded(
+          flex: 8, child: Text(ratingText, style: TextStyle(color: kWhite)))
     ]));
   }
 }

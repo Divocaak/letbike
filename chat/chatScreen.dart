@@ -127,9 +127,11 @@ class _ChatScreenState extends State<ChatScreen>
             child: TextButton(
               child: Icon(Icons.money_off, color: kWhite),
               onPressed: () {
-                DecideBox.showDecideBox(context, "Opravdu?",
-                    Text("Opravdu chcete zrušit prodej předmětu této osobě?"),
-                    () {
+                DecideBox.showDecideBox(
+                    context,
+                    "Opravdu?",
+                    Text("Opravdu chcete zrušit prodej předmětu této osobě?",
+                        style: TextStyle(color: kWhite)), () {
                   Future<String> updateRes = DatabaseServices.updateItemStatus(
                       chatUsers.itemInfo.item.id, 0, 0);
                   AlertBox.showAlertBox(
@@ -139,9 +141,11 @@ class _ChatScreenState extends State<ChatScreen>
                         future: updateRes,
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
-                            return Text(snapshot.data);
+                            return Text(snapshot.data,
+                                style: TextStyle(color: kWhite));
                           } else if (snapshot.hasError) {
-                            return Text('Sorry there is an error');
+                            return Text('Sorry there is an error',
+                                style: TextStyle(color: kWhite));
                           }
                           return Center(child: CircularProgressIndicator());
                         },
@@ -167,9 +171,11 @@ class _ChatScreenState extends State<ChatScreen>
             child: TextButton(
               child: Icon(Icons.attach_money, color: kWhite),
               onPressed: () {
-                DecideBox.showDecideBox(context, "Opravdu?",
-                    Text("Opravdu chcete prodat tento předmět této osobě?"),
-                    () {
+                DecideBox.showDecideBox(
+                    context,
+                    "Opravdu?",
+                    Text("Opravdu chcete prodat tento předmět této osobě?",
+                        style: TextStyle(color: kWhite)), () {
                   Future<String> updateRes = DatabaseServices.updateItemStatus(
                       chatUsers.itemInfo.item.id, 1, chatUsers.userB);
                   AlertBox.showAlertBox(
@@ -179,9 +185,11 @@ class _ChatScreenState extends State<ChatScreen>
                         future: updateRes,
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
-                            return Text(snapshot.data);
+                            return Text(snapshot.data,
+                                style: TextStyle(color: kWhite));
                           } else if (snapshot.hasError) {
-                            return Text('Sorry there is an error');
+                            return Text('Sorry there is an error',
+                                style: TextStyle(color: kWhite));
                           }
                           return Center(child: CircularProgressIndicator());
                         },
@@ -209,14 +217,18 @@ class _ChatScreenState extends State<ChatScreen>
         Column(
           children: [
             TextButton(
-              child: Text("Kontaktní údaje"),
+              child: Text("Kontaktní údaje",
+                  style: TextStyle(color: kPrimaryColor)),
               onPressed: () {
                 AlertBox.showAlertBox(
                     context, "Kontaktní údaje", otherUserInfo());
               },
             ),
             TextButton(
-              child: Text("Recenze"),
+              child: Text(
+                "Recenze",
+                style: TextStyle(color: kPrimaryColor),
+              ),
               onPressed: () {
                 AlertBox.showAlertBox(context, "Recenze", otherUserRating());
               },
@@ -288,9 +300,11 @@ class _ChatScreenState extends State<ChatScreen>
             } else if (!snapshot.hasData) {
               return Container(
                   alignment: Alignment.topCenter,
-                  child: Text("Zatím tu nic není :("));
+                  child: Text("Zatím tu nic není :(",
+                      style: TextStyle(color: kWhite)));
             } else if (snapshot.hasError) {
-              return Text('Sorry there is an error');
+              return Text('Sorry there is an error',
+                  style: TextStyle(color: kWhite));
             }
             return Center(child: CircularProgressIndicator());
           },
