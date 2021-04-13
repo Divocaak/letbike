@@ -55,6 +55,7 @@ class ItemCard {
                                         decoration: InputDecoration(
                                             hintText:
                                                 "Ohodnoťte uživatele a předmět",
+                                            hintStyle: TextStyle(color: kWhite),
                                             border: new OutlineInputBorder(
                                               borderRadius: BorderRadius.all(
                                                   Radius.circular(25)),
@@ -174,7 +175,10 @@ class _RatingBarState extends State<RatingBar> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text("Hodnocení: " + rating.toString()),
+        Text(
+          "Hodnocení: " + rating.toString(),
+          style: TextStyle(color: kWhite),
+        ),
         Slider(
           value: rating,
           min: 0,

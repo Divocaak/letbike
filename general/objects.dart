@@ -347,6 +347,18 @@ class Rating {
   }
 }
 
+class Article {
+  int id;
+  String title;
+  String added;
+
+  Article(this.id, this.title, this.added);
+
+  factory Article.fromJson(Map<String, dynamic> json) {
+    return Article(int.parse(json["id"]), json["title"], json["added"]);
+  }
+}
+
 class ItemInfo {
   Item item;
   User me;

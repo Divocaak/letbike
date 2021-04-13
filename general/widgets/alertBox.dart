@@ -44,6 +44,7 @@ class DecideBox {
     AlertDialog decide = AlertDialog(
       title: Text(title, style: TextStyle(color: kWhite)),
       content: body,
+      backgroundColor: kBlack,
       actions: [
         TextButton(
           child: Text("Zrušit", style: TextStyle(color: kSecondaryColor)),

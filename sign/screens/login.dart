@@ -88,7 +88,9 @@ class LoginScreen extends StatelessWidget {
 
                                   if (snapshot.hasError) {
                                     return Text(
-                                        "Někde se stala chyba, zkuste to prosím později.");
+                                      "Někde se stala chyba, zkuste to prosím později.",
+                                      style: TextStyle(color: kWhite),
+                                    );
                                   }
 
                                   return Center(

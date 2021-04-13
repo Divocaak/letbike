@@ -80,7 +80,8 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
                               context,
                               "Oznámení",
                               failResponse != ""
-                                  ? new Text(failResponse)
+                                  ? new Text(failResponse,
+                                      style: TextStyle(color: kWhite))
                                   : FutureBuilder(
                                       future: response,
                                       builder: (context, snapshot) {

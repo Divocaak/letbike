@@ -131,7 +131,7 @@ class _ChatScreenState extends State<ChatScreen>
                     context,
                     "Opravdu?",
                     Text("Opravdu chcete zrušit prodej předmětu této osobě?",
-                        style: TextStyle(color: kWhite)), () {
+                        style: TextStyle(color: kBlack)), () {
                   Future<String> updateRes = DatabaseServices.updateItemStatus(
                       chatUsers.itemInfo.item.id, 0, 0);
                   AlertBox.showAlertBox(
@@ -142,10 +142,10 @@ class _ChatScreenState extends State<ChatScreen>
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             return Text(snapshot.data,
-                                style: TextStyle(color: kWhite));
+                                style: TextStyle(color: kBlack));
                           } else if (snapshot.hasError) {
                             return Text('Sorry there is an error',
-                                style: TextStyle(color: kWhite));
+                                style: TextStyle(color: kBlack));
                           }
                           return Center(child: CircularProgressIndicator());
                         },

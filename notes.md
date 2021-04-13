@@ -10,8 +10,8 @@
         - [x] vztvorit objects.dart
     - [x] export widgets.dart
         - [x] vztvorit widgets.dart
-            - [x] circularbutton od Lukáše
-            - [x] imagepicker od Bčka
+            - [x] circularbutton
+            - [x] imagepicker
             - [x] roundedButton
                 - [x] registrace
                 - [x] login
@@ -28,7 +28,7 @@
     - [x] accScreen => homePage
     - [x] addItem => homePage
     - [x] filters => homePage
-- [x] fontawesome mrdka
+- [x] fontawesome odstranit
 - [x] password change
 - [x] buildCard do widgets.dart
 - [x] obrázky
@@ -66,16 +66,45 @@
 - [x] barvy (všechno do černý) nebo obrázky na pozadí
     - [x] app
     - [x] alertbox
+- [x] filtry opravit
 - [ ] doplnit kategorie
-- [ ] filtry opravit
-- [ ] article
+- [x] article
+    - [x] encoding, charset
+    - [x] obrázci
+- [ ] killswitch debile!
+- [ ] opravit barvu textu
+    - [ ] psaní recenze
+    - [x] response ze serveru (někde (registrace a login určitě))
+- [ ] opravit warning card
+- [ ] zapamatovat přihlášení
+- [x] refreshnout homepage po přidání inzerátu (nový inzerát se nezobrazuje, snad je to tím)
 - [ ] test na jiných emulátorech (jiné rozlišení)
 - [ ] image picker do samostatného widgetu!
-
+- [ ] až bude hosting
+    - [ ] forgot password
+- [ ] register
+    - [ ] souhlasím se zpracováním
+    - [ ] souhlasím s všeobecnými podmínky (uloženo na serveru, odkaz na ně)
+- [ ] používat textinputcontroller (asi všude xd)
+- [ ] možná zrušit počet obrázků v db, záleží na čtení obrázků v .md souboru
+- [ ] __před releasem__
+    - [ ] změnit adresu serveru
+        - [ ] general.dart
+        - [ ] dbServices.dart
+- [ ] encoding u každý response (udělat jako u articlu)
  
 
 ## App Content
 
+
+### Article
+
+* ukládat jako article.md
+    * encoding utf-8
+* obrázky
+    * minimálně jeden
+        * pojmenovat 0.jpg, bude použit jako náhled
+    * cesta __absolutní__ (až na server, nutno uvést http://)
 
 ### Home Screen
 

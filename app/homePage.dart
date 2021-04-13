@@ -4,6 +4,7 @@ import 'package:letbike/addItem/addItem.dart';
 import '../general/general.dart';
 import "../account/accountScreen.dart";
 import 'filterPage.dart';
+import '../article/articlesScreen.dart';
 
 double volume = 0;
 
@@ -101,6 +102,18 @@ class _HomePageState extends State<HomePage>
                         Navigator.pushReplacementNamed(
                             context, AccountScreen.routeName,
                             arguments: homeArguments.user);
+                      })),
+                  Positioned(
+                      bottom: 200,
+                      right: 100,
+                      child: CircularButton(
+                          kSecondaryColor.withOpacity(volume * 2),
+                          45,
+                          Icons.article,
+                          kWhite.withOpacity(volume * 2), () {
+                        Navigator.pushReplacementNamed(
+                            context, ArticlesScreen.routeName,
+                            arguments: homeArguments);
                       })),
                 ],
               ),
