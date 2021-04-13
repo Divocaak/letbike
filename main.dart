@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:letbike/account/accountSettings.dart';
 import 'package:letbike/app/filterPage.dart';
+import 'package:letbike/article/articlePage.dart';
+import 'package:letbike/article/articlesScreen.dart';
 import 'sign/screens.dart';
 import 'app/homePage.dart';
 import 'app/itemPage.dart';
@@ -39,6 +41,8 @@ class MyApp extends StatelessWidget {
         ChangePassword.routeName: (context) => ChangePassword(),
         AddItem.routeName: (context) => AddItem(),
         FilterPage.routeName: (context) => FilterPage(),
+        ArticlesScreen.routeName: (context) => ArticlesScreen(),
+        ArticlePage.routeName: (context) => ArticlePage(),
       },
     );
   }

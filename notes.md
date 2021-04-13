@@ -10,8 +10,8 @@
         - [x] vztvorit objects.dart
     - [x] export widgets.dart
         - [x] vztvorit widgets.dart
-            - [x] circularbutton od Lukáše
-            - [x] imagepicker od Bčka
+            - [x] circularbutton
+            - [x] imagepicker
             - [x] roundedButton
                 - [x] registrace
                 - [x] login
@@ -28,7 +28,7 @@
     - [x] accScreen => homePage
     - [x] addItem => homePage
     - [x] filters => homePage
-- [x] fontawesome mrdka
+- [x] fontawesome odstranit
 - [x] password change
 - [x] buildCard do widgets.dart
 - [x] obrázky
@@ -47,24 +47,64 @@
             - [x] settings
             - [x] details
         - [x] zpráva v chatu 
-- [ ] test na jiných emulátorech (jiné rozlišení)
 - [x] logout (někde)
-- [ ] charset response ze serveru
-- [ ] hodnocení
+- [x] hodnocení
     - [x] v chatu tlačítko "prodat"
         - [x] skryje se
-    - [ ] u kupujícího se zobrazí inzerát v listu koupeno
-        - [ ] po kliknutí formulář na hodnocení  
-- [ ] image picker do samostatného widgetu!
-- [ ] textfields utf8 encoding, háčky a čárky pls
-    - [ ] account settings
-    - [ ] chat
+    - [x] u kupujícího se zobrazí inzerát v listu koupeno
+        - [x] po kliknutí formulář na hodnocení  
+- [x] textfields utf8 encoding, háčky a čárky pls
+    - [x] account settings
+    - [x] chat
+- [x] chat list - nezobrazovat sám sebe xd
+- [x] ohodnocené (tzn. uzavřené) předměty na accScreen
+- [x] zorbrazení ratingů
+    - [x] account screen
+    - [x] v chatu (otherUser info nebo jak);
+- [x] nahrávání prof pic háže chypu při žádném obrázku
+- [x] charset response ze serveru
+- [x] barvy (všechno do černý) nebo obrázky na pozadí
+    - [x] app
+    - [x] alertbox
+- [x] filtry opravit
 - [ ] doplnit kategorie
-- [ ] chat list - nezobrazovat sám sebe xd
+- [x] article
+    - [x] encoding, charset
+    - [x] obrázci
+- [ ] killswitch debile!
+- [ ] opravit barvu textu
+    - [ ] psaní recenze
+    - [x] response ze serveru (někde (registrace a login určitě))
+- [ ] opravit warning card
+- [ ] zapamatovat přihlášení
+- [x] refreshnout homepage po přidání inzerátu (nový inzerát se nezobrazuje, snad je to tím)
+- [ ] test na jiných emulátorech (jiné rozlišení)
+- [ ] image picker do samostatného widgetu!
+- [ ] až bude hosting
+    - [ ] forgot password
+- [ ] register
+    - [ ] souhlasím se zpracováním
+    - [ ] souhlasím s všeobecnými podmínky (uloženo na serveru, odkaz na ně)
+- [ ] používat textinputcontroller (asi všude xd)
+- [ ] možná zrušit počet obrázků v db, záleží na čtení obrázků v .md souboru
+- [ ] __před releasem__
+    - [ ] změnit adresu serveru
+        - [ ] general.dart
+        - [ ] dbServices.dart
+- [ ] encoding u každý response (udělat jako u articlu)
  
 
 ## App Content
 
+
+### Article
+
+* ukládat jako article.md
+    * encoding utf-8
+* obrázky
+    * minimálně jeden
+        * pojmenovat 0.jpg, bude použit jako náhled
+    * cesta __absolutní__ (až na server, nutno uvést http://)
 
 ### Home Screen
 
@@ -87,15 +127,15 @@
     - [x] master na GitHubu
 - [x] dateEnd jako DateTime
 - [x] zužitkování ostatních dat
-- [ ] appbar odstranit, předělat na tlačítko
+- [x] appbar odstranit, předělat na tlačítko
     - [x] parametry (alertbox)
     - [x] chat(y)
     - [x] zpět
-    - [ ] pokud jsem autor
-        - [ ] skrýt pro ostatní (Skrýt/Rezerováno)
-            - [ ] + potvrzení
-        - [ ] prodáno
-            - [ ] + potvrzení
+    - [x] pokud jsem autor
+        - [x] skrýt pro ostatní (Skrýt/Rezerováno)
+            - [x] + potvrzení
+        - [x] prodáno
+            - [x] + potvrzení
 
 
 ### Login & Register

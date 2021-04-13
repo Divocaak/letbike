@@ -1028,15 +1028,22 @@ class _FilterPage extends State<FilterPage> with TickerProviderStateMixin {
         homeArgs.user,
         new ItemParams({
           "used": used ? 1 : 0,
-          "selectedCategory": category.selectedCategory,
-          "selectedParts": category.selectedPart,
-          "selectedAccessories": category.selectedAccessory,
-          "selectedOther": category.selectedOther,
-          "bikeType": bike.selectedType,
-          "bikeBrand": bike.selectedBrand,
-          "wheelBrand": wheel.selectedBrand,
-          "wheelSize": wheel.selectedSize,
-          "wheelMaterial": wheel.selectedMaterial,
+          "selectedCategory": category.selectedCategory != null
+              ? category.selectedCategory
+              : -1,
+          "selectedParts":
+              category.selectedPart != null ? category.selectedPart : -1,
+          "selectedAccessories": category.selectedAccessory != null
+              ? category.selectedAccessory
+              : -1,
+          "selectedOther":
+              category.selectedOther != null ? category.selectedOther : -1,
+          "bikeType": bike.selectedType != null ? bike.selectedType : -1,
+          "bikeBrand": bike.selectedBrand != null ? bike.selectedBrand : -1,
+          "wheelBrand": wheel.selectedBrand != null ? wheel.selectedBrand : -1,
+          "wheelSize": wheel.selectedSize != null ? wheel.selectedSize : -1,
+          "wheelMaterial":
+              wheel.selectedMaterial != null ? wheel.selectedMaterial : -1,
           "wheeldSpokes": ((wheel.selectedSpokes ? 1 : 0) +
               (category.selectedPart != null ? category.selectedPart : 0) +
               (category.selectedOther != null ? category.selectedOther : 0) +
@@ -1045,7 +1052,7 @@ class _FilterPage extends State<FilterPage> with TickerProviderStateMixin {
               (category.selectedPart != null ? category.selectedPart : 0) +
               (category.selectedOther != null ? category.selectedOther : 0) +
               999),
-          "wheelAxis": wheel.selectedAxis,
+          "wheelAxis": wheel.selectedAxis != null ? wheel.selectedAxis : -1,
           "wheeldBrakesType": ((wheel.selectedBrakesType ? 1 : 0) +
               (category.selectedPart != null ? category.selectedPart : 0) +
               (category.selectedOther != null ? category.selectedOther : 0) +
@@ -1058,18 +1065,29 @@ class _FilterPage extends State<FilterPage> with TickerProviderStateMixin {
               (category.selectedPart != null ? category.selectedPart : 0) +
               (category.selectedOther != null ? category.selectedOther : 0) +
               999),
-          "wheelNut": wheel.selectedNut,
-          "wheelCompatibility": wheel.selectedCompatibility,
-          "cranksBrand": cranks.selectedBrand,
-          "cranksCompatibility": cranks.selectedCompatibility,
-          "cranksMaterial": cranks.selectedMaterial,
-          "cranksAxis": cranks.selectedAxis,
-          "converterBrand": converter.selectedBrand,
-          "converterNumOfSpeeds": converter.selectedNumOfSpeeds,
-          "saddleBrand": saddle.selectedBrand,
-          "saddleGender": saddle.selectedGender,
-          "forkBrand": fork.selectedBrand,
-          "forkSize": fork.selectedSize,
+          "wheelNut": wheel.selectedNut != null ? wheel.selectedNut : -1,
+          "wheelCompatibility": wheel.selectedCompatibility != null
+              ? wheel.selectedCompatibility
+              : -1,
+          "cranksBrand":
+              cranks.selectedBrand != null ? cranks.selectedBrand : -1,
+          "cranksCompatibility": cranks.selectedCompatibility != null
+              ? cranks.selectedCompatibility
+              : -1,
+          "cranksMaterial":
+              cranks.selectedMaterial != null ? cranks.selectedMaterial : -1,
+          "cranksAxis": cranks.selectedAxis != null ? cranks.selectedAxis : -1,
+          "converterBrand":
+              converter.selectedBrand != null ? converter.selectedBrand : -1,
+          "converterNumOfSpeeds": converter.selectedNumOfSpeeds != null
+              ? converter.selectedNumOfSpeeds
+              : -1,
+          "saddleBrand":
+              saddle.selectedBrand != null ? saddle.selectedBrand : -1,
+          "saddleGender":
+              saddle.selectedGender != null ? saddle.selectedGender : -1,
+          "forkBrand": fork.selectedBrand != null ? fork.selectedBrand : -1,
+          "forkSize": fork.selectedSize != null ? fork.selectedSize : -1,
           "forkSuspensionType": ((fork.selectedSuspensionType ? 1 : 0) +
               (category.selectedPart != null ? category.selectedPart : 0) +
               (category.selectedOther != null ? category.selectedOther : 0) +
@@ -1078,18 +1096,27 @@ class _FilterPage extends State<FilterPage> with TickerProviderStateMixin {
               (category.selectedPart != null ? category.selectedPart : 0) +
               (category.selectedOther != null ? category.selectedOther : 0) +
               999),
-          "forkWheelCoompatibility": fork.selectedWheelCoompatibility,
-          "forkMaterial": fork.selectedMaterial,
-          "forkMaterialColumn": fork.selectedMaterialColumn,
-          "eBikeBrand": eBike.selectedBrand,
+          "forkWheelCoompatibility": fork.selectedWheelCoompatibility != null
+              ? fork.selectedWheelCoompatibility
+              : -1,
+          "forkMaterial":
+              fork.selectedMaterial != null ? fork.selectedMaterial : -1,
+          "forkMaterialColumn": fork.selectedMaterialColumn != null
+              ? fork.selectedMaterialColumn
+              : -1,
+          "eBikeBrand": eBike.selectedBrand != null ? eBike.selectedBrand : -1,
           "eBikeMotorPos": ((eBike.selectedMotorPos ? 1 : 0) +
               (category.selectedPart != null ? category.selectedPart : 0) +
               (category.selectedOther != null ? category.selectedOther : 0) +
               999),
-          "trainerBrand": trainer.selectedBrand,
-          "trainerBrakes": trainer.selectedBrakes,
-          "scooterBrand": scooter.selectedBrand,
-          "scooterSize": scooter.selectedSize,
+          "trainerBrand":
+              trainer.selectedBrand != null ? trainer.selectedBrand : -1,
+          "trainerBrakes":
+              trainer.selectedBrakes != null ? trainer.selectedBrakes : -1,
+          "scooterBrand":
+              scooter.selectedBrand != null ? scooter.selectedBrand : -1,
+          "scooterSize":
+              scooter.selectedSize != null ? scooter.selectedSize : -1,
           "scooterComputer": ((scooter.selectedComputer ? 1 : 0) +
               (category.selectedPart != null ? category.selectedPart : 0) +
               (category.selectedOther != null ? category.selectedOther : 0) +

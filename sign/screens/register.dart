@@ -80,17 +80,20 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
                               context,
                               "Oznámení",
                               failResponse != ""
-                                  ? new Text(failResponse)
+                                  ? new Text(failResponse,
+                                      style: TextStyle(color: kWhite))
                                   : FutureBuilder(
                                       future: response,
                                       builder: (context, snapshot) {
                                         if (snapshot.hasData) {
-                                          return Text(snapshot.data);
+                                          return Text(snapshot.data,
+                                              style: TextStyle(color: kWhite));
                                         }
 
                                         if (snapshot.hasError) {
                                           return Text(
-                                              "Někde se stala chyba, zkuste to prosím později");
+                                              "Někde se stala chyba, zkuste to prosím později",
+                                              style: TextStyle(color: kWhite));
                                         }
 
                                         return Center(

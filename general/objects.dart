@@ -336,6 +336,29 @@ class ChatUsers {
   ChatUsers(this.itemInfo, this.userA, this.userB);
 }
 
+class Rating {
+  double ratingValue;
+  String ratingText;
+
+  Rating(this.ratingValue, this.ratingText);
+
+  factory Rating.fromJson(Map<String, dynamic> json) {
+    return Rating(double.parse(json["ratingVal"]), json["ratingText"]);
+  }
+}
+
+class Article {
+  int id;
+  String title;
+  String added;
+
+  Article(this.id, this.title, this.added);
+
+  factory Article.fromJson(Map<String, dynamic> json) {
+    return Article(int.parse(json["id"]), json["title"], json["added"]);
+  }
+}
+
 class ItemInfo {
   Item item;
   User me;

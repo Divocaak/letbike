@@ -4,6 +4,7 @@ import 'package:letbike/addItem/addItem.dart';
 import '../general/general.dart';
 import "../account/accountScreen.dart";
 import 'filterPage.dart';
+import '../article/articlesScreen.dart';
 
 double volume = 0;
 
@@ -35,8 +36,8 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     homeArguments = ModalRoute.of(context).settings.arguments;
-    items =
-        DatabaseServices.getAllItems(0, "seller_id", homeArguments.filters, 0);
+    items = DatabaseServices.getAllItems(
+        0, "seller_id", homeArguments.filters, "sold_to");
     return Scaffold(
       body: Stack(
         children: [
@@ -49,8 +50,8 @@ class _HomePageState extends State<HomePage>
                   return ListView.builder(
                       itemCount: snapshot.data.length,
                       itemBuilder: (context, i) {
-                        return ItemCard.buildCard(
-                            context, snapshot.data[i], homeArguments.user);
+                        return ItemCard.buildCard(context, snapshot.data[i],
+                            homeArguments.user, false, true);
                       });
                 } else if (snapshot.hasError) {
                   return Text('Sorry there is an error');
@@ -101,6 +102,18 @@ class _HomePageState extends State<HomePage>
                         Navigator.pushReplacementNamed(
                             context, AccountScreen.routeName,
                             arguments: homeArguments.user);
+                      })),
+                  Positioned(
+                      bottom: 200,
+                      right: 100,
+                      child: CircularButton(
+                          kSecondaryColor.withOpacity(volume * 2),
+                          45,
+                          Icons.article,
+                          kWhite.withOpacity(volume * 2), () {
+                        Navigator.pushReplacementNamed(
+                            context, ArticlesScreen.routeName,
+                            arguments: homeArguments);
                       })),
                 ],
               ),

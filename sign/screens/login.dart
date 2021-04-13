@@ -70,9 +70,11 @@ class LoginScreen extends StatelessWidget {
                                   if (snapshot.hasData) {
                                     if (snapshot.data.id < 0) {
                                       return Text(
-                                          "Špatně zadané uživatelské jméno nebo heslo.");
+                                          "Špatně zadané uživatelské jméno nebo heslo.",
+                                          style: TextStyle(color: kWhite));
                                     } else {
-                                      Text("Probíhá přesměrování");
+                                      Text("Probíhá přesměrování",
+                                          style: TextStyle(color: kWhite));
                                       Future.delayed(Duration.zero, () {
                                         Navigator.of(context)
                                             .pushReplacementNamed(
@@ -86,7 +88,9 @@ class LoginScreen extends StatelessWidget {
 
                                   if (snapshot.hasError) {
                                     return Text(
-                                        "Někde se stala chyba, zkuste to prosím později.");
+                                      "Někde se stala chyba, zkuste to prosím později.",
+                                      style: TextStyle(color: kWhite),
+                                    );
                                   }
 
                                   return Center(
