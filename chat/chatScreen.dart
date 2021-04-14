@@ -25,7 +25,7 @@ class _ChatScreenState extends State<ChatScreen>
   @override
   Widget build(BuildContext context) {
     chatUsers = ModalRoute.of(context).settings.arguments;
-    messagesStream = DatabaseServices.getMessages(Duration(seconds: 1),
+    messagesStream = DatabaseServices.getMessages(
         chatUsers.userA.id, chatUsers.userB, chatUsers.itemInfo.item.id);
     return Scaffold(
       appBar: AppBar(
