@@ -5,3 +5,4 @@ export 'objects.dart';
 
 String imgsFolder = 'http://10.0.2.2/projects/letbike/imgs';
 String articlesFolder = 'http://10.0.2.2/projects/letbike/articles';
+String docsFolder = 'http://10.0.2.2/projects/letbike/docs';

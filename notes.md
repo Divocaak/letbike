@@ -4,7 +4,41 @@
 
 [Návrh_databáze](https://dbdiagram.io/d/603a99cdfcdcb6230b21cb94)
 
+
+## TODO
+
+- [x] log reg
+    - [x] alert box při špatné validaci
+        - [x] login
+        - [x] register
+    - [x] zbavit se zbytečných závislostí (fonty, ...)
+    - [x] vyřešit error při úspešném loginu
+    - [x] náhodný obrázek na pozadí
+- [x] homescreen
+    - [x] warning card (doplnit uživatelské údaje)
+    - [x] zužitkování ostatních dat na itemcard
+    - [x] tlačítko na filtry
 - [x] getItem a setItem => itemGet && itemSet
+- [x] itemscreen
+    - [x] zužitkování ostatních dat
+    - [x] appbar odstranit, předělat na tlačítko
+        - [x] pokud jsem autor
+            - [x] skrýt pro ostatní (Skrýt/Rezerováno)
+                - [x] + potvrzení
+            - [x] prodáno
+                - [x] + potvrzení
+        - [x] parametry (alertbox)
+        - [x] chat(y)
+        - [x] zpět
+- [x] addItem
+    - [x] response (success || error) při addItem
+    - [x] obrázky u addItem
+        - [x] úvodní (1)
+        - [x] detaily (víc, id = id + 1);
+    - [x] deprecated věci nahradit (addItem)
+    - [x] upravit seznamy.dart na více Tříd, tohle je hnus
+    - [x] appbar odstranit, předělat na tlačítko addItem
+    - [x] TextField upravit na můj custom input na addItem
 - [x] vytvořit general.dart
     - [x] export objects.dart
         - [x] vztvorit objects.dart
@@ -67,37 +101,66 @@
     - [x] app
     - [x] alertbox
 - [x] filtry opravit
-- [ ] doplnit kategorie
 - [x] article
     - [x] encoding, charset
     - [x] obrázci
-- [ ] killswitch debile!
-- [ ] opravit barvu textu
-    - [ ] psaní recenze
+- [x] chat
+    - [x] umožnit posílat zprávy menší než 2 znaky
+    - [x] mazat inputfield po odeslání zprávy
+    - [x] zakázat chat sám se sebou
+    - [x] opravit seznam chatů (idk, bugnul)
+    - [x] opravit zobrazování zpráv (pokud jsem inzerent)
+    - [x] udělat něco s refreshem? zpráva se zobrazí po dlouhé době;
+    - [x] zamezit odesílání prázdných zpráv, asi povolit poslání obrázku s textem
+    - [x] tlačítko na zobrazení userInfo toho druhého
+- [x] opravit barvu textu
+    - [x] psaní recenze
     - [x] response ze serveru (někde (registrace a login určitě))
 - [ ] opravit warning card
 - [ ] zapamatovat přihlášení
+    - [ ] bez textinputcontrolleru to dělat nebudu :D
+- [ ] doplnit kategorie
+- [ ] killswitch debile!
 - [x] refreshnout homepage po přidání inzerátu (nový inzerát se nezobrazuje, snad je to tím)
-- [ ] test na jiných emulátorech (jiné rozlišení)
-- [ ] image picker do samostatného widgetu!
-- [ ] až bude hosting
-    - [ ] forgot password
-- [ ] register
-    - [ ] souhlasím se zpracováním
-    - [ ] souhlasím s všeobecnými podmínky (uloženo na serveru, odkaz na ně)
-- [ ] používat textinputcontroller (asi všude xd)
-- [ ] možná zrušit počet obrázků v db, záleží na čtení obrázků v .md souboru
+- [x] register
+    - [x] souhlasím se zpracováním os. údajů
+    - [x] souhlasím s všeobecnými podmínky (uloženo na serveru, odkaz na ně)
+- [ ] co mi ulehčí práci
+    - [ ] používat textinputcontroller (asi všude xd)
+    - [ ] image picker do samostatného widgetu!
+    - [ ] kategorie a filtry (upravit a zkrátit nějak)
+        - [ ] Dropdown
+        - [ ] Switch
+- [x] možná zrušit počet obrázků v db, záleží na čtení obrázků v .md souboru
 - [ ] __před releasem__
+    - [ ] až bude hosting
+        - [ ] ověřit mail
+        - [ ] forgot password
     - [ ] změnit adresu serveru
         - [ ] general.dart
         - [ ] dbServices.dart
-- [ ] encoding u každý response (udělat jako u articlu)
- 
+    - [ ] test na jiných emulátorech (jiné rozlišení)
+- [x] encoding u každý response (udělat jako u articlu)
+- [x] charset a collation v databázi
+- [ ] zjistit a snad vyřešit co je "unknown param ?.????????"
+- [ ] addItem dodělávky
+    - [ ] upravit zobrazování parametrů (např. Odpružená == true {zobrazit typ odpuržení}, ...)
+    - [ ] pozadí
+- [ ] filtry dodělávky
+    - [ ] upravit zobrazování parametrů (např. Odpružená == true {zobrazit typ odpuržení}, ...)
+    - [ ] pozadí
+- [x] clickable celou item card, ne jenom obrázek
+
+
 
 ## App Content
 
+* jednotlivé stránky
+* progress u stránek
 
 ### Article
+
+* skupina __JÁ__
 
 * ukládat jako article.md
     * encoding utf-8
@@ -106,106 +169,80 @@
         * pojmenovat 0.jpg, bude použit jako náhled
     * cesta __absolutní__ (až na server, nutno uvést http://)
 
+- [x] moje hotovo
+- [x] master na GitHubu
+
+
+
 ### Home Screen
 
-- [x] skupina __A__
-    - [x] příjem na GitHubu
-    - [x] staženo
-    - [x] moje hotovo
-    - [x] master na GitHubu
-- [x] banner (doplnit uživatelské údaje)
-- [x] zužitkování ostatních dat
-- [x] tlačítko na filtry
+* skupina __A__
+
+- [x] příjem na GitHubu
+- [x] staženo
+- [x] moje hotovo
+- [x] master na GitHubu
+
 
 
 ### Item Screen
 
-- [x] skupina __B__
-    - [x] příjem na GitHubu
-    - [x] staženo
-    - [x] moje hotovo
-    - [x] master na GitHubu
-- [x] dateEnd jako DateTime
-- [x] zužitkování ostatních dat
-- [x] appbar odstranit, předělat na tlačítko
-    - [x] parametry (alertbox)
-    - [x] chat(y)
-    - [x] zpět
-    - [x] pokud jsem autor
-        - [x] skrýt pro ostatní (Skrýt/Rezerováno)
-            - [x] + potvrzení
-        - [x] prodáno
-            - [x] + potvrzení
+* skupina __B__
+
+- [x] příjem na GitHubu
+- [x] staženo
+- [x] moje hotovo
+- [x] master na GitHubu
+
 
 
 ### Login & Register
 
-- [x] skupina __A__
-    - [x] příjem na GitHubu
-    - [x] staženo
-    - [x] moje hotovo
-    - [x] master na GitHubu
-- [x] alert box při špatné validaci
-    - [x] login
-    - [x] register
-- [x] zbavit se zbytečných závislostí (fonty, ...)
-- [ ] zapomenuté heslo
-- [ ] zapamatovat přihlášení
-- [x] vyřešit error při úspešném loginu
-- [x] náhodný obrázek na pozadí
+* skupina __A__
+
+- [x] příjem na GitHubu
+- [x] staženo
+- [x] moje hotovo
+- [x] master na GitHubu
+
 
 
 ### Add Item
 
-- [x] skupina __B__
-    - [x] příjem na GitHubu
-    - [x] staženo
-    - [x] moje hotovo
-    - [x] master na GitHubu
-- [x] response (success || error)
-- [x] obrázky
-    - [x] úvodní (1)
-    - [x] detaily (víc, id = id + 1);
-- [x] deprecated věci nahradit
-- [x] upravit seznamy.dart na více Tříd, tohle je hnus
-- [x] appbar odstranit, předělat na tlačítko
-- [x] TextField upravit na můj custom input
-- [ ] upravit, zkrátit
-    - [ ] Dropdown
-    - [ ] Switch
-- [ ] upravit zobrazování parametrů (např. Odpružená == true {zobrazit typ odpuržení}, ...)
-- [ ] náhodný obrázek na pozadí
+* skupina __B__
+
+- [x] příjem na GitHubu
+- [x] staženo
+- [x] moje hotovo
+- [x] master na GitHubu
+
 
 
 ### Chat Screen
 
-- [x] skupina __A__
-    - [x] příjem na GitHubu
-    - [x] staženo
-    - [x] moje hotovo
-    - [x] master na GitHubu
-- [x] umožnit posílat zprávy menší než 2 znaky
-- [x] mazat inputfield po odeslání zprávy
-- [x] zakázat chat sám se sebou
-- [x] opravit seznam chatů (idk, bugnul)
-- [x] opravit zobrazování zpráv (pokud jsem inzerent)
-- [ ] udělat něco s refreshem? zpráva se zobrazí po dlouhé době;
-- [x] zamezit odesílání prázdných zpráv, asi povolit poslání obrázku s textem
-- [x] tlačítko na zobrazení userInfo toho druhého
+* skupina __A__
+
+- [x] příjem na GitHubu
+- [x] staženo
+- [x] moje hotovo
+- [x] master na GitHubu
+
 
 
 ### Fitry
 
-- [ ] __JÁ__
-    - [ ] moje hotovo
-    - [ ] master na GitHubu
+* skupina __JÁ__
+
+- [x] moje hotovo
+- [x] master na GitHubu
+
 
 
 ### Account
 
-- [x] skupina __A__
-    - [x] příjem na GitHubu
-    - [x] staženo
-    - [x] moje hotovo
-    - [x] master na GitHubu
-- [x] postavit, Lukáš je kokot
+* skupina __A__
+
+- [x] příjem na GitHubu
+- [x] staženo
+- [x] moje hotovo
+- [x] master na GitHubu

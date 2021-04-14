@@ -240,9 +240,9 @@ class DatabaseServices {
   }
 
   static Stream<List<Message>> getMessages(
-      Duration refreshTime, int seller, int buyer, int itemId) async* {
+      int seller, int buyer, int itemId) async* {
     while (true) {
-      await Future.delayed(refreshTime);
+      await Future.delayed(Duration.zero);
       yield await getMessagesBetween(seller, buyer, itemId);
     }
   }

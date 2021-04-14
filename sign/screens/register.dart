@@ -1,10 +1,16 @@
 import 'dart:ui';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:letbike/general/general.dart';
 import '../../general/pallete.dart';
 import '../../general/dbServices.dart';
 import '../../general/widgets.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 Future<String> response;
+
+bool acceptData = false;
+bool acceptTerms = false;
 
 GlobalKey<FormState> _regformkey = GlobalKey<FormState>();
 
@@ -60,6 +66,75 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
                           inputAction: TextInputAction.done,
                           obscure: true),
                       SizedBox(
+                        height: 15,
+                      ),
+                      Container(
+                        padding: EdgeInsetsDirectional.only(start: 20),
+                        child: Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                openUrl("terms.pdf");
+                              },
+                              child: Text(
+                                "Souhlasím s Všebecné obchodní podmínky",
+                                style: TextStyle(
+                                    color: kWhite,
+                                    fontSize: 17,
+                                    decoration: TextDecoration.underline,
+                                    shadows: [
+                                      Shadow(
+                                        blurRadius: 10.0,
+                                        color: kBlack,
+                                        offset: Offset(5.0, 5.0),
+                                      ),
+                                    ]),
+                              ),
+                            ),
+                            Switch(
+                              value: acceptTerms,
+                              onChanged: (value) {
+                                setState(() {
+                                  acceptTerms = value;
+                                });
+                              },
+                              inactiveTrackColor: kSecondaryColor,
+                              activeTrackColor: kPrimaryColor,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsetsDirectional.only(start: 20),
+                        child: Row(
+                          children: [
+                            Text(
+                              "Souhlasím se zpracováním osobních údajů",
+                              style: TextStyle(
+                                  color: kWhite,
+                                  fontSize: 17,
+                                  shadows: [
+                                    Shadow(
+                                      blurRadius: 10.0,
+                                      color: kBlack,
+                                      offset: Offset(5.0, 5.0),
+                                    ),
+                                  ]),
+                            ),
+                            Switch(
+                              value: acceptData,
+                              onChanged: (value) {
+                                setState(() {
+                                  acceptData = value;
+                                });
+                              },
+                              inactiveTrackColor: kSecondaryColor,
+                              activeTrackColor: kPrimaryColor,
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
                         height: 25,
                       ),
                       RoundedButton(
@@ -67,13 +142,19 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
                         onClick: () {
                           String failResponse = "";
 
-                          if (_regformkey.currentState.validate()) {
-                            response = DatabaseServices.registerUser(
-                                TextInput.getValue("regName"),
-                                TextInput.getValue("regMail"),
-                                TextInput.getValue("regPass"));
+                          if (acceptData && acceptTerms) {
+                            if (_regformkey.currentState.validate()) {
+                              response = DatabaseServices.registerUser(
+                                  TextInput.getValue("regName"),
+                                  TextInput.getValue("regMail"),
+                                  TextInput.getValue("regPass"));
+                            } else {
+                              failResponse =
+                                  "Některé údaje jsou špatně zadané.";
+                            }
                           } else {
-                            failResponse = "Některé údaje jsou špatně zadané.";
+                            failResponse =
+                                "Pro pokračování musíte souhlasit s VOP a zpracováním osobních údajů.";
                           }
 
                           AlertBox.showAlertBox(
@@ -133,5 +214,14 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
         ),
       ],
     );
+  }
+
+  openUrl(String doc) async {
+    String url = docsFolder + "/" + doc;
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Nelze otevřít.';
+    }
   }
 }
