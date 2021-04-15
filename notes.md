@@ -116,9 +116,9 @@
 - [x] opravit barvu textu
     - [x] psaní recenze
     - [x] response ze serveru (někde (registrace a login určitě))
+- [x] zapamatovat přihlášení
+    - [x] bez textinputcontrolleru to dělat nebudu :D
 - [ ] opravit warning card
-- [ ] zapamatovat přihlášení
-    - [ ] bez textinputcontrolleru to dělat nebudu :D
 - [ ] doplnit kategorie
 - [ ] killswitch debile!
 - [x] refreshnout homepage po přidání inzerátu (nový inzerát se nezobrazuje, snad je to tím)
@@ -126,7 +126,7 @@
     - [x] souhlasím se zpracováním os. údajů
     - [x] souhlasím s všeobecnými podmínky (uloženo na serveru, odkaz na ně)
 - [ ] co mi ulehčí práci
-    - [ ] používat textinputcontroller (asi všude xd)
+    - [x] používat textinputcontroller (asi všude xd)
     - [ ] image picker do samostatného widgetu!
     - [ ] kategorie a filtry (upravit a zkrátit nějak)
         - [ ] Dropdown

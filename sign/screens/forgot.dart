@@ -3,6 +3,7 @@ import '../../general/pallete.dart';
 import '../../general/widgets.dart';
 
 class ForgotPassword extends StatelessWidget {
+  final TextEditingController forgotMailController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -50,9 +51,9 @@ class ForgotPassword extends StatelessWidget {
                     TextInput(
                       icon: Icons.mail,
                       hint: "Email",
-                      identificator: "",
                       inputType: TextInputType.emailAddress,
                       inputAction: TextInputAction.done,
+                      controller: forgotMailController,
                     ),
                     SizedBox(
                       height: 20,

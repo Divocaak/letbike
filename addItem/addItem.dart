@@ -18,6 +18,10 @@ class _AddItem extends State<AddItem> with TickerProviderStateMixin {
   User user;
   List<Asset> images = [];
 
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController descController = TextEditingController();
+  final TextEditingController priceController = TextEditingController();
+
   Widget buildGridView() {
     if (images != null)
       return GridView.count(
@@ -144,23 +148,21 @@ class _AddItem extends State<AddItem> with TickerProviderStateMixin {
                         height: 20,
                       ),
                       TextInput(
-                        icon: Icons.text_fields,
-                        hint: "Název předmětu",
-                        identificator: "addName",
-                        inputAction: TextInputAction.next,
-                      ),
+                          icon: Icons.text_fields,
+                          hint: "Název předmětu",
+                          inputAction: TextInputAction.next,
+                          controller: nameController),
                       TextInput(
-                        icon: Icons.text_fields,
-                        hint: "Popis předmětu",
-                        identificator: "addDesc",
-                        inputAction: TextInputAction.next,
-                      ),
+                          icon: Icons.text_fields,
+                          hint: "Popis předmětu",
+                          inputAction: TextInputAction.next,
+                          controller: descController),
                       TextInput(
                         icon: Icons.attach_money,
                         hint: "Cena",
-                        identificator: "addPric",
                         inputAction: TextInputAction.done,
                         inputType: TextInputType.number,
+                        controller: priceController,
                       ),
                       Container(
                         height: 20,
@@ -1106,9 +1108,9 @@ class _AddItem extends State<AddItem> with TickerProviderStateMixin {
                               new Item(
                                   -1,
                                   user.id,
-                                  TextInput.getValue("addName"),
-                                  TextInput.getValue("addDesc"),
-                                  double.parse(TextInput.getValue("addPric")),
+                                  nameController.text,
+                                  descController.text,
+                                  double.parse(priceController.text),
                                   0,
                                   0,
                                   "",

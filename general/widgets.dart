@@ -8,3 +8,4 @@ export 'widgets/accountInfoField.dart';
 export 'widgets/chatMessages.dart';
 export 'widgets/chatInputField.dart';
 export 'widgets/ratingRow.dart';
+export 'widgets/filterWidgets.dart';

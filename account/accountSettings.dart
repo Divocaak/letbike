@@ -24,6 +24,14 @@ class _AccountSettingsState extends State<AccountSettings>
 
   List<Asset> images = [];
 
+  final TextEditingController fNameController = TextEditingController();
+  final TextEditingController lNameController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController addAController = TextEditingController();
+  final TextEditingController addBController = TextEditingController();
+  final TextEditingController addCController = TextEditingController();
+  final TextEditingController postalController = TextEditingController();
+
   Widget buildGridView() {
     if (images != null)
       return GridView.count(
@@ -152,53 +160,47 @@ class _AccountSettingsState extends State<AccountSettings>
               Column(
                 children: [
                   TextInput(
-                    icon: Icons.create,
-                    hint: "Křestní jméno: " + user.fName,
-                    identificator: "accFName",
-                    inputType: TextInputType.name,
-                    inputAction: TextInputAction.next,
-                  ),
+                      icon: Icons.create,
+                      hint: "Křestní jméno: " + user.fName,
+                      inputType: TextInputType.name,
+                      inputAction: TextInputAction.next,
+                      controller: fNameController),
                   TextInput(
-                    icon: Icons.create,
-                    hint: "Příjmení: " + user.lName,
-                    identificator: "accLName",
-                    inputType: TextInputType.name,
-                    inputAction: TextInputAction.next,
-                  ),
+                      icon: Icons.create,
+                      hint: "Příjmení: " + user.lName,
+                      inputType: TextInputType.name,
+                      inputAction: TextInputAction.next,
+                      controller: lNameController),
                   TextInput(
-                    icon: Icons.phone,
-                    hint: "Telefon: " + user.phone.toString(),
-                    identificator: "accPhone",
-                    inputAction: TextInputAction.next,
-                    inputType: TextInputType.phone,
-                  ),
+                      icon: Icons.phone,
+                      hint: "Telefon: " + user.phone.toString(),
+                      inputType: TextInputType.phone,
+                      inputAction: TextInputAction.next,
+                      controller: phoneController),
                   TextInput(
-                    icon: Icons.home,
-                    hint: "Ulice a č.p.: " + user.addressA,
-                    identificator: "accAddA",
-                    inputAction: TextInputAction.next,
-                    inputType: TextInputType.streetAddress,
-                  ),
+                      icon: Icons.home,
+                      hint: "Ulice a č.p.: " + user.addressA,
+                      inputType: TextInputType.streetAddress,
+                      inputAction: TextInputAction.next,
+                      controller: addAController),
                   TextInput(
-                    icon: Icons.location_city,
-                    hint: "Obec: " + user.addressB,
-                    identificator: "accAddB",
-                    inputAction: TextInputAction.next,
-                    inputType: TextInputType.streetAddress,
-                  ),
+                      icon: Icons.location_city,
+                      hint: "Obec: " + user.addressB,
+                      inputType: TextInputType.streetAddress,
+                      inputAction: TextInputAction.next,
+                      controller: addBController),
                   TextInput(
-                    icon: Icons.flag,
-                    hint: "Země: " + user.addressC,
-                    identificator: "accAddC",
-                    inputAction: TextInputAction.next,
-                    inputType: TextInputType.streetAddress,
-                  ),
+                      icon: Icons.flag,
+                      hint: "Země: " + user.addressC,
+                      inputType: TextInputType.streetAddress,
+                      inputAction: TextInputAction.next,
+                      controller: addCController),
                   TextInput(
                       icon: Icons.email,
                       hint: "PSČ: " + user.postal.toString(),
-                      identificator: "accPostal",
+                      inputType: TextInputType.number,
                       inputAction: TextInputAction.done,
-                      inputType: TextInputType.number),
+                      controller: postalController),
                   SizedBox(
                     height: 25,
                   ),
@@ -228,15 +230,15 @@ class _AccountSettingsState extends State<AccountSettings>
                   child: CircularButton(kSecondaryColor.withOpacity(volume * 2),
                       45, Icons.arrow_back, kWhite.withOpacity(volume * 2), () {
                     setState(() {
-                      user.fName = getVal("accFName", user.fName);
-                      user.lName = getVal("accLName", user.lName);
-                      user.phone =
-                          int.parse(getVal("accPhone", user.phone.toString()));
-                      user.addressA = getVal("accAddA", user.addressA);
-                      user.addressB = getVal("accAddB", user.addressB);
-                      user.addressC = getVal("accAddC", user.addressC);
+                      user.fName = getVal(fNameController, user.fName);
+                      user.lName = getVal(lNameController, user.lName);
+                      user.phone = int.parse(
+                          getVal(phoneController, user.phone.toString()));
+                      user.addressA = getVal(addAController, user.addressA);
+                      user.addressB = getVal(addBController, user.addressB);
+                      user.addressC = getVal(addCController, user.addressC);
                       user.postal = int.parse(
-                          getVal("accPostal", user.postal.toString()));
+                          getVal(postalController, user.postal.toString()));
                     });
                     Navigator.of(context).pushReplacementNamed(
                         AccountScreen.routeName,
@@ -277,13 +279,13 @@ class _AccountSettingsState extends State<AccountSettings>
 
   void saveData() {
     fieldsValues = [
-      getVal("accFName", user.fName),
-      getVal("accLName", user.lName),
-      getVal("accPhone", user.phone.toString()),
-      getVal("accAddA", user.addressA),
-      getVal("accAddB", user.addressB),
-      getVal("accAddC", user.addressC),
-      getVal("accPostal", user.postal.toString()),
+      getVal(fNameController, user.fName),
+      getVal(lNameController, user.lName),
+      getVal(phoneController, user.phone.toString()),
+      getVal(addAController, user.addressA),
+      getVal(addBController, user.addressB),
+      getVal(addCController, user.addressC),
+      getVal(postalController, user.postal.toString()),
     ];
 
     saveResponse = DatabaseServices.changeAccountDetails(
@@ -306,9 +308,9 @@ class _AccountSettingsState extends State<AccountSettings>
         ));
   }
 
-  String getVal(String textInput, String current) {
-    return TextInput.getValue(textInput) != null
-        ? TextInput.getValue(textInput)
+  String getVal(TextEditingController controller, String current) {
+    return (controller.text != null && controller.text != "")
+        ? controller.text
         : current;
   }
 }

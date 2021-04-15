@@ -18,6 +18,9 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController mailController = TextEditingController();
+  final TextEditingController passController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     getLocalData();
@@ -53,16 +56,16 @@ class _LoginScreenState extends State<LoginScreen> {
                       TextInput(
                         icon: Icons.mail,
                         hint: "E-mail",
-                        identificator: "logMail",
                         inputType: TextInputType.emailAddress,
                         inputAction: TextInputAction.next,
+                        controller: mailController,
                       ),
                       TextInput(
                           icon: Icons.lock,
                           hint: "Heslo",
-                          identificator: "logPass",
                           inputAction: TextInputAction.done,
-                          obscure: true),
+                          obscure: true,
+                          controller: passController),
                       GestureDetector(
                           onTap: () =>
                               Navigator.of(context).pushNamed("ForgotPassword"),
@@ -107,15 +110,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         buttonName: "Přihlásit se",
                         onClick: () {
                           if (remember) {
-                            setLocalData(
-                                remember,
-                                TextInput.getValue("logMail"),
-                                TextInput.getValue("logPass"));
+                            setLocalData(remember, mailController.text,
+                                passController.text);
                           }
 
                           logResponse = DatabaseServices.loginUser(
-                            TextInput.getValue("logMail"),
-                            TextInput.getValue("logPass"),
+                            mailController.text,
+                            passController.text,
                           );
 
                           AlertBox.showAlertBox(
@@ -194,8 +195,8 @@ class _LoginScreenState extends State<LoginScreen> {
       savedEmail = prefs.getString("savedEmail");
       savedPass = prefs.getString("savedPass");
 
-      print("mail: " + savedEmail);
-      print("pass: " + savedPass);
+      mailController.text = savedEmail;
+      passController.text = savedPass;
     }
   }
 
