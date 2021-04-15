@@ -20,6 +20,10 @@ class CreateNewAccount extends StatefulWidget {
 }
 
 class _CreateNewAccountState extends State<CreateNewAccount> {
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController regMailController = TextEditingController();
+  final TextEditingController regPassController = TextEditingController();
+  final TextEditingController passConfController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -40,31 +44,31 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
                   Column(
                     children: [
                       TextInput(
-                        icon: Icons.person,
-                        hint: "Uživatelské jméno",
-                        identificator: "regName",
-                        inputType: TextInputType.name,
-                        inputAction: TextInputAction.next,
-                      ),
+                          icon: Icons.person,
+                          hint: "Uživatelské jméno",
+                          inputType: TextInputType.name,
+                          inputAction: TextInputAction.next,
+                          controller: usernameController),
                       TextInput(
-                        icon: Icons.mail,
-                        hint: "E-mail",
-                        identificator: "regMail",
-                        inputType: TextInputType.emailAddress,
-                        inputAction: TextInputAction.next,
-                      ),
+                          icon: Icons.mail,
+                          hint: "E-mail",
+                          inputType: TextInputType.emailAddress,
+                          inputAction: TextInputAction.next,
+                          controller: regMailController),
                       TextInput(
                           icon: Icons.lock,
                           hint: "Heslo",
-                          identificator: "regPass",
                           inputAction: TextInputAction.next,
-                          obscure: true),
+                          obscure: true,
+                          validationIdentity: "regPass",
+                          controller: regPassController),
                       TextInput(
                           icon: Icons.lock,
                           hint: "Potvrdit heslo",
-                          identificator: "regPassConf",
                           inputAction: TextInputAction.done,
-                          obscure: true),
+                          obscure: true,
+                          validationIdentity: "regPassConf",
+                          controller: passConfController),
                       SizedBox(
                         height: 15,
                       ),
@@ -143,14 +147,16 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
                           String failResponse = "";
 
                           if (acceptData && acceptTerms) {
-                            if (_regformkey.currentState.validate()) {
+                            if (_regformkey.currentState.validate() &&
+                                passConfController.text ==
+                                    regPassController.text) {
                               response = DatabaseServices.registerUser(
-                                  TextInput.getValue("regName"),
-                                  TextInput.getValue("regMail"),
-                                  TextInput.getValue("regPass"));
+                                  usernameController.text,
+                                  regMailController.text,
+                                  regPassController.text);
                             } else {
                               failResponse =
-                                  "Některé údaje jsou špatně zadané.";
+                                  "Některé údaje jsou špatně zadané, nebo se hesla neshodují";
                             }
                           } else {
                             failResponse =

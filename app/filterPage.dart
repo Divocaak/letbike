@@ -29,8 +29,8 @@ class _FilterPage extends State<FilterPage> with TickerProviderStateMixin {
     super.initState();
   }
 
-  bool used = false;
-  Category category = Category(null, null, null, null);
+  final bool used = false;
+  final Category category = Category(null, null, null, null);
   Bike bike = Bike(null, null);
 
   Cranks cranks = Cranks(null, null, null, null);
@@ -70,18 +70,8 @@ class _FilterPage extends State<FilterPage> with TickerProviderStateMixin {
                             ),
                             borderRadius: BorderRadius.circular(25),
                           ),
-                          child: Row(children: [
-                            Text("Použité: Ne "),
-                            Switch(
-                              value: used,
-                              onChanged: (value) {
-                                setState(() {
-                                  used = value;
-                                });
-                              },
-                            ),
-                            Text(" Ano")
-                          ])),
+                          child: FilterWidgets.filterSwitch(
+                              "Použité", "Ne", "Ano", used)),
                       Container(
                         height: 20,
                       ),
@@ -96,7 +86,11 @@ class _FilterPage extends State<FilterPage> with TickerProviderStateMixin {
                           ),
                           child: Column(
                             children: [
-                              DropdownButton(
+                              FilterWidgets.filterDropdown(
+                                  "Kategorie",
+                                  category.selectedCategory,
+                                  Category.categories),
+                              /* DropdownButton(
                                 hint: Text("Kategorie"),
                                 value: category.selectedCategory,
                                 onChanged: (newValue) {
@@ -113,7 +107,7 @@ class _FilterPage extends State<FilterPage> with TickerProviderStateMixin {
                                     value: entry.key,
                                   );
                                 }).toList(),
-                              ),
+                              ), */
                               Builder(
                                 builder: (context) {
                                   switch (category.selectedCategory) {
@@ -1007,6 +1001,9 @@ class _FilterPage extends State<FilterPage> with TickerProviderStateMixin {
                   alignment: Alignment.center,
                   children: <Widget>[
                     CircularButton(kPrimaryColor, 60, Icons.menu, kWhite, () {
+                      print("used: " + used.toString());
+                      print("cat: " + category.selectedCategory.toString());
+
                       if (animationController.isCompleted) {
                         animationController.reverse();
                         volume = 0;

@@ -19,6 +19,10 @@ class _ChangePasswordState extends State<ChangePassword>
   User user;
   AnimationController animationController;
 
+  final TextEditingController currController = TextEditingController();
+  final TextEditingController newController = TextEditingController();
+  final TextEditingController confController = TextEditingController();
+
   @override
   void initState() {
     animationController =
@@ -52,30 +56,34 @@ class _ChangePasswordState extends State<ChangePassword>
                       TextInput(
                           icon: Icons.lock,
                           hint: "Aktuální heslo",
-                          identificator: "changePassCurr",
                           obscure: true,
                           inputType: TextInputType.text,
-                          inputAction: TextInputAction.next),
+                          inputAction: TextInputAction.next,
+                          controller: currController),
                       SizedBox(
                         height: 25,
                       ),
                       TextInput(
-                          icon: Icons.lock,
-                          hint: "Nové heslo",
-                          identificator: "changePassNew",
-                          obscure: true,
-                          inputType: TextInputType.text,
-                          inputAction: TextInputAction.next),
+                        icon: Icons.lock,
+                        hint: "Nové heslo",
+                        obscure: true,
+                        inputType: TextInputType.text,
+                        inputAction: TextInputAction.next,
+                        validationIdentity: "changePassNew",
+                        controller: newController,
+                      ),
                       SizedBox(
                         height: 25,
                       ),
                       TextInput(
-                          icon: Icons.lock,
-                          hint: "Nové heslo znovu",
-                          identificator: "changePassConf",
-                          obscure: true,
-                          inputType: TextInputType.text,
-                          inputAction: TextInputAction.next),
+                        icon: Icons.lock,
+                        hint: "Nové heslo znovu",
+                        obscure: true,
+                        inputType: TextInputType.text,
+                        inputAction: TextInputAction.next,
+                        validationIdentity: "changePassConf",
+                        controller: confController,
+                      ),
                     ],
                   )
                 ],
@@ -109,13 +117,15 @@ class _ChangePasswordState extends State<ChangePassword>
                         kWhite.withOpacity(volume * 2), () {
                       String failResponse = "";
 
-                      if (_changePassKey.currentState.validate()) {
+                      if (_changePassKey.currentState.validate() &&
+                          newController.text == confController.text) {
                         changeResponse = DatabaseServices.changePassword(
                             user.id.toString(),
-                            TextInput.getValue("changePassNew"),
-                            TextInput.getValue("changePassCurr"));
+                            newController.text,
+                            currController.text);
                       } else {
-                        failResponse = "Některé údaje jsou špatně zadané.";
+                        failResponse =
+                            "Některé údaje jsou špatně zadané, nebo se hesla neshodují";
                       }
 
                       AlertBox.showAlertBox(
