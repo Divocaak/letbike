@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
+import 'package:letbike/general/general.dart';
 
 class BackgroundImage extends StatelessWidget {
   @override
@@ -14,7 +15,8 @@ class BackgroundImage extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-              image: NetworkImage('http://10.0.2.2/projects/letbike/imgs/app/' +
+              image: NetworkImage(imgsFolder +
+                  '/app/' +
                   new Random().nextInt(8).toString() +
                   '.jpg'),
               fit: BoxFit.cover,
