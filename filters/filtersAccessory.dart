@@ -13,7 +13,7 @@ class FiltersAccessory extends StatefulWidget {
 
 class _FiltersAccessory extends State<FiltersAccessory>
     with TickerProviderStateMixin {
-  HomeArguments args;
+  AddItemFiltersArgs args;
 
   double volume = 0;
 
@@ -68,9 +68,8 @@ class _FiltersAccessory extends State<FiltersAccessory>
                             45,
                             Icons.save,
                             kWhite.withOpacity(volume * 2), () {
-                          args.filters.params["selectedAccessories"] =
+                          args.args.filters.params["selectedAccessories"] =
                               FilterValueSetters.setDropdownValue(typeDd.value);
-
                           Navigator.of(context).pushReplacementNamed(
                               FilterPage.routeName,
                               arguments: args);
@@ -83,7 +82,7 @@ class _FiltersAccessory extends State<FiltersAccessory>
                             45,
                             Icons.filter_alt,
                             kWhite.withOpacity(volume * 2), () {
-                          args.filters.params["selectedAccessories"] =
+                          args.args.filters.params["selectedAccessories"] =
                               FilterValueSetters.setDropdownValue(typeDd.value);
 
                           switch (typeDd.value) {
@@ -91,13 +90,6 @@ class _FiltersAccessory extends State<FiltersAccessory>
                               {
                                 Navigator.of(context).pushReplacementNamed(
                                     FiltersMudguard.routeName,
-                                    arguments: args);
-                              }
-                              break;
-                            case 1:
-                              {
-                                Navigator.of(context).pushReplacementNamed(
-                                    FiltersBag.routeName,
                                     arguments: args);
                               }
                               break;
@@ -171,13 +163,6 @@ class _FiltersAccessory extends State<FiltersAccessory>
                                     arguments: args);
                               }
                               break;
-                            case 12:
-                              {
-                                Navigator.of(context).pushReplacementNamed(
-                                    FiltersCards.routeName,
-                                    arguments: args);
-                              }
-                              break;
                             case 13:
                               {
                                 Navigator.of(context).pushReplacementNamed(
@@ -185,17 +170,17 @@ class _FiltersAccessory extends State<FiltersAccessory>
                                     arguments: args);
                               }
                               break;
-                            case 14:
-                              {
-                                Navigator.of(context).pushReplacementNamed(
-                                    FiltersFood.routeName,
-                                    arguments: args);
-                              }
-                              break;
                             case 15:
                               {
                                 Navigator.of(context).pushReplacementNamed(
                                     FiltersLock.routeName,
+                                    arguments: args);
+                              }
+                              break;
+                            case 16:
+                              {
+                                Navigator.of(context).pushReplacementNamed(
+                                    FiltersCarRack.routeName,
                                     arguments: args);
                               }
                               break;

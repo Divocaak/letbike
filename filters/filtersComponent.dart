@@ -13,7 +13,7 @@ class FiltersComponent extends StatefulWidget {
 
 class _FiltersComponent extends State<FiltersComponent>
     with TickerProviderStateMixin {
-  HomeArguments args;
+  AddItemFiltersArgs args;
 
   double volume = 0;
 
@@ -68,7 +68,7 @@ class _FiltersComponent extends State<FiltersComponent>
                             45,
                             Icons.save,
                             kWhite.withOpacity(volume * 2), () {
-                          args.filters.params["selectedParts"] =
+                          args.args.filters.params["selectedParts"] =
                               FilterValueSetters.setDropdownValue(typeDd.value);
 
                           Navigator.of(context).pushReplacementNamed(
@@ -83,7 +83,7 @@ class _FiltersComponent extends State<FiltersComponent>
                             45,
                             Icons.filter_alt,
                             kWhite.withOpacity(volume * 2), () {
-                          args.filters.params["selectedParts"] =
+                          args.args.filters.params["selectedParts"] =
                               FilterValueSetters.setDropdownValue(typeDd.value);
 
                           switch (typeDd.value) {
@@ -238,13 +238,6 @@ class _FiltersComponent extends State<FiltersComponent>
                               {
                                 Navigator.of(context).pushReplacementNamed(
                                     FiltersShockAbs.routeName,
-                                    arguments: args);
-                              }
-                              break;
-                            case 22:
-                              {
-                                Navigator.of(context).pushReplacementNamed(
-                                    FiltersOther.routeName,
                                     arguments: args);
                               }
                               break;

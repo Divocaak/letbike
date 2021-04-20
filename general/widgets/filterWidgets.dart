@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:letbike/general/general.dart';
 
 class FilterDropdown extends StatefulWidget {
   int value;
@@ -115,11 +116,14 @@ class FilterValueSetters {
     return (dropdownValue != null ? dropdownValue : -1);
   }
 
-  static int setSwitchValueWithOffset(
-      bool switchValue, int selectedPart, int selectedOther) {
+  static int setSwitchValueWithOffset(bool switchValue, ItemParams params) {
     return ((switchValue ? 1 : 0) +
-        (selectedPart != null ? selectedPart : 0) +
-        (selectedOther != null ? selectedOther : 0) +
+        (params.params["selectedPart"] != null
+            ? params.params["selectedPart"]
+            : 0) +
+        (params.params["selectedOther"] != null
+            ? params.params["selectedOther"]
+            : 0) +
         999);
   }
 }

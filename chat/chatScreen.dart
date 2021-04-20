@@ -158,8 +158,7 @@ class _ChatScreenState extends State<ChatScreen>
                 });
               },
             ));
-      }
-      if (chatUsers.itemInfo.item.status == 0) {
+      } else if (chatUsers.itemInfo.item.status == 0) {
         return Container(
             alignment: Alignment.centerRight,
             width: 40,
@@ -208,6 +207,8 @@ class _ChatScreenState extends State<ChatScreen>
         width: 1,
       );
     }
+
+    return SizedBox(width: 1);
   }
 
   Widget otherPersonInfo() {

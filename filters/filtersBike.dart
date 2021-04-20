@@ -11,7 +11,7 @@ class FiltersBike extends StatefulWidget {
 }
 
 class _FiltersBike extends State<FiltersBike> with TickerProviderStateMixin {
-  HomeArguments args;
+  AddItemFiltersArgs args;
 
   double volume = 0;
 
@@ -74,9 +74,9 @@ class _FiltersBike extends State<FiltersBike> with TickerProviderStateMixin {
                             45,
                             Icons.save,
                             kWhite.withOpacity(volume * 2), () {
-                          args.filters.params["bikeType"] =
+                          args.args.filters.params["bikeType"] =
                               FilterValueSetters.setDropdownValue(typeDd.value);
-                          args.filters.params["bikeBrand"] =
+                          args.args.filters.params["bikeBrand"] =
                               FilterValueSetters.setDropdownValue(
                                   brandDd.value);
 

@@ -3,24 +3,27 @@ import 'package:letbike/app/filterPage.dart';
 import '../../general/widgets/filterWidgets.dart';
 import '../../general/general.dart';
 
-class FiltersCards extends StatefulWidget {
+class FiltersClothesMore extends StatefulWidget {
   @override
-  _FiltersCards createState() => _FiltersCards();
+  _FiltersClothesMore createState() => _FiltersClothesMore();
 
-  static const routeName = "/FiltersCards";
+  static const routeName = "/FiltersClothesMore";
 }
 
-class _FiltersCards extends State<FiltersCards> with TickerProviderStateMixin {
-  HomeArguments args;
+class _FiltersClothesMore extends State<FiltersClothesMore>
+    with TickerProviderStateMixin {
+  AddItemFiltersArgs args;
 
   double volume = 0;
 
   AnimationController animationController;
 
-  FilterDropdown brandDd =
-      new FilterDropdown(hint: "Značka kola", options: Bike.brand);
   FilterDropdown typeDd =
-      new FilterDropdown(hint: "Typ kola", options: Bike.type);
+      new FilterDropdown(hint: "Typ", options: Clothes.clothesType);
+  FilterDropdown genderDd =
+      new FilterDropdown(hint: "Pohlaví", options: Clothes.gender);
+  FilterDropdown sizeDd =
+      new FilterDropdown(hint: "Velikost", options: Clothes.size);
 
   @override
   void initState() {
@@ -50,11 +53,15 @@ class _FiltersCards extends State<FiltersCards> with TickerProviderStateMixin {
                   padding: EdgeInsets.all(20),
                   child: ListView(
                     children: [
-                      brandDd,
+                      typeDd,
                       Container(
                         height: 20,
                       ),
-                      typeDd,
+                      genderDd,
+                      Container(
+                        height: 20,
+                      ),
+                      sizeDd
                     ],
                   ),
                 ),
@@ -74,11 +81,13 @@ class _FiltersCards extends State<FiltersCards> with TickerProviderStateMixin {
                             45,
                             Icons.save,
                             kWhite.withOpacity(volume * 2), () {
-                          args.filters.params["bikeType"] =
+                          args.args.filters.params["clothesClothes"] =
                               FilterValueSetters.setDropdownValue(typeDd.value);
-                          args.filters.params["bikeBrand"] =
+                          args.args.filters.params["clothesGender"] =
                               FilterValueSetters.setDropdownValue(
-                                  brandDd.value);
+                                  genderDd.value);
+                          args.args.filters.params["clothesSize"] =
+                              FilterValueSetters.setDropdownValue(sizeDd.value);
 
                           Navigator.of(context).pushReplacementNamed(
                               FilterPage.routeName,

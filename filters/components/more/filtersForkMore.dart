@@ -1,28 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:letbike/app/filterPage.dart';
-import '../../general/widgets/filterWidgets.dart';
-import '../../general/general.dart';
+import '../../../general/widgets/filterWidgets.dart';
+import '../../../general/general.dart';
 
-class FiltersEBike extends StatefulWidget {
+class FiltersForkMore extends StatefulWidget {
   @override
-  _FiltersEBike createState() => _FiltersEBike();
+  _FiltersForkMore createState() => _FiltersForkMore();
 
-  static const routeName = "/FiltersEBike";
+  static const routeName = "/FiltersForkMore";
 }
 
-class _FiltersEBike extends State<FiltersEBike> with TickerProviderStateMixin {
+class _FiltersForkMore extends State<FiltersForkMore>
+    with TickerProviderStateMixin {
   AddItemFiltersArgs args;
 
   double volume = 0;
 
   AnimationController animationController;
 
-  FilterDropdown brandDd =
-      new FilterDropdown(hint: "Značka kola", options: EBike.brand);
-  FilterSwitch typeSwitch = new FilterSwitch(
-    label: "Umístění motoru",
-    right: "Středový",
-    left: "Nábojový",
+  FilterSwitch suspensionSwitch = new FilterSwitch(
+    label: "Odpružení",
+    right: "Vzduchové",
+    left: "Pružinové",
   );
 
   @override
@@ -53,11 +52,7 @@ class _FiltersEBike extends State<FiltersEBike> with TickerProviderStateMixin {
                   padding: EdgeInsets.all(20),
                   child: ListView(
                     children: [
-                      brandDd,
-                      Container(
-                        height: 20,
-                      ),
-                      typeSwitch,
+                      suspensionSwitch,
                     ],
                   ),
                 ),
@@ -77,12 +72,9 @@ class _FiltersEBike extends State<FiltersEBike> with TickerProviderStateMixin {
                             45,
                             Icons.save,
                             kWhite.withOpacity(volume * 2), () {
-                          args.args.filters.params["eBikeBrand"] =
-                              FilterValueSetters.setDropdownValue(
-                                  brandDd.value);
-                          args.args.filters.params["eBikeMotorPos"] =
+                          args.args.filters.params["forkSuspension"] =
                               FilterValueSetters.setSwitchValueWithOffset(
-                                  typeSwitch.value, args.args.filters);
+                                  suspensionSwitch.value, args.args.filters);
 
                           Navigator.of(context).pushReplacementNamed(
                               FilterPage.routeName,

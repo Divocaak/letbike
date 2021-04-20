@@ -12,16 +12,20 @@ class FiltersSaddlePipe extends StatefulWidget {
 
 class _FiltersSaddlePipe extends State<FiltersSaddlePipe>
     with TickerProviderStateMixin {
-  HomeArguments args;
+  AddItemFiltersArgs args;
 
   double volume = 0;
 
   AnimationController animationController;
 
-  FilterDropdown brandDd =
-      new FilterDropdown(hint: "Značka kola", options: Bike.brand);
   FilterDropdown typeDd =
-      new FilterDropdown(hint: "Typ kola", options: Bike.type);
+      new FilterDropdown(hint: "Typ", options: SaddleTube.type);
+  FilterDropdown lengthDd =
+      new FilterDropdown(hint: "Délka", options: SaddleTube.length);
+  FilterDropdown materialDd =
+      new FilterDropdown(hint: "Materiál", options: SaddleTube.material);
+  FilterDropdown sizeDd =
+      new FilterDropdown(hint: "Průměr", options: SaddleTube.size);
 
   @override
   void initState() {
@@ -51,11 +55,19 @@ class _FiltersSaddlePipe extends State<FiltersSaddlePipe>
                   padding: EdgeInsets.all(20),
                   child: ListView(
                     children: [
-                      brandDd,
+                      typeDd,
                       Container(
                         height: 20,
                       ),
-                      typeDd,
+                      lengthDd,
+                      Container(
+                        height: 20,
+                      ),
+                      materialDd,
+                      Container(
+                        height: 20,
+                      ),
+                      sizeDd,
                     ],
                   ),
                 ),
@@ -75,11 +87,16 @@ class _FiltersSaddlePipe extends State<FiltersSaddlePipe>
                             45,
                             Icons.save,
                             kWhite.withOpacity(volume * 2), () {
-                          args.filters.params["bikeType"] =
+                          args.args.filters.params["saddleTubeType"] =
                               FilterValueSetters.setDropdownValue(typeDd.value);
-                          args.filters.params["bikeBrand"] =
+                          args.args.filters.params["saddleTubeLength"] =
                               FilterValueSetters.setDropdownValue(
-                                  brandDd.value);
+                                  lengthDd.value);
+                          args.args.filters.params["saddleTubeMaterial"] =
+                              FilterValueSetters.setDropdownValue(
+                                  materialDd.value);
+                          args.args.filters.params["saddleTubeSize"] =
+                              FilterValueSetters.setDropdownValue(sizeDd.value);
 
                           Navigator.of(context).pushReplacementNamed(
                               FilterPage.routeName,

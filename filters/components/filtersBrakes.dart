@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:letbike/app/filterPage.dart';
 import '../../general/widgets/filterWidgets.dart';
 import '../../general/general.dart';
+import 'more/filtersBrakeMore.dart';
 
 class FiltersBrakes extends StatefulWidget {
   @override
@@ -12,16 +13,15 @@ class FiltersBrakes extends StatefulWidget {
 
 class _FiltersBrakes extends State<FiltersBrakes>
     with TickerProviderStateMixin {
-  HomeArguments args;
+  AddItemFiltersArgs args;
 
   double volume = 0;
 
   AnimationController animationController;
 
   FilterDropdown brandDd =
-      new FilterDropdown(hint: "Značka kola", options: Bike.brand);
-  FilterDropdown typeDd =
-      new FilterDropdown(hint: "Typ kola", options: Bike.type);
+      new FilterDropdown(hint: "Značka", options: Brakes.brand);
+  FilterDropdown typeDd = new FilterDropdown(hint: "Typ", options: Brakes.type);
 
   @override
   void initState() {
@@ -68,6 +68,41 @@ class _FiltersBrakes extends State<FiltersBrakes>
                 child: Stack(
                   children: [
                     Positioned(
+                        bottom: 150,
+                        right: 40,
+                        child: CircularButton(
+                            kSecondaryColor.withOpacity(volume * 2),
+                            45,
+                            Icons.filter_alt,
+                            kWhite.withOpacity(volume * 2), () {
+                          args.args.filters.params["brakeType"] =
+                              FilterValueSetters.setDropdownValue(typeDd.value);
+                          args.args.filters.params["brakeBrand"] =
+                              FilterValueSetters.setDropdownValue(
+                                  brandDd.value);
+
+                          switch (typeDd.value) {
+                            case 2:
+                              {
+                                AlertBox.showAlertBox(
+                                    context,
+                                    "Chyba",
+                                    Text(
+                                      "Pro další nastavení zvolte prosím jiný brzdy",
+                                      style: TextStyle(color: kWhite),
+                                    ));
+                              }
+                              break;
+                            default:
+                              {
+                                Navigator.of(context).pushReplacementNamed(
+                                    FiltersBrakeMore.routeName,
+                                    arguments: args);
+                              }
+                              break;
+                          }
+                        })),
+                    Positioned(
                         bottom: 120,
                         right: 120,
                         child: CircularButton(
@@ -75,9 +110,9 @@ class _FiltersBrakes extends State<FiltersBrakes>
                             45,
                             Icons.save,
                             kWhite.withOpacity(volume * 2), () {
-                          args.filters.params["bikeType"] =
+                          args.args.filters.params["brakeType"] =
                               FilterValueSetters.setDropdownValue(typeDd.value);
-                          args.filters.params["bikeBrand"] =
+                          args.args.filters.params["brakeBrand"] =
                               FilterValueSetters.setDropdownValue(
                                   brandDd.value);
 

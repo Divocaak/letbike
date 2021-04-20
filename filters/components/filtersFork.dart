@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:letbike/app/filterPage.dart';
 import '../../general/widgets/filterWidgets.dart';
 import '../../general/general.dart';
+import 'more/filtersForkMore.dart';
 
 class FiltersFork extends StatefulWidget {
   @override
@@ -11,16 +12,27 @@ class FiltersFork extends StatefulWidget {
 }
 
 class _FiltersFork extends State<FiltersFork> with TickerProviderStateMixin {
-  HomeArguments args;
+  AddItemFiltersArgs args;
 
   double volume = 0;
 
   AnimationController animationController;
 
   FilterDropdown brandDd =
-      new FilterDropdown(hint: "Značka kola", options: Bike.brand);
-  FilterDropdown typeDd =
-      new FilterDropdown(hint: "Typ kola", options: Bike.type);
+      new FilterDropdown(hint: "Značka vidlice", options: Fork.brand);
+  FilterDropdown sizeDd =
+      new FilterDropdown(hint: "Velikost", options: Fork.size);
+  FilterSwitch suspensionSwitch = new FilterSwitch(
+    label: "Typ",
+    right: "Odpružená",
+    left: "Pevná",
+  );
+  FilterDropdown compatibilityDd = new FilterDropdown(
+      hint: "Kompatibilita", options: Fork.wheelCompatibility);
+  FilterDropdown materialDd =
+      new FilterDropdown(hint: "Materiál", options: Fork.material);
+  FilterDropdown materialColDd = new FilterDropdown(
+      hint: "Materiál sloupku", options: Fork.materialColumn);
 
   @override
   void initState() {
@@ -54,7 +66,23 @@ class _FiltersFork extends State<FiltersFork> with TickerProviderStateMixin {
                       Container(
                         height: 20,
                       ),
-                      typeDd,
+                      sizeDd,
+                      Container(
+                        height: 20,
+                      ),
+                      suspensionSwitch,
+                      Container(
+                        height: 20,
+                      ),
+                      compatibilityDd,
+                      Container(
+                        height: 20,
+                      ),
+                      materialDd,
+                      Container(
+                        height: 20,
+                      ),
+                      materialColDd,
                     ],
                   ),
                 ),
@@ -67,6 +95,46 @@ class _FiltersFork extends State<FiltersFork> with TickerProviderStateMixin {
                 child: Stack(
                   children: [
                     Positioned(
+                        bottom: 150,
+                        right: 40,
+                        child: CircularButton(
+                            kSecondaryColor.withOpacity(volume * 2),
+                            45,
+                            Icons.filter_alt,
+                            kWhite.withOpacity(volume * 2), () {
+                          args.args.filters.params["forkBrand"] =
+                              FilterValueSetters.setDropdownValue(
+                                  brandDd.value);
+                          args.args.filters.params["forkSize"] =
+                              FilterValueSetters.setDropdownValue(sizeDd.value);
+                          args.args.filters.params["forkSuspensionType"] =
+                              FilterValueSetters.setSwitchValueWithOffset(
+                                  suspensionSwitch.value, args.args.filters);
+                          args.args.filters.params["forkWheelCoompatibility"] =
+                              FilterValueSetters.setDropdownValue(
+                                  compatibilityDd.value);
+                          args.args.filters.params["forkMaterial"] =
+                              FilterValueSetters.setDropdownValue(
+                                  materialDd.value);
+                          args.args.filters.params["forkMaterialColumn"] =
+                              FilterValueSetters.setDropdownValue(
+                                  materialColDd.value);
+
+                          if (suspensionSwitch.value) {
+                            Navigator.of(context).pushReplacementNamed(
+                                FiltersForkMore.routeName,
+                                arguments: args);
+                          } else {
+                            AlertBox.showAlertBox(
+                                context,
+                                "Chyba",
+                                Text(
+                                  "Pro další nastavení zvolte prosím typ vidlice",
+                                  style: TextStyle(color: kWhite),
+                                ));
+                          }
+                        })),
+                    Positioned(
                         bottom: 120,
                         right: 120,
                         child: CircularButton(
@@ -74,11 +142,23 @@ class _FiltersFork extends State<FiltersFork> with TickerProviderStateMixin {
                             45,
                             Icons.save,
                             kWhite.withOpacity(volume * 2), () {
-                          args.filters.params["bikeType"] =
-                              FilterValueSetters.setDropdownValue(typeDd.value);
-                          args.filters.params["bikeBrand"] =
+                          args.args.filters.params["forkBrand"] =
                               FilterValueSetters.setDropdownValue(
                                   brandDd.value);
+                          args.args.filters.params["forkSize"] =
+                              FilterValueSetters.setDropdownValue(sizeDd.value);
+                          args.args.filters.params["forkSuspensionType"] =
+                              FilterValueSetters.setSwitchValueWithOffset(
+                                  suspensionSwitch.value, args.args.filters);
+                          args.args.filters.params["forkWheelCoompatibility"] =
+                              FilterValueSetters.setDropdownValue(
+                                  compatibilityDd.value);
+                          args.args.filters.params["forkMaterial"] =
+                              FilterValueSetters.setDropdownValue(
+                                  materialDd.value);
+                          args.args.filters.params["forkMaterialColumn"] =
+                              FilterValueSetters.setDropdownValue(
+                                  materialColDd.value);
 
                           Navigator.of(context).pushReplacementNamed(
                               FilterPage.routeName,

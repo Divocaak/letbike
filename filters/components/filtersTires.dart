@@ -11,16 +11,24 @@ class FiltersTires extends StatefulWidget {
 }
 
 class _FiltersTires extends State<FiltersTires> with TickerProviderStateMixin {
-  HomeArguments args;
+  AddItemFiltersArgs args;
 
   double volume = 0;
 
   AnimationController animationController;
 
+  FilterDropdown sizeDd =
+      new FilterDropdown(hint: "Velikost", options: Tire.size);
+  FilterDropdown widthDd =
+      new FilterDropdown(hint: "Šířka", options: Tire.width);
   FilterDropdown brandDd =
-      new FilterDropdown(hint: "Značka kola", options: Bike.brand);
-  FilterDropdown typeDd =
-      new FilterDropdown(hint: "Typ kola", options: Bike.type);
+      new FilterDropdown(hint: "Značka", options: Tire.brand);
+  FilterDropdown typeDd = new FilterDropdown(hint: "Typ", options: Tire.type);
+  FilterSwitch materialSwitch = new FilterSwitch(
+    label: "Materiál",
+    left: "Kevlar",
+    right: "Drát",
+  );
 
   @override
   void initState() {
@@ -50,11 +58,23 @@ class _FiltersTires extends State<FiltersTires> with TickerProviderStateMixin {
                   padding: EdgeInsets.all(20),
                   child: ListView(
                     children: [
+                      sizeDd,
+                      Container(
+                        height: 20,
+                      ),
+                      widthDd,
+                      Container(
+                        height: 20,
+                      ),
                       brandDd,
                       Container(
                         height: 20,
                       ),
                       typeDd,
+                      Container(
+                        height: 20,
+                      ),
+                      materialSwitch,
                     ],
                   ),
                 ),
@@ -74,11 +94,19 @@ class _FiltersTires extends State<FiltersTires> with TickerProviderStateMixin {
                             45,
                             Icons.save,
                             kWhite.withOpacity(volume * 2), () {
-                          args.filters.params["bikeType"] =
-                              FilterValueSetters.setDropdownValue(typeDd.value);
-                          args.filters.params["bikeBrand"] =
+                          args.args.filters.params["tireSize"] =
+                              FilterValueSetters.setDropdownValue(sizeDd.value);
+                          args.args.filters.params["tireWidth"] =
+                              FilterValueSetters.setDropdownValue(
+                                  widthDd.value);
+                          args.args.filters.params["tireBrand"] =
                               FilterValueSetters.setDropdownValue(
                                   brandDd.value);
+                          args.args.filters.params["tireType"] =
+                              FilterValueSetters.setDropdownValue(typeDd.value);
+                          args.args.filters.params["tireMaterial"] =
+                              FilterValueSetters.setSwitchValueWithOffset(
+                                  materialSwitch.value, args.args.filters);
 
                           Navigator.of(context).pushReplacementNamed(
                               FilterPage.routeName,

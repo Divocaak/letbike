@@ -1,10 +1,8 @@
-export "filtersBag.dart";
 export "filtersBoots.dart";
 export "filtersBottleHolder.dart";
-export "filtersCards.dart";
 export "filtersClothes.dart";
+export "filtersClothesMore.dart";
 export "filtersComps.dart";
-export "filtersFood.dart";
 export "filtersGlasses.dart";
 export "filtersHelmet.dart";
 export "filtersKidSaddle.dart";
@@ -14,3 +12,4 @@ export "filtersMudguard.dart";
 export "filtersPumps.dart";
 export "filtersRack.dart";
 export "filtersTools.dart";
+export "filtersCarRack.dart";

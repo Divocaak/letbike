@@ -12,16 +12,20 @@ class FiltersHandlebars extends StatefulWidget {
 
 class _FiltersHandlebars extends State<FiltersHandlebars>
     with TickerProviderStateMixin {
-  HomeArguments args;
+  AddItemFiltersArgs args;
 
   double volume = 0;
 
   AnimationController animationController;
 
-  FilterDropdown brandDd =
-      new FilterDropdown(hint: "Značka kola", options: Bike.brand);
   FilterDropdown typeDd =
-      new FilterDropdown(hint: "Typ kola", options: Bike.type);
+      new FilterDropdown(hint: "Tvar", options: Handlebars.type);
+  FilterDropdown materialDd =
+      new FilterDropdown(hint: "Materiál", options: Handlebars.material);
+  FilterDropdown widthDd =
+      new FilterDropdown(hint: "Šířka", options: Handlebars.width);
+  FilterDropdown sizeDd =
+      new FilterDropdown(hint: "Průměr", options: Handlebars.size);
 
   @override
   void initState() {
@@ -51,11 +55,19 @@ class _FiltersHandlebars extends State<FiltersHandlebars>
                   padding: EdgeInsets.all(20),
                   child: ListView(
                     children: [
-                      brandDd,
+                      typeDd,
                       Container(
                         height: 20,
                       ),
-                      typeDd,
+                      materialDd,
+                      Container(
+                        height: 20,
+                      ),
+                      widthDd,
+                      Container(
+                        height: 20,
+                      ),
+                      sizeDd,
                     ],
                   ),
                 ),
@@ -75,11 +87,16 @@ class _FiltersHandlebars extends State<FiltersHandlebars>
                             45,
                             Icons.save,
                             kWhite.withOpacity(volume * 2), () {
-                          args.filters.params["bikeType"] =
+                          args.args.filters.params["handlebarType"] =
                               FilterValueSetters.setDropdownValue(typeDd.value);
-                          args.filters.params["bikeBrand"] =
+                          args.args.filters.params["handlebarMaterial"] =
                               FilterValueSetters.setDropdownValue(
-                                  brandDd.value);
+                                  materialDd.value);
+                          args.args.filters.params["handlebarWidth"] =
+                              FilterValueSetters.setDropdownValue(
+                                  widthDd.value);
+                          args.args.filters.params["handlebarSize"] =
+                              FilterValueSetters.setDropdownValue(sizeDd.value);
 
                           Navigator.of(context).pushReplacementNamed(
                               FilterPage.routeName,

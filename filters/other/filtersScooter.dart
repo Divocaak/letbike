@@ -12,16 +12,21 @@ class FiltersScooter extends StatefulWidget {
 
 class _FiltersScooter extends State<FiltersScooter>
     with TickerProviderStateMixin {
-  HomeArguments args;
+  AddItemFiltersArgs args;
 
   double volume = 0;
 
   AnimationController animationController;
 
   FilterDropdown brandDd =
-      new FilterDropdown(hint: "Značka kola", options: Bike.brand);
-  FilterDropdown typeDd =
-      new FilterDropdown(hint: "Typ kola", options: Bike.type);
+      new FilterDropdown(hint: "Značka koloběžky", options: Scooter.brand);
+  FilterDropdown sizeDd =
+      new FilterDropdown(hint: "Velikost koleček", options: Scooter.size);
+  FilterSwitch compSwitch = new FilterSwitch(
+    label: "Počítač",
+    left: "Ne",
+    right: "Ano",
+  );
 
   @override
   void initState() {
@@ -55,7 +60,11 @@ class _FiltersScooter extends State<FiltersScooter>
                       Container(
                         height: 20,
                       ),
-                      typeDd,
+                      sizeDd,
+                      Container(
+                        height: 20,
+                      ),
+                      compSwitch
                     ],
                   ),
                 ),
@@ -75,11 +84,14 @@ class _FiltersScooter extends State<FiltersScooter>
                             45,
                             Icons.save,
                             kWhite.withOpacity(volume * 2), () {
-                          args.filters.params["bikeType"] =
-                              FilterValueSetters.setDropdownValue(typeDd.value);
-                          args.filters.params["bikeBrand"] =
+                          args.args.filters.params["scooterBrand"] =
                               FilterValueSetters.setDropdownValue(
                                   brandDd.value);
+                          args.args.filters.params["scooterSize"] =
+                              FilterValueSetters.setDropdownValue(sizeDd.value);
+                          args.args.filters.params["scooterComputer"] =
+                              FilterValueSetters.setSwitchValueWithOffset(
+                                  compSwitch.value, args.args.filters);
 
                           Navigator.of(context).pushReplacementNamed(
                               FilterPage.routeName,

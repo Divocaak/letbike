@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:letbike/app/filterPage.dart';
 import '../../general/widgets/filterWidgets.dart';
 import '../../general/general.dart';
+import 'more/filtersWheelMore.dart';
 
 class FiltersWheel extends StatefulWidget {
   @override
@@ -11,16 +12,29 @@ class FiltersWheel extends StatefulWidget {
 }
 
 class _FiltersWheel extends State<FiltersWheel> with TickerProviderStateMixin {
-  HomeArguments args;
+  AddItemFiltersArgs args;
 
   double volume = 0;
 
   AnimationController animationController;
 
   FilterDropdown brandDd =
-      new FilterDropdown(hint: "Značka kola", options: Bike.brand);
-  FilterDropdown typeDd =
-      new FilterDropdown(hint: "Typ kola", options: Bike.type);
+      new FilterDropdown(hint: "Značka kola", options: Wheel.brand);
+  FilterDropdown sizeDd =
+      new FilterDropdown(hint: "Velikost", options: Wheel.size);
+  FilterDropdown materialDd =
+      new FilterDropdown(hint: "Materiál", options: Wheel.material);
+  FilterSwitch spokesSwitch =
+      new FilterSwitch(label: "Typ drátů", left: "Kulaté", right: "Ploché");
+  FilterSwitch typeSwitch = new FilterSwitch(
+      label: "Provedení náboje", left: "Přední", right: "Zadní");
+  FilterDropdown axisDd = new FilterDropdown(hint: "Osa", options: Wheel.axis);
+  FilterSwitch brakesSwitch =
+      new FilterSwitch(label: "Typ brzd", left: "Kotoučové", right: "V-Brzdy");
+  FilterSwitch cassetteSwitch = new FilterSwitch(
+      label: "Provedení kazety", left: "Závit", right: "Ořech");
+  FilterDropdown compatibilityDd =
+      new FilterDropdown(hint: "Kompatibilita", options: Wheel.compatibility);
 
   @override
   void initState() {
@@ -54,7 +68,35 @@ class _FiltersWheel extends State<FiltersWheel> with TickerProviderStateMixin {
                       Container(
                         height: 20,
                       ),
-                      typeDd,
+                      sizeDd,
+                      Container(
+                        height: 20,
+                      ),
+                      materialDd,
+                      Container(
+                        height: 20,
+                      ),
+                      spokesSwitch,
+                      Container(
+                        height: 20,
+                      ),
+                      typeSwitch,
+                      Container(
+                        height: 20,
+                      ),
+                      axisDd,
+                      Container(
+                        height: 20,
+                      ),
+                      brakesSwitch,
+                      Container(
+                        height: 20,
+                      ),
+                      cassetteSwitch,
+                      Container(
+                        height: 20,
+                      ),
+                      compatibilityDd
                     ],
                   ),
                 ),
@@ -67,6 +109,55 @@ class _FiltersWheel extends State<FiltersWheel> with TickerProviderStateMixin {
                 child: Stack(
                   children: [
                     Positioned(
+                        bottom: 150,
+                        right: 40,
+                        child: CircularButton(
+                            kSecondaryColor.withOpacity(volume * 2),
+                            45,
+                            Icons.filter_alt,
+                            kWhite.withOpacity(volume * 2), () {
+                          args.args.filters.params["wheelBrand"] =
+                              FilterValueSetters.setDropdownValue(
+                                  brandDd.value);
+                          args.args.filters.params["wheelSize"] =
+                              FilterValueSetters.setDropdownValue(sizeDd.value);
+                          args.args.filters.params["wheelMaterial"] =
+                              FilterValueSetters.setDropdownValue(
+                                  materialDd.value);
+                          args.args.filters.params["wheeldSpokes"] =
+                              FilterValueSetters.setSwitchValueWithOffset(
+                                  spokesSwitch.value, args.args.filters);
+                          args.args.filters.params["wheeldType"] =
+                              FilterValueSetters.setSwitchValueWithOffset(
+                                  typeSwitch.value, args.args.filters);
+                          args.args.filters.params["wheelAxis"] =
+                              FilterValueSetters.setDropdownValue(axisDd.value);
+                          args.args.filters.params["wheeldBrakesType"] =
+                              FilterValueSetters.setSwitchValueWithOffset(
+                                  brakesSwitch.value, args.args.filters);
+                          args.args.filters.params["wheeldCassette"] =
+                              FilterValueSetters.setSwitchValueWithOffset(
+                                  cassetteSwitch.value, args.args.filters);
+                          args.args.filters.params["wheelCompatibility"] =
+                              FilterValueSetters.setDropdownValue(
+                                  compatibilityDd.value);
+
+                          if (!brakesSwitch.value || cassetteSwitch.value) {
+                            Navigator.of(context).pushReplacementNamed(
+                                FiltersWheelMore.routeName,
+                                arguments: new FiltersWheelMoreArgs(args,
+                                    cassetteSwitch.value, brakesSwitch.value));
+                          } else {
+                            AlertBox.showAlertBox(
+                                context,
+                                "Chyba",
+                                Text(
+                                  "Pro další nastavení zvolte prosím typ provedení kazety na ořech, nebo nastavte typ brzd na kotoučové",
+                                  style: TextStyle(color: kWhite),
+                                ));
+                          }
+                        })),
+                    Positioned(
                         bottom: 120,
                         right: 120,
                         child: CircularButton(
@@ -74,11 +165,31 @@ class _FiltersWheel extends State<FiltersWheel> with TickerProviderStateMixin {
                             45,
                             Icons.save,
                             kWhite.withOpacity(volume * 2), () {
-                          args.filters.params["bikeType"] =
-                              FilterValueSetters.setDropdownValue(typeDd.value);
-                          args.filters.params["bikeBrand"] =
+                          args.args.filters.params["wheelBrand"] =
                               FilterValueSetters.setDropdownValue(
                                   brandDd.value);
+                          args.args.filters.params["wheelSize"] =
+                              FilterValueSetters.setDropdownValue(sizeDd.value);
+                          args.args.filters.params["wheelMaterial"] =
+                              FilterValueSetters.setDropdownValue(
+                                  materialDd.value);
+                          args.args.filters.params["wheeldSpokes"] =
+                              FilterValueSetters.setSwitchValueWithOffset(
+                                  spokesSwitch.value, args.args.filters);
+                          args.args.filters.params["wheeldType"] =
+                              FilterValueSetters.setSwitchValueWithOffset(
+                                  typeSwitch.value, args.args.filters);
+                          args.args.filters.params["wheelAxis"] =
+                              FilterValueSetters.setDropdownValue(axisDd.value);
+                          args.args.filters.params["wheeldBrakesType"] =
+                              FilterValueSetters.setSwitchValueWithOffset(
+                                  brakesSwitch.value, args.args.filters);
+                          args.args.filters.params["wheeldCassette"] =
+                              FilterValueSetters.setSwitchValueWithOffset(
+                                  cassetteSwitch.value, args.args.filters);
+                          args.args.filters.params["wheelCompatibility"] =
+                              FilterValueSetters.setDropdownValue(
+                                  compatibilityDd.value);
 
                           Navigator.of(context).pushReplacementNamed(
                               FilterPage.routeName,

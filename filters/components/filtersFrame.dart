@@ -11,16 +11,17 @@ class FiltersFrame extends StatefulWidget {
 }
 
 class _FiltersFrame extends State<FiltersFrame> with TickerProviderStateMixin {
-  HomeArguments args;
+  AddItemFiltersArgs args;
 
   double volume = 0;
 
   AnimationController animationController;
 
-  FilterDropdown brandDd =
-      new FilterDropdown(hint: "Značka kola", options: Bike.brand);
-  FilterDropdown typeDd =
-      new FilterDropdown(hint: "Typ kola", options: Bike.type);
+  FilterDropdown sizeDd =
+      new FilterDropdown(hint: "Velikost", options: Frame.size);
+  FilterDropdown forkDd =
+      new FilterDropdown(hint: "Vidlice", options: Frame.fork);
+  FilterDropdown typeDd = new FilterDropdown(hint: "Typ", options: Frame.type);
 
   @override
   void initState() {
@@ -50,7 +51,11 @@ class _FiltersFrame extends State<FiltersFrame> with TickerProviderStateMixin {
                   padding: EdgeInsets.all(20),
                   child: ListView(
                     children: [
-                      brandDd,
+                      sizeDd,
+                      Container(
+                        height: 20,
+                      ),
+                      forkDd,
                       Container(
                         height: 20,
                       ),
@@ -74,11 +79,12 @@ class _FiltersFrame extends State<FiltersFrame> with TickerProviderStateMixin {
                             45,
                             Icons.save,
                             kWhite.withOpacity(volume * 2), () {
-                          args.filters.params["bikeType"] =
+                          args.args.filters.params["frameSize"] =
+                              FilterValueSetters.setDropdownValue(sizeDd.value);
+                          args.args.filters.params["frameFork"] =
+                              FilterValueSetters.setDropdownValue(forkDd.value);
+                          args.args.filters.params["frameType"] =
                               FilterValueSetters.setDropdownValue(typeDd.value);
-                          args.filters.params["bikeBrand"] =
-                              FilterValueSetters.setDropdownValue(
-                                  brandDd.value);
 
                           Navigator.of(context).pushReplacementNamed(
                               FilterPage.routeName,

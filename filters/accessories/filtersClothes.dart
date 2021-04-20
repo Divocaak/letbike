@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:letbike/app/filterPage.dart';
 import '../../general/widgets/filterWidgets.dart';
 import '../../general/general.dart';
+import 'filtersClothesMore.dart';
 
 class FiltersClothes extends StatefulWidget {
   @override
@@ -12,16 +13,14 @@ class FiltersClothes extends StatefulWidget {
 
 class _FiltersClothes extends State<FiltersClothes>
     with TickerProviderStateMixin {
-  HomeArguments args;
+  AddItemFiltersArgs args;
 
   double volume = 0;
 
   AnimationController animationController;
 
-  FilterDropdown brandDd =
-      new FilterDropdown(hint: "Značka kola", options: Bike.brand);
   FilterDropdown typeDd =
-      new FilterDropdown(hint: "Typ kola", options: Bike.type);
+      new FilterDropdown(hint: "Typ", options: Clothes.type);
 
   @override
   void initState() {
@@ -51,10 +50,6 @@ class _FiltersClothes extends State<FiltersClothes>
                   padding: EdgeInsets.all(20),
                   child: ListView(
                     children: [
-                      brandDd,
-                      Container(
-                        height: 20,
-                      ),
                       typeDd,
                     ],
                   ),
@@ -68,6 +63,31 @@ class _FiltersClothes extends State<FiltersClothes>
                 child: Stack(
                   children: [
                     Positioned(
+                        bottom: 150,
+                        right: 40,
+                        child: CircularButton(
+                            kSecondaryColor.withOpacity(volume * 2),
+                            45,
+                            Icons.filter_alt,
+                            kWhite.withOpacity(volume * 2), () {
+                          args.args.filters.params["clothesType"] =
+                              FilterValueSetters.setDropdownValue(typeDd.value);
+
+                          if (typeDd.value == 3) {
+                            Navigator.of(context).pushReplacementNamed(
+                                FiltersClothesMore.routeName,
+                                arguments: args);
+                          } else {
+                            AlertBox.showAlertBox(
+                                context,
+                                "Chyba",
+                                Text(
+                                  "Pro další nastavení zvolte prosím jiný typ oblečení",
+                                  style: TextStyle(color: kWhite),
+                                ));
+                          }
+                        })),
+                    Positioned(
                         bottom: 120,
                         right: 120,
                         child: CircularButton(
@@ -75,11 +95,8 @@ class _FiltersClothes extends State<FiltersClothes>
                             45,
                             Icons.save,
                             kWhite.withOpacity(volume * 2), () {
-                          args.filters.params["bikeType"] =
+                          args.args.filters.params["clothesType"] =
                               FilterValueSetters.setDropdownValue(typeDd.value);
-                          args.filters.params["bikeBrand"] =
-                              FilterValueSetters.setDropdownValue(
-                                  brandDd.value);
 
                           Navigator.of(context).pushReplacementNamed(
                               FilterPage.routeName,

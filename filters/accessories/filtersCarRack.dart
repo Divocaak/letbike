@@ -3,24 +3,23 @@ import 'package:letbike/app/filterPage.dart';
 import '../../general/widgets/filterWidgets.dart';
 import '../../general/general.dart';
 
-class FiltersBag extends StatefulWidget {
+class FiltersCarRack extends StatefulWidget {
   @override
-  _FiltersBag createState() => _FiltersBag();
+  _FiltersCarRack createState() => _FiltersCarRack();
 
-  static const routeName = "/FiltersBag";
+  static const routeName = "/FiltersCarRack";
 }
 
-class _FiltersBag extends State<FiltersBag> with TickerProviderStateMixin {
-  HomeArguments args;
+class _FiltersCarRack extends State<FiltersCarRack>
+    with TickerProviderStateMixin {
+  AddItemFiltersArgs args;
 
   double volume = 0;
 
   AnimationController animationController;
 
-  FilterDropdown brandDd =
-      new FilterDropdown(hint: "Značka kola", options: Bike.brand);
-  FilterDropdown typeDd =
-      new FilterDropdown(hint: "Typ kola", options: Bike.type);
+  FilterSwitch typeSwitch =
+      new FilterSwitch(label: "Typ", left: "Na střechu", right: "Na tažné");
 
   @override
   void initState() {
@@ -49,13 +48,7 @@ class _FiltersBag extends State<FiltersBag> with TickerProviderStateMixin {
                 child: Padding(
                   padding: EdgeInsets.all(20),
                   child: ListView(
-                    children: [
-                      brandDd,
-                      Container(
-                        height: 20,
-                      ),
-                      typeDd,
-                    ],
+                    children: [typeSwitch],
                   ),
                 ),
               ),
@@ -74,11 +67,9 @@ class _FiltersBag extends State<FiltersBag> with TickerProviderStateMixin {
                             45,
                             Icons.save,
                             kWhite.withOpacity(volume * 2), () {
-                          args.filters.params["bikeType"] =
-                              FilterValueSetters.setDropdownValue(typeDd.value);
-                          args.filters.params["bikeBrand"] =
-                              FilterValueSetters.setDropdownValue(
-                                  brandDd.value);
+                          args.args.filters.params["carRackType"] =
+                              FilterValueSetters.setSwitchValueWithOffset(
+                                  typeSwitch.value, args.args.filters);
 
                           Navigator.of(context).pushReplacementNamed(
                               FilterPage.routeName,
