@@ -1,26 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:letbike/app/filterPage.dart';
-import '../../general/widgets/filterWidgets.dart';
-import '../../general/general.dart';
+import '../../../general/widgets/filterWidgets.dart';
+import '../../../general/general.dart';
 
-class FiltersOther extends StatefulWidget {
+class FiltersWheelMore extends StatefulWidget {
   @override
-  _FiltersOther createState() => _FiltersOther();
+  _FiltersWheelMore createState() => _FiltersWheelMore();
 
-  static const routeName = "/FiltersOther";
+  static const routeName = "/FiltersWheelMore";
 }
 
-class _FiltersOther extends State<FiltersOther> with TickerProviderStateMixin {
-  HomeArguments args;
+class _FiltersWheelMore extends State<FiltersWheelMore>
+    with TickerProviderStateMixin {
+  FiltersWheelMoreArgs args;
 
   double volume = 0;
 
   AnimationController animationController;
 
-  FilterDropdown brandDd =
-      new FilterDropdown(hint: "Značka kola", options: Bike.brand);
-  FilterDropdown typeDd =
-      new FilterDropdown(hint: "Typ kola", options: Bike.type);
+  FilterDropdown nutDd =
+      new FilterDropdown(hint: "Značka ořechu", options: Wheel.nut);
+  FilterSwitch discBrakesSwitch = new FilterSwitch(
+      label: "Uchycení disku", left: "CenterLock", right: "6 děr");
 
   @override
   void initState() {
@@ -50,11 +51,13 @@ class _FiltersOther extends State<FiltersOther> with TickerProviderStateMixin {
                   padding: EdgeInsets.all(20),
                   child: ListView(
                     children: [
-                      brandDd,
-                      Container(
-                        height: 20,
-                      ),
-                      typeDd,
+                      if (args.nut) ...[
+                        nutDd,
+                        Container(
+                          height: 20,
+                        ),
+                      ],
+                      if (!args.brakes) discBrakesSwitch,
                     ],
                   ),
                 ),
@@ -74,15 +77,18 @@ class _FiltersOther extends State<FiltersOther> with TickerProviderStateMixin {
                             45,
                             Icons.save,
                             kWhite.withOpacity(volume * 2), () {
-                          args.filters.params["bikeType"] =
-                              FilterValueSetters.setDropdownValue(typeDd.value);
-                          args.filters.params["bikeBrand"] =
-                              FilterValueSetters.setDropdownValue(
-                                  brandDd.value);
+                          args.args
+                            ..args.filters.params["wheelNut"] =
+                                FilterValueSetters.setDropdownValue(
+                                    nutDd.value);
+                          args.args.args.filters.params["wheeldBrakesDisc"] =
+                              FilterValueSetters.setSwitchValueWithOffset(
+                                  discBrakesSwitch.value,
+                                  args.args.args.filters);
 
                           Navigator.of(context).pushReplacementNamed(
                               FilterPage.routeName,
-                              arguments: args);
+                              arguments: args.args);
                         })),
                   ],
                 ),
@@ -112,4 +118,12 @@ class _FiltersOther extends State<FiltersOther> with TickerProviderStateMixin {
       ),
     );
   }
+}
+
+class FiltersWheelMoreArgs {
+  AddItemFiltersArgs args;
+  bool nut;
+  bool brakes;
+
+  FiltersWheelMoreArgs(this.args, this.nut, this.brakes);
 }

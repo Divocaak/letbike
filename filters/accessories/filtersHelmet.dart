@@ -12,16 +12,14 @@ class FiltersHelmet extends StatefulWidget {
 
 class _FiltersHelmet extends State<FiltersHelmet>
     with TickerProviderStateMixin {
-  HomeArguments args;
+  AddItemFiltersArgs args;
 
   double volume = 0;
 
   AnimationController animationController;
 
-  FilterDropdown brandDd =
-      new FilterDropdown(hint: "Značka kola", options: Bike.brand);
-  FilterDropdown typeDd =
-      new FilterDropdown(hint: "Typ kola", options: Bike.type);
+  FilterSwitch typeSwitch =
+      new FilterSwitch(label: "Typ", left: "Dospělí", right: "Dětské");
 
   @override
   void initState() {
@@ -50,13 +48,7 @@ class _FiltersHelmet extends State<FiltersHelmet>
                 child: Padding(
                   padding: EdgeInsets.all(20),
                   child: ListView(
-                    children: [
-                      brandDd,
-                      Container(
-                        height: 20,
-                      ),
-                      typeDd,
-                    ],
+                    children: [typeSwitch],
                   ),
                 ),
               ),
@@ -75,11 +67,9 @@ class _FiltersHelmet extends State<FiltersHelmet>
                             45,
                             Icons.save,
                             kWhite.withOpacity(volume * 2), () {
-                          args.filters.params["bikeType"] =
-                              FilterValueSetters.setDropdownValue(typeDd.value);
-                          args.filters.params["bikeBrand"] =
-                              FilterValueSetters.setDropdownValue(
-                                  brandDd.value);
+                          args.args.filters.params["helmetType"] =
+                              FilterValueSetters.setSwitchValueWithOffset(
+                                  typeSwitch.value, args.args.filters);
 
                           Navigator.of(context).pushReplacementNamed(
                               FilterPage.routeName,

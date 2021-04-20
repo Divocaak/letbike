@@ -77,7 +77,7 @@ class _HomePageState extends State<HomePage>
                           kWhite.withOpacity(volume * 2), () {
                         Navigator.pushReplacementNamed(
                             context, AddItem.routeName,
-                            arguments: homeArguments.user);
+                            arguments: homeArguments);
                       })),
                   Positioned(
                       bottom: 120,
@@ -89,7 +89,8 @@ class _HomePageState extends State<HomePage>
                           kWhite.withOpacity(volume * 2), () {
                         Navigator.pushReplacementNamed(
                             context, FilterPage.routeName,
-                            arguments: homeArguments);
+                            arguments:
+                                new AddItemFiltersArgs(homeArguments, false));
                       })),
                   Positioned(
                       bottom: 150,

@@ -11,16 +11,14 @@ class FiltersRim extends StatefulWidget {
 }
 
 class _FiltersRim extends State<FiltersRim> with TickerProviderStateMixin {
-  HomeArguments args;
+  AddItemFiltersArgs args;
 
   double volume = 0;
 
   AnimationController animationController;
 
-  FilterDropdown brandDd =
-      new FilterDropdown(hint: "Značka kola", options: Bike.brand);
-  FilterDropdown typeDd =
-      new FilterDropdown(hint: "Typ kola", options: Bike.type);
+  FilterDropdown sizeDd =
+      new FilterDropdown(hint: "Velikost", options: Rim.type);
 
   @override
   void initState() {
@@ -49,13 +47,7 @@ class _FiltersRim extends State<FiltersRim> with TickerProviderStateMixin {
                 child: Padding(
                   padding: EdgeInsets.all(20),
                   child: ListView(
-                    children: [
-                      brandDd,
-                      Container(
-                        height: 20,
-                      ),
-                      typeDd,
-                    ],
+                    children: [sizeDd],
                   ),
                 ),
               ),
@@ -74,11 +66,8 @@ class _FiltersRim extends State<FiltersRim> with TickerProviderStateMixin {
                             45,
                             Icons.save,
                             kWhite.withOpacity(volume * 2), () {
-                          args.filters.params["bikeType"] =
-                              FilterValueSetters.setDropdownValue(typeDd.value);
-                          args.filters.params["bikeBrand"] =
-                              FilterValueSetters.setDropdownValue(
-                                  brandDd.value);
+                          args.args.filters.params["rimSize"] =
+                              FilterValueSetters.setDropdownValue(sizeDd.value);
 
                           Navigator.of(context).pushReplacementNamed(
                               FilterPage.routeName,

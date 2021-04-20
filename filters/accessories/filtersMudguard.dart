@@ -12,16 +12,16 @@ class FiltersMudguard extends StatefulWidget {
 
 class _FiltersMudguard extends State<FiltersMudguard>
     with TickerProviderStateMixin {
-  HomeArguments args;
+  AddItemFiltersArgs args;
 
   double volume = 0;
 
   AnimationController animationController;
 
-  FilterDropdown brandDd =
-      new FilterDropdown(hint: "Značka kola", options: Bike.brand);
   FilterDropdown typeDd =
-      new FilterDropdown(hint: "Typ kola", options: Bike.type);
+      new FilterDropdown(hint: "Typ", options: Mudguard.type);
+  FilterDropdown sizeDd =
+      new FilterDropdown(hint: "Velikost", options: Mudguard.size);
 
   @override
   void initState() {
@@ -51,11 +51,11 @@ class _FiltersMudguard extends State<FiltersMudguard>
                   padding: EdgeInsets.all(20),
                   child: ListView(
                     children: [
-                      brandDd,
+                      typeDd,
                       Container(
                         height: 20,
                       ),
-                      typeDd,
+                      sizeDd,
                     ],
                   ),
                 ),
@@ -75,11 +75,10 @@ class _FiltersMudguard extends State<FiltersMudguard>
                             45,
                             Icons.save,
                             kWhite.withOpacity(volume * 2), () {
-                          args.filters.params["bikeType"] =
-                              FilterValueSetters.setDropdownValue(typeDd.value);
-                          args.filters.params["bikeBrand"] =
-                              FilterValueSetters.setDropdownValue(
-                                  brandDd.value);
+                          args.args.filters.params["mudguardType"] =
+                              FilterValueSetters.setDropdownValue(sizeDd.value);
+                          args.args.filters.params["mudguardSize"] =
+                              FilterValueSetters.setDropdownValue(sizeDd.value);
 
                           Navigator.of(context).pushReplacementNamed(
                               FilterPage.routeName,

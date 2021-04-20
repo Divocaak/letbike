@@ -1,3 +1,5 @@
+export 'categories.dart';
+
 class Item {
   int id;
   int sellerId;
@@ -82,6 +84,64 @@ class Item {
           "scooterBrand": int.parse(json["scooterBrand"]),
           "scooterSize": int.parse(json["scooterSize"]),
           "scooterComputer": int.parse(json["scooterComputer"]),
+          "brakeType": int.parse(json["brakeType"]),
+          "brakeBrand": int.parse(json["brakeBrand"]),
+          "brakeDiscType": int.parse(json["brakeDiscType"]),
+          "brakeDiscSize": int.parse(json["brakeDiscSize"]),
+          "brakeBlockType": int.parse(json["brakeBlockType"]),
+          "tireSize": int.parse(json["tireSize"]),
+          "tireWidth": int.parse(json["tireWidth"]),
+          "tireBrand": int.parse(json["tireBrand"]),
+          "tireType": int.parse(json["tireType"]),
+          "tireMaterial": int.parse(json["tireMaterial"]),
+          "tubeSize": int.parse(json["tubeSize"]),
+          "tubeType": int.parse(json["tubeType"]),
+          "frameSize": int.parse(json["frameSize"]),
+          "frameFork": int.parse(json["frameFork"]),
+          "frameType": int.parse(json["frameType"]),
+          "handlebarType": int.parse(json["handlebarType"]),
+          "handlebarMaterial": int.parse(json["handlebarMaterial"]),
+          "handlebarWidth": int.parse(json["handlebarWidth"]),
+          "handlebarSize": int.parse(json["handlebarSize"]),
+          "saddleTubeType": int.parse(json["saddleTubeType"]),
+          "saddleTubeLength": int.parse(json["saddleTubeLength"]),
+          "saddleTubeMaterial": int.parse(json["saddleTubeMaterial"]),
+          "saddleTubeSize": int.parse(json["saddleTubeSize"]),
+          "stemType": int.parse(json["stemType"]),
+          "axisType": int.parse(json["axisType"]),
+          "cassetteType": int.parse(json["cassetteType"]),
+          "shockAbsType": int.parse(json["shockAbsType"]),
+          "gearChangeType": int.parse(json["gearChangeType"]),
+          "pedalsType": int.parse(json["pedalsType"]),
+          "rimSize": int.parse(json["rimSize"]),
+          "gripsType": int.parse(json["gripsType"]),
+          "eBikeComponentsType": int.parse(json["eBikeComponentsType"]),
+          "headsetType": int.parse(json["headsetType"]),
+          "bowdenType": int.parse(json["bowdenType"]),
+          "clothesType": int.parse(json["clothesType"]),
+          "clothesClothes": int.parse(json["clothesClothes"]),
+          "clothesGender": int.parse(json["clothesGender"]),
+          "clothesSize": int.parse(json["clothesSize"]),
+          "bootsType": int.parse(json["bootsType"]),
+          "bootsSize": int.parse(json["bootsSize"]),
+          "helmetType": int.parse(json["helmetType"]),
+          "compType": int.parse(json["compType"]),
+          "glassType": int.parse(json["glassType"]),
+          "glassGlass": int.parse(json["glassGlass"]),
+          "glassGender": int.parse(json["glassGender"]),
+          "glassGlassChange": int.parse(json["glassGlassChange"]),
+          "glassHolderChange": int.parse(json["glassHolderChange"]),
+          "kidSaddleType": int.parse(json["kidSaddleType"]),
+          "bottleHolderType": int.parse(json["bottleHolderType"]),
+          "rackType": int.parse(json["rackType"]),
+          "rackSize": int.parse(json["rackSize"]),
+          "carRackType": int.parse(json["carRackType"]),
+          "toolType": int.parse(json["toolType"]),
+          "pumpType": int.parse(json["pumpType"]),
+          "lightType": int.parse(json["lightType"]),
+          "mudguardType": int.parse(json["mudguardType"]),
+          "mudguardSize": int.parse(json["mudguardSize"]),
+          "lockType": int.parse(json["lockType"]),
         }),
         int.parse(json["soldTo"]));
   }
@@ -138,7 +198,65 @@ class Item {
         "scooterBrand": itemParams.params["scooterBrand"],
         "scooterSize": itemParams.params["scooterSize"],
         "scooterComputer": itemParams.params["scooterComputer"],
-        "soldTo": soldTo
+        "soldTo": soldTo,
+        "brakeType": itemParams.params["brakeType"],
+        "brakeBrand": itemParams.params["brakeBrand"],
+        "brakeDiscType": itemParams.params["brakeDiscType"],
+        "brakeDiscSize": itemParams.params["brakeDiscSize"],
+        "brakeBlockType": itemParams.params["brakeBlockType"],
+        "tireSize": itemParams.params["tireSize"],
+        "tireWidth": itemParams.params["tireWidth"],
+        "tireBrand": itemParams.params["tireBrand"],
+        "tireType": itemParams.params["tireType"],
+        "tireMaterial": itemParams.params["tireMaterial"],
+        "tubeSize": itemParams.params["tubeSize"],
+        "tubeType": itemParams.params["tubeType"],
+        "frameSize": itemParams.params["frameSize"],
+        "frameFork": itemParams.params["frameFork"],
+        "frameType": itemParams.params["frameType"],
+        "handlebarType": itemParams.params["handlebarType"],
+        "handlebarMaterial": itemParams.params["handlebarMaterial"],
+        "handlebarWidth": itemParams.params["handlebarWidth"],
+        "handlebarSize": itemParams.params["handlebarSize"],
+        "saddleTubeType": itemParams.params["saddleTubeType"],
+        "saddleTubeLength": itemParams.params["saddleTubeLength"],
+        "saddleTubeMaterial": itemParams.params["saddleTubeMaterial"],
+        "saddleTubeSize": itemParams.params["saddleTubeSize"],
+        "stemType": itemParams.params["stemType"],
+        "axisType": itemParams.params["axisType"],
+        "cassetteType": itemParams.params["cassetteType"],
+        "shockAbsType": itemParams.params["shockAbsType"],
+        "gearChangeType": itemParams.params["gearChangeType"],
+        "pedalsType": itemParams.params["pedalsType"],
+        "rimSize": itemParams.params["rimSize"],
+        "gripsType": itemParams.params["gripsType"],
+        "eBikeComponentsType": itemParams.params["eBikeComponentsType"],
+        "headsetType": itemParams.params["headsetType"],
+        "bowdenType": itemParams.params["bowdenType"],
+        "clothesType": itemParams.params["clothesType"],
+        "clothesClothes": itemParams.params["clothesClothes"],
+        "clothesGender": itemParams.params["clothesGender"],
+        "clothesSize": itemParams.params["clothesSize"],
+        "bootsType": itemParams.params["bootsType"],
+        "bootsSize": itemParams.params["bootsSize"],
+        "helmetType": itemParams.params["helmetType"],
+        "compType": itemParams.params["compType"],
+        "glassType": itemParams.params["glassType"],
+        "glassGlass": itemParams.params["glassGlass"],
+        "glassGender": itemParams.params["glassGender"],
+        "glassGlassChange": itemParams.params["glassGlassChange"],
+        "glassHolderChange": itemParams.params["glassHolderChange"],
+        "kidSaddleType": itemParams.params["kidSaddleType"],
+        "bottleHolderType": itemParams.params["bottleHolderType"],
+        "rackType": itemParams.params["rackType"],
+        "rackSize": itemParams.params["rackSize"],
+        "carRackType": itemParams.params["carRackType"],
+        "toolType": itemParams.params["toolType"],
+        "pumpType": itemParams.params["pumpType"],
+        "lightType": itemParams.params["lightType"],
+        "mudguardType": itemParams.params["mudguardType"],
+        "mudguardSize": itemParams.params["mudguardSize"],
+        "lockType": itemParams.params["lockType"],
       };
 }
 
@@ -186,7 +304,65 @@ class ItemParams {
       "trainerBrakes": -1,
       "scooterBrand": -1,
       "scooterSize": -1,
-      "scooterComputer": -1
+      "scooterComputer": -1,
+      "brakeType": -1,
+      "brakeBrand": -1,
+      "brakeDiscType": -1,
+      "brakeDiscSize": -1,
+      "brakeBlockType": -1,
+      "tireSize": -1,
+      "tireWidth": -1,
+      "tireBrand": -1,
+      "tireType": -1,
+      "tireMaterial": -1,
+      "tubeSize": -1,
+      "tubeType": -1,
+      "frameSize": -1,
+      "frameFork": -1,
+      "frameType": -1,
+      "handlebarType": -1,
+      "handlebarMaterial": -1,
+      "handlebarWidth": -1,
+      "handlebarSize": -1,
+      "saddleTubeType": -1,
+      "saddleTubeLength": -1,
+      "saddleTubeMaterial": -1,
+      "saddleTubeSize": -1,
+      "stemType": -1,
+      "axisType": -1,
+      "cassetteType": -1,
+      "shockAbsType": -1,
+      "gearChangeType": -1,
+      "pedalsType": -1,
+      "rimSize": -1,
+      "gripsType": -1,
+      "eBikeComponentsType": -1,
+      "headsetType": -1,
+      "bowdenType": -1,
+      "clothesType": -1,
+      "clothesClothes": -1,
+      "clothesGender": -1,
+      "clothesSize": -1,
+      "bootsType": -1,
+      "bootsSize": -1,
+      "helmetType": -1,
+      "compType": -1,
+      "glassType": -1,
+      "glassGlass": -1,
+      "glassGender": -1,
+      "glassGlassChange": -1,
+      "glassHolderChange": -1,
+      "kidSaddleType": -1,
+      "bottleHolderType": -1,
+      "rackType": -1,
+      "rackSize": -1,
+      "carRackType": -1,
+      "toolType": -1,
+      "pumpType": -1,
+      "lightType": -1,
+      "mudguardType": -1,
+      "mudguardSize": -1,
+      "lockType": -1,
     };
     return ItemParams(toReturn);
   }
@@ -231,7 +407,65 @@ class ItemParams {
     "trainerBrakes": 0,
     "scooterBrand": 0,
     "scooterSize": 0,
-    "scooterComputer": 0
+    "scooterComputer": 0,
+    "brakeType": 0,
+    "brakeBrand": 0,
+    "brakeDiscType": 0,
+    "brakeDiscSize": 0,
+    "brakeBlockType": 0,
+    "tireSize": 0,
+    "tireWidth": 0,
+    "tireBrand": 0,
+    "tireType": 0,
+    "tireMaterial": 0,
+    "tubeSize": 0,
+    "tubeType": 0,
+    "frameSize": 0,
+    "frameFork": 0,
+    "frameType": 0,
+    "handlebarType": 0,
+    "handlebarMaterial": 0,
+    "handlebarWidth": 0,
+    "handlebarSize": 0,
+    "saddleTubeType": 0,
+    "saddleTubeLength": 0,
+    "saddleTubeMaterial": 0,
+    "saddleTubeSize": 0,
+    "stemType": 0,
+    "axisType": 0,
+    "cassetteType": 0,
+    "shockAbsType": 0,
+    "gearChangeType": 0,
+    "pedalsType": 0,
+    "rimSize": 0,
+    "gripsType": 0,
+    "eBikeComponentsType": 0,
+    "headsetType": 0,
+    "bowdenType": 0,
+    "clothesType": 0,
+    "clothesClothes": 0,
+    "clothesGender": 0,
+    "clothesSize": 0,
+    "bootsType": 0,
+    "bootsSize": 0,
+    "helmetType": 0,
+    "compType": 0,
+    "glassType": 0,
+    "glassGlass": 0,
+    "glassGender": 0,
+    "glassGlassChange": 0,
+    "glassHolderChange": 0,
+    "kidSaddleType": 0,
+    "bottleHolderType": 0,
+    "rackType": 0,
+    "rackSize": 0,
+    "carRackType": 0,
+    "toolType": 0,
+    "pumpType": 0,
+    "lightType": 0,
+    "mudguardType": 0,
+    "mudguardSize": 0,
+    "lockType": 0,
   };
 }
 
@@ -366,540 +600,16 @@ class ItemInfo {
   ItemInfo(this.item, this.me);
 }
 
-class Category {
-  int selectedCategory;
-  int selectedAccessory;
-  int selectedPart;
-  int selectedOther;
-
-  Category(this.selectedCategory, this.selectedAccessory, this.selectedPart,
-      this.selectedOther);
-
-  static List<String> categories = ['Kola', 'Komponenty', 'Doplňky', 'Ostatní'];
-
-  static List<String> parts = [
-    "Zapletená kola",
-    "Kliky",
-    "Převodníky",
-    "Sedla",
-    "Vidlice",
-    "Bowdeny a lanka",
-    "Brzdy",
-    "Duše",
-    "Gripy a omotávky",
-    "Hlavová složení",
-    "Kazety a pastorky",
-    "Náboje a osy",
-    "Pedály",
-    "Pláště/Galusky",
-    "Představce",
-    "Příslušenství na elektrokola",
-    "Ráfky",
-    "Rámy",
-    "Řazení",
-    "Řídítka",
-    "Sedlovky",
-    "Tlumiče",
-    "Jiné"
-  ];
-
-  static List<String> accessories = [
-    "Blatníky",
-    "Brašny/batohy",
-    "Brýle",
-    "Cyklocomputery",
-    "Dětské sedačky",
-    "Helmy",
-    "Hustilky",
-    "Košíky na lahev",
-    "Nářadí",
-    "Nosič na kolo",
-    "Nosiče",
-    "Oblečení",
-    "Obuv",
-    "Poukazy",
-    "Světla",
-    "Výživa",
-    "Zámky",
-  ];
-
-  static List<String> other = ["E-Bike", "Tranažery", "Koloběžky"];
-}
-
-class Bike {
-  int selectedType;
-  int selectedBrand;
-
-  Bike(this.selectedType, this.selectedBrand);
-
-  static List<String> type = [
-    "Horská kola",
-    "Silniční kola",
-    "Celoodpružené", // bez odpružení
-    "Enduro",
-    "Elektrokola", // +elektro info
-    "Dětská kola",
-    "Krosová/Trekingová kola",
-    "Gravel/Cyklokros",
-    "Historická kola",
-    "Retro kola",
-    "Dámská kola",
-    "Městská kola",
-    "Sjezdová kola",
-    "Bmx kola", //konec
-    "Dirtová kola",
-    "Trenažéry", // custom(zátěž)
-    "Koloběžky", // custom
-    "Odrážedla", // custom(jako koloběžky)
-    "Dráhová kola",
-    "Singlespeed", // custom(if my dobrý -> jako koloběžky)
-    "Fatbike",
-    "Skládací kola",
-    "Cargobike",
-    "Jiné"
-  ];
-
-  static List<String> brand = [
-    "4Ever",
-    "Acra",
-    "Amulet",
-    "Apache",
-    "Author",
-    "Bianchi",
-    "Cannonadale",
-    "CTM",
-    "Cube",
-    "Denver",
-    "Dino",
-    "Fox",
-    "Galaxy",
-    "Ghost",
-    "Giant",
-    "GT",
-    "Kellys",
-    "Koss",
-    "KTM",
-    "Lapierre",
-    "Leader",
-    "Liberty",
-    "Maxbike",
-    "Merida",
-    "MMR",
-    "MRX",
-    "Norco",
-    "Olpran",
-    "Orbea",
-    "Rock Machine",
-    "Scott",
-    "Scud",
-    "Specialized",
-    "Stevens",
-    "Superior",
-    "Trek",
-    "Jiné"
-  ];
-}
-
-class Wheel {
-  int selectedBrand;
-  int selectedSize;
-  int selectedMaterial;
-  bool selectedSpokes;
-  bool selectedType;
-  int selectedAxis;
-  bool selectedBrakesType;
-  bool selectedBrakesDisc;
-  bool selectedCassette;
-  int selectedNut;
-  int selectedCompatibility;
-
-  Wheel(
-      this.selectedBrand,
-      this.selectedSize,
-      this.selectedMaterial,
-      this.selectedSpokes,
-      this.selectedType,
-      this.selectedAxis,
-      this.selectedBrakesType,
-      this.selectedBrakesDisc,
-      this.selectedCassette,
-      this.selectedNut,
-      this.selectedCompatibility);
-
-  static List<String> brand = [
-    "Author",
-    "Bontrager",
-    "Campagnolo",
-    "Dema",
-    "DT Swiss",
-    "Easton",
-    "FFWD",
-    "Force",
-    "FSA",
-    "Fulcrum",
-    "Giant",
-    "Kellys",
-    "Lightweight",
-    "Mach",
-    "Mavic",
-    "Miche",
-    "Novatech",
-    "Remerx",
-    "Rodi",
-    "Shimano",
-    "Specialized",
-    "Sram",
-    "Veltec",
-    "Vision Tech",
-    "XLC",
-    "Zipp",
-  ];
-
-  static List<String> size = [
-    "12’",
-    "14’",
-    "16’",
-    "20’",
-    "23’",
-    "24’",
-    "25’",
-    "26’",
-    "27,5’",
-    "28’",
-    "29’"
-  ];
-
-  static List<String> material = ["Karbon", "Hlíník", "Ocel"];
-
-  static List<String> axis = [
-    "Pevná 20 mm",
-    "Pevná 15 mm",
-    "Pevná 12mm",
-    "Rychloupínák",
-    "Na matice"
-  ];
-
-  static List<String> nut = ["Shimano", "Sram", "Campagnolo"];
-
-  static List<String> compatibility = [
-    "12 rychlostí",
-    "11 rychlostí",
-    "10 rychlostí",
-    "9 rychlostí",
-    "8 rychlostí",
-    "7 rychlostí",
-    "6 rychlostí",
-    "1 rychlost"
-  ];
-}
-
-class Cranks {
-  int selectedBrand;
-  int selectedCompatibility;
-  int selectedMaterial;
-  int selectedAxis;
-
-  Cranks(this.selectedBrand, this.selectedCompatibility, this.selectedMaterial,
-      this.selectedAxis);
-
-  static List<String> brand = [
-    "Aerozine",
-    "Campagnolo",
-    "Force",
-    "FSA",
-    "Prowhell",
-    "Race Face",
-    "Rotor",
-    "Shimano",
-    "SR Suntour",
-    "Sram",
-    "Sturney Archer",
-    "Sunrace",
-    "Truvativ",
-    "Jiné"
-  ];
-
-  static List<String> compatibility = [
-    "1 Převodník",
-    "2 Převodníky",
-    "3 Převodníky"
-  ];
-
-  static List<String> material = ["Karbon", "Ocel", "Hliník"];
-
-  static List<String> axis = ["DUB", "29 mm", "24 mm", "BB30", "4hran", "Isis"];
-}
-
-class Converter {
-  int selectedBrand;
-  int selectedNumOfSpeeds;
-
-  Converter(this.selectedBrand, this.selectedNumOfSpeeds);
-
-  static List<String> brand = [
-    "absoluteBLACK",
-    "Aerozine",
-    "BBB",
-    "Campagnolo",
-    "Da Bomb",
-    "E*13",
-    "Fireeye",
-    "Force",
-    "FSA",
-    "Gebhardt",
-    "Manobike",
-    "MAX1",
-    "Prowheel",
-    "Renthal",
-    "Ridea",
-    "Rotor",
-    "Shaman Racing",
-    "Shimano",
-    "SR Suntour",
-    "Sram",
-    "Stronglight",
-    "Total BMX",
-    "Truvativ",
-    "Jiné"
-  ];
-
-  static List<String> numOfSpeeds = ["1", "2", "7", "8", "9", "10", "11", "12"];
-}
-
-class Saddle {
-  int selectedBrand;
-  int selectedGender;
-
-  Saddle(this.selectedBrand, this.selectedGender);
-
-  static List<String> brand = [
-    "Author",
-    "BBB",
-    "Bontrager",
-    "Brooks",
-    "DDK",
-    "Ergon",
-    "Fabric",
-    "Felt",
-    "Fizik",
-    "Force",
-    "Giant",
-    "Kellys",
-    "Pro",
-    "Prologo",
-    "San Marco",
-    "Selle Bassano",
-    "Selle Italia",
-    "Selle Monte Grappa",
-    "Selle Royal",
-    "Selle San Marco",
-    "Selle SMP",
-    "Specialized",
-    "Sportourer",
-    "Velo",
-    "Wittkop",
-    "WTB",
-    "XLC",
-    "Jiné"
-  ];
-
-  static List<String> gender = ["Unisex", "Pánské", "Dámské", "Dětské"];
-}
-
-class Fork {
-  int selectedBrand;
-  int selectedSize;
-  bool selectedSuspensionType;
-  bool selectedSuspension;
-  int selectedWheelCoompatibility;
-  int selectedMaterial;
-  int selectedMaterialColumn;
-
-  Fork(
-      this.selectedBrand,
-      this.selectedSize,
-      this.selectedSuspensionType,
-      this.selectedSuspension,
-      this.selectedWheelCoompatibility,
-      this.selectedMaterial,
-      this.selectedMaterialColumn);
-
-  static List<String> brand = [
-    "Cane Creek",
-    "Cannondale",
-    "Cyklo Žitný",
-    "DVO suspension",
-    "Éclat",
-    "Felt",
-    "Force",
-    "Fox",
-    "GT",
-    "Macneil",
-    "Magura",
-    "Manitou",
-    "Marzocchi",
-    "Maxbike",
-    "MRX",
-    "M-Wave",
-    "Noxon",
-    "NS Bikes",
-    "Odyssey",
-    "Öhlins",
-    "Pells",
-    "Rock Shox",
-    "RST",
-    "Spinner",
-    "SR Suntour",
-    "Total BMX",
-    "TWN",
-    "WTP",
-    "Zoom",
-    "Jiné"
-  ];
-
-  static List<String> size = [
-    "12’",
-    "14’",
-    "16’",
-    "20’",
-    "23’",
-    "24’",
-    "25’",
-    "26’",
-    "27,5’",
-    "28’",
-    "29’"
-  ];
-
-  static List<String> wheelCompatibility = [
-    "Rychloupínák",
-    "Pevná osa",
-    "Matice"
-  ];
-
-  static List<String> material = ["Ocel", "Karbon", "Hliník", "Titan"];
-
-  static List<String> materialColumn = ["Karbon", "Ocel", "Hliník"];
-}
-
-class EBike {
-  int selectedBrand;
-  bool selectedMotorPos;
-
-  EBike(this.selectedBrand, this.selectedMotorPos);
-
-  static List<String> brand = [
-    "Crussis",
-    "Haibike",
-    "Apache",
-    "Rock Machine",
-    "Leader Fox",
-    "Jiné"
-  ];
-}
-
-class Trainer {
-  int selectedBrand;
-  int selectedBrakes;
-
-  Trainer(this.selectedBrand, this.selectedBrakes);
-
-  static List<String> brand = [
-    "HMS",
-    "Tunturi",
-    "BH Fitness",
-    "InSPORTline",
-    "Spokey",
-    "Jiné"
-  ];
-
-  static List<String> brakes = ["magnetický", "indukční", "páskový"];
-}
-
-class Scooter {
-  int selectedBrand;
-  int selectedSize;
-  bool selectedComputer;
-
-  Scooter(this.selectedBrand, this.selectedSize, this.selectedComputer);
-
-  static List<String> size = [
-    "přední 26’ a zadní 20’",
-    "přední 16’ a zadní 12’",
-    "přední 12’ a zadní 12’",
-    "přední 16’ a zadní 16’",
-    "přední 20’ a zadní 20’",
-    "přední 20’ a zadní 16’",
-    "přední 28’ a zadní 20’",
-    "přední 20’ a zadní 12’",
-    "přední 28’ a zadní 18’",
-    "přední 14’ a zadní 12’",
-    "přední 26’ a zadní 16’",
-    "přední 28’ a zadní 28’",
-    "přední 22’ a zadní 12’",
-    "přední 230 mm, zadní 180 mm",
-  ];
-
-  static List<String> brand = [
-    "AO",
-    "Bestial Wolf",
-    "Blazer",
-    "Blunt",
-    "Crisp",
-    "Crussis",
-    "District",
-    "Dominator",
-    "Enero",
-    "Ethic",
-    "Frenzy",
-    "Galaxy",
-    "Globber",
-    "Grit",
-    "Hudora",
-    "Chilli",
-    "InSPORTline",
-    "JD Bug",
-    "Kickbike",
-    "Kostka",
-    "Longway",
-    "Lucky",
-    "Madd Gear",
-    "Master",
-    "Meteor",
-    "Mibo",
-    "Micro",
-    "Milly Mally",
-    "Mondo",
-    "Morxes",
-    "Movino",
-    "Nils",
-    "North Scooters",
-    "Oxelo",
-    "Panda",
-    "Raven",
-    "Razor",
-    "Root Industries",
-    "R-Sport",
-    "Scoot & Ride",
-    "Sedco",
-    "Schildkrot",
-    "Slamm",
-    "Smoby",
-    "Spartan",
-    "Spokey",
-    "Stiga",
-    "Street Surfing",
-    "Striker",
-    "Tempish",
-    "Worker",
-    "Yedoo",
-    "Jiné"
-  ];
-}
-
 class HomeArguments {
   User user;
   ItemParams filters;
 
   HomeArguments(this.user, this.filters);
+}
+
+class AddItemFiltersArgs {
+  HomeArguments args;
+  bool addItem;
+
+  AddItemFiltersArgs(this.args, this.addItem);
 }

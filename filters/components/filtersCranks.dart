@@ -12,16 +12,19 @@ class FiltersCranks extends StatefulWidget {
 
 class _FiltersCranks extends State<FiltersCranks>
     with TickerProviderStateMixin {
-  HomeArguments args;
+  AddItemFiltersArgs args;
 
   double volume = 0;
 
   AnimationController animationController;
 
   FilterDropdown brandDd =
-      new FilterDropdown(hint: "Značka kola", options: Bike.brand);
-  FilterDropdown typeDd =
-      new FilterDropdown(hint: "Typ kola", options: Bike.type);
+      new FilterDropdown(hint: "Značka", options: Cranks.brand);
+  FilterDropdown compatibilityDd =
+      new FilterDropdown(hint: "Kompatibilita", options: Cranks.compatibility);
+  FilterDropdown materialDd =
+      new FilterDropdown(hint: "Materiál", options: Cranks.material);
+  FilterDropdown axisDd = new FilterDropdown(hint: "Osa", options: Cranks.axis);
 
   @override
   void initState() {
@@ -55,7 +58,15 @@ class _FiltersCranks extends State<FiltersCranks>
                       Container(
                         height: 20,
                       ),
-                      typeDd,
+                      compatibilityDd,
+                      Container(
+                        height: 20,
+                      ),
+                      materialDd,
+                      Container(
+                        height: 20,
+                      ),
+                      axisDd,
                     ],
                   ),
                 ),
@@ -75,11 +86,17 @@ class _FiltersCranks extends State<FiltersCranks>
                             45,
                             Icons.save,
                             kWhite.withOpacity(volume * 2), () {
-                          args.filters.params["bikeType"] =
-                              FilterValueSetters.setDropdownValue(typeDd.value);
-                          args.filters.params["bikeBrand"] =
+                          args.args.filters.params["cranksBrand"] =
                               FilterValueSetters.setDropdownValue(
                                   brandDd.value);
+                          args.args.filters.params["cranksCompatibility"] =
+                              FilterValueSetters.setDropdownValue(
+                                  compatibilityDd.value);
+                          args.args.filters.params["cranksMaterial"] =
+                              FilterValueSetters.setDropdownValue(
+                                  materialDd.value);
+                          args.args.filters.params["cranksAxis"] =
+                              FilterValueSetters.setDropdownValue(axisDd.value);
 
                           Navigator.of(context).pushReplacementNamed(
                               FilterPage.routeName,

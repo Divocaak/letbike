@@ -194,8 +194,4 @@ class _RatingBarState extends State<RatingBar> {
       ],
     );
   }
-
-  static double getSliderVal() {
-    return rating;
-  }
 }

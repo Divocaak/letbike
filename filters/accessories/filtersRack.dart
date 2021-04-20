@@ -11,16 +11,16 @@ class FiltersRack extends StatefulWidget {
 }
 
 class _FiltersRack extends State<FiltersRack> with TickerProviderStateMixin {
-  HomeArguments args;
+  AddItemFiltersArgs args;
 
   double volume = 0;
 
   AnimationController animationController;
 
-  FilterDropdown brandDd =
-      new FilterDropdown(hint: "Značka kola", options: Bike.brand);
-  FilterDropdown typeDd =
-      new FilterDropdown(hint: "Typ kola", options: Bike.type);
+  FilterSwitch typeSwitch =
+      new FilterSwitch(label: "Typ", left: "Přední", right: "Zadní");
+  FilterDropdown sizeDd =
+      new FilterDropdown(hint: "Velikost", options: Rack.type);
 
   @override
   void initState() {
@@ -50,11 +50,11 @@ class _FiltersRack extends State<FiltersRack> with TickerProviderStateMixin {
                   padding: EdgeInsets.all(20),
                   child: ListView(
                     children: [
-                      brandDd,
+                      typeSwitch,
                       Container(
                         height: 20,
                       ),
-                      typeDd,
+                      sizeDd
                     ],
                   ),
                 ),
@@ -74,11 +74,11 @@ class _FiltersRack extends State<FiltersRack> with TickerProviderStateMixin {
                             45,
                             Icons.save,
                             kWhite.withOpacity(volume * 2), () {
-                          args.filters.params["bikeType"] =
-                              FilterValueSetters.setDropdownValue(typeDd.value);
-                          args.filters.params["bikeBrand"] =
-                              FilterValueSetters.setDropdownValue(
-                                  brandDd.value);
+                          args.args.filters.params["rackType"] =
+                              FilterValueSetters.setSwitchValueWithOffset(
+                                  typeSwitch.value, args.args.filters);
+                          args.args.filters.params["rackSize"] =
+                              FilterValueSetters.setDropdownValue(sizeDd.value);
 
                           Navigator.of(context).pushReplacementNamed(
                               FilterPage.routeName,

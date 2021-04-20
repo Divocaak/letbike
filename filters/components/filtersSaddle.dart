@@ -12,16 +12,16 @@ class FiltersSaddle extends StatefulWidget {
 
 class _FiltersSaddle extends State<FiltersSaddle>
     with TickerProviderStateMixin {
-  HomeArguments args;
+  AddItemFiltersArgs args;
 
   double volume = 0;
 
   AnimationController animationController;
 
   FilterDropdown brandDd =
-      new FilterDropdown(hint: "Značka kola", options: Bike.brand);
-  FilterDropdown typeDd =
-      new FilterDropdown(hint: "Typ kola", options: Bike.type);
+      new FilterDropdown(hint: "Značka sedla", options: Saddle.brand);
+  FilterDropdown genderDd =
+      new FilterDropdown(hint: "Pohlaví", options: Saddle.gender);
 
   @override
   void initState() {
@@ -55,7 +55,7 @@ class _FiltersSaddle extends State<FiltersSaddle>
                       Container(
                         height: 20,
                       ),
-                      typeDd,
+                      genderDd,
                     ],
                   ),
                 ),
@@ -75,9 +75,10 @@ class _FiltersSaddle extends State<FiltersSaddle>
                             45,
                             Icons.save,
                             kWhite.withOpacity(volume * 2), () {
-                          args.filters.params["bikeType"] =
-                              FilterValueSetters.setDropdownValue(typeDd.value);
-                          args.filters.params["bikeBrand"] =
+                          args.args.filters.params["saddleGender"] =
+                              FilterValueSetters.setDropdownValue(
+                                  genderDd.value);
+                          args.args.filters.params["saddleBrand"] =
                               FilterValueSetters.setDropdownValue(
                                   brandDd.value);
 

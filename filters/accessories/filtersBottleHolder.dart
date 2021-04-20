@@ -12,16 +12,14 @@ class FiltersBottleHolder extends StatefulWidget {
 
 class _FiltersBottleHolder extends State<FiltersBottleHolder>
     with TickerProviderStateMixin {
-  HomeArguments args;
+  AddItemFiltersArgs args;
 
   double volume = 0;
 
   AnimationController animationController;
 
-  FilterDropdown brandDd =
-      new FilterDropdown(hint: "Značka kola", options: Bike.brand);
   FilterDropdown typeDd =
-      new FilterDropdown(hint: "Typ kola", options: Bike.type);
+      new FilterDropdown(hint: "Typ", options: BottleHolder.type);
 
   @override
   void initState() {
@@ -51,10 +49,6 @@ class _FiltersBottleHolder extends State<FiltersBottleHolder>
                   padding: EdgeInsets.all(20),
                   child: ListView(
                     children: [
-                      brandDd,
-                      Container(
-                        height: 20,
-                      ),
                       typeDd,
                     ],
                   ),
@@ -75,11 +69,8 @@ class _FiltersBottleHolder extends State<FiltersBottleHolder>
                             45,
                             Icons.save,
                             kWhite.withOpacity(volume * 2), () {
-                          args.filters.params["bikeType"] =
+                          args.args.filters.params["bottleHolderType"] =
                               FilterValueSetters.setDropdownValue(typeDd.value);
-                          args.filters.params["bikeBrand"] =
-                              FilterValueSetters.setDropdownValue(
-                                  brandDd.value);
 
                           Navigator.of(context).pushReplacementNamed(
                               FilterPage.routeName,

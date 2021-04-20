@@ -15,7 +15,7 @@ class FiltersBase extends StatefulWidget {
 }
 
 class _FiltersBase extends State<FiltersBase> with TickerProviderStateMixin {
-  HomeArguments args;
+  AddItemFiltersArgs args;
 
   double volume = 0;
 
@@ -78,6 +78,11 @@ class _FiltersBase extends State<FiltersBase> with TickerProviderStateMixin {
                             45,
                             Icons.save,
                             kWhite.withOpacity(volume * 2), () {
+                          args.args.filters.params["used"] =
+                              usedSwitch.value ? 1 : 0;
+                          args.args.filters.params["selectedCategory"] =
+                              FilterValueSetters.setDropdownValue(
+                                  categoryDd.value);
                           Navigator.of(context).pushReplacementNamed(
                               FilterPage.routeName,
                               arguments: args);
@@ -90,9 +95,9 @@ class _FiltersBase extends State<FiltersBase> with TickerProviderStateMixin {
                             45,
                             Icons.filter_alt,
                             kWhite.withOpacity(volume * 2), () {
-                          args.filters.params["used"] =
+                          args.args.filters.params["used"] =
                               usedSwitch.value ? 1 : 0;
-                          args.filters.params["selectedCategory"] =
+                          args.args.filters.params["selectedCategory"] =
                               FilterValueSetters.setDropdownValue(
                                   categoryDd.value);
 

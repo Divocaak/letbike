@@ -12,16 +12,16 @@ class FiltersConverter extends StatefulWidget {
 
 class _FiltersConverter extends State<FiltersConverter>
     with TickerProviderStateMixin {
-  HomeArguments args;
+  AddItemFiltersArgs args;
 
   double volume = 0;
 
   AnimationController animationController;
 
   FilterDropdown brandDd =
-      new FilterDropdown(hint: "Značka kola", options: Bike.brand);
-  FilterDropdown typeDd =
-      new FilterDropdown(hint: "Typ kola", options: Bike.type);
+      new FilterDropdown(hint: "Značka", options: Converter.brand);
+  FilterDropdown numOfSpeedsDd = new FilterDropdown(
+      hint: "Počet rychlostí", options: Converter.numOfSpeeds);
 
   @override
   void initState() {
@@ -55,7 +55,7 @@ class _FiltersConverter extends State<FiltersConverter>
                       Container(
                         height: 20,
                       ),
-                      typeDd,
+                      numOfSpeedsDd,
                     ],
                   ),
                 ),
@@ -75,11 +75,12 @@ class _FiltersConverter extends State<FiltersConverter>
                             45,
                             Icons.save,
                             kWhite.withOpacity(volume * 2), () {
-                          args.filters.params["bikeType"] =
-                              FilterValueSetters.setDropdownValue(typeDd.value);
-                          args.filters.params["bikeBrand"] =
+                          args.args.filters.params["converterBrand"] =
                               FilterValueSetters.setDropdownValue(
                                   brandDd.value);
+                          args.args.filters.params["converterNumOfSpeeds"] =
+                              FilterValueSetters.setDropdownValue(
+                                  numOfSpeedsDd.value);
 
                           Navigator.of(context).pushReplacementNamed(
                               FilterPage.routeName,

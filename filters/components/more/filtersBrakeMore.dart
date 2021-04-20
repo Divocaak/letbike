@@ -1,26 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:letbike/app/filterPage.dart';
-import '../../general/widgets/filterWidgets.dart';
-import '../../general/general.dart';
+import '../../../general/widgets/filterWidgets.dart';
+import '../../../general/general.dart';
 
-class FiltersFood extends StatefulWidget {
+class FiltersBrakeMore extends StatefulWidget {
   @override
-  _FiltersFood createState() => _FiltersFood();
+  _FiltersBrakeMore createState() => _FiltersBrakeMore();
 
-  static const routeName = "/FiltersFood";
+  static const routeName = "/FiltersBrakeMore";
 }
 
-class _FiltersFood extends State<FiltersFood> with TickerProviderStateMixin {
-  HomeArguments args;
+class _FiltersBrakeMore extends State<FiltersBrakeMore>
+    with TickerProviderStateMixin {
+  AddItemFiltersArgs args;
 
   double volume = 0;
 
   AnimationController animationController;
 
-  FilterDropdown brandDd =
-      new FilterDropdown(hint: "Značka kola", options: Bike.brand);
-  FilterDropdown typeDd =
-      new FilterDropdown(hint: "Typ kola", options: Bike.type);
+  FilterSwitch discSwitch = new FilterSwitch(
+    label: "Typ brzdy",
+    left: "Hydraulická",
+    right: "Mechanická",
+  );
+  FilterDropdown discDd =
+      new FilterDropdown(hint: "Průměr kotouče", options: Brakes.discSize);
+
+  FilterDropdown blockDd = new FilterDropdown(
+    hint: "Typ brzdy",
+    options: Brakes.blockType,
+  );
 
   @override
   void initState() {
@@ -50,11 +59,14 @@ class _FiltersFood extends State<FiltersFood> with TickerProviderStateMixin {
                   padding: EdgeInsets.all(20),
                   child: ListView(
                     children: [
-                      brandDd,
-                      Container(
-                        height: 20,
-                      ),
-                      typeDd,
+                      if (args.args.filters.params["brakeType"] == 0) ...[
+                        discSwitch,
+                        Container(
+                          height: 20,
+                        ),
+                        discDd
+                      ],
+                      if (args.args.filters.params["brakeType"] == 1) blockDd
                     ],
                   ),
                 ),
@@ -74,11 +86,14 @@ class _FiltersFood extends State<FiltersFood> with TickerProviderStateMixin {
                             45,
                             Icons.save,
                             kWhite.withOpacity(volume * 2), () {
-                          args.filters.params["bikeType"] =
-                              FilterValueSetters.setDropdownValue(typeDd.value);
-                          args.filters.params["bikeBrand"] =
+                          args.args.filters.params["brakeDiscType"] =
+                              FilterValueSetters.setSwitchValueWithOffset(
+                                  discSwitch.value, args.args.filters);
+                          args.args.filters.params["brakeDiscSize"] =
+                              FilterValueSetters.setDropdownValue(discDd.value);
+                          args.args.filters.params["brakeBlockType"] =
                               FilterValueSetters.setDropdownValue(
-                                  brandDd.value);
+                                  blockDd.value);
 
                           Navigator.of(context).pushReplacementNamed(
                               FilterPage.routeName,
