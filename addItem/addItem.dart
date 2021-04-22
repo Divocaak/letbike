@@ -15,7 +15,7 @@ class AddItem extends StatefulWidget {
 Future<String> addResponse;
 
 class _AddItem extends State<AddItem> with TickerProviderStateMixin {
-  HomeArguments args;
+  AddItemFiltersArgs args;
   List<Asset> images = [];
 
   final TextEditingController nameController = TextEditingController();
@@ -94,6 +94,12 @@ class _AddItem extends State<AddItem> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     args = ModalRoute.of(context).settings.arguments;
+    if (args.addItemData != null) {
+      nameController.text = args.addItemData.name;
+      descController.text = args.addItemData.desc;
+      priceController.text = args.addItemData.price;
+      images = args.addItemData.imgs;
+    }
 
     return MaterialApp(
       title: 'Přidat předmět',
@@ -134,7 +140,13 @@ class _AddItem extends State<AddItem> with TickerProviderStateMixin {
                           onPressed: () {
                             Navigator.of(context).pushNamed(
                                 FilterPage.routeName,
-                                arguments: new AddItemFiltersArgs(args, true));
+                                arguments: new AddItemFiltersArgs(
+                                    args.args,
+                                    new AddItemData(
+                                        nameController.text,
+                                        descController.text,
+                                        priceController.text,
+                                        images)));
                           },
                           child: Container(
                               height: 50,
@@ -200,7 +212,8 @@ class _AddItem extends State<AddItem> with TickerProviderStateMixin {
                             kWhite.withOpacity(volume * 2), () {
                           Navigator.of(context).pushReplacementNamed(
                               HomePage.routeName,
-                              arguments: args);
+                              arguments: new HomeArguments(
+                                  args.args.user, ItemParams.createEmpty()));
                         })),
                     Positioned(
                         bottom: 150,
@@ -213,7 +226,7 @@ class _AddItem extends State<AddItem> with TickerProviderStateMixin {
                           addResponse = DatabaseServices.createItem(
                               new Item(
                                   -1,
-                                  args.user.id,
+                                  args.args.user.id,
                                   nameController.text,
                                   descController.text,
                                   double.parse(priceController.text),
@@ -223,7 +236,7 @@ class _AddItem extends State<AddItem> with TickerProviderStateMixin {
                                   "",
                                   "",
                                   0,
-                                  args.filters,
+                                  args.args.filters,
                                   0),
                               images);
 

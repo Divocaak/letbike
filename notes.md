@@ -150,13 +150,18 @@
     - [x] upravit zobrazování parametrů (např. Odpružená == true {zobrazit typ odpuržení}, ...)
     - [x] pozadí
 - [x] clickable celou item card, ne jenom obrázek
-- [ ] nové filtry do a z db, zoptializovat (nová tabulka?)
+- [x] nové filtry do a z db, zoptializovat (nová tabulka?)
 - [x] tabulka filtrů na filtersPage
 - [ ] otestovat
     - [ ] filtrování
     - [x] zobrazování zadaných parametrů při přidávání itemu
-    - [ ] zobrazování parametrů na itemScreen
+    - [x] zobrazování parametrů na itemScreen
 - [x] doplnit nové parametry do ParamRow v categories.dart
+- [x] opravit
+    - [x] po vyplnění parametrů předmětu nemazat jméno, popis, cenu ani obrázky
+    - [x] zobrazování na homepage nefunguje
+    - [x] po přidání itemu resetovat filtry na homepage
+    - [x] nějakej bug při zadávání parametrů, nastaví se jiný :D ;(
 
 
 
@@ -254,63 +259,101 @@
 - [x] moje hotovo
 - [x] master na GitHubu
 
-
-
-brakeType
-brakeBrand
-brakeDiscType
-brakeDiscSize
-brakeBlockType
-tireSize
-tireWidth
-tireBrand
-tireType
-tireMaterial
-tubeSize
-tubeType
-frameSize
-frameFork
-frameType
-handlebarType
-handlebarMaterial
-handlebarWidth
-handlebarSize
-saddleTubeTube
-saddleTubeLength
-saddleTubeMaterial
-saddleTubeSize
-stemType
-axisType
-cassetteType
-shockAbsType
-gearChangeType
-pedalsType
-rimSize
-gripsType
-eBikeComponentsType
-headsetType
-bowdenType
-clothesType
-clothesClothes
-clothesGender
-clothesSize
-bootsType
-bootsSize
-helmetType
-compType
-glassType
-glassGlass
-glassGender
-glassGlassChange
-glassHolderChange
-kidSaddleType
-bottleHolderType
-rackType
-rackSize
-carRackType
-toolType
-pumpType
-lightType
-mudguardType
-mudguardSize
+used,
+selectedCategory,
+bikeBrand,
+bikeType,
+selectedParts,
+wheelBrand,
+wheelSize,
+wheelMaterial,
+wheeldSpokes,
+wheeldType,
+wheelAxis,
+wheeldBrakesType,
+wheeldBrakesDisc,
+wheeldCassette,
+wheelNut,
+wheelCompatibility,
+cranksBrand,
+cranksCompatibility,
+cranksMaterial,
+cranksAxis,
+converterBrand,
+converterNumOfSpeeds,
+saddleBrand,
+saddleGender,
+forkBrand,
+forkSize,
+forkSuspension,
+forkSuspensionType,
+forkWheelCoompatibility,
+forkMaterial,
+forkMaterialColumn,
+selectedAccessories,
+selectedOther,
+eBikeBrand,
+eBikeMotorPos,
+trainerBrand,
+trainerBrakes,
+scooterBrand,
+scooterSize,
+scooterComputer,
+brakeType,
+brakeBrand,
+brakeDiscType,
+brakeDiscSize,
+brakeBlockType,
+tireSize,
+tireWidth,
+tireBrand,
+tireType,
+tireMaterial,
+tubeSize,
+tubeType,
+frameSize,
+frameFork,
+frameType,
+handlebarType,
+handlebarMaterial,
+handlebarWidth,
+handlebarSize,
+saddleTubeTube,
+saddleTubeLength,
+saddleTubeMaterial,
+saddleTubeSize,
+stemType,
+axisType,
+cassetteType,
+shockAbsType,
+gearChangeType,
+pedalsType,
+rimSize,
+gripsType,
+eBikeComponentsType,
+headsetType,
+bowdenType,
+clothesType,
+clothesClothes,
+clothesGender,
+clothesSize,
+bootsType,
+bootsSize,
+helmetType,
+compType,
+glassType,
+glassGlass,
+glassGender,
+glassGlassChange,
+glassHolderChange,
+kidSaddleType,
+bottleHolderType,
+rackType,
+rackSize,
+carRackType,
+toolType,
+pumpType,
+lightType,
+mudguardType,
+mudguardSize,
 lockType

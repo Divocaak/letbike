@@ -1,4 +1,5 @@
 export 'categories.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
 
 class Item {
   int id;
@@ -609,7 +610,16 @@ class HomeArguments {
 
 class AddItemFiltersArgs {
   HomeArguments args;
-  bool addItem;
+  AddItemData addItemData;
 
-  AddItemFiltersArgs(this.args, this.addItem);
+  AddItemFiltersArgs(this.args, this.addItemData);
+}
+
+class AddItemData {
+  String name;
+  String desc;
+  String price;
+  List<Asset> imgs;
+
+  AddItemData(this.name, this.desc, this.price, this.imgs);
 }

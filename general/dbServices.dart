@@ -102,6 +102,7 @@ class DatabaseServices {
             "&&" +
             passParamsToDb(itemParams)),
         headers: {"Accept": "application/json;charset=UTF-8"});
+    print(response.body);
     if (response.statusCode == 200) {
       if (response.body == "[]") {
         return null;
@@ -336,18 +337,16 @@ class DatabaseServices {
 }
 
 String passParamsToDb(ItemParams itemParams) {
-  return "selectedCategory=" +
+  return "used=" +
+      itemParams.params["used"].toString() +
+      "&&selectedCategory=" +
       itemParams.params["selectedCategory"].toString() +
-      "&&selectedParts=" +
-      itemParams.params["selectedParts"].toString() +
-      "&&selectedAccessories=" +
-      itemParams.params["selectedAccessories"].toString() +
-      "&&selectedOther=" +
-      itemParams.params["selectedOther"].toString() +
-      "&&bikeType=" +
-      itemParams.params["bikeType"].toString() +
       "&&bikeBrand=" +
       itemParams.params["bikeBrand"].toString() +
+      "&&bikeType=" +
+      itemParams.params["bikeType"].toString() +
+      "&&selectedParts=" +
+      itemParams.params["selectedParts"].toString() +
       "&&wheelBrand=" +
       itemParams.params["wheelBrand"].toString() +
       "&&wheelSize=" +
@@ -390,16 +389,20 @@ String passParamsToDb(ItemParams itemParams) {
       itemParams.params["forkBrand"].toString() +
       "&&forkSize=" +
       itemParams.params["forkSize"].toString() +
-      "&&forkSuspensionType=" +
-      itemParams.params["forkSuspensionType"].toString() +
       "&&forkSuspension=" +
       itemParams.params["forkSuspension"].toString() +
+      "&&forkSuspensionType=" +
+      itemParams.params["forkSuspensionType"].toString() +
       "&&forkWheelCoompatibility=" +
       itemParams.params["forkWheelCoompatibility"].toString() +
       "&&forkMaterial=" +
       itemParams.params["forkMaterial"].toString() +
       "&&forkMaterialColumn=" +
       itemParams.params["forkMaterialColumn"].toString() +
+      "&&selectedAccessories=" +
+      itemParams.params["selectedAccessories"].toString() +
+      "&&selectedOther=" +
+      itemParams.params["selectedOther"].toString() +
       "&&eBikeBrand=" +
       itemParams.params["eBikeBrand"].toString() +
       "&&eBikeMotorPos=" +
@@ -414,6 +417,120 @@ String passParamsToDb(ItemParams itemParams) {
       itemParams.params["scooterSize"].toString() +
       "&&scooterComputer=" +
       itemParams.params["scooterComputer"].toString() +
-      "&&used=" +
-      itemParams.params["used"].toString();
+      "&&brakeType=" +
+      itemParams.params["brakeType"].toString() +
+      "&&brakeBrand=" +
+      itemParams.params["brakeBrand"].toString() +
+      "&&brakeDiscType=" +
+      itemParams.params["brakeDiscType"].toString() +
+      "&&brakeDiscSize=" +
+      itemParams.params["brakeDiscSize"].toString() +
+      "&&brakeBlockType=" +
+      itemParams.params["brakeBlockType"].toString() +
+      "&&tireSize=" +
+      itemParams.params["tireSize"].toString() +
+      "&&tireWidth=" +
+      itemParams.params["tireWidth"].toString() +
+      "&&tireBrand=" +
+      itemParams.params["tireBrand"].toString() +
+      "&&tireType=" +
+      itemParams.params["tireType"].toString() +
+      "&&tireMaterial=" +
+      itemParams.params["tireMaterial"].toString() +
+      "&&tubeSize=" +
+      itemParams.params["tubeSize"].toString() +
+      "&&tubeType=" +
+      itemParams.params["tubeType"].toString() +
+      "&&frameSize=" +
+      itemParams.params["frameSize"].toString() +
+      "&&frameFork=" +
+      itemParams.params["frameFork"].toString() +
+      "&&frameType=" +
+      itemParams.params["frameType"].toString() +
+      "&&handlebarType=" +
+      itemParams.params["handlebarType"].toString() +
+      "&&handlebarMaterial=" +
+      itemParams.params["handlebarMaterial"].toString() +
+      "&&handlebarWidth=" +
+      itemParams.params["handlebarWidth"].toString() +
+      "&&handlebarSize=" +
+      itemParams.params["handlebarSize"].toString() +
+      "&&saddleTubeTube=" +
+      itemParams.params["saddleTubeTube"].toString() +
+      "&&saddleTubeLength=" +
+      itemParams.params["saddleTubeLength"].toString() +
+      "&&saddleTubeMaterial=" +
+      itemParams.params["saddleTubeMaterial"].toString() +
+      "&&saddleTubeSize=" +
+      itemParams.params["saddleTubeSize"].toString() +
+      "&&stemType=" +
+      itemParams.params["stemType"].toString() +
+      "&&axisType=" +
+      itemParams.params["axisType"].toString() +
+      "&&cassetteType=" +
+      itemParams.params["cassetteType"].toString() +
+      "&&shockAbsType=" +
+      itemParams.params["shockAbsType"].toString() +
+      "&&gearChangeType=" +
+      itemParams.params["gearChangeType"].toString() +
+      "&&pedalsType=" +
+      itemParams.params["pedalsType"].toString() +
+      "&&rimSize=" +
+      itemParams.params["rimSize"].toString() +
+      "&&gripsType=" +
+      itemParams.params["gripsType"].toString() +
+      "&&eBikeComponentsType=" +
+      itemParams.params["eBikeComponentsType"].toString() +
+      "&&headsetType=" +
+      itemParams.params["headsetType"].toString() +
+      "&&bowdenType=" +
+      itemParams.params["bowdenType"].toString() +
+      "&&clothesType=" +
+      itemParams.params["clothesType"].toString() +
+      "&&clothesClothes=" +
+      itemParams.params["clothesClothes"].toString() +
+      "&&clothesGender=" +
+      itemParams.params["clothesGender"].toString() +
+      "&&clothesSize=" +
+      itemParams.params["clothesSize"].toString() +
+      "&&bootsType=" +
+      itemParams.params["bootsType"].toString() +
+      "&&bootsSize=" +
+      itemParams.params["bootsSize"].toString() +
+      "&&helmetType=" +
+      itemParams.params["helmetType"].toString() +
+      "&&compType=" +
+      itemParams.params["compType"].toString() +
+      "&&glassType=" +
+      itemParams.params["glassType"].toString() +
+      "&&glassGlass=" +
+      itemParams.params["glassGlass"].toString() +
+      "&&glassGender=" +
+      itemParams.params["glassGender"].toString() +
+      "&&glassGlassChange=" +
+      itemParams.params["glassGlassChange"].toString() +
+      "&&glassHolderChange=" +
+      itemParams.params["glassHolderChange"].toString() +
+      "&&kidSaddleType=" +
+      itemParams.params["kidSaddleType"].toString() +
+      "&&bottleHolderType=" +
+      itemParams.params["bottleHolderType"].toString() +
+      "&&rackType=" +
+      itemParams.params["rackType"].toString() +
+      "&&rackSize=" +
+      itemParams.params["rackSize"].toString() +
+      "&&carRackType=" +
+      itemParams.params["carRackType"].toString() +
+      "&&toolType=" +
+      itemParams.params["toolType"].toString() +
+      "&&pumpType=" +
+      itemParams.params["pumpType"].toString() +
+      "&&lightType=" +
+      itemParams.params["lightType"].toString() +
+      "&&mudguardType=" +
+      itemParams.params["mudguardType"].toString() +
+      "&&mudguardSize=" +
+      itemParams.params["mudguardSize"].toString() +
+      "&&lockType=" +
+      itemParams.params["lockType"].toString();
 }
