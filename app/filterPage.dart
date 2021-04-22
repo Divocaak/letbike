@@ -80,14 +80,14 @@ class _FilterPage extends State<FilterPage> with TickerProviderStateMixin {
                             45,
                             Icons.save,
                             kWhite.withOpacity(volume * 2), () {
-                          if (!addItemArgs.addItem) {
+                          if (addItemArgs.addItemData == null) {
                             Navigator.of(context).pushReplacementNamed(
                                 HomePage.routeName,
                                 arguments: addItemArgs.args);
                           } else {
                             Navigator.of(context).pushReplacementNamed(
                                 AddItem.routeName,
-                                arguments: addItemArgs.args);
+                                arguments: addItemArgs);
                           }
                         })),
                     Positioned(

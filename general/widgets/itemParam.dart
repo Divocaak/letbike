@@ -19,8 +19,8 @@ class ItemParam extends StatelessWidget {
     int index = params.params[ParamRow.keys[i]];
     if (index > 999) {
       index -= (999 +
-          (params.params["selecetedOther"] != null
-              ? params.params["selecetedOther"]
+          (params.params["selectedOther"] != null
+              ? params.params["selectedOther"]
               : 0) +
           (params.params["selectedParts"] != null
               ? params.params["selectedParts"]
