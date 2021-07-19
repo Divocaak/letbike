@@ -1,0 +1,27 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "..\\..\\EasyPHP-DevServer-14.1VC11\\data\\localweb\\projects\\letbike"
+		}
+	],
+	"settings": {
+		"sqltools.connections": [
+			{
+				"mysqlOptions": {
+					"authProtocol": "default"
+				},
+				"previewLimit": 50,
+				"server": "localhost",
+				"port": 3306,
+				"driver": "MySQL",
+				"name": "letbike",
+				"database": "letbike",
+				"username": "root",
+				"password": ""
+			}
+		]
+	}
+}
