@@ -1,0 +1,29 @@
+name: letbike
+description: A new Flutter project.
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.9.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  http: ^0.12.0
+  flutter_swiper : ^1.1.0
+  google_fonts: ^1.1.1
+  permission_handler: ^6.1.1
+  multi_image_picker: ^4.7.15
+  flutter_markdown: ^0.6.1
+  url_launcher: ^6.0.3
+  shared_preferences: ^2.0.5
+  
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
