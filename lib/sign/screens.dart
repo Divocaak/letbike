@@ -1,3 +1,3 @@
-export 'screens/login.dart';
-export 'screens/forgot.dart';
-export 'screens/register.dart';
+export 'login.dart';
+export 'forgot.dart';
+export 'register.dart';

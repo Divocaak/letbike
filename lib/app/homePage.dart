@@ -39,6 +39,19 @@ class _HomePageState extends State<HomePage>
     items = DatabaseServices.getAllItems(
         0, "seller_id", homeArguments.filters, "sold_to");
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+          backgroundColor: kPrimaryColor,
+          child: Icon(Icons.menu, color: kWhite),
+          onPressed: () {
+            if (animationController.isCompleted) {
+              animationController.reverse();
+              volume = 0;
+            } else {
+              animationController.forward();
+              volume = 0.5;
+            }
+          }),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: Stack(
         children: [
           Container(
@@ -123,25 +136,6 @@ class _HomePageState extends State<HomePage>
               ),
             ),
           ),
-          Positioned(
-              height: 275,
-              width: 275,
-              right: -75,
-              bottom: -75,
-              child: Stack(
-                alignment: Alignment.center,
-                children: <Widget>[
-                  CircularButton(kPrimaryColor, 60, Icons.menu, kWhite, () {
-                    if (animationController.isCompleted) {
-                      animationController.reverse();
-                      volume = 0;
-                    } else {
-                      animationController.forward();
-                      volume = 0.5;
-                    }
-                  })
-                ],
-              ))
         ],
       ),
     );
