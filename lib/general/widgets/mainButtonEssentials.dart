@@ -1,6 +1,23 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import '../pallete.dart';
+
+class MainButton extends StatelessWidget {
+  MainButton({Key key, @required this.iconData, @required this.onPressed})
+      : super(key: key);
+
+  final IconData iconData;
+  final Function onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+        padding: EdgeInsets.only(bottom: 35, right: 35),
+        child: FloatingActionButton(
+            backgroundColor: kPrimaryColor,
+            child: Icon(iconData, color: kWhite),
+            onPressed: onPressed));
+  }
+}
 
 class MainButtonClicked extends StatelessWidget {
   const MainButtonClicked(
@@ -19,7 +36,6 @@ class MainButtonClicked extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //MediaQuery.of(context).size;
     return Stack(
       children: [
         for (int i = 0; i < buttons.length; i++)

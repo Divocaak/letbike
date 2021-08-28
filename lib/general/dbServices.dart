@@ -25,7 +25,6 @@ class DatabaseServices {
     request.fields["folderIdentificator"] = folderIdentificator;
 
     var res = await request.send();
-    print(await res.stream.bytesToString());
     if (res.statusCode != 200) {
       print("error");
     }
@@ -102,7 +101,6 @@ class DatabaseServices {
             "&&" +
             passParamsToDb(itemParams)),
         headers: {"Accept": "application/json;charset=UTF-8"});
-    print(response.body);
     if (response.statusCode == 200) {
       if (response.body == "[]") {
         return null;

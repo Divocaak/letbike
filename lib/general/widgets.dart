@@ -10,4 +10,5 @@ export 'widgets/chatInputField.dart';
 export 'widgets/ratingRow.dart';
 export 'widgets/filterWidgets.dart';
 export 'widgets/itemParam.dart';
-export 'widgets/mainButtonClicked.dart';
+export 'widgets/mainButtonEssentials.dart';
+export "widgets/errorWidgets.dart";

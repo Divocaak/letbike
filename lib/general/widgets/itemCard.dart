@@ -9,96 +9,49 @@ double rating = 50;
 class ItemCard {
   static Widget buildCard(
       context, Item item, User loggedUser, bool forRating, bool touchable) {
-    return Card(
-        clipBehavior: Clip.antiAlias,
-        elevation: 0,
-        color: Colors.white.withOpacity(.05),
-        margin: const EdgeInsets.fromLTRB(5, 0, 5, 10),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: GestureDetector(
-          onTap: () {
-            onCardClick(context, item, loggedUser, forRating, touchable);
-          },
-          child: Stack(
-            children: [
-              Container(
-                height: 240,
-                child: FadeInImage.assetNetwork(
-                    fit: BoxFit.fill,
-                    placeholder: "Načítám obrázek (možná neexsituje :/)",
-                    image: imgsFolder +
-                        "/items/" +
-                        (item.name.hashCode + item.sellerId).toString() +
-                        "/0.jpg"),
-              ),
-              Positioned(
-                left: 16,
-                bottom: 32,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      child: Text(
-                        item.name,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          fontSize: 32,
-                          shadows: [
-                            Shadow(
-                              color: Colors.black,
-                              offset: Offset(4, 1),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Container(
-                      child: Text(
-                        item.description,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          fontSize: 18,
-                          shadows: [
-                            Shadow(
-                              color: Colors.black,
-                              offset: Offset(4, 1),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Positioned(
-                right: 16,
-                bottom: 32,
-                child: Container(
-                  child: Text(
-                    item.price.toString() + "Kč",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      fontSize: 32,
-                      fontFamily: "Montserrat",
-                      shadows: [
-                        Shadow(
-                          color: Colors.black,
-                          offset: Offset(4, 1),
-                        ),
+    return Container(
+        height: 240,
+        child: Card(
+            clipBehavior: Clip.antiAlias,
+            elevation: 0,
+            color: Colors.white.withOpacity(.05),
+            margin: const EdgeInsets.all(5),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: InkWell(
+              onTap: () {
+                onCardClick(context, item, loggedUser, forRating, touchable);
+              },
+              child: Stack(
+                children: [
+                  FadeInImage.assetNetwork(
+                      fit: BoxFit.fill,
+                      placeholder: "Načítám obrázek (možná neexsituje :/)",
+                      image: imgsFolder +
+                          "/items/" +
+                          (item.name.hashCode + item.sellerId).toString() +
+                          "/0.jpg"),
+                  Positioned(
+                    left: 16,
+                    bottom: 32,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        itemText(item.name, 32, 2, FontWeight.bold),
+                        itemText(item.description, 18, 1, FontWeight.normal)
                       ],
                     ),
                   ),
-                ),
+                  Positioned(
+                      right: 16,
+                      bottom: 16,
+                      child: itemText(item.price.toString() + "Kč", 32, 2,
+                          FontWeight.bold)),
+                ],
               ),
-            ],
-          ),
-        ));
+            )));
   }
 
   static void onCardClick(
@@ -162,6 +115,25 @@ class ItemCard {
         });
       }
     }
+  }
+
+  static Widget itemText(
+      String text, double fontSize, double offset, FontWeight fontWeight) {
+    return Text(
+      text,
+      style: TextStyle(
+        fontWeight: fontWeight,
+        color: kWhite,
+        fontSize: fontSize,
+        fontFamily: "Montserrat",
+        shadows: [
+          Shadow(
+            color: kBlack,
+            offset: Offset(offset, offset),
+          ),
+        ],
+      ),
+    );
   }
 }
 

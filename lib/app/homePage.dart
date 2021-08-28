@@ -40,20 +40,17 @@ class _HomePageState extends State<HomePage>
     items = DatabaseServices.getAllItems(
         0, "seller_id", homeArguments.filters, "sold_to");
     return Scaffold(
-      floatingActionButton: Padding(
-          padding: EdgeInsets.only(bottom: 35, right: 35),
-          child: FloatingActionButton(
-              backgroundColor: kPrimaryColor,
-              child: Icon(Icons.menu, color: kWhite),
-              onPressed: () {
-                if (animationController.isCompleted) {
-                  animationController.reverse();
-                  volume = 0;
-                } else {
-                  animationController.forward();
-                  volume = 0.5;
-                }
-              })),
+      floatingActionButton: MainButton(
+          iconData: Icons.menu,
+          onPressed: () {
+            if (animationController.isCompleted) {
+              animationController.reverse();
+              volume = 0;
+            } else {
+              animationController.forward();
+              volume = 0.5;
+            }
+          }),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: Stack(
         children: [
@@ -70,20 +67,7 @@ class _HomePageState extends State<HomePage>
                             homeArguments.user, false, true);
                       });
                 } else if (snapshot.hasError) {
-                  return Center(
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                        Icon(
-                          Icons.error_outline,
-                          color: kWhite,
-                        ),
-                        Text(
-                          'Někde se stala chyba ' + Emojis.faceScreamingInFear,
-                          style: TextStyle(color: kWhite),
-                        )
-                      ]));
+                  return ErrorWidgets.futureBuilderError();
                 }
                 return Center(child: CircularProgressIndicator());
               },
