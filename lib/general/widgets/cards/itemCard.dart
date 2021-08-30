@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:letbike/account/accountScreen.dart';
-import '../../app/itemPage.dart';
-import '../general.dart';
+import '../../../app/itemPage.dart';
+import '../../general.dart';
+import 'cardWidgets.dart';
 
 TextEditingController ratingController = TextEditingController();
 double rating = 50;
@@ -20,11 +21,10 @@ class ItemCard {
               borderRadius: BorderRadius.circular(20),
             ),
             child: InkWell(
-              onTap: () {
-                onCardClick(context, item, loggedUser, forRating, touchable);
-              },
-              child: Stack(
-                children: [
+                onTap: () {
+                  onCardClick(context, item, loggedUser, forRating, touchable);
+                },
+                child: Stack(children: [
                   FadeInImage.assetNetwork(
                       fit: BoxFit.fill,
                       placeholder: "Načítám obrázek (možná neexsituje :/)",
@@ -33,25 +33,22 @@ class ItemCard {
                           (item.name.hashCode + item.sellerId).toString() +
                           "/0.jpg"),
                   Positioned(
-                    left: 16,
-                    bottom: 32,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        itemText(item.name, 32, 2, FontWeight.bold),
-                        itemText(item.description, 18, 1, FontWeight.normal)
-                      ],
-                    ),
-                  ),
+                      left: 16,
+                      bottom: 32,
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CardWidgets.text(item.name, 32, 2, FontWeight.bold),
+                            CardWidgets.text(
+                                item.description, 18, 1, FontWeight.normal)
+                          ])),
                   Positioned(
                       right: 16,
                       bottom: 16,
-                      child: itemText(item.price.toString() + "Kč", 32, 2,
-                          FontWeight.bold)),
-                ],
-              ),
-            )));
+                      child: CardWidgets.text(item.price.toString() + "Kč", 32,
+                          2, FontWeight.bold)),
+                ]))));
   }
 
   static void onCardClick(
@@ -72,7 +69,7 @@ class ItemCard {
                     Text(
                         "Prodejce ohodnoťte až poté, co Vám přijde zakoupený předmět.",
                         style: TextStyle(color: kWhite)),
-                    RatingBar(),
+                    RatingBar(rating),
                     Expanded(
                         child: TextField(
                             keyboardType: TextInputType.multiline,
@@ -115,55 +112,5 @@ class ItemCard {
         });
       }
     }
-  }
-
-  static Widget itemText(
-      String text, double fontSize, double offset, FontWeight fontWeight) {
-    return Text(
-      text,
-      style: TextStyle(
-        fontWeight: fontWeight,
-        color: kWhite,
-        fontSize: fontSize,
-        fontFamily: "Montserrat",
-        shadows: [
-          Shadow(
-            color: kBlack,
-            offset: Offset(offset, offset),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class RatingBar extends StatefulWidget {
-  @override
-  _RatingBarState createState() => _RatingBarState();
-}
-
-class _RatingBarState extends State<RatingBar> {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          "Hodnocení: " + rating.toString(),
-          style: TextStyle(color: kWhite),
-        ),
-        Slider(
-          value: rating,
-          min: 0,
-          max: 100,
-          inactiveColor: kSecondaryColor,
-          activeColor: kPrimaryColor,
-          onChanged: (double value) {
-            setState(() {
-              rating = double.parse(value.toStringAsFixed(1));
-            });
-          },
-        )
-      ],
-    );
   }
 }
