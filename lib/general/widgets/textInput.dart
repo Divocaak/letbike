@@ -46,10 +46,8 @@ class TextInput extends StatelessWidget {
                 child: Icon(icon, size: 28, color: kWhite),
               ),
               hintText: hint,
-              hintStyle: kTitleTextStyle,
             ),
             obscureText: obscure != null ? obscure : false,
-            style: kTitleTextStyle,
             keyboardType: inputType,
             textInputAction: inputAction,
             validator: (String value) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:letbike/account/accountSettings.dart';
 import 'package:letbike/addItem/addItem.dart';
+import 'package:letbike/general/widgets/cards/cardWidgets.dart';
 import '../general/general.dart';
 import "../account/accountScreen.dart";
 import 'filterPage.dart';
@@ -55,59 +56,36 @@ class _HomePageState extends State<HomePage>
       body: Stack(
         children: [
           Container(
-            color: kBlack,
-            child: FutureBuilder<List<Item>>(
-              future: items,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return ListView.builder(
-                      itemCount: snapshot.data.length,
-                      itemBuilder: (context, i) {
-                        return ItemCard.buildCard(context, snapshot.data[i],
-                            homeArguments.user, false, true);
-                      });
-                } else if (snapshot.hasError) {
-                  return ErrorWidgets.futureBuilderError();
-                }
-                return Center(child: CircularProgressIndicator());
-              },
-            ),
-          ),
+              color: kBlack,
+              child: CardWidgets.cardsBuilder(items, false,
+                  loggedUser: homeArguments.user,
+                  forRating: false,
+                  touchable: true)),
           warningCard(),
-          IgnorePointer(
-            ignoring: volume == 0 ? true : false,
-            child: Container(
-                color: Colors.black.withOpacity(volume),
-                child: MainButtonClicked(
-                  buttons: [
-                    SecondaryButtonData(
-                        Icons.add,
-                        () => Navigator.pushReplacementNamed(
-                            context, AddItem.routeName,
-                            arguments: new AddItemFiltersArgs(
-                                new HomeArguments(homeArguments.user,
-                                    ItemParams.createEmpty()),
-                                null))),
-                    SecondaryButtonData(
-                        Icons.filter_alt,
-                        () => Navigator.pushReplacementNamed(
-                            context, FilterPage.routeName,
-                            arguments:
-                                new AddItemFiltersArgs(homeArguments, null))),
-                    SecondaryButtonData(
-                        Icons.person,
-                        () => Navigator.pushReplacementNamed(
-                            context, AccountScreen.routeName,
-                            arguments: homeArguments.user)),
-                    SecondaryButtonData(
-                        Icons.article,
-                        () => Navigator.pushReplacementNamed(
-                            context, ArticlesScreen.routeName,
-                            arguments: homeArguments))
-                  ],
-                  volume: volume,
-                )),
-          ),
+          MainButtonClicked(buttons: [
+            SecondaryButtonData(
+                Icons.add,
+                () => Navigator.pushReplacementNamed(context, AddItem.routeName,
+                    arguments: new AddItemFiltersArgs(
+                        new HomeArguments(
+                            homeArguments.user, ItemParams.createEmpty()),
+                        null))),
+            SecondaryButtonData(
+                Icons.filter_alt,
+                () => Navigator.pushReplacementNamed(
+                    context, FilterPage.routeName,
+                    arguments: new AddItemFiltersArgs(homeArguments, null))),
+            SecondaryButtonData(
+                Icons.person,
+                () => Navigator.pushReplacementNamed(
+                    context, AccountScreen.routeName,
+                    arguments: homeArguments.user)),
+            SecondaryButtonData(
+                Icons.article,
+                () => Navigator.pushReplacementNamed(
+                    context, ArticlesScreen.routeName,
+                    arguments: homeArguments))
+          ], volume: volume),
         ],
       ),
     );
@@ -117,11 +95,11 @@ class _HomePageState extends State<HomePage>
     if (checkUserData() < 7) {
       return Container(
           width: MediaQuery.of(context).size.width,
-          height: 120,
+          height: 130,
           clipBehavior: Clip.antiAlias,
           padding: const EdgeInsets.symmetric(vertical: 10),
           decoration: BoxDecoration(
-              color: kWarninngColor.withOpacity(0.85),
+              color: kWarning.withOpacity(0.85),
               borderRadius: BorderRadius.all(Radius.circular(20))),
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             Icon(
@@ -141,7 +119,7 @@ class _HomePageState extends State<HomePage>
               onPressed: () => Navigator.pushNamed(
                   context, AccountSettings.routeName,
                   arguments: homeArguments.user),
-            ),
+            )
           ]));
     } else {
       return SizedBox(height: 0, width: 0);

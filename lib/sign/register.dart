@@ -136,7 +136,7 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
                               }));
                 },
               ),
-              SignLink.build(context, "Přihlásit se", kBodyText,
+              SignLink.build(context, "Přihlásit se", kSignLinkButton,
                   () => Navigator.of(context).pop())
             ],
           )

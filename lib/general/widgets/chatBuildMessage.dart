@@ -12,14 +12,14 @@ class ChatBuildMessage {
         mainAxisAlignment:
             myMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
         children: [
-          if (!myMessage) ...[
+          /* if (!myMessage) ...[
             SizedBox(width: kDefaultPadding / 2),
           ],
           if (myMessage) ...[
             SizedBox(
               width: 34 + kDefaultPadding / 2,
             ),
-          ],
+          ], */
           ChatMessages.message(context, myMessage, message),
         ],
       ),

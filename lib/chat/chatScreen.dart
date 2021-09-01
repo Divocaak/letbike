@@ -51,7 +51,6 @@ class _ChatScreenState extends State<ChatScreen>
                         arguments: chatUsers.itemInfo);
                   },
                 )),
-            SizedBox(width: kDefaultPadding * 0.75),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -61,13 +60,7 @@ class _ChatScreenState extends State<ChatScreen>
                 ),
               ],
             ),
-            SizedBox(
-              width: kDefaultPadding * .75,
-            ),
             sellButton(chatUsers),
-            SizedBox(
-              width: kDefaultPadding * .75,
-            ),
             Container(
                 width: 40,
                 height: 40,
@@ -87,25 +80,21 @@ class _ChatScreenState extends State<ChatScreen>
       body: Column(
         children: [
           Expanded(
-            child: Padding(
-                padding: const EdgeInsets.fromLTRB(
-                    kDefaultPadding, 1, kDefaultPadding, 0),
-                child: StreamBuilder(
-                  stream: messagesStream,
-                  builder: (context, stream) {
-                    if (stream.hasData) {
-                      return ListView.builder(
-                          itemCount: stream.data.length,
-                          itemBuilder: (context, i) {
-                            return ChatBuildMessage.buildMessage(
-                                context, stream.data[i], chatUsers);
-                          });
-                    } else {
-                      return Center(child: CircularProgressIndicator());
-                    }
-                  },
-                )),
-          ),
+              child: StreamBuilder(
+            stream: messagesStream,
+            builder: (context, stream) {
+              if (stream.hasData) {
+                return ListView.builder(
+                    itemCount: stream.data.length,
+                    itemBuilder: (context, i) {
+                      return ChatBuildMessage.buildMessage(
+                          context, stream.data[i], chatUsers);
+                    });
+              } else {
+                return Center(child: CircularProgressIndicator());
+              }
+            },
+          )),
           ChatInputField(chatUsers),
         ],
       ),

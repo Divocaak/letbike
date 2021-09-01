@@ -21,9 +21,8 @@ class ItemCard {
               borderRadius: BorderRadius.circular(20),
             ),
             child: InkWell(
-                onTap: () {
-                  onCardClick(context, item, loggedUser, forRating, touchable);
-                },
+                onTap: () => onCardClick(
+                    context, item, loggedUser, forRating, touchable),
                 child: Stack(children: [
                   FadeInImage.assetNetwork(
                       fit: BoxFit.fill,

@@ -50,10 +50,6 @@ class _ChatInputFieldState extends State<ChatInputField> {
   Widget build(BuildContext context) {
     chatInputController.text = "";
     return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: kDefaultPadding,
-        vertical: kDefaultPadding / 2,
-      ),
       //Barva dolní části
       decoration: BoxDecoration(
         color: Color(0xFF1E1F1D),
@@ -70,9 +66,6 @@ class _ChatInputFieldState extends State<ChatInputField> {
           children: [
             Expanded(
               child: Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: kDefaultPadding * 0.75,
-                ),
                 decoration: BoxDecoration(
                   //Barva Input Okna
                   color: Color(0xFF424040).withOpacity(1),
@@ -80,7 +73,6 @@ class _ChatInputFieldState extends State<ChatInputField> {
                 ),
                 child: Row(
                   children: [
-                    SizedBox(width: kDefaultPadding / 2),
                     Expanded(
                       child: TextField(
                         controller: chatInputController,
@@ -91,9 +83,6 @@ class _ChatInputFieldState extends State<ChatInputField> {
                                 TextStyle(color: kWhite.withOpacity(.5))),
                         style: TextStyle(color: kWhite),
                       ),
-                    ),
-                    SizedBox(
-                      width: kDefaultPadding,
                     ),
                     Stack(children: [
                       TextButton(

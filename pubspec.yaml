@@ -21,6 +21,7 @@ dependencies:
   url_launcher: ^6.0.3
   shared_preferences: ^2.0.5
   emojis: ^0.9.3
+  carousel_slider: ^4.0.0
   
 dev_dependencies:
   flutter_test:

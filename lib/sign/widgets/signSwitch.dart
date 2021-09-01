@@ -17,6 +17,7 @@ class _SignSwitchState extends State<SignSwitch> {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         widget.label,
         Switch(

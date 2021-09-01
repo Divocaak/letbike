@@ -26,7 +26,7 @@ class ForgotPassword extends StatelessWidget {
             ),
             title: Text(
               "Forgot Password",
-              style: kBodyText,
+              style: kSignLinkButton,
             ),
             centerTitle: true,
           ),
@@ -42,7 +42,7 @@ class ForgotPassword extends StatelessWidget {
                       width: size.width * 0.8,
                       child: Text(
                         "Enter your email we will send instruction to reset your password",
-                        style: kBodyText,
+                        style: kSignLinkButton,
                       ),
                     ),
                     SizedBox(

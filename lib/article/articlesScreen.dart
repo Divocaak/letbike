@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:letbike/general/widgets/cards/articleCard.dart';
+import 'package:letbike/general/widgets/cards/cardWidgets.dart';
 import '../general/general.dart';
 import '../app/homePage.dart';
 
@@ -20,30 +20,13 @@ class _ArticlesScreenState extends State<ArticlesScreen>
     homeArguments = ModalRoute.of(context).settings.arguments;
     articles = DatabaseServices.getAllArticles();
     return Scaffold(
-      floatingActionButton: MainButton(
-          iconData: Icons.arrow_back,
-          onPressed: () => Navigator.of(context).pushReplacementNamed(
-              HomePage.routeName,
-              arguments: homeArguments)),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      body: Container(
-        color: kBlack,
-        child: FutureBuilder<List<Article>>(
-          future: articles,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return ListView.builder(
-                  itemCount: snapshot.data.length,
-                  itemBuilder: (context, i) {
-                    return ArticleCard.buildCard(context, snapshot.data[i]);
-                  });
-            } else if (snapshot.hasError) {
-              return ErrorWidgets.futureBuilderError();
-            }
-            return Center(child: CircularProgressIndicator());
-          },
-        ),
-      ),
-    );
+        floatingActionButton: MainButton(
+            iconData: Icons.arrow_back,
+            onPressed: () => Navigator.of(context).pushReplacementNamed(
+                HomePage.routeName,
+                arguments: homeArguments)),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        body: Container(
+            color: kBlack, child: CardWidgets.cardsBuilder(articles, true)));
   }
 }

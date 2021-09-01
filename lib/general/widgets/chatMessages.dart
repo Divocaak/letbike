@@ -5,10 +5,6 @@ import '../general.dart';
 class ChatMessages {
   static Widget message(BuildContext context, bool isMe, Message message) {
     return Container(
-        padding: EdgeInsets.symmetric(
-          horizontal: kDefaultPadding * 0.75,
-          vertical: kDefaultPadding / 2,
-        ),
         decoration: BoxDecoration(
           color: isMe ? kPrimaryColor : kSecondaryColor,
           borderRadius: BorderRadius.circular(30),

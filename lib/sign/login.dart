@@ -54,7 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
               inputAction: TextInputAction.done,
               obscure: true,
               controller: passController),
-          SignLink.build(context, "Zapomenuté heslo", kBodyText,
+          SignLink.build(context, "Zapomenuté heslo", kSignLinkButton,
               () => Navigator.of(context).pushNamed("ForgotPassword")),
           SignSwitch(
               Text(
@@ -116,7 +116,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           return Center(child: CircularProgressIndicator());
                         }));
               }),
-          SignLink.build(context, "Zaregistrovat se", kBodyText,
+          SignLink.build(context, "Zaregistrovat se", kSignLinkButton,
               () => Navigator.of(context).pushNamed("CreateNewAccount"))
         ],
       )

@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:letbike/account/accountScreen.dart';
@@ -32,23 +31,6 @@ class _AccountSettingsState extends State<AccountSettings>
   final TextEditingController addCController = TextEditingController();
   final TextEditingController postalController = TextEditingController();
 
-  Widget buildGridView() {
-    if (images != null)
-      return GridView.count(
-        crossAxisCount: 3,
-        children: List.generate(images.length, (index) {
-          Asset asset = images[index];
-          return AssetThumb(
-            asset: asset,
-            width: 300,
-            height: 300,
-          );
-        }),
-      );
-    else
-      return Container(color: Colors.white);
-  }
-
   Future<void> loadAssets() async {
     setState(() {
       images = [];
@@ -71,7 +53,7 @@ class _AccountSettingsState extends State<AccountSettings>
       images = resultList.length < 1 ? [] : resultList;
       if (error != null)
         AlertBox.showAlertBox(
-            context, "Error", Text("Error", style: TextStyle(color: kWhite)));
+            context, "Error", Text("Error", style: TextStyle(color: kError)));
     });
   }
 
@@ -89,192 +71,102 @@ class _AccountSettingsState extends State<AccountSettings>
   @override
   Widget build(BuildContext context) {
     user = ModalRoute.of(context).settings.arguments;
-    Size size = MediaQuery.of(context).size;
-    var profileInfo = Expanded(
-      child: Column(
-        children: <Widget>[
-          Center(
-            child: Container(
-              height: 100,
-              width: 100,
-              margin: EdgeInsets.only(top: 30),
-              child: Stack(
-                children: <Widget>[
-                  Text(
-                    images.length < 1
-                        ? "Aktualizovat profilovou fotku"
-                        : "Fotografie nahrána",
-                    style: TextStyle(color: kWhite),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomRight,
-                    child: Container(
-                        height: 50,
-                        width: 50,
-                        decoration: BoxDecoration(
-                          color: kPrimaryColor,
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                        child: Column(
-                          children: [
-                            Container(
-                              child: TextButton(
-                                child: Icon(
-                                  Icons.upload_rounded,
-                                  color: kWhite,
-                                ),
-                                onPressed: loadAssets,
-                              ),
-                            ),
-                          ],
-                        )),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          SizedBox(height: 20),
-        ],
-      ),
-    );
-
-    var header = Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        profileInfo,
-      ],
-    );
-
-    return new Scaffold(
-        body: Stack(children: [
-      Scaffold(
+    return Scaffold(
         backgroundColor: kBlack,
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                height: size.width * 0.1,
-              ),
-              header,
-              Column(
-                children: [
-                  TextInput(
-                      icon: Icons.create,
-                      hint: "Křestní jméno: " + user.fName,
-                      inputType: TextInputType.name,
-                      inputAction: TextInputAction.next,
-                      controller: fNameController),
-                  TextInput(
-                      icon: Icons.create,
-                      hint: "Příjmení: " + user.lName,
-                      inputType: TextInputType.name,
-                      inputAction: TextInputAction.next,
-                      controller: lNameController),
-                  TextInput(
-                      icon: Icons.phone,
-                      hint: "Telefon: " + user.phone.toString(),
-                      inputType: TextInputType.phone,
-                      inputAction: TextInputAction.next,
-                      controller: phoneController),
-                  TextInput(
-                      icon: Icons.home,
-                      hint: "Ulice a č.p.: " + user.addressA,
-                      inputType: TextInputType.streetAddress,
-                      inputAction: TextInputAction.next,
-                      controller: addAController),
-                  TextInput(
-                      icon: Icons.location_city,
-                      hint: "Obec: " + user.addressB,
-                      inputType: TextInputType.streetAddress,
-                      inputAction: TextInputAction.next,
-                      controller: addBController),
-                  TextInput(
-                      icon: Icons.flag,
-                      hint: "Země: " + user.addressC,
-                      inputType: TextInputType.streetAddress,
-                      inputAction: TextInputAction.next,
-                      controller: addCController),
-                  TextInput(
-                      icon: Icons.email,
-                      hint: "PSČ: " + user.postal.toString(),
-                      inputType: TextInputType.number,
-                      inputAction: TextInputAction.done,
-                      controller: postalController),
-                  SizedBox(
-                    height: 25,
-                  ),
-                ],
-              )
-            ],
-          ),
-        ),
-      ),
-      IgnorePointer(
-        ignoring: volume == 0 ? true : false,
-        child: Container(
-          color: Colors.black.withOpacity(volume),
-          child: Stack(
-            children: [
-              Positioned(
-                  bottom: 40,
-                  right: 150,
-                  child: CircularButton(kSecondaryColor.withOpacity(volume * 2),
-                      45, Icons.lock, kWhite.withOpacity(volume * 2), () {
-                    Navigator.of(context)
-                        .pushNamed(ChangePassword.routeName, arguments: user);
-                  })),
-              Positioned(
-                  bottom: 120,
-                  right: 120,
-                  child: CircularButton(kSecondaryColor.withOpacity(volume * 2),
-                      45, Icons.arrow_back, kWhite.withOpacity(volume * 2), () {
-                    setState(() {
-                      user.fName = getVal(fNameController, user.fName);
-                      user.lName = getVal(lNameController, user.lName);
-                      user.phone = int.parse(
-                          getVal(phoneController, user.phone.toString()));
-                      user.addressA = getVal(addAController, user.addressA);
-                      user.addressB = getVal(addBController, user.addressB);
-                      user.addressC = getVal(addCController, user.addressC);
-                      user.postal = int.parse(
-                          getVal(postalController, user.postal.toString()));
-                    });
-                    Navigator.of(context).pushReplacementNamed(
-                        AccountScreen.routeName,
-                        arguments: user);
-                  })),
-              Positioned(
-                  bottom: 150,
-                  right: 40,
-                  child: CircularButton(kSecondaryColor.withOpacity(volume * 2),
-                      45, Icons.save, kWhite.withOpacity(volume * 2), () {
-                    saveData();
-                  })),
-            ],
-          ),
-        ),
-      ),
-      Positioned(
-          height: 275,
-          width: 275,
-          right: -75,
-          bottom: -75,
-          child: Stack(
-            alignment: Alignment.center,
-            children: <Widget>[
-              CircularButton(kPrimaryColor, 60, Icons.menu, kWhite, () {
-                if (animationController.isCompleted) {
-                  animationController.reverse();
-                  volume = 0;
-                } else {
-                  animationController.forward();
-                  volume = 0.5;
-                }
-              })
-            ],
-          ))
-    ]));
+        floatingActionButton: MainButton(
+            iconData: Icons.menu,
+            onPressed: () {
+              if (animationController.isCompleted) {
+                animationController.reverse();
+                volume = 0;
+              } else {
+                animationController.forward();
+                volume = 0.5;
+              }
+            }),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        body: Stack(children: [
+          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Text(
+                  images.length < 1
+                      ? "Aktualizovat profilovou fotku"
+                      : "Fotografie nahrána",
+                  style: TextStyle(color: kWhite),
+                ),
+                CircularButton(
+                    kPrimaryColor, 50, Icons.upload, kWhite, loadAssets)
+              ],
+            ),
+            TextInput(
+                icon: Icons.create,
+                hint: "Křestní jméno: " + userInfo(user.fName),
+                inputType: TextInputType.name,
+                inputAction: TextInputAction.next,
+                controller: fNameController),
+            TextInput(
+                icon: Icons.create,
+                hint: "Příjmení: " + userInfo(user.lName),
+                inputType: TextInputType.name,
+                inputAction: TextInputAction.next,
+                controller: lNameController),
+            TextInput(
+                icon: Icons.phone,
+                hint: "Telefon: " + userInfo(user.phone.toString()),
+                inputType: TextInputType.phone,
+                inputAction: TextInputAction.next,
+                controller: phoneController),
+            TextInput(
+                icon: Icons.home,
+                hint: "Ulice a č.p.: " + userInfo(user.addressA),
+                inputType: TextInputType.streetAddress,
+                inputAction: TextInputAction.next,
+                controller: addAController),
+            TextInput(
+                icon: Icons.location_city,
+                hint: "Obec: " + userInfo(user.addressB),
+                inputType: TextInputType.streetAddress,
+                inputAction: TextInputAction.next,
+                controller: addBController),
+            TextInput(
+                icon: Icons.flag,
+                hint: "Země: " + userInfo(user.addressC),
+                inputType: TextInputType.streetAddress,
+                inputAction: TextInputAction.next,
+                controller: addCController),
+            TextInput(
+                icon: Icons.email,
+                hint: "PSČ: " + userInfo(user.postal.toString()),
+                inputType: TextInputType.number,
+                inputAction: TextInputAction.done,
+                controller: postalController)
+          ]),
+          MainButtonClicked(buttons: [
+            SecondaryButtonData(
+                Icons.lock,
+                () => Navigator.of(context)
+                    .pushNamed(ChangePassword.routeName, arguments: user)),
+            SecondaryButtonData(Icons.save, () {
+              setState(() {
+                saveData();
+                user.fName = getVal(fNameController, user.fName);
+                user.lName = getVal(lNameController, user.lName);
+                user.phone =
+                    int.parse(getVal(phoneController, user.phone.toString()));
+                user.addressA = getVal(addAController, user.addressA);
+                user.addressB = getVal(addBController, user.addressB);
+                user.addressC = getVal(addCController, user.addressC);
+                user.postal =
+                    int.parse(getVal(postalController, user.postal.toString()));
+              });
+              Navigator.of(context).pushReplacementNamed(
+                  AccountScreen.routeName,
+                  arguments: user);
+            })
+          ], volume: volume)
+        ]));
   }
 
   void saveData() {
@@ -300,8 +192,7 @@ class _AccountSettingsState extends State<AccountSettings>
             if (snapshot.hasData) {
               return Text(snapshot.data, style: TextStyle(color: kWhite));
             } else if (snapshot.hasError) {
-              return Text('Sorry there is an error',
-                  style: TextStyle(color: kWhite));
+              return ErrorWidgets.futureBuilderError();
             }
             return Center(child: CircularProgressIndicator());
           },
@@ -312,5 +203,9 @@ class _AccountSettingsState extends State<AccountSettings>
     return (controller.text != null && controller.text != "")
         ? controller.text
         : current;
+  }
+
+  String userInfo(String input) {
+    return (input == "-1" ? " " : input);
   }
 }

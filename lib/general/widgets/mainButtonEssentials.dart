@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:letbike/general/general.dart';
 import '../pallete.dart';
 
 class MainButton extends StatelessWidget {
@@ -36,27 +37,24 @@ class MainButtonClicked extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        for (int i = 0; i < buttons.length; i++)
-          Positioned(
-              bottom: positions[i].x,
-              right: positions[i].y,
-              child: Container(
-                decoration: BoxDecoration(
-                    color: kSecondaryColor.withOpacity(volume * 2),
-                    shape: BoxShape.circle),
-                width: 40,
-                height: 40,
-                child: IconButton(
-                  icon: Icon(buttons[i].icon,
-                      color: kWhite.withOpacity(volume * 2)),
-                  enableFeedback: true,
-                  onPressed: buttons[i].onClick,
-                ),
-              )),
-      ],
-    );
+    return IgnorePointer(
+        ignoring: volume == 0 ? true : false,
+        child: Container(
+            color: Colors.black.withOpacity(volume),
+            child: Stack(
+              children: [
+                for (int i = 0; i < buttons.length; i++)
+                  Positioned(
+                      bottom: positions[i].x,
+                      right: positions[i].y,
+                      child: CircularButton(
+                          kSecondaryColor.withOpacity(volume * 2),
+                          40,
+                          buttons[i].icon,
+                          kWhite.withOpacity(volume * 2),
+                          buttons[i].onClick)),
+              ],
+            )));
   }
 }
 
