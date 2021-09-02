@@ -72,6 +72,7 @@ class _AccountSettingsState extends State<AccountSettings>
   Widget build(BuildContext context) {
     user = ModalRoute.of(context).settings.arguments;
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: kBlack,
         floatingActionButton: MainButton(
             iconData: Icons.menu,

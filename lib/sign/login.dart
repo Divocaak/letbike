@@ -26,101 +26,103 @@ class _LoginScreenState extends State<LoginScreen> {
     getLocalData();
 
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         body: Stack(children: [
-      BackgroundImage(),
-      Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Center(
-            child: Text(
-              "Letbike",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 60,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          TextInput(
-            icon: Icons.mail,
-            hint: "E-mail",
-            inputType: TextInputType.emailAddress,
-            inputAction: TextInputAction.next,
-            controller: mailController,
-          ),
-          TextInput(
-              icon: Icons.lock,
-              hint: "Heslo",
-              inputAction: TextInputAction.done,
-              obscure: true,
-              controller: passController),
-          SignLink.build(context, "Zapomenuté heslo", kSignLinkButton,
-              () => Navigator.of(context).pushNamed("ForgotPassword")),
-          SignSwitch(
-              Text(
-                "Zapamatovat přihlášení",
-                style: TextStyle(color: kWhite, fontSize: 17, shadows: [
-                  Shadow(
-                    blurRadius: 10.0,
-                    color: kBlack,
-                    offset: Offset(5.0, 5.0),
+          BackgroundImage(),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Center(
+                child: Text(
+                  "Letbike",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 60,
+                    fontWeight: FontWeight.bold,
                   ),
-                ]),
+                ),
               ),
-              remember,
-              kSecondaryColor,
-              kPrimaryColor),
-          RoundedButton(
-              buttonName: "Přihlásit se",
-              onClick: () {
-                if (remember) {
-                  setLocalData(
-                      remember, mailController.text, passController.text);
-                }
+              TextInput(
+                icon: Icons.mail,
+                hint: "E-mail",
+                inputType: TextInputType.emailAddress,
+                inputAction: TextInputAction.next,
+                controller: mailController,
+              ),
+              TextInput(
+                  icon: Icons.lock,
+                  hint: "Heslo",
+                  inputAction: TextInputAction.done,
+                  obscure: true,
+                  controller: passController),
+              SignLink.build(context, "Zapomenuté heslo", kSignLinkButton,
+                  () => Navigator.of(context).pushNamed("ForgotPassword")),
+              SignSwitch(
+                  Text(
+                    "Zapamatovat přihlášení",
+                    style: TextStyle(color: kWhite, fontSize: 17, shadows: [
+                      Shadow(
+                        blurRadius: 10.0,
+                        color: kBlack,
+                        offset: Offset(5.0, 5.0),
+                      ),
+                    ]),
+                  ),
+                  remember,
+                  kSecondaryColor,
+                  kPrimaryColor),
+              RoundedButton(
+                  buttonName: "Přihlásit se",
+                  onClick: () {
+                    if (remember) {
+                      setLocalData(
+                          remember, mailController.text, passController.text);
+                    }
 
-                logResponse = DatabaseServices.loginUser(
-                  mailController.text,
-                  passController.text,
-                );
+                    logResponse = DatabaseServices.loginUser(
+                      mailController.text,
+                      passController.text,
+                    );
 
-                AlertBox.showAlertBox(
-                    context,
-                    "Oznámení",
-                    FutureBuilder(
-                        future: logResponse,
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            if (snapshot.data.id < 0) {
-                              return Text(
-                                  "Špatně zadané uživatelské jméno nebo heslo.",
-                                  style: TextStyle(color: kWhite));
-                            } else {
-                              Text("Probíhá přesměrování",
-                                  style: TextStyle(color: kWhite));
-                              Future.delayed(Duration.zero, () {
-                                Navigator.of(context).pushReplacementNamed(
-                                    HomePage.routeName,
-                                    arguments: new HomeArguments(snapshot.data,
-                                        ItemParams.createEmpty()));
-                              });
-                            }
-                          }
+                    AlertBox.showAlertBox(
+                        context,
+                        "Oznámení",
+                        FutureBuilder(
+                            future: logResponse,
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                if (snapshot.data.id < 0) {
+                                  return Text(
+                                      "Špatně zadané uživatelské jméno nebo heslo.",
+                                      style: TextStyle(color: kWhite));
+                                } else {
+                                  Text("Probíhá přesměrování",
+                                      style: TextStyle(color: kWhite));
+                                  Future.delayed(Duration.zero, () {
+                                    Navigator.of(context).pushReplacementNamed(
+                                        HomePage.routeName,
+                                        arguments: new HomeArguments(
+                                            snapshot.data,
+                                            ItemParams.createEmpty()));
+                                  });
+                                }
+                              }
 
-                          if (snapshot.hasError) {
-                            return Text(
-                              "Někde se stala chyba, zkuste to prosím později.",
-                              style: TextStyle(color: kWhite),
-                            );
-                          }
+                              if (snapshot.hasError) {
+                                return Text(
+                                  "Někde se stala chyba, zkuste to prosím později.",
+                                  style: TextStyle(color: kWhite),
+                                );
+                              }
 
-                          return Center(child: CircularProgressIndicator());
-                        }));
-              }),
-          SignLink.build(context, "Zaregistrovat se", kSignLinkButton,
-              () => Navigator.of(context).pushNamed("CreateNewAccount"))
-        ],
-      )
-    ]));
+                              return Center(child: CircularProgressIndicator());
+                            }));
+                  }),
+              SignLink.build(context, "Zaregistrovat se", kSignLinkButton,
+                  () => Navigator.of(context).pushNamed("CreateNewAccount"))
+            ],
+          )
+        ]));
   }
 
   getLocalData() async {

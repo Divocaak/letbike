@@ -101,188 +101,123 @@ class _AddItem extends State<AddItem> with TickerProviderStateMixin {
       images = args.addItemData.imgs;
     }
 
-    return MaterialApp(
-      title: 'Přidat předmět',
-      home: Scaffold(
-        body: Stack(
-          children: [
-            BackgroundImage(),
-            Scaffold(
-              backgroundColor: Colors.transparent,
-              resizeToAvoidBottomInset: false,
-              body: Container(
-                child: Padding(
-                  padding: EdgeInsets.all(20),
-                  child: ListView(
-                    children: [
-                      Container(
-                        height: 20,
-                      ),
-                      TextInput(
-                          icon: Icons.text_fields,
-                          hint: "Název předmětu",
-                          inputAction: TextInputAction.next,
-                          controller: nameController),
-                      TextInput(
-                          icon: Icons.text_fields,
-                          hint: "Popis předmětu",
-                          inputAction: TextInputAction.next,
-                          controller: descController),
-                      TextInput(
-                        icon: Icons.attach_money,
-                        hint: "Cena",
-                        inputAction: TextInputAction.done,
-                        inputType: TextInputType.number,
-                        controller: priceController,
-                      ),
-                      Container(height: 20),
-                      TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pushNamed(
-                                FilterPage.routeName,
-                                arguments: new AddItemFiltersArgs(
-                                    args.args,
-                                    new AddItemData(
-                                        nameController.text,
-                                        descController.text,
-                                        priceController.text,
-                                        images)));
-                          },
-                          child: Container(
-                              height: 50,
-                              width: 250,
-                              decoration: BoxDecoration(
-                                color: kSecondaryColor,
-                                border: Border.all(
-                                  color: kSecondaryColor,
-                                  width: 2,
-                                ),
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                              child: Center(
-                                  child: Text("Vyplnit detaily předmětu",
-                                      style: TextStyle(
-                                        color: kBlack,
-                                      ))))),
-                      Container(height: 20),
-                      Container(
-                          height: 200,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(
-                              color: Colors.white,
-                              width: 2,
-                            ),
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                          padding: EdgeInsets.all(15),
-                          child: Column(
-                            children: [
-                              Text(
-                                  "První vybraný obrázek se bude zobrazovat na domovské stránce."),
-                              Container(
-                                child: TextButton(
-                                  child: Text("Vybrat foto z úložiště"),
-                                  onPressed: loadAssets,
-                                ),
-                              ),
-                              Expanded(
-                                child: buildGridView(),
-                              )
-                            ],
-                          )),
-                    ],
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      floatingActionButton: MainButton(
+          iconData: Icons.menu,
+          onPressed: () {
+            if (animationController.isCompleted) {
+              animationController.reverse();
+              volume = 0;
+            } else {
+              animationController.forward();
+              volume = 0.5;
+            }
+          }),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      body: Stack(
+        children: [
+          BackgroundImage(),
+          Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            TextInput(
+                icon: Icons.text_fields,
+                hint: "Název předmětu",
+                inputAction: TextInputAction.next,
+                controller: nameController),
+            TextInput(
+                icon: Icons.text_fields,
+                hint: "Popis předmětu",
+                inputAction: TextInputAction.next,
+                controller: descController),
+            TextInput(
+              icon: Icons.attach_money,
+              hint: "Cena",
+              inputAction: TextInputAction.done,
+              inputType: TextInputType.number,
+              controller: priceController,
+            ),
+            RoundedButton(
+                buttonName: "Vyplnit detaily předmětu",
+                onClick: () => Navigator.of(context).pushNamed(
+                    FilterPage.routeName,
+                    arguments: new AddItemFiltersArgs(
+                        args.args,
+                        new AddItemData(
+                            nameController.text,
+                            descController.text,
+                            priceController.text,
+                            images)))),
+            Container(
+                height: 200,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(
+                    color: Colors.white,
+                    width: 2,
                   ),
+                  borderRadius: BorderRadius.circular(25),
                 ),
-              ),
-            ),
-            IgnorePointer(
-              ignoring: volume == 0 ? true : false,
-              child: Container(
-                color: Colors.black.withOpacity(volume),
-                child: Stack(
+                padding: EdgeInsets.all(15),
+                child: Column(
                   children: [
-                    Positioned(
-                        bottom: 120,
-                        right: 120,
-                        child: CircularButton(
-                            kSecondaryColor.withOpacity(volume * 2),
-                            45,
-                            Icons.arrow_back,
-                            kWhite.withOpacity(volume * 2), () {
-                          Navigator.of(context).pushReplacementNamed(
-                              HomePage.routeName,
-                              arguments: new HomeArguments(
-                                  args.args.user, ItemParams.createEmpty()));
-                        })),
-                    Positioned(
-                        bottom: 150,
-                        right: 40,
-                        child: CircularButton(
-                            kSecondaryColor.withOpacity(volume * 2),
-                            45,
-                            Icons.add,
-                            kWhite.withOpacity(volume * 2), () {
-                          addResponse = DatabaseServices.createItem(
-                              new Item(
-                                  -1,
-                                  args.args.user.id,
-                                  nameController.text,
-                                  descController.text,
-                                  double.parse(priceController.text),
-                                  0,
-                                  0,
-                                  "",
-                                  "",
-                                  "",
-                                  0,
-                                  args.args.filters,
-                                  0),
-                              images);
-
-                          AlertBox.showAlertBox(
-                              context,
-                              "Oznámení",
-                              FutureBuilder<String>(
-                                future: addResponse,
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasData) {
-                                    return Text(snapshot.data,
-                                        style: TextStyle(color: kWhite));
-                                  } else if (snapshot.hasError) {
-                                    return Text('Sorry there is an error',
-                                        style: TextStyle(color: kWhite));
-                                  }
-                                  return Center(
-                                      child: CircularProgressIndicator());
-                                },
-                              ));
-                        })),
-                  ],
-                ),
-              ),
-            ),
-            Positioned(
-                height: 275,
-                width: 275,
-                right: -75,
-                bottom: -75,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: <Widget>[
-                    CircularButton(kPrimaryColor, 60, Icons.menu, kWhite, () {
-                      if (animationController.isCompleted) {
-                        animationController.reverse();
-                        volume = 0;
-                      } else {
-                        animationController.forward();
-                        volume = 0.5;
-                      }
-                    })
+                    Text(
+                        "První vybraný obrázek se bude zobrazovat na domovské stránce."),
+                    Container(
+                      child: TextButton(
+                        child: Text("Vybrat fotografie"),
+                        onPressed: loadAssets,
+                      ),
+                    ),
+                    Expanded(
+                      child: buildGridView(),
+                    )
                   ],
                 ))
-          ],
-        ),
+          ]),
+          MainButtonClicked(buttons: [
+            SecondaryButtonData(
+                Icons.arrow_back,
+                () => Navigator.of(context).pushReplacementNamed(
+                    HomePage.routeName,
+                    arguments: new HomeArguments(
+                        args.args.user, ItemParams.createEmpty()))),
+            SecondaryButtonData(Icons.add, () {
+              addResponse = DatabaseServices.createItem(
+                  new Item(
+                      -1,
+                      args.args.user.id,
+                      nameController.text,
+                      descController.text,
+                      double.parse(priceController.text),
+                      0,
+                      0,
+                      "",
+                      "",
+                      "",
+                      0,
+                      args.args.filters,
+                      0),
+                  images);
+
+              AlertBox.showAlertBox(
+                  context,
+                  "Oznámení",
+                  FutureBuilder<String>(
+                    future: addResponse,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return Text(snapshot.data,
+                            style: TextStyle(color: kWhite));
+                      } else if (snapshot.hasError) {
+                        return Text('Sorry there is an error',
+                            style: TextStyle(color: kWhite));
+                      }
+                      return Center(child: CircularProgressIndicator());
+                    },
+                  ));
+            })
+          ], volume: volume)
+        ],
       ),
     );
   }

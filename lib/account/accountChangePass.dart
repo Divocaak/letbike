@@ -38,6 +38,7 @@ class _ChangePasswordState extends State<ChangePassword>
     user = ModalRoute.of(context).settings.arguments;
 
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: kBlack,
         floatingActionButton: MainButton(
             iconData: Icons.menu,
