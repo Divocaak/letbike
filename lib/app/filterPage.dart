@@ -14,120 +14,50 @@ class FilterPage extends StatefulWidget {
 class _FilterPage extends State<FilterPage> with TickerProviderStateMixin {
   AddItemFiltersArgs addItemArgs;
 
-  double volume = 0;
+  int widgetCount = 2;
 
-  AnimationController animationController;
+  FilterDropdown categoryDd = new FilterDropdown(
+    hint: "Kategorie",
+    options: Category.categories,
+    //onTap: () => setState(() {}),
+  );
+  FilterSwitch usedSwitch =
+      new FilterSwitch(label: "Použité", left: "Ne", right: "Ano");
+
+  FilterDropdown brandDd =
+      new FilterDropdown(hint: "Značka kola", options: Bike.brand);
+  FilterDropdown typeDd =
+      new FilterDropdown(hint: "Typ kola", options: Bike.type);
 
   @override
   void initState() {
-    animationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 250));
-    animationController.addListener(() {
-      setState(() {});
-    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     addItemArgs = ModalRoute.of(context).settings.arguments;
-    return MaterialApp(
-      title: 'Filtry',
-      home: Scaffold(
-        body: Stack(
-          children: [
-            BackgroundImage(),
-            Scaffold(
-              backgroundColor: Colors.transparent,
-              resizeToAvoidBottomInset: false,
-              body: Container(
-                child: Padding(
-                  padding: EdgeInsets.all(20),
-                  child: ListView(
-                    children: [
-                      Text(
-                        "Nastavené filtry:",
-                        style: TextStyle(
-                          color: kWhite,
-                          shadows: [
-                            Shadow(
-                              color: Colors.black,
-                              offset: Offset(4, 1),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                          height: 500,
-                          width: 300,
-                          child: ItemParam(addItemArgs.args.filters))
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            IgnorePointer(
-              ignoring: volume == 0 ? true : false,
-              child: Container(
-                color: Colors.black.withOpacity(volume),
-                child: Stack(
-                  children: [
-                    Positioned(
-                        bottom: 120,
-                        right: 120,
-                        child: CircularButton(
-                            kSecondaryColor.withOpacity(volume * 2),
-                            45,
-                            Icons.save,
-                            kWhite.withOpacity(volume * 2), () {
-                          if (addItemArgs.addItemData == null) {
-                            Navigator.of(context).pushReplacementNamed(
-                                HomePage.routeName,
-                                arguments: addItemArgs.args);
-                          } else {
-                            Navigator.of(context).pushReplacementNamed(
-                                AddItem.routeName,
-                                arguments: addItemArgs);
-                          }
-                        })),
-                    Positioned(
-                        bottom: 150,
-                        right: 40,
-                        child: CircularButton(
-                            kSecondaryColor.withOpacity(volume * 2),
-                            45,
-                            Icons.filter_alt,
-                            kWhite.withOpacity(volume * 2), () {
-                          Navigator.of(context).pushReplacementNamed(
-                              FiltersBase.routeName,
-                              arguments: addItemArgs);
-                        })),
-                  ],
-                ),
-              ),
-            ),
-            Positioned(
-                height: 275,
-                width: 275,
-                right: -75,
-                bottom: -75,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: <Widget>[
-                    CircularButton(kPrimaryColor, 60, Icons.menu, kWhite, () {
-                      if (animationController.isCompleted) {
-                        animationController.reverse();
-                        volume = 0;
-                      } else {
-                        animationController.forward();
-                        volume = 0.5;
-                      }
-                    })
-                  ],
-                ))
-          ],
-        ),
-      ),
-    );
+    return Scaffold(
+        floatingActionButton: MainButton(
+            iconData: Icons.save,
+            onPressed: () => addItemArgs.addItemData == null
+                ? Navigator.of(context).pushReplacementNamed(HomePage.routeName,
+                    arguments: addItemArgs.args)
+                : Navigator.of(context).pushReplacementNamed(AddItem.routeName,
+                    arguments: addItemArgs)),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        body: Stack(children: [
+          BackgroundImage(),
+          ListView(
+            children: [
+              usedSwitch,
+              categoryDd,
+            ],
+          )
+        ]));
+  }
+
+  rebuilder() {
+    setState(() {});
   }
 }
