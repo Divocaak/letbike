@@ -11,18 +11,15 @@ class FilterPage extends StatefulWidget {
   static const routeName = "/filterPage";
 }
 
-class _FilterPage extends State<FilterPage> with TickerProviderStateMixin {
+class _FilterPage extends State<FilterPage> {
   AddItemFiltersArgs addItemArgs;
 
   int widgetCount = 2;
 
-  FilterDropdown categoryDd = new FilterDropdown(
-    hint: "Kategorie",
-    options: Category.categories,
-    //onTap: () => setState(() {}),
-  );
   FilterSwitch usedSwitch =
       new FilterSwitch(label: "Použité", left: "Ne", right: "Ano");
+  FilterDropdown categoryDd =
+      new FilterDropdown(hint: "Kategorie", options: Category.categories);
 
   FilterDropdown brandDd =
       new FilterDropdown(hint: "Značka kola", options: Bike.brand);
@@ -37,6 +34,7 @@ class _FilterPage extends State<FilterPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     addItemArgs = ModalRoute.of(context).settings.arguments;
+    categoryDd.fp = this;
     return Scaffold(
         floatingActionButton: MainButton(
             iconData: Icons.save,
@@ -52,12 +50,21 @@ class _FilterPage extends State<FilterPage> with TickerProviderStateMixin {
             children: [
               usedSwitch,
               categoryDd,
+              case2(categoryDd.value, {1: brandDd, 2: typeDd}, Container())
             ],
           )
         ]));
   }
 
-  rebuilder() {
-    setState(() {});
+  TValue case2<TOptionType, TValue>(
+    TOptionType selectedOption,
+    Map<TOptionType, TValue> branches, [
+    TValue defaultValue,
+  ]) {
+    if (!branches.containsKey(selectedOption)) {
+      return defaultValue;
+    }
+
+    return branches[selectedOption];
   }
 }

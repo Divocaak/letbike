@@ -1,15 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:letbike/app/filterPage.dart';
 import 'package:letbike/general/general.dart';
 
 class FilterDropdown extends StatefulWidget {
-  FilterDropdown({Key key, this.hint, this.options, this.onTap})
+  FilterDropdown({Key key, this.hint, this.options, this.fp})
       : super(key: key);
 
   int value;
   final String hint;
   final List<String> options;
-  final Function onTap;
+  State<FilterPage> fp;
 
   State<StatefulWidget> createState() => _FilterDropdownState();
 }
@@ -30,10 +31,11 @@ class _FilterDropdownState extends State<FilterDropdown> {
           hint: Text(widget.hint),
           value: widget.value,
           onChanged: (newValue) {
-            if (widget.onTap != null) widget.onTap();
             setState(() {
               widget.value = newValue;
             });
+
+            if(widget.fp != null) widget.fp.setState(() {});
           },
           items: widget.options.asMap().entries.map((entry) {
             return DropdownMenuItem(
