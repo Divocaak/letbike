@@ -4,7 +4,8 @@ import 'package:letbike/app/filterPage.dart';
 import 'package:letbike/general/general.dart';
 
 class FilterDropdown extends StatefulWidget {
-  FilterDropdown({Key key, this.hint, this.options, this.fp})
+  FilterDropdown(
+      {Key key, @required this.hint, @required this.options, this.fp})
       : super(key: key);
 
   int value;
@@ -35,7 +36,7 @@ class _FilterDropdownState extends State<FilterDropdown> {
               widget.value = newValue;
             });
 
-            if(widget.fp != null) widget.fp.setState(() {});
+            if (widget.fp != null) widget.fp.setState(() {});
           },
           items: widget.options.asMap().entries.map((entry) {
             return DropdownMenuItem(
@@ -48,12 +49,19 @@ class _FilterDropdownState extends State<FilterDropdown> {
 }
 
 class FilterSwitch extends StatefulWidget {
-  FilterSwitch({Key key, this.label, this.left, this.right}) : super(key: key);
+  FilterSwitch(
+      {Key key,
+      @required this.label,
+      @required this.left,
+      @required this.right,
+      this.fp})
+      : super(key: key);
 
   bool value = false;
   final String label;
   final String left;
   final String right;
+  State<FilterPage> fp;
 
   State<StatefulWidget> createState() => _FilterSwitchState();
 }
@@ -78,6 +86,8 @@ class _FilterSwitchState extends State<FilterSwitch> {
               setState(() {
                 widget.value = value;
               });
+
+              if (widget.fp != null) widget.fp.setState(() {});
             },
           ),
           Text(" " + widget.right)
