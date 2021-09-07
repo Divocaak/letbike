@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import '../general/general.dart';
+import 'package:letbike/widgets/textInput.dart';
+import 'package:letbike/widgets/mainButtonEssentials.dart';
+import 'package:letbike/widgets/errorWidgets.dart';
+import 'package:letbike/widgets/alertBox.dart';
 
 double volume = 0;
 

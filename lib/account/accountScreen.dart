@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:letbike/app/homePage.dart';
-import 'package:letbike/general/widgets/cards/cardWidgets.dart';
-import 'package:letbike/general/widgets/ratingRow.dart';
+import 'package:letbike/widgets/cards/cardWidgets.dart';
+import 'package:letbike/widgets/ratingRow.dart';
 import 'accountSettings.dart';
 import '../general/general.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:letbike/widgets/mainButtonEssentials.dart';
+import 'package:letbike/widgets/errorWidgets.dart';
+import 'package:letbike/widgets/accountInfoFIeld.dart';
 
 double volume = 0;
 

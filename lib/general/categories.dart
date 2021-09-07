@@ -1,5 +1,3 @@
-import 'package:letbike/filters/accessories/accessories.dart';
-
 class Category {
   static List<String> categories = ['Kola', 'Komponenty', 'Doplňky', 'Ostatní'];
 

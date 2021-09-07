@@ -6,7 +6,8 @@
 
 
 ## TODO
-
+- [ ] chatscreen: nová funkce na API, dostat userinfo + recenze
+- [ ] logika z filterpage: získat vybrané filtry && získat nastavené parametry
 - [x] log reg
     - [x] alert box při špatné validaci
         - [x] login

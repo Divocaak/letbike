@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:letbike/account/accountSettings.dart';
-import 'package:letbike/addItem/addItem.dart';
-import 'package:letbike/general/widgets/cards/cardWidgets.dart';
+import 'package:letbike/item/addItem.dart';
+import 'package:letbike/widgets/cards/cardWidgets.dart';
 import '../general/general.dart';
 import "../account/accountScreen.dart";
-import 'filterPage.dart';
+import 'package:letbike/filters/filters.dart';
 import '../article/articlesScreen.dart';
 import 'package:emojis/emojis.dart';
+import 'package:letbike/widgets/mainButtonEssentials.dart';
 
 double volume = 0;
 

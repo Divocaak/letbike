@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:letbike/app/homePage.dart';
-import 'package:letbike/app/itemPage.dart';
-import '../general/widgets/chatBuildMessage.dart';
-import '../general/general.dart';
+import 'package:letbike/item/itemPage.dart';
+import 'package:letbike/chat/chatBuildMessage.dart';
+import 'package:letbike/general/general.dart';
 import 'dart:async';
+import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:letbike/widgets/textInput.dart';
+import 'package:letbike/widgets/ratingRow.dart';
+import 'package:letbike/widgets/errorWidgets.dart';
+import 'package:letbike/widgets/buttonCircular.dart';
+import 'package:letbike/widgets/alertBox.dart';
+import 'package:letbike/widgets/accountInfoFIeld.dart';
 
 ChatUsers chatUsers;
 
@@ -17,287 +24,248 @@ class _ChatScreenState extends State<ChatScreen>
     with SingleTickerProviderStateMixin {
   Stream<List<Message>> messagesStream;
 
-  @override
-  void initState() {
-    super.initState();
+  List<Asset> images = [];
+
+  Future<void> loadAssets() async {
+    setState(() {
+      images = [];
+    });
+
+    List<Asset> resultList;
+    String error;
+
+    try {
+      resultList = await MultiImagePicker.pickImages(
+        maxImages: 1,
+        enableCamera: true,
+      );
+    } on Exception catch (e) {
+      error = e.toString();
+    }
+    if (!mounted) return;
+
+    setState(() {
+      images = resultList.length < 1 ? [] : resultList;
+      if (error != null)
+        AlertBox.showAlertBox(
+            context, "Error", Text("Error", style: TextStyle(color: kWhite)));
+    });
   }
+
+  TextEditingController chatInputController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     chatUsers = ModalRoute.of(context).settings.arguments;
     messagesStream = DatabaseServices.getMessages(
         chatUsers.userA.id, chatUsers.userB, chatUsers.itemInfo.item.id);
+    bool cancelTrade = (chatUsers.itemInfo.item.status == 1 ? true : false);
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: kPrimaryColor,
-        automaticallyImplyLeading: false,
-        title: Row(
-          children: [
-            SizedBox(
-              width: 15,
-            ),
-            Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                    color: kSecondaryColor,
-                    border: Border.all(color: kSecondaryColor),
-                    borderRadius: BorderRadius.all(Radius.circular(50))),
-                child: TextButton(
-                  child: Icon(Icons.arrow_back, color: kWhite),
-                  onPressed: () {
-                    Navigator.of(context).pushReplacementNamed(
-                        ItemPage.routeName,
-                        arguments: chatUsers.itemInfo);
-                  },
-                )),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  chatUsers.itemInfo.item.name,
-                  style: TextStyle(fontSize: 20),
-                ),
-              ],
-            ),
-            sellButton(chatUsers),
-            Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                    color: kSecondaryColor,
-                    border: Border.all(color: kSecondaryColor),
-                    borderRadius: BorderRadius.all(Radius.circular(50))),
-                child: TextButton(
-                  child: Icon(Icons.person_search, color: kWhite),
-                  onPressed: () {
+        backgroundColor: kBlack,
+        appBar: AppBar(
+            backgroundColor: kPrimaryColor,
+            automaticallyImplyLeading: false,
+            title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  CircularButton(
+                      kSecondaryColor,
+                      40,
+                      Icons.arrow_back,
+                      kWhite,
+                      () => Navigator.of(context).pushReplacementNamed(
+                          ItemPage.routeName,
+                          arguments: chatUsers.itemInfo)),
+                  Text(chatUsers.itemInfo.item.name,
+                      style: TextStyle(fontSize: 20)),
+                  CircularButton(
+                      kSecondaryColor, 40, Icons.person_search, kWhite, () {
                     otherPersonInfo();
-                  },
-                )),
-          ],
-        ),
-      ),
-      body: Column(
-        children: [
+                  }),
+                  (chatUsers.itemInfo.me.id == chatUsers.itemInfo.item.sellerId
+                      ? CircularButton(
+                          kSecondaryColor,
+                          40,
+                          (cancelTrade ? Icons.money_off : Icons.attach_money),
+                          kWhite,
+                          () =>
+                              (cancelTrade ? cancelTradeBtn() : acceptTrade()))
+                      : Container())
+                ])),
+        body: Column(children: [
           Expanded(
               child: StreamBuilder(
-            stream: messagesStream,
-            builder: (context, stream) {
-              if (stream.hasData) {
-                return ListView.builder(
-                    itemCount: stream.data.length,
-                    itemBuilder: (context, i) {
-                      return ChatBuildMessage.buildMessage(
-                          context, stream.data[i], chatUsers);
-                    });
-              } else {
-                return Center(child: CircularProgressIndicator());
-              }
-            },
-          )),
-          ChatInputField(chatUsers),
-        ],
-      ),
-      backgroundColor: kBlack,
-    );
+                  stream: messagesStream,
+                  builder: (context, stream) {
+                    if (stream.hasData) {
+                      return ListView.builder(
+                          itemCount: stream.data.length,
+                          itemBuilder: (context, i) {
+                            return ChatBuildMessage.buildMessage(
+                                context, stream.data[i], chatUsers);
+                          });
+                    } else {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                  })),
+          Row(children: [
+            Expanded(
+                child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 5),
+                    child: TextInput(
+                        icon: Icons.chat,
+                        hint: "Napište zprávu",
+                        controller: chatInputController))),
+            CircularButton(
+                kSecondaryColor, 40, Icons.image, kWhite, loadAssets),
+            Padding(
+                padding: EdgeInsets.symmetric(horizontal: 5),
+                child:
+                    CircularButton(kSecondaryColor, 40, Icons.send, kWhite, () {
+                  if (images.length != 0 || chatInputController.text != "") {
+                    DatabaseServices.sendMessage(
+                        chatUsers.userA.id,
+                        chatUsers.userB,
+                        chatUsers.itemInfo.item.id,
+                        chatInputController.text,
+                        images);
+
+                    if (images.length != 0) {
+                      setState(() {
+                        images = [];
+                      });
+                    }
+
+                    if (chatInputController.text != "") {
+                      chatInputController.clear();
+                    }
+                  }
+                }))
+          ])
+        ]));
   }
 
-  Widget sellButton(ChatUsers chatUsers) {
-    if (chatUsers.itemInfo.me.id == chatUsers.itemInfo.item.sellerId) {
-      if (chatUsers.itemInfo.item.status == 1) {
-        return Container(
-            alignment: Alignment.centerRight,
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-                color: kSecondaryColor,
-                border: Border.all(color: kSecondaryColor),
-                borderRadius: BorderRadius.all(Radius.circular(50))),
-            child: TextButton(
-              child: Icon(Icons.money_off, color: kWhite),
-              onPressed: () {
-                DecideBox.showDecideBox(
-                    context,
-                    "Opravdu?",
-                    Text("Opravdu chcete zrušit prodej předmětu této osobě?",
-                        style: TextStyle(color: kBlack)), () {
-                  Future<String> updateRes = DatabaseServices.updateItemStatus(
-                      chatUsers.itemInfo.item.id, 0, 0);
-                  AlertBox.showAlertBox(
-                      context,
-                      "Oznámení",
-                      FutureBuilder<String>(
-                        future: updateRes,
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return Text(snapshot.data,
-                                style: TextStyle(color: kBlack));
-                          } else if (snapshot.hasError) {
-                            return Text('Sorry there is an error',
-                                style: TextStyle(color: kBlack));
-                          }
-                          return Center(child: CircularProgressIndicator());
-                        },
-                      ), after: () {
-                    Navigator.of(context).pushReplacementNamed(
-                        HomePage.routeName,
-                        arguments: HomeArguments(
-                            chatUsers.userA, ItemParams.createEmpty()));
-                  });
-                });
-              },
-            ));
-      } else if (chatUsers.itemInfo.item.status == 0) {
-        return Container(
-            alignment: Alignment.centerRight,
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-                color: kSecondaryColor,
-                border: Border.all(color: kSecondaryColor),
-                borderRadius: BorderRadius.all(Radius.circular(50))),
-            child: TextButton(
-              child: Icon(Icons.attach_money, color: kWhite),
-              onPressed: () {
-                DecideBox.showDecideBox(
-                    context,
-                    "Opravdu?",
-                    Text("Opravdu chcete prodat tento předmět této osobě?",
-                        style: TextStyle(color: kWhite)), () {
-                  Future<String> updateRes = DatabaseServices.updateItemStatus(
-                      chatUsers.itemInfo.item.id, 1, chatUsers.userB);
-                  AlertBox.showAlertBox(
-                      context,
-                      "Oznámení",
-                      FutureBuilder<String>(
-                        future: updateRes,
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return Text(snapshot.data,
-                                style: TextStyle(color: kWhite));
-                          } else if (snapshot.hasError) {
-                            return Text('Sorry there is an error',
-                                style: TextStyle(color: kWhite));
-                          }
-                          return Center(child: CircularProgressIndicator());
-                        },
-                      ), after: () {
-                    Navigator.of(context).pushReplacementNamed(
-                        HomePage.routeName,
-                        arguments: HomeArguments(
-                            chatUsers.userA, ItemParams.createEmpty()));
-                  });
-                });
-              },
-            ));
-      }
-    } else {
-      return SizedBox(
-        width: 1,
-      );
-    }
+  Widget cancelTradeBtn() {
+    return DecideBox.showDecideBox(
+        context,
+        "Opravdu?",
+        Text("Opravdu chcete zrušit předmětu této osobě?",
+            style: TextStyle(color: kWhite)), () {
+      Future<String> updateRes =
+          DatabaseServices.updateItemStatus(chatUsers.itemInfo.item.id, 0, 0);
+      AlertBox.showAlertBox(
+          context,
+          "Oznámení",
+          FutureBuilder<String>(
+              future: updateRes,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Text(snapshot.data, style: TextStyle(color: kWhite));
+                } else if (snapshot.hasError) {
+                  return ErrorWidgets.futureBuilderError();
+                }
+                return Center(child: CircularProgressIndicator());
+              }),
+          after: () => Navigator.of(context).pushReplacementNamed(
+              HomePage.routeName,
+              arguments:
+                  HomeArguments(chatUsers.userA, ItemParams.createEmpty())));
+    });
+  }
 
-    return SizedBox(width: 1);
+  Widget acceptTrade() {
+    return DecideBox.showDecideBox(
+        context,
+        "Opravdu?",
+        Text("Opravdu chcete prodat předmět této osobě?",
+            style: TextStyle(color: kWhite)), () {
+      Future<String> updateRes = DatabaseServices.updateItemStatus(
+          chatUsers.itemInfo.item.id, 1, chatUsers.userB);
+      AlertBox.showAlertBox(
+          context,
+          "Oznámení",
+          FutureBuilder<String>(
+              future: updateRes,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Text(snapshot.data, style: TextStyle(color: kWhite));
+                } else if (snapshot.hasError) {
+                  return ErrorWidgets.futureBuilderError();
+                }
+                return Center(child: CircularProgressIndicator());
+              }),
+          after: () => Navigator.of(context).pushReplacementNamed(
+              HomePage.routeName,
+              arguments:
+                  HomeArguments(chatUsers.userA, ItemParams.createEmpty())));
+    });
   }
 
   Widget otherPersonInfo() {
+    Future<User> otherUser = DatabaseServices.getUserInfo(chatUsers.userB);
+    Future<List<Rating>> ratings = DatabaseServices.getRatings(chatUsers.userB);
+
     return AlertBox.showAlertBox(
         context,
         "Informace",
-        Column(
-          children: [
-            TextButton(
-              child: Text("Kontaktní údaje",
-                  style: TextStyle(color: kPrimaryColor)),
-              onPressed: () {
-                AlertBox.showAlertBox(
-                    context, "Kontaktní údaje", otherUserInfo());
-              },
-            ),
-            TextButton(
-              child: Text(
-                "Recenze",
-                style: TextStyle(color: kPrimaryColor),
-              ),
-              onPressed: () {
-                AlertBox.showAlertBox(context, "Recenze", otherUserRating());
-              },
-            )
-          ],
-        ));
-  }
-
-  Widget otherUserInfo() {
-    Future<User> otherUser = DatabaseServices.getUserInfo(chatUsers.userB);
-    return Expanded(
-        child: FutureBuilder<User>(
-            future: otherUser,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Container(
-                    width: 200,
-                    height: 200,
-                    child: ListView(children: [
-                      Center(
-                          child: FadeInImage.assetNetwork(
-                              placeholder:
-                                  "Načítám obrázek (možná neexsituje :/)",
-                              image: imgsFolder +
-                                  "/users/" +
-                                  snapshot.data.id.toString() +
-                                  "/0.jpg")),
-                      AccountInfoField.infoField(
-                          "Uživatelské jméno: " + snapshot.data.username),
-                      AccountInfoField.infoField(
-                          "E-mail: " + snapshot.data.email),
-                      AccountInfoField.infoField(
-                          "Křestní jméno: " + snapshot.data.fName),
-                      AccountInfoField.infoField(
-                          "Příjmení: " + snapshot.data.lName),
-                      AccountInfoField.infoField(
-                          "Telefon: " + snapshot.data.phone.toString()),
-                      AccountInfoField.infoField(
-                          "Ulice a č.p.: " + snapshot.data.addressA),
-                      AccountInfoField.infoField(
-                          "Obec: " + snapshot.data.addressB),
-                      AccountInfoField.infoField(
-                          "Země: " + snapshot.data.addressC),
-                      AccountInfoField.infoField(
-                          "PSČ: " + snapshot.data.postal.toString())
-                    ]));
-              } else if (snapshot.hasError) {
-                return Text('Sorry there is an error');
-              }
-              return Center(child: CircularProgressIndicator());
-            }));
-  }
-
-  Widget otherUserRating() {
-    Future<List<Rating>> ratings = DatabaseServices.getRatings(chatUsers.userB);
-    return Container(
-        height: 300,
-        width: 400,
-        child: FutureBuilder<List<Rating>>(
-          future: ratings,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return ListView.builder(
-                  itemCount: snapshot.data.length,
-                  itemBuilder: (context, i) {
-                    return RatingRow.buildRow(snapshot.data[i].ratingValue,
-                        snapshot.data[i].ratingText);
-                  });
-            } else if (!snapshot.hasData) {
-              return Container(
-                  alignment: Alignment.topCenter,
-                  child: Text("Zatím tu nic není :(",
-                      style: TextStyle(color: kWhite)));
-            } else if (snapshot.hasError) {
-              return Text('Sorry there is an error',
-                  style: TextStyle(color: kWhite));
-            }
-            return Center(child: CircularProgressIndicator());
-          },
-        ));
+        Container(
+            width: 500,
+            height: 700,
+            child: ListView(children: [
+              FutureBuilder<User>(
+                  future: otherUser,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Column(children: [
+                        FadeInImage.assetNetwork(
+                            placeholder:
+                                "Načítám obrázek (možná neexsituje :/)",
+                            image: imgsFolder +
+                                "/users/" +
+                                snapshot.data.id.toString() +
+                                "/0.jpg"),
+                        AccountInfoField.infoField(
+                            "Uživatelské jméno: " + snapshot.data.username),
+                        AccountInfoField.infoField(
+                            "E-mail: " + snapshot.data.email),
+                        AccountInfoField.infoField(
+                            "Křestní jméno: " + snapshot.data.fName),
+                        AccountInfoField.infoField(
+                            "Příjmení: " + snapshot.data.lName),
+                        AccountInfoField.infoField(
+                            "Telefon: " + snapshot.data.phone.toString()),
+                        AccountInfoField.infoField(
+                            "Ulice a č.p.: " + snapshot.data.addressA),
+                        AccountInfoField.infoField(
+                            "Obec: " + snapshot.data.addressB),
+                        AccountInfoField.infoField(
+                            "Země: " + snapshot.data.addressC),
+                        AccountInfoField.infoField(
+                            "PSČ: " + snapshot.data.postal.toString())
+                      ]);
+                    } else if (snapshot.hasError) {
+                      return ErrorWidgets.futureBuilderError();
+                    }
+                    return Center(child: CircularProgressIndicator());
+                  }),
+              FutureBuilder<List<Rating>>(
+                  future: ratings,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return ListView.builder(
+                          itemCount: snapshot.data.length,
+                          itemBuilder: (context, i) {
+                            return RatingRow.buildRow(
+                                snapshot.data[i].ratingValue,
+                                snapshot.data[i].ratingText);
+                          });
+                    } else if (!snapshot.hasData) {
+                      return ErrorWidgets.futureBuilderEmpty();
+                    } else if (snapshot.hasError) {
+                      return ErrorWidgets.futureBuilderError();
+                    }
+                    return Center(child: CircularProgressIndicator());
+                  })
+            ])));
   }
 }

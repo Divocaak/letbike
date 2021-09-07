@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:letbike/general/widgets/cards/cardWidgets.dart';
+import 'package:letbike/widgets/cards/cardWidgets.dart';
 import '../general/general.dart';
 import '../app/homePage.dart';
+import 'package:letbike/widgets/mainButtonEssentials.dart';
 
 class ArticlesScreen extends StatefulWidget {
   @override

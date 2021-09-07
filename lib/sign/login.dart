@@ -1,9 +1,13 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import '../general/general.dart';
-import '../app/homePage.dart';
+import 'package:letbike/general/general.dart';
+import 'package:letbike/app/homePage.dart';
+import 'package:letbike/sign/widgetsSign.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'widgets/signWidgets.dart';
+import 'package:letbike/widgets/textInput.dart';
+import 'package:letbike/widgets/buttonRounded.dart';
+import 'package:letbike/widgets/backgroundImage.dart';
+import 'package:letbike/widgets/alertBox.dart';
 
 Future<User> logResponse;
 
@@ -33,22 +37,18 @@ class _LoginScreenState extends State<LoginScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Center(
-                child: Text(
-                  "Letbike",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 60,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+                  child: Text("Letbike",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 60,
+                        fontWeight: FontWeight.bold,
+                      ))),
               TextInput(
-                icon: Icons.mail,
-                hint: "E-mail",
-                inputType: TextInputType.emailAddress,
-                inputAction: TextInputAction.next,
-                controller: mailController,
-              ),
+                  icon: Icons.mail,
+                  hint: "E-mail",
+                  inputType: TextInputType.emailAddress,
+                  inputAction: TextInputAction.next,
+                  controller: mailController),
               TextInput(
                   icon: Icons.lock,
                   hint: "Heslo",
@@ -58,19 +58,15 @@ class _LoginScreenState extends State<LoginScreen> {
               SignLink.build(context, "Zapomenuté heslo", kSignLinkButton,
                   () => Navigator.of(context).pushNamed("ForgotPassword")),
               SignSwitch(
-                  Text(
-                    "Zapamatovat přihlášení",
-                    style: TextStyle(color: kWhite, fontSize: 17, shadows: [
-                      Shadow(
-                        blurRadius: 10.0,
-                        color: kBlack,
-                        offset: Offset(5.0, 5.0),
-                      ),
-                    ]),
-                  ),
-                  remember,
-                  kSecondaryColor,
-                  kPrimaryColor),
+                  Text("Zapamatovat přihlášení",
+                      style: TextStyle(color: kWhite, fontSize: 17, shadows: [
+                        Shadow(
+                          blurRadius: 10.0,
+                          color: kBlack,
+                          offset: Offset(5.0, 5.0),
+                        )
+                      ])),
+                  remember),
               RoundedButton(
                   buttonName: "Přihlásit se",
                   onClick: () {

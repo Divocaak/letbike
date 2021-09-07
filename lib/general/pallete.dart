@@ -7,6 +7,7 @@ const kWhite = Color(0xFFf2f2f2);
 const kBlack = Color(0xFF1a1a1a);
 const kError = Color(0xFFFF101F);
 const kWarning = Color(0xFFFFFC31);
+const kGreen = Color(0xFF50C878);
 
 const TextStyle kSignLinkButton =
     TextStyle(fontSize: 22, color: Colors.white, height: 1.5);

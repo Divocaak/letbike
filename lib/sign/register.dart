@@ -2,11 +2,13 @@ import 'dart:ui';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:letbike/general/general.dart';
-import 'package:letbike/sign/widgets/signLink.dart';
-import 'package:letbike/sign/widgets/signSwitch.dart';
-import '../general/pallete.dart';
-import '../general/dbServices.dart';
-import '../general/widgets.dart';
+import 'package:letbike/sign/widgetsSign.dart';
+import 'package:letbike/general/pallete.dart';
+import 'package:letbike/general/dbServices.dart';
+import 'package:letbike/widgets/textInput.dart';
+import 'package:letbike/widgets/buttonRounded.dart';
+import 'package:letbike/widgets/backgroundImage.dart';
+import 'package:letbike/widgets/alertBox.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 Future<String> response;
@@ -71,26 +73,20 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
                           blurRadius: 10.0,
                           color: kBlack,
                           offset: Offset(5.0, 5.0),
-                        ),
+                        )
                       ]),
                       () => openUrl("terms.pdf")),
-                  acceptData,
-                  kSecondaryColor,
-                  kPrimaryColor),
+                  acceptData),
               SignSwitch(
-                  Text(
-                    "Souhlasím se zpracováním osobních údajů",
-                    style: TextStyle(color: kWhite, fontSize: 17, shadows: [
-                      Shadow(
-                        blurRadius: 10.0,
-                        color: kBlack,
-                        offset: Offset(5.0, 5.0),
-                      ),
-                    ]),
-                  ),
-                  acceptData,
-                  kSecondaryColor,
-                  kPrimaryColor),
+                  Text("Souhlasím se zpracováním osobních údajů",
+                      style: TextStyle(color: kWhite, fontSize: 17, shadows: [
+                        Shadow(
+                          blurRadius: 10.0,
+                          color: kBlack,
+                          offset: Offset(5.0, 5.0),
+                        )
+                      ])),
+                  acceptData),
               RoundedButton(
                 buttonName: "Zaregistrovat",
                 onClick: () {
