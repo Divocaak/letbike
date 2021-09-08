@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:letbike/general/general.dart';
 import 'package:letbike/general/pallete.dart';
 import 'package:letbike/widgets/buttonCircular.dart';
 

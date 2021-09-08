@@ -1,13 +1,15 @@
+import 'package:letbike/db/dbAccount.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:letbike/account/accountScreen.dart';
 import 'accountChangePass.dart';
-import '../general/general.dart';
 import 'package:letbike/widgets/textInput.dart';
 import 'package:letbike/widgets/mainButtonEssentials.dart';
 import 'package:letbike/widgets/errorWidgets.dart';
 import 'package:letbike/widgets/buttonCircular.dart';
 import 'package:letbike/widgets/alertBox.dart';
+import 'package:letbike/general/objects.dart';
+import 'package:letbike/general/pallete.dart';
 
 double volume = 0;
 
@@ -186,7 +188,7 @@ class _AccountSettingsState extends State<AccountSettings>
       getVal(postalController, user.postal.toString()),
     ];
 
-    saveResponse = DatabaseServices.changeAccountDetails(
+    saveResponse = DatabaseAccount.changeAccountDetails(
         user.id.toString(), fieldsValues, images);
 
     AlertBox.showAlertBox(

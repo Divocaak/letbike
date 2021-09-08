@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:letbike/general/pallete.dart';
 import 'package:letbike/general/objects.dart';
-import 'package:letbike/general/general.dart';
+import 'package:letbike/db/remoteSettings.dart';
+import 'package:letbike/widgets/images.dart';
 
 class ChatBuildMessage {
   static Widget buildMessage(context, Message message, ChatUsers chatUsers) {
@@ -27,15 +28,12 @@ class ChatBuildMessage {
                 ),
               ),
               (img
-                  ? FadeInImage.assetNetwork(
-                      placeholder: "Načítám obrázek (možná neexsituje :/)",
-                      image: (imgsFolder +
-                          "/messages/" +
-                          (message.from.toString() +
-                              message.to.toString() +
-                              message.message.hashCode.toString()) +
-                          "/0.jpg"),
-                    )
+                  ? ServerImage.build(imgsFolder +
+                      "/messages/" +
+                      (message.from.toString() +
+                          message.to.toString() +
+                          message.message.hashCode.toString()) +
+                      "/0.jpg")
                   : Container())
             ]));
   }

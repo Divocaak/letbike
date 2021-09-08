@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../general/general.dart';
+import 'package:letbike/general/pallete.dart';
 
 class SignLink {
   static Widget build(

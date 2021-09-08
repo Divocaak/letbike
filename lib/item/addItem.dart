@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:letbike/db/dbItem.dart';
 import 'package:letbike/filters/filters.dart';
 import 'package:letbike/app/homePage.dart';
-import '../general/general.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:letbike/widgets/textInput.dart';
 import 'package:letbike/widgets/mainButtonEssentials.dart';
 import 'package:letbike/widgets/buttonRounded.dart';
-import 'package:letbike/widgets/backgroundImage.dart';
+import 'package:letbike/widgets/images.dart';
 import 'package:letbike/widgets/alertBox.dart';
+import 'package:letbike/general/objects.dart';
+import 'package:letbike/general/pallete.dart';
 
 class AddItem extends StatefulWidget {
   @override
@@ -184,10 +186,9 @@ class _AddItem extends State<AddItem> with TickerProviderStateMixin {
                 Icons.arrow_back,
                 () => Navigator.of(context).pushReplacementNamed(
                     HomePage.routeName,
-                    arguments: new HomeArguments(
-                        args.args.user, ItemParams.createEmpty()))),
+                    arguments: new HomeArguments(args.args.user, {}))),
             SecondaryButtonData(Icons.add, () {
-              addResponse = DatabaseServices.createItem(
+              addResponse = DatabaseItem.createItem(
                   new Item(
                       -1,
                       args.args.user.id,

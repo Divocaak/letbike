@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:letbike/general/general.dart';
+import 'package:letbike/general/pallete.dart';
 
 class AlertBox {
   static showAlertBox(BuildContext context, String title, Widget body,

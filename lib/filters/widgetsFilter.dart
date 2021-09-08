@@ -1,16 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:letbike/filters/filters.dart';
-import 'package:letbike/general/general.dart';
+import 'package:letbike/general/pallete.dart';
 
 class FilterDropdown extends StatefulWidget {
   FilterDropdown(
-      {Key key, @required this.hint, @required this.options, this.fp})
+      {Key key,
+      @required this.hint,
+      @required this.options,
+      @required this.filterKey,
+      this.fp})
       : super(key: key);
 
   int value;
   final String hint;
   final List<String> options;
+  final String filterKey;
   State<FilterPage> fp;
 
   State<StatefulWidget> createState() => _FilterDropdownState();
@@ -54,6 +59,7 @@ class FilterSwitch extends StatefulWidget {
       @required this.label,
       @required this.left,
       @required this.right,
+      @required this.filterKey,
       this.fp})
       : super(key: key);
 
@@ -61,6 +67,7 @@ class FilterSwitch extends StatefulWidget {
   final String label;
   final String left;
   final String right;
+  final String filterKey;
   State<FilterPage> fp;
 
   State<StatefulWidget> createState() => _FilterSwitchState();
@@ -96,22 +103,5 @@ class _FilterSwitchState extends State<FilterSwitch> {
           ),
           Text(" " + widget.right, style: TextStyle(color: kWhite))
         ]));
-  }
-}
-
-class FilterValueSetters {
-  static int setDropdownValue(int dropdownValue) {
-    return (dropdownValue != null ? dropdownValue : -1);
-  }
-
-  static int setSwitchValueWithOffset(bool switchValue, ItemParams params) {
-    return ((switchValue ? 1 : 0) +
-        (params.params["selectedPart"] != null
-            ? params.params["selectedPart"]
-            : 0) +
-        (params.params["selectedOther"] != null
-            ? params.params["selectedOther"]
-            : 0) +
-        999);
   }
 }

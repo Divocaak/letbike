@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import 'package:letbike/general/general.dart';
+import 'package:letbike/general/objects.dart';
 import 'package:letbike/general/pallete.dart';
 import 'package:letbike/widgets/cards/articleCard.dart';
 import 'package:letbike/widgets/cards/itemCard.dart';

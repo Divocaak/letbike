@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:letbike/chat/chatScreen.dart';
-import '../general/general.dart';
+import 'package:letbike/db/dbChat.dart';
+import 'package:letbike/widgets/images.dart';
 import 'package:letbike/widgets/mainButtonEssentials.dart';
 import 'package:letbike/widgets/errorWidgets.dart';
 import 'package:letbike/widgets/alertBox.dart';
 import 'package:letbike/item/widgets/itemParam.dart';
+import 'package:letbike/general/objects.dart';
+import 'package:letbike/general/pallete.dart';
+import 'package:letbike/db/remoteSettings.dart';
 
 double volume = 0;
 
@@ -36,7 +40,7 @@ class _ItemPageState extends State<ItemPage>
   @override
   Widget build(BuildContext context) {
     itemInfo = ModalRoute.of(context).settings.arguments;
-    chats = DatabaseServices.getChats(itemInfo.item.id);
+    chats = DatabaseChat.getChats(itemInfo.item.id);
     return Scaffold(
         backgroundColor: kBlack,
         floatingActionButton: MainButton(
@@ -67,17 +71,14 @@ class _ItemPageState extends State<ItemPage>
                         autoPlayAnimationDuration: Duration(seconds: 1)),
                     items: [
                       for (int i = 0; i < int.parse(itemInfo.item.imgs); i++)
-                        FadeInImage.assetNetwork(
-                            placeholder:
-                                "Načítám obrázek (možná neexsituje :/)",
-                            image: imgsFolder +
-                                "/items/" +
-                                (itemInfo.item.name.hashCode +
-                                        itemInfo.item.sellerId)
-                                    .toString() +
-                                "/" +
-                                i.toString() +
-                                ".jpg")
+                        ServerImage.build(imgsFolder +
+                            "/items/" +
+                            (itemInfo.item.name.hashCode +
+                                    itemInfo.item.sellerId)
+                                .toString() +
+                            "/" +
+                            i.toString() +
+                            ".jpg")
                     ])),
             Padding(
                 padding: EdgeInsets.fromLTRB(10, 10, 10, 5),

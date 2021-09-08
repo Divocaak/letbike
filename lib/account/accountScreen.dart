@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:letbike/app/homePage.dart';
+import 'package:letbike/db/dbItem.dart';
+import 'package:letbike/db/dbRating.dart';
+import 'package:letbike/db/remoteSettings.dart';
 import 'package:letbike/widgets/cards/cardWidgets.dart';
+import 'package:letbike/widgets/images.dart';
 import 'package:letbike/widgets/ratingRow.dart';
 import 'accountSettings.dart';
-import '../general/general.dart';
+import 'package:letbike/general/pallete.dart';
+import 'package:letbike/general/objects.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:letbike/widgets/mainButtonEssentials.dart';
 import 'package:letbike/widgets/errorWidgets.dart';
@@ -42,15 +47,13 @@ class _AccountScreenState extends State<AccountScreen>
   @override
   Widget build(BuildContext context) {
     user = ModalRoute.of(context).settings.arguments;
-    items = DatabaseServices.getAllItems(
-        0, user.id.toString(), ItemParams.createEmpty(), "sold_to");
-    soldItems = DatabaseServices.getAllItems(
-        1, user.id.toString(), ItemParams.createEmpty(), "sold_to");
-    boughtItems = DatabaseServices.getAllItems(
-        1, "seller_id", ItemParams.createEmpty(), user.id.toString());
-    ratedItems = DatabaseServices.getAllItems(
-        2, "seller_id", ItemParams.createEmpty(), user.id.toString());
-    ratings = DatabaseServices.getRatings(user.id);
+    items = DatabaseItem.getAllItems(0, user.id.toString(), {}, "sold_to");
+    soldItems = DatabaseItem.getAllItems(1, user.id.toString(), {}, "sold_to");
+    boughtItems =
+        DatabaseItem.getAllItems(1, "seller_id", {}, user.id.toString());
+    ratedItems =
+        DatabaseItem.getAllItems(2, "seller_id", {}, user.id.toString());
+    ratings = DatabaseRating.getRatings(user.id);
     return Scaffold(
         backgroundColor: kBlack,
         floatingActionButton: MainButton(
@@ -69,16 +72,8 @@ class _AccountScreenState extends State<AccountScreen>
           ListView(
             children: [
               Center(
-                  child: FadeInImage.assetNetwork(
-                      imageErrorBuilder: (BuildContext context,
-                          Object exception, StackTrace stackTrace) {
-                        return ErrorWidgets.imageLoadingError(Icons.person);
-                      },
-                      placeholder: "Načítám obrázek (možná neexsituje :/)",
-                      image: imgsFolder +
-                          "/users/" +
-                          user.id.toString() +
-                          "/0.jpg")),
+                  child: ServerImage.build(
+                      imgsFolder + "/users/" + user.id.toString() + "/0.jpg")),
               AccountInfoField.infoField(
                   "Uživatelské jméno: " + userInfo(user.username)),
               AccountInfoField.infoField("E-mail: " + userInfo(user.email)),
@@ -148,8 +143,7 @@ class _AccountScreenState extends State<AccountScreen>
                 Icons.arrow_back,
                 () => Navigator.of(context).pushReplacementNamed(
                     HomePage.routeName,
-                    arguments:
-                        new HomeArguments(user, ItemParams.createEmpty()))),
+                    arguments: new HomeArguments(user, {}))),
             SecondaryButtonData(
                 Icons.create,
                 () => Navigator.pushReplacementNamed(

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import '../general/general.dart';
 import 'package:letbike/widgets/mainButtonEssentials.dart';
+import 'package:letbike/general/pallete.dart';
+import 'package:letbike/general/objects.dart';
+import 'package:letbike/db/dbArticles.dart';
 
 double volume = 0;
 
@@ -32,7 +34,7 @@ class _ArticlePageState extends State<ArticlePage>
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         backgroundColor: kBlack,
         body: FutureBuilder(
-            future: DatabaseServices.getArticle(articleInfo.id),
+            future: DatabaseArticles.getArticle(articleInfo.id),
             builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
               if (snapshot.hasData) {
                 return Container(

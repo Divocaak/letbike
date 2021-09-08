@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:letbike/widgets/cards/cardWidgets.dart';
-import 'package:letbike/general/general.dart';
+import 'package:letbike/general/pallete.dart';
+import 'package:letbike/general/objects.dart';
 import 'package:letbike/article/articlePage.dart';
+import 'package:letbike/widgets/images.dart';
+import 'package:letbike/db/remoteSettings.dart';
 
 class ArticleCard {
   static Widget buildCard(context, Article article) {
@@ -10,7 +13,7 @@ class ArticleCard {
         child: Card(
             clipBehavior: Clip.antiAlias,
             elevation: 0,
-            color: Colors.white.withOpacity(.05),
+            color: kWhite.withOpacity(.05),
             margin: const EdgeInsets.all(5),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
@@ -19,13 +22,8 @@ class ArticleCard {
                 onTap: () => Navigator.of(context)
                     .pushNamed(ArticlePage.routeName, arguments: article),
                 child: Stack(children: [
-                  FadeInImage.assetNetwork(
-                      fit: BoxFit.fill,
-                      placeholder: "Načítám obrázek (možná neexsituje :/)",
-                      image: articlesFolder +
-                          "/" +
-                          article.id.toString() +
-                          "/0.jpg"),
+                  ServerImage.build(
+                      articlesFolder + "/" + article.id.toString() + "/0.jpg"),
                   Positioned(
                       left: 16,
                       bottom: 32,

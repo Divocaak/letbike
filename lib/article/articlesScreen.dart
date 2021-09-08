@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:letbike/widgets/cards/cardWidgets.dart';
-import '../general/general.dart';
-import '../app/homePage.dart';
 import 'package:letbike/widgets/mainButtonEssentials.dart';
+import 'package:letbike/general/pallete.dart';
+import 'package:letbike/general/objects.dart';
+import 'package:letbike/db/dbArticles.dart';
+import 'package:letbike/app/homePage.dart';
 
 class ArticlesScreen extends StatefulWidget {
   @override
@@ -19,7 +21,7 @@ class _ArticlesScreenState extends State<ArticlesScreen>
   @override
   Widget build(BuildContext context) {
     homeArguments = ModalRoute.of(context).settings.arguments;
-    articles = DatabaseServices.getAllArticles();
+    articles = DatabaseArticles.getAllArticles();
     return Scaffold(
         floatingActionButton: MainButton(
             iconData: Icons.arrow_back,

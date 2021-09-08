@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import '../general/general.dart';
+import 'package:letbike/general/pallete.dart';
+import 'package:letbike/general/objects.dart';
+import 'package:letbike/db/dbAccount.dart';
 import 'package:letbike/widgets/textInput.dart';
 import 'package:letbike/widgets/mainButtonEssentials.dart';
 import 'package:letbike/widgets/errorWidgets.dart';
@@ -92,7 +94,7 @@ class _ChangePasswordState extends State<ChangePassword>
 
               if (_changePassKey.currentState.validate() &&
                   newController.text == confController.text) {
-                changeResponse = DatabaseServices.changePassword(
+                changeResponse = DatabaseAccount.changePassword(
                     user.id.toString(),
                     newController.text,
                     currController.text);

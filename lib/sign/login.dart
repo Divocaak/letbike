@@ -1,13 +1,15 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:letbike/general/general.dart';
 import 'package:letbike/app/homePage.dart';
+import 'package:letbike/db/dbSign.dart';
 import 'package:letbike/sign/widgetsSign.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:letbike/widgets/textInput.dart';
 import 'package:letbike/widgets/buttonRounded.dart';
-import 'package:letbike/widgets/backgroundImage.dart';
+import 'package:letbike/widgets/images.dart';
 import 'package:letbike/widgets/alertBox.dart';
+import 'package:letbike/general/objects.dart';
+import 'package:letbike/general/pallete.dart';
 
 Future<User> logResponse;
 
@@ -75,7 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           remember, mailController.text, passController.text);
                     }
 
-                    logResponse = DatabaseServices.loginUser(
+                    logResponse = DatabaseSign.loginUser(
                       mailController.text,
                       passController.text,
                     );
@@ -98,8 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     Navigator.of(context).pushReplacementNamed(
                                         HomePage.routeName,
                                         arguments: new HomeArguments(
-                                            snapshot.data,
-                                            ItemParams.createEmpty()));
+                                            snapshot.data, {}));
                                   });
                                 }
                               }

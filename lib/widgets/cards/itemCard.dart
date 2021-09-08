@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:letbike/account/accountScreen.dart';
-import 'package:letbike/general/general.dart';
+import 'package:letbike/db/dbItem.dart';
+import 'package:letbike/db/dbRating.dart';
+import 'package:letbike/db/remoteSettings.dart';
+import 'package:letbike/general/pallete.dart';
+import 'package:letbike/general/objects.dart';
 import 'package:letbike/item/itemPage.dart';
 import 'package:letbike/widgets/alertBox.dart';
+import 'package:letbike/widgets/images.dart';
 import 'cardWidgets.dart';
 
 TextEditingController ratingController = TextEditingController();
@@ -16,7 +21,7 @@ class ItemCard {
         child: Card(
             clipBehavior: Clip.antiAlias,
             elevation: 0,
-            color: Colors.white.withOpacity(.05),
+            color: kWhite.withOpacity(.05),
             margin: const EdgeInsets.all(5),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
@@ -25,13 +30,10 @@ class ItemCard {
                 onTap: () => onCardClick(
                     context, item, loggedUser, forRating, touchable),
                 child: Stack(children: [
-                  FadeInImage.assetNetwork(
-                      fit: BoxFit.fill,
-                      placeholder: "Načítám obrázek (možná neexsituje :/)",
-                      image: imgsFolder +
-                          "/items/" +
-                          (item.name.hashCode + item.sellerId).toString() +
-                          "/0.jpg"),
+                  ServerImage.build(imgsFolder +
+                      "/items/" +
+                      (item.name.hashCode + item.sellerId).toString() +
+                      "/0.jpg"),
                   Positioned(
                       left: 16,
                       bottom: 32,
@@ -88,7 +90,7 @@ class ItemCard {
                                 ))))
                   ],
                 )), after: () {
-          Future<String> rateResponse = DatabaseServices.setRating(
+          Future<String> rateResponse = DatabaseRating.setRating(
               item.sellerId, rating, ratingController.text);
           AlertBox.showAlertBox(
               context,
@@ -105,7 +107,7 @@ class ItemCard {
                   return Center(child: CircularProgressIndicator());
                 },
               ), after: () {
-            DatabaseServices.updateItemStatus(item.id, 2, item.soldTo);
+            DatabaseItem.updateItemStatus(item.id, 2, item.soldTo);
             Navigator.of(context).pushReplacementNamed(AccountScreen.routeName,
                 arguments: loggedUser);
           });

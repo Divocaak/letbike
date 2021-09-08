@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:letbike/general/general.dart';
 import 'package:letbike/sign/widgetsSign.dart';
 import 'package:letbike/widgets/textInput.dart';
 import 'package:letbike/widgets/buttonRounded.dart';
-import 'package:letbike/widgets/backgroundImage.dart';
+import 'package:letbike/widgets/images.dart';
+import 'package:letbike/general/pallete.dart';
 
 class ForgotPassword extends StatelessWidget {
   final TextEditingController forgotMailController = TextEditingController();

@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:letbike/account/accountSettings.dart';
+import 'package:letbike/db/dbItem.dart';
 import 'package:letbike/item/addItem.dart';
 import 'package:letbike/widgets/cards/cardWidgets.dart';
-import '../general/general.dart';
-import "../account/accountScreen.dart";
+import 'package:letbike/account/accountScreen.dart';
 import 'package:letbike/filters/filters.dart';
-import '../article/articlesScreen.dart';
+import 'package:letbike/article/articlesScreen.dart';
 import 'package:emojis/emojis.dart';
 import 'package:letbike/widgets/mainButtonEssentials.dart';
+import 'package:letbike/general/objects.dart';
+import 'package:letbike/general/pallete.dart';
 
 double volume = 0;
 
@@ -39,7 +41,7 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     homeArguments = ModalRoute.of(context).settings.arguments;
-    items = DatabaseServices.getAllItems(
+    items = DatabaseItem.getAllItems(
         0, "seller_id", homeArguments.filters, "sold_to");
     return Scaffold(
       floatingActionButton: MainButton(
@@ -68,9 +70,7 @@ class _HomePageState extends State<HomePage>
                 Icons.add,
                 () => Navigator.pushReplacementNamed(context, AddItem.routeName,
                     arguments: new AddItemFiltersArgs(
-                        new HomeArguments(
-                            homeArguments.user, ItemParams.createEmpty()),
-                        null))),
+                        new HomeArguments(homeArguments.user, {}), null))),
             SecondaryButtonData(
                 Icons.filter_alt,
                 () => Navigator.pushReplacementNamed(

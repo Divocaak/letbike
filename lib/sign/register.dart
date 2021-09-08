@@ -1,13 +1,13 @@
 import 'dart:ui';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:letbike/general/general.dart';
+import 'package:letbike/db/dbSign.dart';
+import 'package:letbike/db/remoteSettings.dart';
 import 'package:letbike/sign/widgetsSign.dart';
 import 'package:letbike/general/pallete.dart';
-import 'package:letbike/general/dbServices.dart';
 import 'package:letbike/widgets/textInput.dart';
 import 'package:letbike/widgets/buttonRounded.dart';
-import 'package:letbike/widgets/backgroundImage.dart';
+import 'package:letbike/widgets/images.dart';
 import 'package:letbike/widgets/alertBox.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -95,7 +95,7 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
                   if (acceptData && acceptTerms) {
                     if (_regformkey.currentState.validate() &&
                         passConfController.text == regPassController.text) {
-                      response = DatabaseServices.registerUser(
+                      response = DatabaseSign.registerUser(
                           usernameController.text,
                           regMailController.text,
                           regPassController.text);

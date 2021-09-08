@@ -1,16 +1,23 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:letbike/db/dbChat.dart';
+import 'package:letbike/db/dbItem.dart';
+import 'package:letbike/db/dbRating.dart';
+import 'package:letbike/db/dbSign.dart';
+import 'package:letbike/db/remoteSettings.dart';
+import 'package:letbike/widgets/images.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:letbike/app/homePage.dart';
 import 'package:letbike/item/itemPage.dart';
 import 'package:letbike/chat/chatBuildMessage.dart';
-import 'package:letbike/general/general.dart';
-import 'dart:async';
-import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:letbike/widgets/textInput.dart';
 import 'package:letbike/widgets/ratingRow.dart';
 import 'package:letbike/widgets/errorWidgets.dart';
 import 'package:letbike/widgets/buttonCircular.dart';
 import 'package:letbike/widgets/alertBox.dart';
 import 'package:letbike/widgets/accountInfoFIeld.dart';
+import 'package:letbike/general/objects.dart';
+import 'package:letbike/general/pallete.dart';
 
 ChatUsers chatUsers;
 
@@ -57,7 +64,7 @@ class _ChatScreenState extends State<ChatScreen>
   @override
   Widget build(BuildContext context) {
     chatUsers = ModalRoute.of(context).settings.arguments;
-    messagesStream = DatabaseServices.getMessages(
+    messagesStream = DatabaseChat.getMessages(
         chatUsers.userA.id, chatUsers.userB, chatUsers.itemInfo.item.id);
     bool cancelTrade = (chatUsers.itemInfo.item.status == 1 ? true : false);
     return Scaffold(
@@ -123,7 +130,7 @@ class _ChatScreenState extends State<ChatScreen>
                 child:
                     CircularButton(kSecondaryColor, 40, Icons.send, kWhite, () {
                   if (images.length != 0 || chatInputController.text != "") {
-                    DatabaseServices.sendMessage(
+                    DatabaseChat.sendMessage(
                         chatUsers.userA.id,
                         chatUsers.userB,
                         chatUsers.itemInfo.item.id,
@@ -152,7 +159,7 @@ class _ChatScreenState extends State<ChatScreen>
         Text("Opravdu chcete zrušit předmětu této osobě?",
             style: TextStyle(color: kWhite)), () {
       Future<String> updateRes =
-          DatabaseServices.updateItemStatus(chatUsers.itemInfo.item.id, 0, 0);
+          DatabaseItem.updateItemStatus(chatUsers.itemInfo.item.id, 0, 0);
       AlertBox.showAlertBox(
           context,
           "Oznámení",
@@ -168,8 +175,7 @@ class _ChatScreenState extends State<ChatScreen>
               }),
           after: () => Navigator.of(context).pushReplacementNamed(
               HomePage.routeName,
-              arguments:
-                  HomeArguments(chatUsers.userA, ItemParams.createEmpty())));
+              arguments: HomeArguments(chatUsers.userA, {})));
     });
   }
 
@@ -179,7 +185,7 @@ class _ChatScreenState extends State<ChatScreen>
         "Opravdu?",
         Text("Opravdu chcete prodat předmět této osobě?",
             style: TextStyle(color: kWhite)), () {
-      Future<String> updateRes = DatabaseServices.updateItemStatus(
+      Future<String> updateRes = DatabaseItem.updateItemStatus(
           chatUsers.itemInfo.item.id, 1, chatUsers.userB);
       AlertBox.showAlertBox(
           context,
@@ -196,14 +202,13 @@ class _ChatScreenState extends State<ChatScreen>
               }),
           after: () => Navigator.of(context).pushReplacementNamed(
               HomePage.routeName,
-              arguments:
-                  HomeArguments(chatUsers.userA, ItemParams.createEmpty())));
+              arguments: HomeArguments(chatUsers.userA, {})));
     });
   }
 
   Widget otherPersonInfo() {
-    Future<User> otherUser = DatabaseServices.getUserInfo(chatUsers.userB);
-    Future<List<Rating>> ratings = DatabaseServices.getRatings(chatUsers.userB);
+    Future<User> otherUser = DatabaseSign.getUserInfo(chatUsers.userB);
+    Future<List<Rating>> ratings = DatabaseRating.getRatings(chatUsers.userB);
 
     return AlertBox.showAlertBox(
         context,
@@ -217,13 +222,10 @@ class _ChatScreenState extends State<ChatScreen>
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       return Column(children: [
-                        FadeInImage.assetNetwork(
-                            placeholder:
-                                "Načítám obrázek (možná neexsituje :/)",
-                            image: imgsFolder +
-                                "/users/" +
-                                snapshot.data.id.toString() +
-                                "/0.jpg"),
+                        ServerImage.build(imgsFolder +
+                            "/users/" +
+                            snapshot.data.id.toString() +
+                            "/0.jpg"),
                         AccountInfoField.infoField(
                             "Uživatelské jméno: " + snapshot.data.username),
                         AccountInfoField.infoField(

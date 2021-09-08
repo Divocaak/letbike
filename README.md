@@ -6,8 +6,10 @@
 
 
 ## TODO
+- [ ] umožnit filtrování (kvůli refactoru nefunguje)
 - [ ] chatscreen: nová funkce na API, dostat userinfo + recenze
 - [ ] logika z filterpage: získat vybrané filtry && získat nastavené parametry
+- [ ] killswitch
 - [x] log reg
     - [x] alert box při špatné validaci
         - [x] login
@@ -125,22 +127,13 @@
 - [x] register
     - [x] souhlasím se zpracováním os. údajů
     - [x] souhlasím s všeobecnými podmínky (uloženo na serveru, odkaz na ně)
-- [ ] co mi ulehčí práci
+- [x] co mi ulehčí práci
     - [x] používat textinputcontroller (asi všude xd)
-    - [ ] image picker do samostatného widgetu!
+    - [x] image picker do samostatného widgetu!
     - [x] kategorie a filtry (upravit a zkrátit nějak)
         - [x] Dropdown
         - [x] Switch
 - [x] možná zrušit počet obrázků v db, záleží na čtení obrázků v .md souboru
-- [ ] __před releasem__
-    - [ ] až bude hosting
-        - [ ] ověřit mail
-        - [ ] forgot password
-    - [ ] změnit adresu serveru
-        - [ ] general.dart
-        - [ ] dbServices.dart
-    - [ ] test na jiných emulátorech (jiné rozlišení)
-    - [ ] killswitch debile!
 - [x] encoding u každý response (udělat jako u articlu)
 - [x] charset a collation v databázi
 - [x] zjistit a snad vyřešit co je "unknown param ?.????????"
