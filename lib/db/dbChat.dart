@@ -7,6 +7,8 @@ import 'package:letbike/db/dbUploadImage.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 
 class DatabaseChat {
+  static String url = scriptsUrl + 'chat/';
+
   static Future<List<Message>> getMessagesBetween(
       int seller, int buyer, int itemId) async {
     final Response response = await get(

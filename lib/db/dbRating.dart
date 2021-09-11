@@ -5,6 +5,8 @@ import 'package:letbike/general/objects.dart';
 import 'package:letbike/db/remoteSettings.dart';
 
 class DatabaseRating {
+  static String url = scriptsUrl + 'rating/';
+
   static Future<String> setRating(
       int userId, double ratingVal, String ratingText) async {
     final Response response = await post(

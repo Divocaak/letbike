@@ -6,9 +6,16 @@
 
 
 ## TODO
+- [ ] refactor parametrů u itemu (zobrazování)
+- [ ] modál. okna
+    - [ ] redesign
+    - [ ] refactor
+- [ ] možnost mazat inzeráty
+- [ ] min. počet pro přidání inzerátu = 1
+    - [ ] otestovat
 - [ ] umožnit filtrování (kvůli refactoru nefunguje)
 - [ ] chatscreen: nová funkce na API, dostat userinfo + recenze
-- [ ] logika z filterpage: získat vybrané filtry && získat nastavené parametry
+- [x] logika z filterpage: získat vybrané filtry && získat nastavené parametry
 - [ ] killswitch
 - [x] log reg
     - [x] alert box při špatné validaci

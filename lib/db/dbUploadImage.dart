@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:letbike/db/remoteSettings.dart';
 
 class DatabaseUploadImage {
   static uploadImages(
       List<Asset> images, String imgFolder, String folderIdentificator) async {
-    var request = MultipartRequest(
-        'POST', Uri.parse('http://10.0.2.2/projects/letbike/uploadImage.php/'));
+    var request = MultipartRequest('POST', Uri.parse(imgUploadEndPoint));
 
     for (int i = 0; i < images.length; i++) {
       var byteData = await images[i].getByteData();

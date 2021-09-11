@@ -1,6 +1,8 @@
-const String imgsFolder = 'http://10.0.2.2/projects/letbike/imgs';
-const String articlesFolder = 'http://10.0.2.2/projects/letbike/articles';
-const String docsFolder = 'http://10.0.2.2/projects/letbike/docs';
+const String baseUrl = 'http://10.0.2.2/projects/letbike/';
 
-const String url = 'http://10.0.2.2/projects/letbike/';
-const String uploadEndPoint = url + 'uploadImage.php';
+const String imgsFolder = baseUrl + 'imgs';
+const String articlesFolder = baseUrl + 'articles';
+const String docsFolder = baseUrl + 'docs';
+
+const String scriptsUrl = baseUrl + 'scripts/app/';
+const String imgUploadEndPoint = scriptsUrl + 'uploadImage.php';

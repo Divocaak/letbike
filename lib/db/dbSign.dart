@@ -5,6 +5,8 @@ import 'package:letbike/general/objects.dart';
 import 'package:letbike/db/remoteSettings.dart';
 
 class DatabaseSign {
+  static String url = scriptsUrl + 'sign/';
+
   static Future<String> registerUser(
       String username, String email, String password) async {
     final Response response = await get(

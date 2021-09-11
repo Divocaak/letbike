@@ -5,6 +5,8 @@ import 'package:letbike/general/objects.dart';
 import 'package:letbike/db/remoteSettings.dart';
 
 class DatabaseArticles {
+  static String url = scriptsUrl;
+
   static Future<List<Article>> getAllArticles() async {
     final Response response = await get(
         Uri.encodeFull(url + "articleGetAll.php"),
@@ -27,7 +29,7 @@ class DatabaseArticles {
 
   static Future<String> getArticle(int id) async {
     var response = await get(
-        Uri.encodeFull(url + 'articles/' + id.toString() + '/article.md'),
+        Uri.encodeFull(articlesFolder + '/' + id.toString() + '/article.md'),
         headers: {"Accept": "application/json;charset=UTF-8"});
     return Utf8Decoder().convert(response.body.codeUnits);
   }

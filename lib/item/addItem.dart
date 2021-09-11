@@ -171,7 +171,7 @@ class _AddItem extends State<AddItem> with TickerProviderStateMixin {
                         "První vybraný obrázek se bude zobrazovat na domovské stránce."),
                     Container(
                       child: TextButton(
-                        child: Text("Vybrat fotografie"),
+                        child: Text("Vybrat fotografie (minimálně 1"),
                         onPressed: loadAssets,
                       ),
                     ),
@@ -188,39 +188,41 @@ class _AddItem extends State<AddItem> with TickerProviderStateMixin {
                     HomePage.routeName,
                     arguments: new HomeArguments(args.args.user, {}))),
             SecondaryButtonData(Icons.add, () {
-              addResponse = DatabaseItem.createItem(
-                  new Item(
-                      -1,
-                      args.args.user.id,
-                      nameController.text,
-                      descController.text,
-                      double.parse(priceController.text),
-                      0,
-                      0,
-                      "",
-                      "",
-                      "",
-                      0,
-                      args.args.filters,
-                      0),
-                  images);
+              if (images.length >= 1) {
+                addResponse = DatabaseItem.createItem(
+                    new Item(
+                        -1,
+                        args.args.user.id,
+                        nameController.text,
+                        descController.text,
+                        double.parse(priceController.text),
+                        0,
+                        0,
+                        "",
+                        "",
+                        "",
+                        0,
+                        args.args.filters,
+                        0),
+                    images);
 
-              AlertBox.showAlertBox(
-                  context,
-                  "Oznámení",
-                  FutureBuilder<String>(
-                    future: addResponse,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return Text(snapshot.data,
-                            style: TextStyle(color: kWhite));
-                      } else if (snapshot.hasError) {
-                        return Text('Sorry there is an error',
-                            style: TextStyle(color: kWhite));
-                      }
-                      return Center(child: CircularProgressIndicator());
-                    },
-                  ));
+                AlertBox.showAlertBox(
+                    context,
+                    "Oznámení",
+                    FutureBuilder<String>(
+                      future: addResponse,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return Text(snapshot.data,
+                              style: TextStyle(color: kWhite));
+                        } else if (snapshot.hasError) {
+                          return Text('Sorry there is an error',
+                              style: TextStyle(color: kWhite));
+                        }
+                        return Center(child: CircularProgressIndicator());
+                      },
+                    ));
+              }
             })
           ], volume: volume)
         ],

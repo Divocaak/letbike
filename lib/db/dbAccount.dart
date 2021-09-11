@@ -5,6 +5,8 @@ import 'package:letbike/db/dbUploadImage.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 
 class DatabaseAccount {
+  static String url = scriptsUrl + 'user/';
+
   static Future<String> changeAccountDetails(
       String id, List<String> values, List<Asset> images) async {
     DatabaseUploadImage.uploadImages(images, "users", id.toString());

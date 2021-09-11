@@ -7,29 +7,29 @@ import 'package:letbike/db/dbUploadImage.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 
 class DatabaseItem {
+  static String url = scriptsUrl + 'item/';
+
   static Future<String> createItem(Item item, List<Asset> images) async {
     DatabaseUploadImage.uploadImages(
         images, "items", (item.name.hashCode + item.sellerId).toString());
 
     final Response response = await post(
-      url +
-          "itemSet.php/?" +
-          "&&seller_id=" +
-          item.sellerId.toString() +
-          "&&name=" +
-          item.name +
-          "&&description=" +
-          item.description +
-          "&&price=" +
-          item.price.toString() +
-          "&&images=" +
-          images.length.toString() +
-          passParamsToDb(item.itemParams),
-      headers: <String, String>{
-        'Content-Type': 'application/json;charset=UTF-8'
-      },
-      /* body: jsonEncode(item.toJson()) */
-    );
+        url +
+            "itemSet.php/?" +
+            "&&seller_id=" +
+            item.sellerId.toString() +
+            "&&name=" +
+            item.name +
+            "&&description=" +
+            item.description +
+            "&&price=" +
+            item.price.toString() +
+            "&&images=" +
+            images.length.toString() +
+            passParamsToDb(item.itemParams),
+        headers: <String, String>{
+          'Content-Type': 'application/json;charset=UTF-8'
+        });
 
     if (response.statusCode == 200) {
       return response.body;
