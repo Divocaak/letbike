@@ -6,13 +6,14 @@
 
 
 ## TODO
-- [ ] refactor parametrů u itemu (zobrazování)
-- [ ] modál. okna
-    - [ ] redesign
-    - [ ] refactor
-- [ ] možnost mazat inzeráty
-- [ ] min. počet pro přidání inzerátu = 1
-    - [ ] otestovat
+- [ ] server error při přidávání itemu?
+- [x] refactor parametrů u itemu (zobrazování)
+- [x] modál. okna
+    - [x] redesign
+    - [x] refactor
+- [x] možnost mazat inzeráty
+- [x] min. počet pro přidání inzerátu = 1
+    - [x] otestovat
 - [ ] umožnit filtrování (kvůli refactoru nefunguje)
 - [ ] chatscreen: nová funkce na API, dostat userinfo + recenze
 - [x] logika z filterpage: získat vybrané filtry && získat nastavené parametry
@@ -153,8 +154,8 @@
 - [x] clickable celou item card, ne jenom obrázek
 - [x] nové filtry do a z db, zoptializovat (nová tabulka?)
 - [x] tabulka filtrů na filtersPage
-- [ ] otestovat
-    - [ ] filtrování
+- [x] otestovat
+    - [x] filtrování
     - [x] zobrazování zadaných parametrů při přidávání itemu
     - [x] zobrazování parametrů na itemScreen
 - [x] doplnit nové parametry do ParamRow v categories.dart

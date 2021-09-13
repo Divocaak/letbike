@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:letbike/chat/chatScreen.dart';
 import 'package:letbike/db/dbChat.dart';
+import 'package:letbike/db/dbItem.dart';
 import 'package:letbike/widgets/images.dart';
 import 'package:letbike/widgets/mainButtonEssentials.dart';
 import 'package:letbike/widgets/errorWidgets.dart';
@@ -110,7 +111,7 @@ class _ItemPageState extends State<ItemPage>
           MainButtonClicked(buttons: [
             SecondaryButtonData(
                 Icons.info,
-                () => AlertBox.showAlertBox(
+                () => ModalWindow.showModalWindow(
                     context,
                     "Parametry",
                     Container(
@@ -119,7 +120,35 @@ class _ItemPageState extends State<ItemPage>
                         child: ItemParam(itemInfo.item.itemParams)))),
             SecondaryButtonData(
                 Icons.arrow_back, () => Navigator.of(context).pop()),
-            SecondaryButtonData(Icons.chat, startChat)
+            SecondaryButtonData(Icons.chat, startChat),
+            if (itemInfo.item.sellerId == itemInfo.me.id)
+              SecondaryButtonData(
+                  Icons.delete,
+                  () => ModalWindow.showModalWindow(
+                          context,
+                          "Opravdu?",
+                          Text("Přejete si inzerát odstranit?",
+                              style: TextStyle(color: kWhite)), onTrue: () {
+                        Future<String> deleteResponse =
+                            DatabaseItem.updateItemStatus(
+                                itemInfo.item.id, 9, itemInfo.item.soldTo);
+                        ModalWindow.showModalWindow(
+                            context,
+                            "Oznámení",
+                            FutureBuilder<String>(
+                              future: deleteResponse,
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return Text(snapshot.data,
+                                      style: TextStyle(color: kWhite));
+                                } else if (snapshot.hasError) {
+                                  return ErrorWidgets.futureBuilderError();
+                                }
+                                return Center(
+                                    child: CircularProgressIndicator());
+                              },
+                            ));
+                      }))
           ], volume: volume)
         ]));
   }
@@ -129,7 +158,7 @@ class _ItemPageState extends State<ItemPage>
       Navigator.of(context).pushReplacementNamed(ChatScreen.routeName,
           arguments: ChatUsers(itemInfo, itemInfo.me, itemInfo.item.sellerId));
     } else {
-      AlertBox.showAlertBox(
+      ModalWindow.showModalWindow(
           context,
           "Vyberte chat",
           Container(

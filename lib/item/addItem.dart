@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:letbike/db/dbItem.dart';
 import 'package:letbike/filters/filters.dart';
 import 'package:letbike/app/homePage.dart';
+import 'package:letbike/widgets/errorWidgets.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:letbike/widgets/textInput.dart';
@@ -78,7 +79,7 @@ class _AddItem extends State<AddItem> with TickerProviderStateMixin {
       setState(() {
         images = resultList;
         if (error != null)
-          AlertBox.showAlertBox(
+          ModalWindow.showModalWindow(
               context, "Error", Text("Error", style: TextStyle(color: kWhite)));
       });
     }
@@ -171,7 +172,7 @@ class _AddItem extends State<AddItem> with TickerProviderStateMixin {
                         "První vybraný obrázek se bude zobrazovat na domovské stránce."),
                     Container(
                       child: TextButton(
-                        child: Text("Vybrat fotografie (minimálně 1"),
+                        child: Text("Vybrat fotografie (minimálně 1)"),
                         onPressed: loadAssets,
                       ),
                     ),
@@ -188,7 +189,10 @@ class _AddItem extends State<AddItem> with TickerProviderStateMixin {
                     HomePage.routeName,
                     arguments: new HomeArguments(args.args.user, {}))),
             SecondaryButtonData(Icons.add, () {
-              if (images.length >= 1) {
+              if (images.length >= 1 &&
+                  nameController.text != "" &&
+                  descController.text != "" &&
+                  priceController.text != "") {
                 addResponse = DatabaseItem.createItem(
                     new Item(
                         -1,
@@ -206,7 +210,7 @@ class _AddItem extends State<AddItem> with TickerProviderStateMixin {
                         0),
                     images);
 
-                AlertBox.showAlertBox(
+                ModalWindow.showModalWindow(
                     context,
                     "Oznámení",
                     FutureBuilder<String>(
@@ -216,12 +220,14 @@ class _AddItem extends State<AddItem> with TickerProviderStateMixin {
                           return Text(snapshot.data,
                               style: TextStyle(color: kWhite));
                         } else if (snapshot.hasError) {
-                          return Text('Sorry there is an error',
-                              style: TextStyle(color: kWhite));
+                          return ErrorWidgets.futureBuilderError();
                         }
                         return Center(child: CircularProgressIndicator());
                       },
                     ));
+              } else {
+                ModalWindow.showModalWindow(
+                    context, "Upozornění", ErrorWidgets.addItemError());
               }
             })
           ], volume: volume)

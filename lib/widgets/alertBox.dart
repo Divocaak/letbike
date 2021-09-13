@@ -1,70 +1,59 @@
+import 'package:emojis/emojis.dart';
 import 'package:flutter/material.dart';
 import 'package:letbike/general/pallete.dart';
 
-class AlertBox {
-  static showAlertBox(BuildContext context, String title, Widget body,
-      {Function after}) {
-    AlertDialog alert = AlertDialog(
+class ModalWindow {
+  static showModalWindow(BuildContext context, String title, Widget body,
+      {Function after, Function onTrue}) {
+    AlertDialog modal = AlertDialog(
       title: Text(
         title,
         style: TextStyle(color: kWhite),
       ),
       content: body,
       backgroundColor: kBlack,
-      shape: RoundedRectangleBorder(side: BorderSide(color: kWhite)),
+      elevation: 100,
+      shape: RoundedRectangleBorder(
+          side: BorderSide(color: kWhite.withOpacity(.25)),
+          borderRadius: BorderRadius.circular(25)),
       actions: [
-        TextButton(
-          child: Text(
-            "OK",
-            style: TextStyle(color: kPrimaryColor),
-          ),
-          onPressed: () {
-            Navigator.of(context).pop();
-
-            if (after != null) {
-              after();
-            }
-          },
-        )
-      ],
-    );
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
-}
-
-class DecideBox {
-  static showDecideBox(
-      BuildContext context, String title, Widget body, Function onTrue) {
-    AlertDialog decide = AlertDialog(
-      title: Text(title, style: TextStyle(color: kWhite)),
-      content: body,
-      backgroundColor: kBlack,
-      actions: [
-        TextButton(
-          child: Text("Zrušit", style: TextStyle(color: kSecondaryColor)),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-        TextButton(
-            child: Text("Potvrdit", style: TextStyle(color: kPrimaryColor)),
+        if (after != null)
+          TextButton(
+            child: Text(
+              Emojis.okButton,
+              style: TextStyle(color: kPrimaryColor),
+            ),
             onPressed: () {
               Navigator.of(context).pop();
-              onTrue();
-            })
+
+              if (after != null) {
+                after();
+              }
+            },
+          ),
+        if (onTrue != null)
+          TextButton(
+            child: Text(Emojis.crossMarkButton,
+                style: TextStyle(color: kSecondaryColor)),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        if (onTrue != null)
+          TextButton(
+              child: Text(Emojis.checkMarkButton,
+                  style: TextStyle(color: kPrimaryColor)),
+              onPressed: () {
+                Navigator.of(context).pop();
+                onTrue();
+              })
       ],
     );
 
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return decide;
+        return modal;
       },
     );
   }

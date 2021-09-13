@@ -60,7 +60,7 @@ class ItemCard {
         Navigator.of(context).pushNamed(ItemPage.routeName,
             arguments: new ItemInfo(item, loggedUser));
       } else {
-        AlertBox.showAlertBox(
+        ModalWindow.showModalWindow(
             context,
             "Ohodnoťte prodejce",
             Container(
@@ -92,7 +92,7 @@ class ItemCard {
                 )), after: () {
           Future<String> rateResponse = DatabaseRating.setRating(
               item.sellerId, rating, ratingController.text);
-          AlertBox.showAlertBox(
+          ModalWindow.showModalWindow(
               context,
               "Oznámení",
               FutureBuilder<String>(

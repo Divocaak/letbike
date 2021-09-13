@@ -103,7 +103,7 @@ class _ChangePasswordState extends State<ChangePassword>
                     "Některé údaje jsou špatně zadané, nebo se hesla neshodují";
               }
 
-              AlertBox.showAlertBox(
+              ModalWindow.showModalWindow(
                   context,
                   "Oznámení",
                   failResponse != ""

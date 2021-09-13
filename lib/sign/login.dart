@@ -82,7 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       passController.text,
                     );
 
-                    AlertBox.showAlertBox(
+                    ModalWindow.showModalWindow(
                         context,
                         "Oznámení",
                         FutureBuilder(

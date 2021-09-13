@@ -59,7 +59,7 @@ class _AccountSettingsState extends State<AccountSettings>
     setState(() {
       images = resultList.length < 1 ? [] : resultList;
       if (error != null)
-        AlertBox.showAlertBox(
+        ModalWindow.showModalWindow(
             context, "Error", Text("Error", style: TextStyle(color: kError)));
     });
   }
@@ -191,7 +191,7 @@ class _AccountSettingsState extends State<AccountSettings>
     saveResponse = DatabaseAccount.changeAccountDetails(
         user.id.toString(), fieldsValues, images);
 
-    AlertBox.showAlertBox(
+    ModalWindow.showModalWindow(
         context,
         "Oznámení",
         FutureBuilder<String>(

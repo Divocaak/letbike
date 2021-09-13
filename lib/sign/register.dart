@@ -108,7 +108,7 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
                         "Pro pokračování musíte souhlasit s VOP a zpracováním osobních údajů.";
                   }
 
-                  AlertBox.showAlertBox(
+                  ModalWindow.showModalWindow(
                       context,
                       "Oznámení",
                       failResponse != ""

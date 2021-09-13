@@ -54,7 +54,7 @@ class _ChatScreenState extends State<ChatScreen>
     setState(() {
       images = resultList.length < 1 ? [] : resultList;
       if (error != null)
-        AlertBox.showAlertBox(
+        ModalWindow.showModalWindow(
             context, "Error", Text("Error", style: TextStyle(color: kWhite)));
     });
   }
@@ -153,14 +153,14 @@ class _ChatScreenState extends State<ChatScreen>
   }
 
   Widget cancelTradeBtn() {
-    return DecideBox.showDecideBox(
+    return ModalWindow.showModalWindow(
         context,
         "Opravdu?",
         Text("Opravdu chcete zrušit předmětu této osobě?",
-            style: TextStyle(color: kWhite)), () {
+            style: TextStyle(color: kWhite)), onTrue: () {
       Future<String> updateRes =
           DatabaseItem.updateItemStatus(chatUsers.itemInfo.item.id, 0, 0);
-      AlertBox.showAlertBox(
+      ModalWindow.showModalWindow(
           context,
           "Oznámení",
           FutureBuilder<String>(
@@ -180,14 +180,14 @@ class _ChatScreenState extends State<ChatScreen>
   }
 
   Widget acceptTrade() {
-    return DecideBox.showDecideBox(
+    return ModalWindow.showModalWindow(
         context,
         "Opravdu?",
         Text("Opravdu chcete prodat předmět této osobě?",
-            style: TextStyle(color: kWhite)), () {
+            style: TextStyle(color: kWhite)), onTrue: () {
       Future<String> updateRes = DatabaseItem.updateItemStatus(
           chatUsers.itemInfo.item.id, 1, chatUsers.userB);
-      AlertBox.showAlertBox(
+      ModalWindow.showModalWindow(
           context,
           "Oznámení",
           FutureBuilder<String>(
@@ -210,7 +210,7 @@ class _ChatScreenState extends State<ChatScreen>
     Future<User> otherUser = DatabaseSign.getUserInfo(chatUsers.userB);
     Future<List<Rating>> ratings = DatabaseRating.getRatings(chatUsers.userB);
 
-    return AlertBox.showAlertBox(
+    return ModalWindow.showModalWindow(
         context,
         "Informace",
         Container(
