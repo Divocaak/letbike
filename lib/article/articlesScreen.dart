@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:letbike/general/widgets/articleCard.dart';
-import '../general/general.dart';
-import '../app/homePage.dart';
-
-double volume = 0;
+import 'package:letbike/widgets/cards/cardWidgets.dart';
+import 'package:letbike/widgets/mainButtonEssentials.dart';
+import 'package:letbike/general/pallete.dart';
+import 'package:letbike/general/objects.dart';
+import 'package:letbike/db/dbArticles.dart';
+import 'package:letbike/app/homePage.dart';
 
 class ArticlesScreen extends StatefulWidget {
   @override
@@ -17,87 +18,18 @@ class _ArticlesScreenState extends State<ArticlesScreen>
 
   HomeArguments homeArguments;
 
-  AnimationController animationController;
-
-  @override
-  void initState() {
-    animationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 250));
-    animationController.addListener(() {
-      setState(() {});
-    });
-
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     homeArguments = ModalRoute.of(context).settings.arguments;
-    articles = DatabaseServices.getAllArticles();
+    articles = DatabaseArticles.getAllArticles();
     return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            color: kBlack,
-            child: FutureBuilder<List<Article>>(
-              future: articles,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return ListView.builder(
-                      itemCount: snapshot.data.length,
-                      itemBuilder: (context, i) {
-                        return ArticleCard.buildCard(context, snapshot.data[i]);
-                      });
-                } else if (snapshot.hasError) {
-                  return Text('Sorry there is an error');
-                }
-                return Center(child: CircularProgressIndicator());
-              },
-            ),
-          ),
-          IgnorePointer(
-            ignoring: volume == 0 ? true : false,
-            child: Container(
-              color: Colors.black.withOpacity(volume),
-              child: Stack(
-                children: [
-                  Positioned(
-                      bottom: 120,
-                      right: 120,
-                      child: CircularButton(
-                          kSecondaryColor.withOpacity(volume * 2),
-                          45,
-                          Icons.arrow_back,
-                          kWhite.withOpacity(volume * 2), () {
-                        Navigator.of(context).pushReplacementNamed(
-                            HomePage.routeName,
-                            arguments: homeArguments);
-                      })),
-                ],
-              ),
-            ),
-          ),
-          Positioned(
-              height: 275,
-              width: 275,
-              right: -75,
-              bottom: -75,
-              child: Stack(
-                alignment: Alignment.center,
-                children: <Widget>[
-                  CircularButton(kPrimaryColor, 60, Icons.menu, kWhite, () {
-                    if (animationController.isCompleted) {
-                      animationController.reverse();
-                      volume = 0;
-                    } else {
-                      animationController.forward();
-                      volume = 0.5;
-                    }
-                  })
-                ],
-              ))
-        ],
-      ),
-    );
+        floatingActionButton: MainButton(
+            iconData: Icons.arrow_back,
+            onPressed: () => Navigator.of(context).pushReplacementNamed(
+                HomePage.routeName,
+                arguments: homeArguments)),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        body: Container(
+            color: kBlack, child: CardWidgets.cardsBuilder(articles, true)));
   }
 }
