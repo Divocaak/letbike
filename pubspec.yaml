@@ -13,13 +13,14 @@ dependencies:
     sdk: flutter
 
   http: ^0.12.0
-  flutter_swiper : ^1.1.0
   google_fonts: ^1.1.1
   permission_handler: ^6.1.1
   multi_image_picker: ^4.7.15
   flutter_markdown: ^0.6.1
   url_launcher: ^6.0.3
   shared_preferences: ^2.0.5
+  emojis: ^0.9.3
+  carousel_slider: ^4.0.0
   
 dev_dependencies:
   flutter_test:
@@ -27,3 +28,5 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/loading.gif
