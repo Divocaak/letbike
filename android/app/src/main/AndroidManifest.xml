@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.letbike">
+    package="cz.divocak.letbike">
     
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/>
     <uses-permission android:name="android.permission.CAMERA"/>
@@ -13,7 +13,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="letbike"
+        android:label="LetBike"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

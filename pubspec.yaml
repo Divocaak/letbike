@@ -1,5 +1,5 @@
 name: letbike
-description: A new Flutter project.
+description: Cyclist marketplace
 
 publish_to: 'none'
 
@@ -21,7 +21,14 @@ dependencies:
   shared_preferences: ^2.0.5
   emojis: ^0.9.3
   carousel_slider: ^4.0.0
+  flutter_launcher_icons: ^0.9.2
   
+flutter_icons:
+  image_path: "assets/icon.png"
+  android: true
+  ios: true
+  remove_alpha_ios: true
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
