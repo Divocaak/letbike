@@ -41,16 +41,4 @@ class DatabaseSign {
       throw Exception("Can't login user");
     }
   }
-
-  static Future<User> getUserInfo(int id) async {
-    final Response response = await get(
-        Uri.encodeFull(url + "userInfo.php?id=" + id.toString()),
-        headers: {"Accept": "application/json;charset=UTF-8"});
-    if (response.statusCode == 200) {
-      final Map parsed = jsonDecode(response.body);
-      return User.fromJson(parsed);
-    } else {
-      throw Exception("Can't login user");
-    }
-  }
 }

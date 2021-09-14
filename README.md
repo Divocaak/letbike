@@ -6,7 +6,8 @@
 
 
 ## TODO
-- [ ] server error při přidávání itemu?
+- [ ] killswitch
+- [x] server error při přidávání itemu?
 - [x] refactor parametrů u itemu (zobrazování)
 - [x] modál. okna
     - [x] redesign
@@ -14,10 +15,9 @@
 - [x] možnost mazat inzeráty
 - [x] min. počet pro přidání inzerátu = 1
     - [x] otestovat
-- [ ] umožnit filtrování (kvůli refactoru nefunguje)
-- [ ] chatscreen: nová funkce na API, dostat userinfo + recenze
+- [x] umožnit filtrování (kvůli refactoru nefunguje)
+- [x] chatscreen: nová funkce na API, dostat userinfo + recenze
 - [x] logika z filterpage: získat vybrané filtry && získat nastavené parametry
-- [ ] killswitch
 - [x] log reg
     - [x] alert box při špatné validaci
         - [x] login

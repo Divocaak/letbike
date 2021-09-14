@@ -15,10 +15,10 @@ import 'package:letbike/account/accountScreen.dart';
 import 'package:letbike/account/accountChangePass.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(LetBike());
 }
 
-class MyApp extends StatelessWidget {
+class LetBike extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

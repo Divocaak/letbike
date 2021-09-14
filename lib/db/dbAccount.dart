@@ -2,7 +2,9 @@ import 'dart:async';
 import 'package:http/http.dart';
 import 'package:letbike/db/remoteSettings.dart';
 import 'package:letbike/db/dbUploadImage.dart';
+import 'package:letbike/general/objects.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
+import "dart:convert";
 
 class DatabaseAccount {
   static String url = scriptsUrl + 'user/';
@@ -51,6 +53,18 @@ class DatabaseAccount {
       return response.body;
     } else {
       throw Exception("Can't register user");
+    }
+  }
+
+  static Future<User> getUserInfo(int id) async {
+    final Response response = await get(
+        Uri.encodeFull(url + "userInfo.php?id=" + id.toString()),
+        headers: {"Accept": "application/json;charset=UTF-8"});
+    if (response.statusCode == 200) {
+      final Map parsed = jsonDecode(response.body);
+      return User.fromJson(parsed);
+    } else {
+      throw Exception("Can't get info");
     }
   }
 }

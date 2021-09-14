@@ -38,8 +38,8 @@ class _AddItem extends State<AddItem> with TickerProviderStateMixin {
           Asset asset = images[index];
           return AssetThumb(
             asset: asset,
-            width: 300,
-            height: 300,
+            width: 150,
+            height: 150,
           );
         }),
       );
@@ -166,6 +166,7 @@ class _AddItem extends State<AddItem> with TickerProviderStateMixin {
                   borderRadius: BorderRadius.circular(25),
                 ),
                 padding: EdgeInsets.all(15),
+                margin: EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   children: [
                     Text(
