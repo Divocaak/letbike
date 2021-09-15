@@ -6,6 +6,7 @@
 
 
 ## TODO
+- [ ] register switch not working
 - [ ] killswitch
 - [x] server error při přidávání itemu?
 - [x] refactor parametrů u itemu (zobrazování)

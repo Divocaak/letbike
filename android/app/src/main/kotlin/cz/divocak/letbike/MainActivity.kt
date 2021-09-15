@@ -1,4 +1,4 @@
-package com.divocak.letbike
+package cz.divocak.letbike
 
 import io.flutter.embedding.android.FlutterActivity
 
