@@ -13,11 +13,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 Future<String> response;
 
-bool acceptData = false;
-bool acceptTerms = false;
-
-GlobalKey<FormState> _regformkey = GlobalKey<FormState>();
-
 class CreateNewAccount extends StatefulWidget {
   @override
   _CreateNewAccountState createState() => _CreateNewAccountState();
@@ -28,6 +23,22 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
   final TextEditingController regMailController = TextEditingController();
   final TextEditingController regPassController = TextEditingController();
   final TextEditingController passConfController = TextEditingController();
+
+  SignSwitch termsSwitch = SignSwitch(
+      false,
+      SignLink.build(
+          "Souhlasím s VOP",
+          TextStyle(color: kWhite, fontSize: 17, shadows: [
+            Shadow(blurRadius: 10.0, color: kBlack, offset: Offset(5.0, 5.0))
+          ]),
+          () => openUrl("terms.pdf")));
+  SignSwitch dataSwitch = SignSwitch(
+      false,
+      Text("Souhlasím se zpracováním osobních údajů",
+          style: TextStyle(color: kWhite, fontSize: 17, shadows: [
+            Shadow(blurRadius: 10.0, color: kBlack, offset: Offset(5.0, 5.0))
+          ])));
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,36 +75,15 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
                   obscure: true,
                   validationIdentity: "regPassConf",
                   controller: passConfController),
-              SignSwitch(
-                  SignLink.build(
-                      context,
-                      "Souhlasím s VOP",
-                      TextStyle(color: kWhite, fontSize: 17, shadows: [
-                        Shadow(
-                          blurRadius: 10.0,
-                          color: kBlack,
-                          offset: Offset(5.0, 5.0),
-                        )
-                      ]),
-                      () => openUrl("terms.pdf")),
-                  acceptData),
-              SignSwitch(
-                  Text("Souhlasím se zpracováním osobních údajů",
-                      style: TextStyle(color: kWhite, fontSize: 17, shadows: [
-                        Shadow(
-                          blurRadius: 10.0,
-                          color: kBlack,
-                          offset: Offset(5.0, 5.0),
-                        )
-                      ])),
-                  acceptData),
+              termsSwitch,
+              dataSwitch,
               RoundedButton(
                 buttonName: "Zaregistrovat",
                 onClick: () {
                   String failResponse = "";
-
-                  if (acceptData && acceptTerms) {
-                    if (_regformkey.currentState.validate() &&
+                  if (dataSwitch.value && termsSwitch.value) {
+                    if (regMailController.text.contains("@") &&
+                        regMailController.text.contains(".") &&
                         passConfController.text == regPassController.text) {
                       response = DatabaseSign.registerUser(
                           usernameController.text,
@@ -133,7 +123,7 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
                               }));
                 },
               ),
-              SignLink.build(context, "Přihlásit se", kSignLinkButton,
+              SignLink.build("Přihlásit se", kSignLinkButton,
                   () => Navigator.of(context).pop())
             ],
           )
@@ -142,7 +132,7 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
     );
   }
 
-  openUrl(String doc) async {
+  static void openUrl(String doc) async {
     String url = docsFolder + "/" + doc;
     if (await canLaunch(url)) {
       await launch(url);

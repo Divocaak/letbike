@@ -21,7 +21,7 @@ class ForgotPassword extends StatelessWidget {
                 inputAction: TextInputAction.done,
                 controller: forgotMailController),
             RoundedButton(buttonName: "Send", onClick: () {}),
-            SignLink.build(context, "Přihlásit se", kSignLinkButton,
+            SignLink.build("Přihlásit se", kSignLinkButton,
                 () => Navigator.of(context).pop()),
           ])
         ]));

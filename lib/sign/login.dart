@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:letbike/app/homePage.dart';
 import 'package:letbike/db/dbSign.dart';
@@ -27,9 +26,19 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController mailController = TextEditingController();
   final TextEditingController passController = TextEditingController();
 
+  SignSwitch remLogin = SignSwitch(
+      savedRemember,
+      Text("Zapamatovat přihlášení",
+          style: TextStyle(color: kWhite, fontSize: 17, shadows: [
+            Shadow(blurRadius: 10.0, color: kBlack, offset: Offset(5.0, 5.0))
+          ])));
+
   @override
   Widget build(BuildContext context) {
     getLocalData();
+    setState(() {
+      remLogin.value = savedRemember;
+    });
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
@@ -57,18 +66,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   inputAction: TextInputAction.done,
                   obscure: true,
                   controller: passController),
-              SignLink.build(context, "Zapomenuté heslo", kSignLinkButton,
+              SignLink.build("Zapomenuté heslo", kSignLinkButton,
                   () => Navigator.of(context).pushNamed("ForgotPassword")),
-              SignSwitch(
-                  Text("Zapamatovat přihlášení",
-                      style: TextStyle(color: kWhite, fontSize: 17, shadows: [
-                        Shadow(
-                          blurRadius: 10.0,
-                          color: kBlack,
-                          offset: Offset(5.0, 5.0),
-                        )
-                      ])),
-                  remember),
+              //remLogin,
               RoundedButton(
                   buttonName: "Přihlásit se",
                   onClick: () {
@@ -96,16 +96,15 @@ class _LoginScreenState extends State<LoginScreen> {
                                 } else {
                                   Text("Probíhá přesměrování",
                                       style: TextStyle(color: kWhite));
-                                  Future.delayed(Duration.zero, () {
-                                    Navigator.of(context).pushReplacementNamed(
-                                        HomePage.routeName,
-                                        arguments: new HomeArguments(
-                                            snapshot.data, {}));
-                                  });
+                                  Future.delayed(
+                                      Duration.zero,
+                                      () => Navigator.of(context)
+                                          .pushReplacementNamed(
+                                              HomePage.routeName,
+                                              arguments: new HomeArguments(
+                                                  snapshot.data, {})));
                                 }
-                              }
-
-                              if (snapshot.hasError) {
+                              } else if (snapshot.hasError) {
                                 return Text(
                                   "Někde se stala chyba, zkuste to prosím později.",
                                   style: TextStyle(color: kWhite),
@@ -115,7 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               return Center(child: CircularProgressIndicator());
                             }));
                   }),
-              SignLink.build(context, "Zaregistrovat se", kSignLinkButton,
+              SignLink.build("Zaregistrovat se", kSignLinkButton,
                   () => Navigator.of(context).pushNamed("CreateNewAccount"))
             ],
           )
