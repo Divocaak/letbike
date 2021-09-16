@@ -1,12 +1,21 @@
 # LETBIKE
 
+   ___,_
+@/     oo_
+(  )___(,_@,
+ }/   `}\
+ ""    ""
+
+
 ## Databáze
 
 [Návrh_databáze](https://dbdiagram.io/d/603a99cdfcdcb6230b21cb94)
 
 
 ## TODO
+- [x] register switch not working
 - [ ] killswitch
+- [ ] pamatovat přihlášení
 - [x] server error při přidávání itemu?
 - [x] refactor parametrů u itemu (zobrazování)
 - [x] modál. okna

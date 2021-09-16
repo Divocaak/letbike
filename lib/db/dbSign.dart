@@ -11,7 +11,7 @@ class DatabaseSign {
       String username, String email, String password) async {
     final Response response = await get(
         Uri.encodeFull(url +
-            "userRegister.php?username=" +
+            "userRegister.php/?username=" +
             username +
             "&&email=" +
             email +

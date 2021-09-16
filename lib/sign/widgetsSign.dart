@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:letbike/general/pallete.dart';
 
 class SignLink {
-  static Widget build(
-      BuildContext context, String label, TextStyle style, Function onClick) {
+  static Widget build(String label, TextStyle style, Function onClick) {
     return TextButton(
         onPressed: onClick,
         child: Container(
@@ -17,7 +16,7 @@ class SignLink {
 }
 
 class SignSwitch extends StatefulWidget {
-  SignSwitch(this.label, this.value, {key}) : super(key: key);
+  SignSwitch(this.value, this.label, {key}) : super(key: key);
 
   final Widget label;
   bool value;
