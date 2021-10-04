@@ -1,5 +1,5 @@
 export 'categories.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:multi_image_picker2/multi_image_picker2.dart';
 
 class Item {
   int id;
@@ -41,7 +41,7 @@ class Item {
         int.parse(json["score"]),
         int.parse(json["paid"]),
         json["dateStart"],
-        json["dateEnd"],
+        "", //json["dateEnd"],
         json["imgs"],
         int.parse(json["status"]),
         getParams(json),

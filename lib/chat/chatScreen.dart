@@ -6,7 +6,7 @@ import 'package:letbike/db/dbItem.dart';
 import 'package:letbike/db/dbRating.dart';
 import 'package:letbike/db/remoteSettings.dart';
 import 'package:letbike/widgets/images.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:multi_image_picker2/multi_image_picker2.dart';
 import 'package:letbike/app/homePage.dart';
 import 'package:letbike/item/itemPage.dart';
 import 'package:letbike/chat/chatBuildMessage.dart';

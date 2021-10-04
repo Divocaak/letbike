@@ -12,5 +12,5 @@ const kGreen = Color(0xFF50C878);
 const TextStyle kSignLinkButton =
     TextStyle(fontSize: 22, color: Colors.white, height: 1.5);
 
-const TextStyle kBodyText = TextStyle(color: Colors.purple);
-const TextStyle kCaptionTextStyle = TextStyle(color: Colors.purple);
+const TextStyle kMainButtonStyle = TextStyle(color: kBlack);
+const TextStyle kCaptionTextSatyle = TextStyle(color: Colors.purple);

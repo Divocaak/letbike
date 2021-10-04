@@ -1,5 +1,5 @@
 import 'package:letbike/db/dbAccount.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:multi_image_picker2/multi_image_picker2.dart';
 import 'package:flutter/material.dart';
 import 'package:letbike/account/accountScreen.dart';
 import 'accountChangePass.dart';
@@ -79,7 +79,7 @@ class _AccountSettingsState extends State<AccountSettings>
   Widget build(BuildContext context) {
     user = ModalRoute.of(context).settings.arguments;
     return Scaffold(
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true,
         backgroundColor: kBlack,
         floatingActionButton: MainButton(
             iconData: Icons.menu,
@@ -93,64 +93,68 @@ class _AccountSettingsState extends State<AccountSettings>
               }
             }),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        body: Stack(children: [
-          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Text(
-                  images.length < 1
-                      ? "Aktualizovat profilovou fotku"
-                      : "Fotografie nahrána",
-                  style: TextStyle(color: kWhite),
-                ),
-                CircularButton(
-                    kPrimaryColor, 50, Icons.upload, kWhite, loadAssets)
-              ],
-            ),
-            TextInput(
-                icon: Icons.create,
-                hint: "Křestní jméno: " + userInfo(user.fName),
-                inputType: TextInputType.name,
-                inputAction: TextInputAction.next,
-                controller: fNameController),
-            TextInput(
-                icon: Icons.create,
-                hint: "Příjmení: " + userInfo(user.lName),
-                inputType: TextInputType.name,
-                inputAction: TextInputAction.next,
-                controller: lNameController),
-            TextInput(
-                icon: Icons.phone,
-                hint: "Telefon: " + userInfo(user.phone.toString()),
-                inputType: TextInputType.phone,
-                inputAction: TextInputAction.next,
-                controller: phoneController),
-            TextInput(
-                icon: Icons.home,
-                hint: "Ulice a č.p.: " + userInfo(user.addressA),
-                inputType: TextInputType.streetAddress,
-                inputAction: TextInputAction.next,
-                controller: addAController),
-            TextInput(
-                icon: Icons.location_city,
-                hint: "Obec: " + userInfo(user.addressB),
-                inputType: TextInputType.streetAddress,
-                inputAction: TextInputAction.next,
-                controller: addBController),
-            TextInput(
-                icon: Icons.flag,
-                hint: "Země: " + userInfo(user.addressC),
-                inputType: TextInputType.streetAddress,
-                inputAction: TextInputAction.next,
-                controller: addCController),
-            TextInput(
-                icon: Icons.email,
-                hint: "PSČ: " + userInfo(user.postal.toString()),
-                inputType: TextInputType.number,
-                inputAction: TextInputAction.done,
-                controller: postalController)
-          ]),
+        body: Stack(alignment: Alignment.center, children: [
+          SingleChildScrollView(
+              physics: NeverScrollableScrollPhysics(),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Text(
+                          images.length < 1
+                              ? "Aktualizovat profilovou fotku"
+                              : "Fotografie nahrána",
+                          style: TextStyle(color: kWhite),
+                        ),
+                        CircularButton(
+                            kPrimaryColor, 50, Icons.upload, kWhite, loadAssets)
+                      ],
+                    ),
+                    TextInput(
+                        icon: Icons.create,
+                        hint: "Křestní jméno: " + userInfo(user.fName),
+                        inputType: TextInputType.name,
+                        inputAction: TextInputAction.next,
+                        controller: fNameController),
+                    TextInput(
+                        icon: Icons.create,
+                        hint: "Příjmení: " + userInfo(user.lName),
+                        inputType: TextInputType.name,
+                        inputAction: TextInputAction.next,
+                        controller: lNameController),
+                    TextInput(
+                        icon: Icons.phone,
+                        hint: "Telefon: " + userInfo(user.phone.toString()),
+                        inputType: TextInputType.phone,
+                        inputAction: TextInputAction.next,
+                        controller: phoneController),
+                    TextInput(
+                        icon: Icons.home,
+                        hint: "Ulice a č.p.: " + userInfo(user.addressA),
+                        inputType: TextInputType.streetAddress,
+                        inputAction: TextInputAction.next,
+                        controller: addAController),
+                    TextInput(
+                        icon: Icons.location_city,
+                        hint: "Obec: " + userInfo(user.addressB),
+                        inputType: TextInputType.streetAddress,
+                        inputAction: TextInputAction.next,
+                        controller: addBController),
+                    TextInput(
+                        icon: Icons.flag,
+                        hint: "Země: " + userInfo(user.addressC),
+                        inputType: TextInputType.streetAddress,
+                        inputAction: TextInputAction.next,
+                        controller: addCController),
+                    TextInput(
+                        icon: Icons.email,
+                        hint: "PSČ: " + userInfo(user.postal.toString()),
+                        inputType: TextInputType.number,
+                        inputAction: TextInputAction.done,
+                        controller: postalController)
+                  ])),
           MainButtonClicked(buttons: [
             SecondaryButtonData(
                 Icons.lock,
