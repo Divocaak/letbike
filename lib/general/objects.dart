@@ -1,5 +1,5 @@
 export 'categories.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:multi_image_picker2/multi_image_picker2.dart';
 
 class Item {
   int id;
@@ -10,7 +10,7 @@ class Item {
   int score;
   int paid;
   String dateStart;
-  String dateEnd;
+  //String dateEnd;
   String imgs;
   int status;
   Map<String, String> itemParams;
@@ -25,7 +25,7 @@ class Item {
       this.score,
       this.paid,
       this.dateStart,
-      this.dateEnd,
+      //this.dateEnd,
       this.imgs,
       this.status,
       this.itemParams,
@@ -41,7 +41,7 @@ class Item {
         int.parse(json["score"]),
         int.parse(json["paid"]),
         json["dateStart"],
-        json["dateEnd"],
+        //json["dateEnd"],
         json["imgs"],
         int.parse(json["status"]),
         getParams(json),
@@ -59,7 +59,7 @@ class Item {
           key != "score" &&
           key != "paid" &&
           key != "dateStart" &&
-          key != "dateEnd" &&
+          //key != "dateEnd" &&
           key != "imgs" &&
           key != "param" &&
           key != "status" &&
@@ -80,108 +80,10 @@ class Item {
         "score": score,
         "paid": paid,
         "dateStart": dateStart,
-        "dateEnd": dateEnd,
+        //"dateEnd": dateEnd,
         "imgs": imgs,
         "status": status,
-        "soldTo": soldTo,
-        /* "used": itemParams.params["used"],
-        "selectedCategory": itemParams.params["selectedCategory"],
-        "selectedParts": itemParams.params["selectedParts"],
-        "selectedAccessories": itemParams.params["selectedAccessories"],
-        "selectedOther": itemParams.params["selectedOther"],
-        "bikeType": itemParams.params["bikeType"],
-        "bikeBrand": itemParams.params["bikeBrand"],
-        "wheelBrand": itemParams.params["wheelBrand"],
-        "wheelSize": itemParams.params["wheelSize"],
-        "wheelMaterial": itemParams.params["wheelMaterial"],
-        "wheeldSpokes": itemParams.params["wheeldSpokes"],
-        "wheeldType": itemParams.params["wheeldType"],
-        "wheelAxis": itemParams.params["wheelAxis"],
-        "wheeldBrakesType": itemParams.params["wheeldBrakesType"],
-        "wheeldBrakesDisc": itemParams.params["wheeldBrakesDisc"],
-        "wheeldCassette": itemParams.params["wheeldCassette"],
-        "wheelNut": itemParams.params["wheelNut"],
-        "wheelCompatibility": itemParams.params["wheelCompatibility"],
-        "cranksBrand": itemParams.params["cranksBrand"],
-        "cranksCompatibility": itemParams.params["cranksCompatibility"],
-        "cranksMaterial": itemParams.params["cranksMaterial"],
-        "cranksAxis": itemParams.params["cranksAxis"],
-        "converterBrand": itemParams.params["converterBrand"],
-        "converterNumOfSpeeds": itemParams.params["converterNumOfSpeeds"],
-        "saddleBrand": itemParams.params["saddleBrand"],
-        "saddleGender": itemParams.params["saddleGender"],
-        "forkBrand": itemParams.params["forkBrand"],
-        "forkSize": itemParams.params["forkSize"],
-        "forkSuspensionType": itemParams.params["forkSuspensionType"],
-        "forkSuspension": itemParams.params["forkSuspension"],
-        "forkWheelCoompatibility": itemParams.params["forkWheelCoompatibility"],
-        "forkMaterial": itemParams.params["forkMaterial"],
-        "forkMaterialColumn": itemParams.params["forkMaterialColumn"],
-        "eBikeBrand": itemParams.params["eBikeBrand"],
-        "eBikeMotorPos": itemParams.params["eBikeMotorPos"],
-        "trainerBrand": itemParams.params["trainerBrand"],
-        "trainerBrakes": itemParams.params["trainerBrakes"],
-        "scooterBrand": itemParams.params["scooterBrand"],
-        "scooterSize": itemParams.params["scooterSize"],
-        "scooterComputer": itemParams.params["scooterComputer"],
-        "brakeType": itemParams.params["brakeType"],
-        "brakeBrand": itemParams.params["brakeBrand"],
-        "brakeDiscType": itemParams.params["brakeDiscType"],
-        "brakeDiscSize": itemParams.params["brakeDiscSize"],
-        "brakeBlockType": itemParams.params["brakeBlockType"],
-        "tireSize": itemParams.params["tireSize"],
-        "tireWidth": itemParams.params["tireWidth"],
-        "tireBrand": itemParams.params["tireBrand"],
-        "tireType": itemParams.params["tireType"],
-        "tireMaterial": itemParams.params["tireMaterial"],
-        "tubeSize": itemParams.params["tubeSize"],
-        "tubeType": itemParams.params["tubeType"],
-        "frameSize": itemParams.params["frameSize"],
-        "frameFork": itemParams.params["frameFork"],
-        "frameType": itemParams.params["frameType"],
-        "handlebarType": itemParams.params["handlebarType"],
-        "handlebarMaterial": itemParams.params["handlebarMaterial"],
-        "handlebarWidth": itemParams.params["handlebarWidth"],
-        "handlebarSize": itemParams.params["handlebarSize"],
-        "saddleTubeType": itemParams.params["saddleTubeType"],
-        "saddleTubeLength": itemParams.params["saddleTubeLength"],
-        "saddleTubeMaterial": itemParams.params["saddleTubeMaterial"],
-        "saddleTubeSize": itemParams.params["saddleTubeSize"],
-        "stemType": itemParams.params["stemType"],
-        "axisType": itemParams.params["axisType"],
-        "cassetteType": itemParams.params["cassetteType"],
-        "shockAbsType": itemParams.params["shockAbsType"],
-        "gearChangeType": itemParams.params["gearChangeType"],
-        "pedalsType": itemParams.params["pedalsType"],
-        "rimSize": itemParams.params["rimSize"],
-        "gripsType": itemParams.params["gripsType"],
-        "eBikeComponentsType": itemParams.params["eBikeComponentsType"],
-        "headsetType": itemParams.params["headsetType"],
-        "bowdenType": itemParams.params["bowdenType"],
-        "clothesType": itemParams.params["clothesType"],
-        "clothesClothes": itemParams.params["clothesClothes"],
-        "clothesGender": itemParams.params["clothesGender"],
-        "clothesSize": itemParams.params["clothesSize"],
-        "bootsType": itemParams.params["bootsType"],
-        "bootsSize": itemParams.params["bootsSize"],
-        "helmetType": itemParams.params["helmetType"],
-        "compType": itemParams.params["compType"],
-        "glassType": itemParams.params["glassType"],
-        "glassGlass": itemParams.params["glassGlass"],
-        "glassGender": itemParams.params["glassGender"],
-        "glassGlassChange": itemParams.params["glassGlassChange"],
-        "glassHolderChange": itemParams.params["glassHolderChange"],
-        "kidSaddleType": itemParams.params["kidSaddleType"],
-        "bottleHolderType": itemParams.params["bottleHolderType"],
-        "rackType": itemParams.params["rackType"],
-        "rackSize": itemParams.params["rackSize"],
-        "carRackType": itemParams.params["carRackType"],
-        "toolType": itemParams.params["toolType"],
-        "pumpType": itemParams.params["pumpType"],
-        "lightType": itemParams.params["lightType"],
-        "mudguardType": itemParams.params["mudguardType"],
-        "mudguardSize": itemParams.params["mudguardSize"],
-        "lockType": itemParams.params["lockType"], */
+        "soldTo": soldTo
       };
 }
 

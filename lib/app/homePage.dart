@@ -41,6 +41,7 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     homeArguments = ModalRoute.of(context).settings.arguments;
+    homeArguments.filters.forEach((k, v) => print(k + ": " + v));
     items = DatabaseItem.getAllItems(
         0, "seller_id", homeArguments.filters, "sold_to");
     return Scaffold(

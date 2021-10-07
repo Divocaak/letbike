@@ -4,7 +4,7 @@ import 'package:http/http.dart';
 import 'package:letbike/general/objects.dart';
 import 'package:letbike/db/remoteSettings.dart';
 import 'package:letbike/db/dbUploadImage.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:multi_image_picker2/multi_image_picker2.dart';
 
 class DatabaseItem {
   static String url = scriptsUrl + 'item/';
@@ -16,7 +16,7 @@ class DatabaseItem {
     final Response response = await post(
         url +
             "itemSet.php/?" +
-            "&&seller_id=" +
+            "seller_id=" +
             item.sellerId.toString() +
             "&&name=" +
             item.name +
@@ -30,6 +30,20 @@ class DatabaseItem {
         headers: <String, String>{
           'Content-Type': 'application/json;charset=UTF-8'
         });
+
+    print(url +
+        "itemSet.php/?" +
+        "seller_id=" +
+        item.sellerId.toString() +
+        "&&name=" +
+        item.name +
+        "&&description=" +
+        item.description +
+        "&&price=" +
+        item.price.toString() +
+        "&&images=" +
+        images.length.toString() +
+        passParamsToDb(item.itemParams));
 
     if (response.statusCode == 200) {
       return response.body;
@@ -50,10 +64,19 @@ class DatabaseItem {
             soldTo +
             passParamsToDb(itemParams)),
         headers: {"Accept": "application/json;charset=UTF-8"});
+    print(url +
+        "itemGetAll.php/?id=" +
+        userId +
+        "&&status=" +
+        status.toString() +
+        "&&soldTo=" +
+        soldTo +
+        passParamsToDb(itemParams));
     if (response.statusCode == 200) {
       if (response.body == "[]") {
         return null;
       } else {
+        print(response.body);
         final parsed = jsonDecode(response.body).cast<Map<String, dynamic>>();
         return parsed.map<Item>((item) => Item.fromJson(item)).toList();
       }

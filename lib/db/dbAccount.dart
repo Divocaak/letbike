@@ -3,7 +3,7 @@ import 'package:http/http.dart';
 import 'package:letbike/db/remoteSettings.dart';
 import 'package:letbike/db/dbUploadImage.dart';
 import 'package:letbike/general/objects.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:multi_image_picker2/multi_image_picker2.dart';
 import "dart:convert";
 
 class DatabaseAccount {
