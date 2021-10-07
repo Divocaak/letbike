@@ -57,7 +57,6 @@ class _FilterPage extends State<FilterPage> {
                         0,
                         "",
                         "",
-                        "",
                         0,
                         addItemArgs.args.filters,
                         0),
