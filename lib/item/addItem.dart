@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:letbike/db/dbItem.dart';
 import 'package:letbike/filters/filters.dart';
 import 'package:letbike/app/homePage.dart';
 import 'package:letbike/widgets/errorWidgets.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:multi_image_picker2/multi_image_picker2.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:letbike/widgets/textInput.dart';
 import 'package:letbike/widgets/mainButtonEssentials.dart';
-import 'package:letbike/widgets/buttonRounded.dart';
 import 'package:letbike/widgets/images.dart';
 import 'package:letbike/widgets/alertBox.dart';
 import 'package:letbike/general/objects.dart';
@@ -20,31 +18,31 @@ class AddItem extends StatefulWidget {
   static const routeName = "/addItem";
 }
 
-Future<String> addResponse;
-
 class _AddItem extends State<AddItem> with TickerProviderStateMixin {
   AddItemFiltersArgs args;
-  List<Asset> images = [];
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController descController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
 
+  List<Asset> images = <Asset>[];
+
   Widget buildGridView() {
-    if (images != null)
+    if (images != null) {
       return GridView.count(
         crossAxisCount: 3,
         children: List.generate(images.length, (index) {
           Asset asset = images[index];
           return AssetThumb(
             asset: asset,
-            width: 150,
-            height: 150,
+            width: 50,
+            height: 50,
           );
         }),
       );
-    else
-      return Container(color: Colors.white);
+    } else {
+      return Container();
+    }
   }
 
   Future<int> checkPerm() async {
@@ -58,35 +56,31 @@ class _AddItem extends State<AddItem> with TickerProviderStateMixin {
   }
 
   Future<void> loadAssets() async {
-    setState(() {
-      images = [];
-    });
+    setState(() => images = <Asset>[]);
 
-    List<Asset> resultList;
+    List<Asset> resultList = <Asset>[];
     String error;
 
     if (await checkPerm() == 1) {
       try {
         resultList = await MultiImagePicker.pickImages(
-          maxImages: 10,
-          enableCamera: true,
-        );
+            maxImages: 9, enableCamera: true, selectedAssets: images);
       } on Exception catch (e) {
         error = e.toString();
       }
+
       if (!mounted) return;
 
       setState(() {
         images = resultList;
         if (error != null)
           ModalWindow.showModalWindow(
-              context, "Error", Text("Error", style: TextStyle(color: kWhite)));
+              context, "Chyba", Text(error, style: TextStyle(color: kWhite)));
       });
     }
   }
 
   double volume = 0;
-
   AnimationController animationController;
 
   @override
@@ -144,17 +138,6 @@ class _AddItem extends State<AddItem> with TickerProviderStateMixin {
               inputType: TextInputType.number,
               controller: priceController,
             ),
-            RoundedButton(
-                buttonName: "Vyplnit detaily předmětu",
-                onClick: () => Navigator.of(context).pushNamed(
-                    FilterPage.routeName,
-                    arguments: new AddItemFiltersArgs(
-                        args.args,
-                        new AddItemData(
-                            nameController.text,
-                            descController.text,
-                            priceController.text,
-                            images)))),
             Container(
                 height: 200,
                 decoration: BoxDecoration(
@@ -178,7 +161,7 @@ class _AddItem extends State<AddItem> with TickerProviderStateMixin {
                       ),
                     ),
                     Expanded(
-                      child: buildGridView(),
+                      child: Container(child: buildGridView()),
                     )
                   ],
                 ))
@@ -189,48 +172,22 @@ class _AddItem extends State<AddItem> with TickerProviderStateMixin {
                 () => Navigator.of(context).pushReplacementNamed(
                     HomePage.routeName,
                     arguments: new HomeArguments(args.args.user, {}))),
-            SecondaryButtonData(Icons.add, () {
-              if (images.length >= 1 &&
-                  nameController.text != "" &&
-                  descController.text != "" &&
-                  priceController.text != "") {
-                addResponse = DatabaseItem.createItem(
-                    new Item(
-                        -1,
-                        args.args.user.id,
-                        nameController.text,
-                        descController.text,
-                        double.parse(priceController.text),
-                        0,
-                        0,
-                        "",
-                        "",
-                        "",
-                        0,
-                        args.args.filters,
-                        0),
-                    images);
-
-                ModalWindow.showModalWindow(
-                    context,
-                    "Oznámení",
-                    FutureBuilder<String>(
-                      future: addResponse,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return Text(snapshot.data,
-                              style: TextStyle(color: kWhite));
-                        } else if (snapshot.hasError) {
-                          return ErrorWidgets.futureBuilderError();
-                        }
-                        return Center(child: CircularProgressIndicator());
-                      },
-                    ));
-              } else {
-                ModalWindow.showModalWindow(
-                    context, "Upozornění", ErrorWidgets.addItemError());
-              }
-            })
+            SecondaryButtonData(
+                Icons.add,
+                () => (images.length >= 1 &&
+                        nameController.text != "" &&
+                        descController.text != "" &&
+                        priceController.text != "")
+                    ? Navigator.of(context).pushNamed(FilterPage.routeName,
+                        arguments: new AddItemFiltersArgs(
+                            args.args,
+                            new AddItemData(
+                                nameController.text,
+                                descController.text,
+                                priceController.text,
+                                images)))
+                    : ModalWindow.showModalWindow(
+                        context, "Upozornění", ErrorWidgets.addItemError()))
           ], volume: volume)
         ],
       ),

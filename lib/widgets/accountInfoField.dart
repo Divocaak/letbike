@@ -9,7 +9,7 @@ class AccountInfoField {
         padding: EdgeInsets.symmetric(vertical: 10),
         child: RichText(
             textAlign: TextAlign.center,
-            text: TextSpan(style: kCaptionTextStyle, children: <TextSpan>[
+            text: TextSpan(children: <TextSpan>[
               TextSpan(
                   text: inputString.substring(0, divider),
                   style: TextStyle(color: kWhite)),

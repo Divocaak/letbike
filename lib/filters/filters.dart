@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:letbike/item/addItem.dart';
 import 'package:letbike/app/homePage.dart';
 import 'package:letbike/widgets/mainButtonEssentials.dart';
 import 'package:letbike/widgets/images.dart';
 import 'package:letbike/filters/widgetsFilter.dart';
 import 'package:letbike/general/objects.dart';
+import 'package:letbike/db/dbItem.dart';
+import 'package:letbike/general/pallete.dart';
+import 'package:letbike/widgets/alertBox.dart';
+import 'package:letbike/widgets/errorWidgets.dart';
 
 class FilterPage extends StatefulWidget {
   @override
@@ -12,6 +15,8 @@ class FilterPage extends StatefulWidget {
 
   static const routeName = "/filterPage";
 }
+
+Future<String> addResponse;
 
 class _FilterPage extends State<FilterPage> {
   AddItemFiltersArgs addItemArgs;
@@ -34,16 +39,49 @@ class _FilterPage extends State<FilterPage> {
     accessoryTypeDd.fp = this;
     return Scaffold(
         floatingActionButton: MainButton(
-            iconData: Icons.save,
+            iconData: addItemArgs.addItemData == null ? Icons.save : Icons.add,
             onPressed: () {
               addItemArgs.args.filters = getParams();
-              addItemArgs.addItemData == null
-                  ? Navigator.of(context).pushReplacementNamed(
-                      HomePage.routeName,
-                      arguments: addItemArgs.args)
-                  : Navigator.of(context).pushReplacementNamed(
-                      AddItem.routeName,
-                      arguments: addItemArgs);
+              if (addItemArgs.addItemData == null) {
+                Navigator.of(context).pushReplacementNamed(HomePage.routeName,
+                    arguments: addItemArgs.args);
+              } else {
+                addResponse = DatabaseItem.createItem(
+                    new Item(
+                        -1,
+                        addItemArgs.args.user.id,
+                        addItemArgs.addItemData.name,
+                        addItemArgs.addItemData.desc,
+                        double.parse(addItemArgs.addItemData.price),
+                        0,
+                        0,
+                        "",
+                        "",
+                        0,
+                        addItemArgs.args.filters,
+                        0),
+                    addItemArgs.addItemData.imgs);
+
+                ModalWindow.showModalWindow(
+                    context,
+                    "Oznámení",
+                    FutureBuilder<String>(
+                        future: addResponse,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return Text(snapshot.data,
+                                style: TextStyle(color: kWhite));
+                          } else if (snapshot.hasError) {
+                            return ErrorWidgets.futureBuilderError();
+                          }
+                          return Center(child: CircularProgressIndicator());
+                        }), after: () {
+                  addItemArgs.args.filters = null;
+
+                  Navigator.of(context).pushReplacementNamed(HomePage.routeName,
+                      arguments: addItemArgs.args);
+                });
+              }
             }),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         body: Stack(children: [
