@@ -41,93 +41,98 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        resizeToAvoidBottomInset: true,
-        body: Stack(alignment: Alignment.center, children: [
-          BackgroundImage(),
-          SingleChildScrollView(
-              physics: NeverScrollableScrollPhysics(),
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TextInput(
-                        icon: Icons.person,
-                        hint: "Uživatelské jméno",
-                        inputType: TextInputType.name,
-                        inputAction: TextInputAction.next,
-                        controller: usernameController),
-                    TextInput(
-                        icon: Icons.mail,
-                        hint: "E-mail",
-                        inputType: TextInputType.emailAddress,
-                        inputAction: TextInputAction.next,
-                        controller: regMailController),
-                    TextInput(
-                        icon: Icons.lock,
-                        hint: "Heslo",
-                        inputAction: TextInputAction.next,
-                        obscure: true,
-                        validationIdentity: "regPass",
-                        controller: regPassController),
-                    TextInput(
-                        icon: Icons.lock,
-                        hint: "Potvrdit heslo",
-                        inputAction: TextInputAction.done,
-                        obscure: true,
-                        validationIdentity: "regPassConf",
-                        controller: passConfController),
-                    termsSwitch,
-                    dataSwitch,
-                    RoundedButton(
-                        buttonName: "Zaregistrovat",
-                        onClick: () {
-                          String failResponse = "";
-                          if (dataSwitch.value && termsSwitch.value) {
-                            if (regMailController.text.contains("@") &&
-                                regMailController.text.contains(".") &&
-                                passConfController.text ==
-                                    regPassController.text) {
-                              response = DatabaseSign.registerUser(
-                                  usernameController.text,
-                                  regMailController.text,
-                                  regPassController.text);
-                            } else {
-                              failResponse =
-                                  "Některé údaje jsou špatně zadané, nebo se hesla neshodují";
-                            }
-                          } else {
-                            failResponse =
-                                "Pro pokračování musíte souhlasit s VOP a zpracováním osobních údajů.";
-                          }
+    return GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Scaffold(
+            resizeToAvoidBottomInset: true,
+            body: Stack(alignment: Alignment.center, children: [
+              BackgroundImage(),
+              SingleChildScrollView(
+                  physics: NeverScrollableScrollPhysics(),
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TextInput(
+                            icon: Icons.person,
+                            hint: "Uživatelské jméno",
+                            inputType: TextInputType.name,
+                            inputAction: TextInputAction.next,
+                            controller: usernameController),
+                        TextInput(
+                            icon: Icons.mail,
+                            hint: "E-mail",
+                            inputType: TextInputType.emailAddress,
+                            inputAction: TextInputAction.next,
+                            controller: regMailController),
+                        TextInput(
+                            icon: Icons.lock,
+                            hint: "Heslo",
+                            inputAction: TextInputAction.next,
+                            obscure: true,
+                            validationIdentity: "regPass",
+                            controller: regPassController),
+                        TextInput(
+                            icon: Icons.lock,
+                            hint: "Potvrdit heslo",
+                            inputAction: TextInputAction.done,
+                            obscure: true,
+                            validationIdentity: "regPassConf",
+                            controller: passConfController),
+                        termsSwitch,
+                        dataSwitch,
+                        RoundedButton(
+                            buttonName: "Zaregistrovat",
+                            onClick: () {
+                              String failResponse = "";
+                              if (dataSwitch.value && termsSwitch.value) {
+                                if (regMailController.text.contains("@") &&
+                                    regMailController.text.contains(".") &&
+                                    passConfController.text ==
+                                        regPassController.text) {
+                                  response = DatabaseSign.registerUser(
+                                      usernameController.text,
+                                      regMailController.text,
+                                      regPassController.text);
+                                } else {
+                                  failResponse =
+                                      "Některé údaje jsou špatně zadané, nebo se hesla neshodují";
+                                }
+                              } else {
+                                failResponse =
+                                    "Pro pokračování musíte souhlasit s VOP a zpracováním osobních údajů.";
+                              }
 
-                          ModalWindow.showModalWindow(
-                              context,
-                              "Oznámení",
-                              failResponse != ""
-                                  ? new Text(failResponse,
-                                      style: TextStyle(color: kWhite))
-                                  : FutureBuilder(
-                                      future: response,
-                                      builder: (context, snapshot) {
-                                        if (snapshot.hasData) {
-                                          return Text(snapshot.data,
-                                              style: TextStyle(color: kWhite));
-                                        }
+                              ModalWindow.showModalWindow(
+                                  context,
+                                  "Oznámení",
+                                  failResponse != ""
+                                      ? new Text(failResponse,
+                                          style: TextStyle(color: kWhite))
+                                      : FutureBuilder(
+                                          future: response,
+                                          builder: (context, snapshot) {
+                                            if (snapshot.hasData) {
+                                              return Text(snapshot.data,
+                                                  style:
+                                                      TextStyle(color: kWhite));
+                                            }
 
-                                        if (snapshot.hasError) {
-                                          return Text(
-                                              "Někde se stala chyba, zkuste to prosím později",
-                                              style: TextStyle(color: kWhite));
-                                        }
+                                            if (snapshot.hasError) {
+                                              return Text(
+                                                  "Někde se stala chyba, zkuste to prosím později",
+                                                  style:
+                                                      TextStyle(color: kWhite));
+                                            }
 
-                                        return Center(
-                                            child: CircularProgressIndicator());
-                                      }));
-                        }),
-                    SignLink.build("Přihlásit se", kSignLinkButton,
-                        () => Navigator.of(context).pop())
-                  ]))
-        ]));
+                                            return Center(
+                                                child:
+                                                    CircularProgressIndicator());
+                                          }));
+                            }),
+                        SignLink.build("Přihlásit se", kSignLinkButton,
+                            () => Navigator.of(context).pop())
+                      ]))
+            ])));
   }
 
   static void openUrl(String doc) async {

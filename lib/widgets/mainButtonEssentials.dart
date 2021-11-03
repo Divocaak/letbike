@@ -20,13 +20,12 @@ class MainButton extends StatelessWidget {
   }
 }
 
-class MainButtonClicked extends StatelessWidget {
-  const MainButtonClicked(
-      {Key key, @required this.buttons, @required this.volume})
+class MainButtonClicked extends StatefulWidget {
+  MainButtonClicked({Key key, @required this.buttons, @required this.volume})
       : super(key: key);
 
   final List<SecondaryButtonData> buttons;
-  final double volume;
+  double volume;
 
   static List<SecondaryButtonPos> positions = [
     SecondaryButtonPos(40, 150),
@@ -35,26 +34,32 @@ class MainButtonClicked extends StatelessWidget {
     SecondaryButtonPos(200, 100)
   ];
 
+  State<StatefulWidget> createState() => MainButtonClickedState();
+}
+
+class MainButtonClickedState extends State<MainButtonClicked> {
   @override
   Widget build(BuildContext context) {
     return IgnorePointer(
-        ignoring: volume == 0 ? true : false,
+        ignoring: widget.volume == 0 ? true : false,
         child: Container(
-            color: Colors.black.withOpacity(volume),
-            child: Stack(
-              children: [
-                for (int i = 0; i < buttons.length; i++)
-                  Positioned(
-                      bottom: positions[i].x,
-                      right: positions[i].y,
-                      child: CircularButton(
-                          kSecondaryColor.withOpacity(volume * 2),
-                          40,
-                          buttons[i].icon,
-                          kWhite.withOpacity(volume * 2),
-                          buttons[i].onClick)),
-              ],
-            )));
+            color: Colors.black.withOpacity(widget.volume),
+            child: TextButton(
+                onPressed: () => setState(() {
+                      widget.volume = 0;
+                    }),
+                child: Stack(children: [
+                  for (int i = 0; i < widget.buttons.length; i++)
+                    Positioned(
+                        bottom: MainButtonClicked.positions[i].x,
+                        right: MainButtonClicked.positions[i].y,
+                        child: CircularButton(
+                            kSecondaryColor.withOpacity(widget.volume * 2),
+                            40,
+                            widget.buttons[i].icon,
+                            kWhite.withOpacity(widget.volume * 2),
+                            widget.buttons[i].onClick))
+                ]))));
   }
 }
 

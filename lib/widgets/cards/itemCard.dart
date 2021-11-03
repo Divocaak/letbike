@@ -34,22 +34,32 @@ class ItemCard {
                       "/items/" +
                       (item.name.hashCode + item.sellerId).toString() +
                       "/0.jpg"),
-                  Positioned(
-                      left: 16,
-                      bottom: 32,
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CardWidgets.text(item.name, 32, 2, FontWeight.bold),
-                            CardWidgets.text(
-                                item.description, 18, 1, FontWeight.normal)
-                          ])),
-                  Positioned(
-                      right: 16,
-                      bottom: 16,
-                      child: CardWidgets.text(item.price.toString() + "Kč", 32,
-                          2, FontWeight.bold)),
+                  Column(children: [
+                    Expanded(
+                        flex: 1,
+                        child: CardWidgets.text(
+                            item.name, 32, 2, FontWeight.bold)),
+                    Expanded(flex: 3, child: Container()),
+                    Expanded(
+                        flex: 1,
+                        child: Row(children: [
+                          Expanded(
+                              flex: 4,
+                              child: Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 10),
+                                  child: CardWidgets.text(item.description, 18,
+                                      1, FontWeight.normal))),
+                          Expanded(
+                              flex: 2,
+                              child: Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 10),
+                                  child: CardWidgets.text(
+                                      item.price.toString() + "Kč",
+                                      24,
+                                      2,
+                                      FontWeight.bold)))
+                        ]))
+                  ])
                 ]))));
   }
 

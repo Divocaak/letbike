@@ -30,21 +30,6 @@ class DatabaseItem {
         headers: <String, String>{
           'Content-Type': 'application/json;charset=UTF-8'
         });
-
-    print(url +
-        "itemSet.php/?" +
-        "seller_id=" +
-        item.sellerId.toString() +
-        "&&name=" +
-        item.name +
-        "&&description=" +
-        item.description +
-        "&&price=" +
-        item.price.toString() +
-        "&&images=" +
-        images.length.toString() +
-        passParamsToDb(item.itemParams));
-
     if (response.statusCode == 200) {
       return response.body;
     } else {
@@ -64,19 +49,10 @@ class DatabaseItem {
             soldTo +
             passParamsToDb(itemParams)),
         headers: {"Accept": "application/json;charset=UTF-8"});
-    print(url +
-        "itemGetAll.php/?id=" +
-        userId +
-        "&&status=" +
-        status.toString() +
-        "&&soldTo=" +
-        soldTo +
-        passParamsToDb(itemParams));
     if (response.statusCode == 200) {
       if (response.body == "[]") {
         return null;
       } else {
-        print(response.body);
         final parsed = jsonDecode(response.body).cast<Map<String, dynamic>>();
         return parsed.map<Item>((item) => Item.fromJson(item)).toList();
       }

@@ -176,7 +176,8 @@ class _ItemPageState extends State<ItemPage>
                   } else if (snapshot.hasError) {
                     return ErrorWidgets.futureBuilderError();
                   } else if (!snapshot.hasData) {
-                    return ErrorWidgets.futureBuilderEmpty();
+                    return ErrorWidgets.futureBuilderEmpty(
+                        () => chats = DatabaseChat.getChats(itemInfo.item.id));
                   }
                   return Center(child: CircularProgressIndicator());
                 },

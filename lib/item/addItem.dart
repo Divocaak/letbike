@@ -103,94 +103,95 @@ class _AddItem extends State<AddItem> with TickerProviderStateMixin {
       images = args.addItemData.imgs;
     }
 
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      floatingActionButton: MainButton(
-          iconData: Icons.menu,
-          onPressed: () {
-            if (animationController.isCompleted) {
-              animationController.reverse();
-              volume = 0;
-            } else {
-              animationController.forward();
-              volume = 0.5;
-            }
-          }),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      body: Stack(
-        children: [
-          BackgroundImage(),
-          Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            TextInput(
-                icon: Icons.text_fields,
-                hint: "Název předmětu",
-                inputAction: TextInputAction.next,
-                controller: nameController),
-            TextInput(
-                icon: Icons.text_fields,
-                hint: "Popis předmětu",
-                inputAction: TextInputAction.next,
-                controller: descController),
-            TextInput(
-              icon: Icons.attach_money,
-              hint: "Cena",
-              inputAction: TextInputAction.done,
-              inputType: TextInputType.number,
-              controller: priceController,
-            ),
-            Container(
-                height: 200,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(
-                    color: Colors.white,
-                    width: 2,
-                  ),
-                  borderRadius: BorderRadius.circular(25),
-                ),
-                padding: EdgeInsets.all(15),
-                margin: EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
+    return GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Scaffold(
+            resizeToAvoidBottomInset: false,
+            floatingActionButton: MainButton(
+                iconData: Icons.menu,
+                onPressed: () {
+                  if (animationController.isCompleted) {
+                    animationController.reverse();
+                    volume = 0;
+                  } else {
+                    animationController.forward();
+                    volume = 0.5;
+                  }
+                }),
+            floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+            body: Stack(children: [
+              BackgroundImage(),
+              Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Text(
-                        "První vybraný obrázek se bude zobrazovat na domovské stránce."),
-                    Container(
-                      child: TextButton(
-                        child: Text("Vybrat fotografie (minimálně 1)"),
-                        onPressed: loadAssets,
-                      ),
+                    TextInput(
+                        icon: Icons.text_fields,
+                        hint: "Název předmětu",
+                        inputAction: TextInputAction.next,
+                        controller: nameController),
+                    TextInput(
+                        icon: Icons.text_fields,
+                        hint: "Popis předmětu",
+                        inputAction: TextInputAction.next,
+                        controller: descController),
+                    TextInput(
+                      icon: Icons.attach_money,
+                      hint: "Cena",
+                      inputAction: TextInputAction.done,
+                      inputType: TextInputType.number,
+                      controller: priceController,
                     ),
-                    Expanded(
-                      child: Container(child: buildGridView()),
-                    )
-                  ],
-                ))
-          ]),
-          MainButtonClicked(buttons: [
-            SecondaryButtonData(
-                Icons.arrow_back,
-                () => Navigator.of(context).pushReplacementNamed(
-                    HomePage.routeName,
-                    arguments: new HomeArguments(args.args.user, {}))),
-            SecondaryButtonData(
-                Icons.add,
-                () => (images.length >= 1 &&
-                        nameController.text != "" &&
-                        descController.text != "" &&
-                        priceController.text != "")
-                    ? Navigator.of(context).pushNamed(FilterPage.routeName,
-                        arguments: new AddItemFiltersArgs(
-                            args.args,
-                            new AddItemData(
-                                nameController.text,
-                                descController.text,
-                                priceController.text,
-                                images)))
-                    : ModalWindow.showModalWindow(
-                        context, "Upozornění", ErrorWidgets.addItemError()))
-          ], volume: volume)
-        ],
-      ),
-    );
+                    Container(
+                        height: 200,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(
+                            color: Colors.white,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        padding: EdgeInsets.all(15),
+                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        child: Column(
+                          children: [
+                            Text(
+                                "První vybraný obrázek se bude zobrazovat na domovské stránce."),
+                            Container(
+                              child: TextButton(
+                                child: Text("Vybrat fotografie (minimálně 1)"),
+                                onPressed: loadAssets,
+                              ),
+                            ),
+                            Expanded(
+                              child: Container(child: buildGridView()),
+                            )
+                          ],
+                        ))
+                  ]),
+              MainButtonClicked(buttons: [
+                SecondaryButtonData(
+                    Icons.arrow_back,
+                    () => Navigator.of(context).pushReplacementNamed(
+                        HomePage.routeName,
+                        arguments: new HomeArguments(args.args.user, {}))),
+                SecondaryButtonData(
+                    Icons.add,
+                    () => (images.length >= 1 &&
+                            nameController.text != "" &&
+                            descController.text != "" &&
+                            priceController.text != "")
+                        ? Navigator.of(context).pushNamed(FilterPage.routeName,
+                            arguments: new AddItemFiltersArgs(
+                                args.args,
+                                new AddItemData(
+                                    nameController.text,
+                                    descController.text,
+                                    priceController.text,
+                                    images)))
+                        : ModalWindow.showModalWindow(
+                            context, "Upozornění", ErrorWidgets.addItemError()))
+              ], volume: volume)
+            ])));
   }
 }

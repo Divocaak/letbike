@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:letbike/db/remoteSettings.dart';
+import 'package:letbike/general/pallete.dart';
 import 'package:letbike/widgets/errorWidgets.dart';
 import 'dart:math';
 
@@ -32,11 +33,14 @@ class BackgroundImage extends StatelessWidget {
 
 class ServerImage {
   static Widget build(String path) {
-    return FadeInImage.assetNetwork(
-        fit: BoxFit.fill,
-        placeholder: 'assets/loading.gif',
-        image: path,
-        imageErrorBuilder: (context, exception, stackTrace) =>
-            ErrorWidgets.imageLoadingError(Icons.image));
+    return Container(
+        color: kWhite.withOpacity(.05),
+        child: Center(
+            child: FadeInImage.assetNetwork(
+                fit: BoxFit.fitWidth,
+                placeholder: 'assets/loading.gif',
+                image: path,
+                imageErrorBuilder: (context, exception, stackTrace) =>
+                    ErrorWidgets.imageLoadingError(Icons.image))));
   }
 }

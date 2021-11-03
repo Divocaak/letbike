@@ -78,107 +78,109 @@ class _AccountSettingsState extends State<AccountSettings>
   @override
   Widget build(BuildContext context) {
     user = ModalRoute.of(context).settings.arguments;
-    return Scaffold(
-        resizeToAvoidBottomInset: true,
-        backgroundColor: kBlack,
-        floatingActionButton: MainButton(
-            iconData: Icons.menu,
-            onPressed: () {
-              if (animationController.isCompleted) {
-                animationController.reverse();
-                volume = 0;
-              } else {
-                animationController.forward();
-                volume = 0.5;
-              }
-            }),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        body: Stack(alignment: Alignment.center, children: [
-          SingleChildScrollView(
-              physics: NeverScrollableScrollPhysics(),
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Text(
-                          images.length < 1
-                              ? "Aktualizovat profilovou fotku"
-                              : "Fotografie nahrána",
-                          style: TextStyle(color: kWhite),
+    return GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Scaffold(
+            resizeToAvoidBottomInset: true,
+            backgroundColor: kBlack,
+            floatingActionButton: MainButton(
+                iconData: Icons.menu,
+                onPressed: () {
+                  if (animationController.isCompleted) {
+                    animationController.reverse();
+                    volume = 0;
+                  } else {
+                    animationController.forward();
+                    volume = 0.5;
+                  }
+                }),
+            floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+            body: Stack(alignment: Alignment.center, children: [
+              SingleChildScrollView(
+                  physics: NeverScrollableScrollPhysics(),
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            Text(
+                              images.length < 1
+                                  ? "Aktualizovat profilovou fotku"
+                                  : "Fotografie nahrána",
+                              style: TextStyle(color: kWhite),
+                            ),
+                            CircularButton(kPrimaryColor, 50, Icons.upload,
+                                kWhite, loadAssets)
+                          ],
                         ),
-                        CircularButton(
-                            kPrimaryColor, 50, Icons.upload, kWhite, loadAssets)
-                      ],
-                    ),
-                    TextInput(
-                        icon: Icons.create,
-                        hint: "Křestní jméno: " + userInfo(user.fName),
-                        inputType: TextInputType.name,
-                        inputAction: TextInputAction.next,
-                        controller: fNameController),
-                    TextInput(
-                        icon: Icons.create,
-                        hint: "Příjmení: " + userInfo(user.lName),
-                        inputType: TextInputType.name,
-                        inputAction: TextInputAction.next,
-                        controller: lNameController),
-                    TextInput(
-                        icon: Icons.phone,
-                        hint: "Telefon: " + userInfo(user.phone.toString()),
-                        inputType: TextInputType.phone,
-                        inputAction: TextInputAction.next,
-                        controller: phoneController),
-                    TextInput(
-                        icon: Icons.home,
-                        hint: "Ulice a č.p.: " + userInfo(user.addressA),
-                        inputType: TextInputType.streetAddress,
-                        inputAction: TextInputAction.next,
-                        controller: addAController),
-                    TextInput(
-                        icon: Icons.location_city,
-                        hint: "Obec: " + userInfo(user.addressB),
-                        inputType: TextInputType.streetAddress,
-                        inputAction: TextInputAction.next,
-                        controller: addBController),
-                    TextInput(
-                        icon: Icons.flag,
-                        hint: "Země: " + userInfo(user.addressC),
-                        inputType: TextInputType.streetAddress,
-                        inputAction: TextInputAction.next,
-                        controller: addCController),
-                    TextInput(
-                        icon: Icons.email,
-                        hint: "PSČ: " + userInfo(user.postal.toString()),
-                        inputType: TextInputType.number,
-                        inputAction: TextInputAction.done,
-                        controller: postalController)
-                  ])),
-          MainButtonClicked(buttons: [
-            SecondaryButtonData(
-                Icons.lock,
-                () => Navigator.of(context)
-                    .pushNamed(ChangePassword.routeName, arguments: user)),
-            SecondaryButtonData(Icons.save, () {
-              setState(() {
-                saveData();
-                user.fName = getVal(fNameController, user.fName);
-                user.lName = getVal(lNameController, user.lName);
-                user.phone =
-                    int.parse(getVal(phoneController, user.phone.toString()));
-                user.addressA = getVal(addAController, user.addressA);
-                user.addressB = getVal(addBController, user.addressB);
-                user.addressC = getVal(addCController, user.addressC);
-                user.postal =
-                    int.parse(getVal(postalController, user.postal.toString()));
-              });
-              Navigator.of(context).pushReplacementNamed(
-                  AccountScreen.routeName,
-                  arguments: user);
-            })
-          ], volume: volume)
-        ]));
+                        TextInput(
+                            icon: Icons.create,
+                            hint: "Křestní jméno: " + userInfo(user.fName),
+                            inputType: TextInputType.name,
+                            inputAction: TextInputAction.next,
+                            controller: fNameController),
+                        TextInput(
+                            icon: Icons.create,
+                            hint: "Příjmení: " + userInfo(user.lName),
+                            inputType: TextInputType.name,
+                            inputAction: TextInputAction.next,
+                            controller: lNameController),
+                        TextInput(
+                            icon: Icons.phone,
+                            hint: "Telefon: " + userInfo(user.phone.toString()),
+                            inputType: TextInputType.phone,
+                            inputAction: TextInputAction.next,
+                            controller: phoneController),
+                        TextInput(
+                            icon: Icons.home,
+                            hint: "Ulice a č.p.: " + userInfo(user.addressA),
+                            inputType: TextInputType.streetAddress,
+                            inputAction: TextInputAction.next,
+                            controller: addAController),
+                        TextInput(
+                            icon: Icons.location_city,
+                            hint: "Obec: " + userInfo(user.addressB),
+                            inputType: TextInputType.streetAddress,
+                            inputAction: TextInputAction.next,
+                            controller: addBController),
+                        TextInput(
+                            icon: Icons.flag,
+                            hint: "Země: " + userInfo(user.addressC),
+                            inputType: TextInputType.streetAddress,
+                            inputAction: TextInputAction.next,
+                            controller: addCController),
+                        TextInput(
+                            icon: Icons.email,
+                            hint: "PSČ: " + userInfo(user.postal.toString()),
+                            inputType: TextInputType.number,
+                            inputAction: TextInputAction.done,
+                            controller: postalController)
+                      ])),
+              MainButtonClicked(buttons: [
+                SecondaryButtonData(
+                    Icons.lock,
+                    () => Navigator.of(context)
+                        .pushNamed(ChangePassword.routeName, arguments: user)),
+                SecondaryButtonData(Icons.save, () {
+                  setState(() {
+                    saveData();
+                    user.fName = getVal(fNameController, user.fName);
+                    user.lName = getVal(lNameController, user.lName);
+                    user.phone = int.parse(
+                        getVal(phoneController, user.phone.toString()));
+                    user.addressA = getVal(addAController, user.addressA);
+                    user.addressB = getVal(addBController, user.addressB);
+                    user.addressC = getVal(addCController, user.addressC);
+                    user.postal = int.parse(
+                        getVal(postalController, user.postal.toString()));
+                  });
+                  Navigator.of(context).pushReplacementNamed(
+                      AccountScreen.routeName,
+                      arguments: user);
+                })
+              ], volume: volume)
+            ])));
   }
 
   void saveData() {
