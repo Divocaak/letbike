@@ -6,8 +6,8 @@ import 'package:letbike/widgets/cards/itemCard.dart';
 import 'package:letbike/widgets/errorWidgets.dart';
 
 class CardWidgets {
-  static Widget cardsBuilder(
-      Future<List<dynamic>> objectsToRenderFrom, bool articleCard,
+  static Widget cardsBuilder(Future<List<dynamic>> objectsToRenderFrom,
+      Function getObjects, bool articleCard,
       {User loggedUser, bool forRating, bool touchable}) {
     return FutureBuilder<List<dynamic>>(
         future: objectsToRenderFrom,
@@ -24,7 +24,7 @@ class CardWidgets {
                           loggedUser, forRating, touchable);
                 });
           } else if (!snapshot.hasData) {
-            return ErrorWidgets.futureBuilderEmpty();
+            return ErrorWidgets.futureBuilderEmpty(getObjects);
           } else if (snapshot.hasError) {
             return ErrorWidgets.futureBuilderError();
           }
@@ -34,21 +34,16 @@ class CardWidgets {
 
   static Widget text(
       String text, double fontSize, double offset, FontWeight fontWeight) {
-    return Text(
-      text,
-      style: TextStyle(
-        fontWeight: fontWeight,
-        color: kWhite,
-        fontSize: fontSize,
-        fontFamily: "Montserrat",
-        shadows: [
-          Shadow(
-            color: kBlack,
-            offset: Offset(offset, offset),
-          ),
-        ],
-      ),
-    );
+    return FittedBox(
+        child: Text(text,
+            style: TextStyle(
+                fontWeight: fontWeight,
+                color: kWhite,
+                fontSize: fontSize,
+                fontFamily: "Montserrat",
+                shadows: [
+                  Shadow(color: kBlack, offset: Offset(offset, offset))
+                ])));
   }
 }
 

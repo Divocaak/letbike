@@ -99,13 +99,34 @@ class _AccountScreenState extends State<AccountScreen>
                           autoPlayInterval: Duration(seconds: 3),
                           autoPlayAnimationDuration: Duration(seconds: 1)),
                       items: [
-                    itemStatusField(items, "Moje inzeráty", user, false, true),
                     itemStatusField(
-                        soldItems, "Prodané předměty", user, false, true),
+                        items,
+                        () => items = DatabaseItem.getAllItems(
+                            0, user.id.toString(), {}, "sold_to"),
+                        "Moje inzeráty",
+                        user,
+                        false,
+                        true),
                     itemStatusField(
-                        boughtItems, "Zakoupené předměty", user, true, true),
+                        soldItems,
+                        () => soldItems = DatabaseItem.getAllItems(
+                            1, user.id.toString(), {}, "sold_to"),
+                        "Prodané předměty",
+                        user,
+                        false,
+                        true),
+                    itemStatusField(
+                        boughtItems,
+                        () => boughtItems = DatabaseItem.getAllItems(
+                            1, "seller_id", {}, user.id.toString()),
+                        "Zakoupené předměty",
+                        user,
+                        true,
+                        true),
                     itemStatusField(
                         ratedItems,
+                        () => ratedItems = DatabaseItem.getAllItems(
+                            2, "seller_id", {}, user.id.toString()),
                         "Ohodnocené předměty (již přijaté, uzavřené)",
                         user,
                         false,
@@ -126,7 +147,8 @@ class _AccountScreenState extends State<AccountScreen>
                                 snapshot.data[i].ratingText);
                           });
                     } else if (!snapshot.hasData) {
-                      return ErrorWidgets.futureBuilderEmpty();
+                      return ErrorWidgets.futureBuilderEmpty(
+                          () => ratings = DatabaseRating.getRatings(user.id));
                     } else if (snapshot.hasError) {
                       return ErrorWidgets.futureBuilderError();
                     }
@@ -153,8 +175,8 @@ class _AccountScreenState extends State<AccountScreen>
         ]));
   }
 
-  Widget itemStatusField(Future<List<Item>> items, String label,
-      User loggedUser, bool forRating, bool touchable) {
+  Widget itemStatusField(Future<List<Item>> items, Function getItems,
+      String label, User loggedUser, bool forRating, bool touchable) {
     return Column(
       children: [
         AccountInfoField.infoField(label),
@@ -163,7 +185,7 @@ class _AccountScreenState extends State<AccountScreen>
           child: FutureBuilder<List<Item>>(
             future: items,
             builder: (context, snapshot) {
-              return CardWidgets.cardsBuilder(items, false,
+              return CardWidgets.cardsBuilder(items, getItems, false,
                   loggedUser: loggedUser,
                   forRating: forRating,
                   touchable: touchable);

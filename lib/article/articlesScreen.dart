@@ -30,6 +30,8 @@ class _ArticlesScreenState extends State<ArticlesScreen>
                 arguments: homeArguments)),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         body: Container(
-            color: kBlack, child: CardWidgets.cardsBuilder(articles, true)));
+            color: kBlack,
+            child: CardWidgets.cardsBuilder(articles,
+                () => articles = DatabaseArticles.getAllArticles(), true)));
   }
 }

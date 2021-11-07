@@ -67,89 +67,96 @@ class _ChatScreenState extends State<ChatScreen>
     messagesStream = DatabaseChat.getMessages(
         chatUsers.userA.id, chatUsers.userB, chatUsers.itemInfo.item.id);
     bool cancelTrade = (chatUsers.itemInfo.item.status == 1 ? true : false);
-    return Scaffold(
-        backgroundColor: kBlack,
-        appBar: AppBar(
-            backgroundColor: kPrimaryColor,
-            automaticallyImplyLeading: false,
-            title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  CircularButton(
-                      kSecondaryColor,
-                      40,
-                      Icons.arrow_back,
-                      kWhite,
-                      () => Navigator.of(context).pushReplacementNamed(
-                          ItemPage.routeName,
-                          arguments: chatUsers.itemInfo)),
-                  Text(chatUsers.itemInfo.item.name,
-                      style: TextStyle(fontSize: 20)),
-                  CircularButton(
-                      kSecondaryColor, 40, Icons.person_search, kWhite, () {
-                    otherPersonInfo();
-                  }),
-                  (chatUsers.itemInfo.me.id == chatUsers.itemInfo.item.sellerId
-                      ? CircularButton(
+    return GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Scaffold(
+            backgroundColor: kBlack,
+            appBar: AppBar(
+                backgroundColor: kPrimaryColor,
+                automaticallyImplyLeading: false,
+                title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      CircularButton(
                           kSecondaryColor,
                           40,
-                          (cancelTrade ? Icons.money_off : Icons.attach_money),
+                          Icons.arrow_back,
                           kWhite,
-                          () =>
-                              (cancelTrade ? cancelTradeBtn() : acceptTrade()))
-                      : Container())
-                ])),
-        body: Column(children: [
-          Expanded(
-              child: StreamBuilder(
-                  stream: messagesStream,
-                  builder: (context, stream) {
-                    if (stream.hasData) {
-                      return ListView.builder(
-                          itemCount: stream.data.length,
-                          itemBuilder: (context, i) {
-                            return ChatBuildMessage.buildMessage(
-                                context, stream.data[i], chatUsers);
-                          });
-                    } else {
-                      return Center(child: CircularProgressIndicator());
-                    }
-                  })),
-          Row(children: [
-            Expanded(
-                child: Padding(
+                          () => Navigator.of(context).pushReplacementNamed(
+                              ItemPage.routeName,
+                              arguments: chatUsers.itemInfo)),
+                      Text(chatUsers.itemInfo.item.name,
+                          style: TextStyle(fontSize: 20)),
+                      CircularButton(
+                          kSecondaryColor, 40, Icons.person_search, kWhite, () {
+                        otherPersonInfo();
+                      }),
+                      (chatUsers.itemInfo.me.id ==
+                              chatUsers.itemInfo.item.sellerId
+                          ? CircularButton(
+                              kSecondaryColor,
+                              40,
+                              (cancelTrade
+                                  ? Icons.money_off
+                                  : Icons.attach_money),
+                              kWhite,
+                              () => (cancelTrade
+                                  ? cancelTradeBtn()
+                                  : acceptTrade()))
+                          : Container())
+                    ])),
+            body: Column(children: [
+              Expanded(
+                  child: StreamBuilder(
+                      stream: messagesStream,
+                      builder: (context, stream) {
+                        if (stream.hasData) {
+                          return ListView.builder(
+                              itemCount: stream.data.length,
+                              itemBuilder: (context, i) {
+                                return ChatBuildMessage.buildMessage(
+                                    context, stream.data[i], chatUsers);
+                              });
+                        } else {
+                          return Center(child: CircularProgressIndicator());
+                        }
+                      })),
+              Row(children: [
+                Expanded(
+                    child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 5),
+                        child: TextInput(
+                            icon: Icons.chat,
+                            hint: "Napište zprávu",
+                            controller: chatInputController))),
+                CircularButton(
+                    kSecondaryColor, 40, Icons.image, kWhite, loadAssets),
+                Padding(
                     padding: EdgeInsets.symmetric(horizontal: 5),
-                    child: TextInput(
-                        icon: Icons.chat,
-                        hint: "Napište zprávu",
-                        controller: chatInputController))),
-            CircularButton(
-                kSecondaryColor, 40, Icons.image, kWhite, loadAssets),
-            Padding(
-                padding: EdgeInsets.symmetric(horizontal: 5),
-                child:
-                    CircularButton(kSecondaryColor, 40, Icons.send, kWhite, () {
-                  if (images.length != 0 || chatInputController.text != "") {
-                    DatabaseChat.sendMessage(
-                        chatUsers.userA.id,
-                        chatUsers.userB,
-                        chatUsers.itemInfo.item.id,
-                        chatInputController.text,
-                        images);
+                    child: CircularButton(
+                        kSecondaryColor, 40, Icons.send, kWhite, () {
+                      if (images.length != 0 ||
+                          chatInputController.text != "") {
+                        DatabaseChat.sendMessage(
+                            chatUsers.userA.id,
+                            chatUsers.userB,
+                            chatUsers.itemInfo.item.id,
+                            chatInputController.text,
+                            images);
 
-                    if (images.length != 0) {
-                      setState(() {
-                        images = [];
-                      });
-                    }
+                        if (images.length != 0) {
+                          setState(() {
+                            images = [];
+                          });
+                        }
 
-                    if (chatInputController.text != "") {
-                      chatInputController.clear();
-                    }
-                  }
-                }))
-          ])
-        ]));
+                        if (chatInputController.text != "") {
+                          chatInputController.clear();
+                        }
+                      }
+                    }))
+              ])
+            ])));
   }
 
   Widget cancelTradeBtn() {

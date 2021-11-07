@@ -30,21 +30,6 @@ class DatabaseItem {
         headers: <String, String>{
           'Content-Type': 'application/json;charset=UTF-8'
         });
-
-    print(url +
-        "itemSet.php/?" +
-        "seller_id=" +
-        item.sellerId.toString() +
-        "&&name=" +
-        item.name +
-        "&&description=" +
-        item.description +
-        "&&price=" +
-        item.price.toString() +
-        "&&images=" +
-        images.length.toString() +
-        passParamsToDb(item.itemParams));
-
     if (response.statusCode == 200) {
       return response.body;
     } else {

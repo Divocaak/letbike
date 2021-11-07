@@ -45,23 +45,26 @@ class _HomePageState extends State<HomePage>
     items = DatabaseItem.getAllItems(
         0, "seller_id", homeArguments.filters, "sold_to");
     return Scaffold(
-      floatingActionButton: MainButton(
-          iconData: Icons.menu,
-          onPressed: () {
-            if (animationController.isCompleted) {
-              animationController.reverse();
-              volume = 0;
-            } else {
-              animationController.forward();
-              volume = 0.5;
-            }
-          }),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      body: Stack(
-        children: [
+        floatingActionButton: MainButton(
+            iconData: Icons.menu,
+            onPressed: () {
+              if (animationController.isCompleted) {
+                animationController.reverse();
+                volume = 0;
+              } else {
+                animationController.forward();
+                volume = 0.5;
+              }
+            }),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        body: Stack(children: [
           Container(
               color: kBlack,
-              child: CardWidgets.cardsBuilder(items, false,
+              child: CardWidgets.cardsBuilder(
+                  items,
+                  () => items = DatabaseItem.getAllItems(
+                      0, "seller_id", homeArguments.filters, "sold_to"),
+                  false,
                   loggedUser: homeArguments.user,
                   forRating: false,
                   touchable: true)),
@@ -87,10 +90,8 @@ class _HomePageState extends State<HomePage>
                 () => Navigator.pushReplacementNamed(
                     context, ArticlesScreen.routeName,
                     arguments: homeArguments))
-          ], volume: volume),
-        ],
-      ),
-    );
+          ], volume: volume)
+        ]));
   }
 
   Widget warningCard() {
