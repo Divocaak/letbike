@@ -21,6 +21,7 @@ void main() {
 class LetBike extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // TODO: mby odstranit Gesture
     return GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: MaterialApp(

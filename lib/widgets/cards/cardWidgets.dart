@@ -13,11 +13,9 @@ class CardWidgets {
         future: objectsToRenderFrom,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            print(snapshot.data);
             return ListView.builder(
                 itemCount: snapshot.data.length,
                 itemBuilder: (context, i) {
-                  print(i);
                   return articleCard
                       ? ArticleCard.buildCard(context, snapshot.data[i])
                       : ItemCard.buildCard(context, snapshot.data[i],

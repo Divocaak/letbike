@@ -37,8 +37,8 @@ class ServerImage {
         color: kWhite.withOpacity(.05),
         child: Center(
             child: FadeInImage.assetNetwork(
-                fit: BoxFit.fitWidth,
-                placeholder: 'assets/loading.gif',
+                fit: BoxFit.scaleDown,
+                placeholder: 'assets/load.gif',
                 image: path,
                 imageErrorBuilder: (context, exception, stackTrace) =>
                     ErrorWidgets.imageLoadingError(Icons.image))));

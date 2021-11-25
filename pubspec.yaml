@@ -27,7 +27,6 @@ flutter_icons:
   image_path: "assets/icon.png"
   android: true
   ios: true
-  remove_alpha_ios: true
 
 dev_dependencies:
   flutter_test:
@@ -36,4 +35,4 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/loading.gif
+    - assets/load.gif
