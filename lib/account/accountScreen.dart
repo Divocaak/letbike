@@ -72,7 +72,7 @@ class _AccountScreenState extends State<AccountScreen>
           ListView(
             children: [
               Center(
-                  child: ServerImage.build(
+                  child: ServerImage().build(
                       imgsFolder + "/users/" + user.id.toString() + "/0.jpg")),
               AccountInfoField.infoField(
                   "Uživatelské jméno: " + userInfo(user.username)),
@@ -152,7 +152,7 @@ class _AccountScreenState extends State<AccountScreen>
                     } else if (snapshot.hasError) {
                       return ErrorWidgets.futureBuilderError();
                     }
-                    return Center(child: CircularProgressIndicator());
+                    return Center(child: Image.asset("assets/load.gif"));
                   },
                 ),
               ),

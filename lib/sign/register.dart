@@ -125,8 +125,8 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
                                             }
 
                                             return Center(
-                                                child:
-                                                    CircularProgressIndicator());
+                                                child: Image.asset(
+                                                    "assets/load.gif"));
                                           }));
                             }),
                         SignLink.build("Přihlásit se", kSignLinkButton,

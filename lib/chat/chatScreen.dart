@@ -118,7 +118,7 @@ class _ChatScreenState extends State<ChatScreen>
                                     context, stream.data[i], chatUsers);
                               });
                         } else {
-                          return Center(child: CircularProgressIndicator());
+                          return Center(child: Image.asset("assets/load.gif"));
                         }
                       })),
               Row(children: [
@@ -178,7 +178,7 @@ class _ChatScreenState extends State<ChatScreen>
                 } else if (snapshot.hasError) {
                   return ErrorWidgets.futureBuilderError();
                 }
-                return Center(child: CircularProgressIndicator());
+                return Center(child: Image.asset("assets/load.gif"));
               }),
           after: () => Navigator.of(context).pushReplacementNamed(
               HomePage.routeName,
@@ -205,7 +205,7 @@ class _ChatScreenState extends State<ChatScreen>
                 } else if (snapshot.hasError) {
                   return ErrorWidgets.futureBuilderError();
                 }
-                return Center(child: CircularProgressIndicator());
+                return Center(child: Image.asset("assets/load.gif"));
               }),
           after: () => Navigator.of(context).pushReplacementNamed(
               HomePage.routeName,
@@ -234,7 +234,7 @@ class _ChatScreenState extends State<ChatScreen>
 
                   return ListView(
                       children: [
-                            ServerImage.build(imgsFolder +
+                            ServerImage().build(imgsFolder +
                                 "/users/" +
                                 snapshot.data[0].id.toString() +
                                 "/0.jpg"),
@@ -261,7 +261,7 @@ class _ChatScreenState extends State<ChatScreen>
                 } else if (snapshot.hasError) {
                   return ErrorWidgets.futureBuilderError();
                 }
-                return Center(child: CircularProgressIndicator());
+                return Center(child: Image.asset("assets/load.gif"));
               }),
         ));
   }

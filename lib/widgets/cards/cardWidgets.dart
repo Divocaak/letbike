@@ -26,7 +26,7 @@ class CardWidgets {
           } else if (snapshot.hasError) {
             return ErrorWidgets.futureBuilderError();
           }
-          return Center(child: CircularProgressIndicator());
+          return Center(child: Image.asset("assets/load.gif"));
         });
   }
 

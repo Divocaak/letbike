@@ -12,10 +12,11 @@ import 'package:letbike/general/pallete.dart';
 
 Future<User> logResponse;
 
-bool remember = false;
+// TODO rem login
+/* bool remember = false;
 bool savedRemember = false;
 String savedEmail = "";
-String savedPass = "";
+String savedPass = ""; */
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -26,19 +27,21 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController mailController = TextEditingController();
   final TextEditingController passController = TextEditingController();
 
-  SignSwitch remLogin = SignSwitch(
+// TODO rem login
+  /* SignSwitch remLogin = SignSwitch(
       savedRemember,
       Text("Zapamatovat přihlášení",
           style: TextStyle(color: kWhite, fontSize: 17, shadows: [
             Shadow(blurRadius: 10.0, color: kBlack, offset: Offset(5.0, 5.0))
-          ])));
+          ]))); */
 
   @override
   Widget build(BuildContext context) {
-    getLocalData();
+    // TODO rem login
+    /* getLocalData();
     setState(() {
       remLogin.value = savedRemember;
-    });
+    }); */
 
     return GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
@@ -75,14 +78,15 @@ class _LoginScreenState extends State<LoginScreen> {
                             kSignLinkButton,
                             () => Navigator.of(context)
                                 .pushNamed("ForgotPassword")),
-                        //remLogin,
+                        // TODO remLogin,
                         RoundedButton(
                             buttonName: "Přihlásit se",
                             onClick: () {
-                              if (remember) {
+                              // TODO rem login
+                              /* if (remember) {
                                 setLocalData(remember, mailController.text,
                                     passController.text);
-                              }
+                              } */
 
                               logResponse = DatabaseSign.loginUser(
                                 mailController.text,
@@ -102,9 +106,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 style:
                                                     TextStyle(color: kWhite));
                                           } else {
-                                            Text("Probíhá přesměrování",
-                                                style:
-                                                    TextStyle(color: kWhite));
                                             Future.delayed(
                                                 Duration.zero,
                                                 () => Navigator.of(context)
@@ -123,7 +124,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                         }
 
                                         return Center(
-                                            child: CircularProgressIndicator());
+                                            child:
+                                                Image.asset("assets/load.gif"));
                                       }));
                             }),
                         SignLink.build(
@@ -135,7 +137,8 @@ class _LoginScreenState extends State<LoginScreen> {
             ])));
   }
 
-  getLocalData() async {
+// TODO rem login
+  /* getLocalData() async {
     final prefs = await SharedPreferences.getInstance();
     savedRemember = prefs.getBool("savedRemember") ?? false;
     if (savedRemember) {
@@ -160,5 +163,5 @@ class _LoginScreenState extends State<LoginScreen> {
     prefs.remove('savedRemember');
     prefs.remove('savedEmail');
     prefs.remove('savedPass');
-  }
+  } */
 }

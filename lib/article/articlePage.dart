@@ -40,22 +40,19 @@ class _ArticlePageState extends State<ArticlePage>
                 return Container(
                     padding: EdgeInsets.fromLTRB(10, 50, 10, 50),
                     child: Markdown(
-                      data: snapshot.data,
-                      styleSheet: MarkdownStyleSheet(
-                          h1: TextStyle(color: kWhite),
-                          h2: TextStyle(color: kWhite),
-                          h3: TextStyle(color: kWhite),
-                          h4: TextStyle(color: kWhite),
-                          h5: TextStyle(color: kWhite),
-                          h6: TextStyle(color: kWhite),
-                          p: TextStyle(color: kWhite),
-                          listBullet: TextStyle(color: kWhite)),
-                    ));
+                        data: snapshot.data,
+                        styleSheet: MarkdownStyleSheet(
+                            h1: TextStyle(color: kWhite),
+                            h2: TextStyle(color: kWhite),
+                            h3: TextStyle(color: kWhite),
+                            h4: TextStyle(color: kWhite),
+                            h5: TextStyle(color: kWhite),
+                            h6: TextStyle(color: kWhite),
+                            p: TextStyle(color: kWhite),
+                            listBullet: TextStyle(color: kWhite))));
               }
 
-              return Center(
-                child: CircularProgressIndicator(),
-              );
+              return Center(child: Image.asset("assets/load.gif"));
             }));
   }
 }
