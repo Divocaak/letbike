@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:letbike/db/remoteSettings.dart';
-import 'package:letbike/general/pallete.dart';
 import 'package:letbike/widgets/errorWidgets.dart';
 import 'dart:math';
-import 'package:palette_generator/palette_generator.dart';
 
 class BackgroundImage extends StatelessWidget {
   @override
@@ -34,30 +32,12 @@ class BackgroundImage extends StatelessWidget {
 
 class ServerImage {
   Widget build(String path) {
-    Future<PaletteGenerator> palette = _updatePaletteGenerator(path);
-
-    return FutureBuilder<PaletteGenerator>(
-        future: palette,
-        builder: (context, snapshot) {
-          return Stack(children: [
-            Container(
-                color: snapshot.data == null
-                    ? kWhite.withOpacity(.05)
-                    : snapshot.data.dominantColor.color),
-            Center(
-                child: FadeInImage.assetNetwork(
-                    fit: BoxFit.fitWidth,
-                    placeholder: 'assets/load.gif',
-                    image: path,
-                    imageErrorBuilder: (context, exception, stackTrace) =>
-                        ErrorWidgets.imageLoadingError(Icons.image)))
-          ]);
-        });
-  }
-
-  Future<PaletteGenerator> _updatePaletteGenerator(String path) async {
-    PaletteGenerator paletteGenerator =
-        await PaletteGenerator.fromImageProvider(NetworkImage(path));
-    return paletteGenerator;
+    return Center(
+        child: FadeInImage.assetNetwork(
+            fit: BoxFit.fitWidth,
+            placeholder: 'assets/load.gif',
+            image: path,
+            imageErrorBuilder: (context, exception, stackTrace) =>
+                ErrorWidgets.imageLoadingError(Icons.image)));
   }
 }

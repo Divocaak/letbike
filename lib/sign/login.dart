@@ -78,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             kSignLinkButton,
                             () => Navigator.of(context)
                                 .pushNamed("ForgotPassword")),
-                        // TODO remLogin,
+                        // TODO rem login
                         RoundedButton(
                             buttonName: "Přihlásit se",
                             onClick: () {

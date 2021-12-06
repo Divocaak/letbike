@@ -21,33 +21,30 @@ void main() {
 class LetBike extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // TODO: mby odstranit Gesture
-    return GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: MaterialApp(
-          title: 'LetBike',
-          theme: ThemeData(
-            textTheme:
-                GoogleFonts.josefinSansTextTheme(Theme.of(context).textTheme),
-            primarySwatch: Colors.blue,
-            visualDensity: VisualDensity.adaptivePlatformDensity,
-          ),
-          initialRoute: "/",
-          routes: {
-            "/": (context) => LoginScreen(),
-            "ForgotPassword": (context) => ForgotPassword(),
-            "CreateNewAccount": (context) => CreateNewAccount(),
-            HomePage.routeName: (context) => HomePage(),
-            ItemPage.routeName: (context) => ItemPage(),
-            ChatScreen.routeName: (content) => ChatScreen(),
-            AccountScreen.routeName: (context) => AccountScreen(),
-            AccountSettings.routeName: (context) => AccountSettings(),
-            ChangePassword.routeName: (context) => ChangePassword(),
-            AddItem.routeName: (context) => AddItem(),
-            ArticlesScreen.routeName: (context) => ArticlesScreen(),
-            ArticlePage.routeName: (context) => ArticlePage(),
-            FilterPage.routeName: (context) => FilterPage(),
-          },
-        ));
+    return MaterialApp(
+      title: 'LetBike',
+      theme: ThemeData(
+        textTheme:
+            GoogleFonts.josefinSansTextTheme(Theme.of(context).textTheme),
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      initialRoute: "/",
+      routes: {
+        "/": (context) => LoginScreen(),
+        "ForgotPassword": (context) => ForgotPassword(),
+        "CreateNewAccount": (context) => CreateNewAccount(),
+        HomePage.routeName: (context) => HomePage(),
+        ItemPage.routeName: (context) => ItemPage(),
+        ChatScreen.routeName: (content) => ChatScreen(),
+        AccountScreen.routeName: (context) => AccountScreen(),
+        AccountSettings.routeName: (context) => AccountSettings(),
+        ChangePassword.routeName: (context) => ChangePassword(),
+        AddItem.routeName: (context) => AddItem(),
+        ArticlesScreen.routeName: (context) => ArticlesScreen(),
+        ArticlePage.routeName: (context) => ArticlePage(),
+        FilterPage.routeName: (context) => FilterPage(),
+      },
+    );
   }
 }
