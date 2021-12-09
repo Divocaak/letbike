@@ -221,48 +221,57 @@ class _ChatScreenState extends State<ChatScreen>
         context,
         "Informace",
         Container(
-          width: 500,
-          height: 700,
-          child: FutureBuilder<List>(
-              future: Future.wait([otherUser, ratings]),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  List<Widget> ratings = [];
-                  for (dynamic rating in snapshot.data[1])
-                    ratings.add(RatingRow.buildRow(
-                        rating.ratingValue, rating.ratingText));
-
-                  return ListView(
-                      children: [
-                            ServerImage().build(imgsFolder +
-                                "/users/" +
-                                snapshot.data[0].id.toString() +
-                                "/0.jpg"),
-                            AccountInfoField.infoField("Uživatelské jméno: " +
-                                snapshot.data[0].username),
-                            AccountInfoField.infoField(
-                                "E-mail: " + snapshot.data[0].email),
-                            AccountInfoField.infoField(
-                                "Křestní jméno: " + snapshot.data[0].fName),
-                            AccountInfoField.infoField(
-                                "Příjmení: " + snapshot.data[0].lName),
-                            AccountInfoField.infoField("Telefon: " +
-                                snapshot.data[0].phone.toString()),
-                            AccountInfoField.infoField(
-                                "Ulice a č.p.: " + snapshot.data[0].addressA),
-                            AccountInfoField.infoField(
-                                "Obec: " + snapshot.data[0].addressB),
-                            AccountInfoField.infoField(
-                                "Země: " + snapshot.data[0].addressC),
-                            AccountInfoField.infoField(
-                                "PSČ: " + snapshot.data[0].postal.toString()),
-                          ] +
-                          ratings);
-                } else if (snapshot.hasError) {
-                  return ErrorWidgets.futureBuilderError();
-                }
-                return Center(child: Image.asset("assets/load.gif"));
-              }),
-        ));
+            width: 500,
+            height: 700,
+            child: ListView(children: [
+              FutureBuilder(
+                  future: otherUser,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Column(children: [
+                        ServerImage().build(imgsFolder +
+                            "/users/" +
+                            snapshot.data.id.toString() +
+                            "/0.jpg"),
+                        AccountInfoField.infoField(
+                            "Uživatelské jméno: " + snapshot.data.username),
+                        AccountInfoField.infoField(
+                            "E-mail: " + snapshot.data.email),
+                        AccountInfoField.infoField(
+                            "Křestní jméno: " + snapshot.data.fName),
+                        AccountInfoField.infoField(
+                            "Příjmení: " + snapshot.data.lName),
+                        AccountInfoField.infoField(
+                            "Telefon: " + snapshot.data.phone.toString()),
+                        AccountInfoField.infoField(
+                            "Ulice a č.p.: " + snapshot.data.addressA),
+                        AccountInfoField.infoField(
+                            "Obec: " + snapshot.data.addressB),
+                        AccountInfoField.infoField(
+                            "Země: " + snapshot.data.addressC),
+                        AccountInfoField.infoField(
+                            "PSČ: " + snapshot.data.postal.toString()),
+                      ]);
+                    } else if (snapshot.hasError) {
+                      return ErrorWidgets.futureBuilderError();
+                    }
+                    return Center(child: Image.asset("assets/load.gif"));
+                  }),
+              FutureBuilder(
+                  future: ratings,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      List<Widget> ratings = [];
+                      for (dynamic rating in snapshot.data) {
+                        ratings.add(RatingRow.buildRow(
+                            rating.ratingValue, rating.ratingText));
+                      }
+                      return Column(children: ratings);
+                    } else if (snapshot.hasError) {
+                      return ErrorWidgets.futureBuilderError();
+                    }
+                    return Center(child: Image.asset("assets/load.gif"));
+                  })
+            ])));
   }
 }

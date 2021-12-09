@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:letbike/app/homePage.dart';
 import 'package:letbike/db/dbSign.dart';
 import 'package:letbike/sign/widgetsSign.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:letbike/widgets/textInput.dart';
 import 'package:letbike/widgets/buttonRounded.dart';
 import 'package:letbike/widgets/images.dart';
@@ -11,12 +10,6 @@ import 'package:letbike/general/objects.dart';
 import 'package:letbike/general/pallete.dart';
 
 Future<User> logResponse;
-
-// TODO rem login
-/* bool remember = false;
-bool savedRemember = false;
-String savedEmail = "";
-String savedPass = ""; */
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -27,22 +20,8 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController mailController = TextEditingController();
   final TextEditingController passController = TextEditingController();
 
-// TODO rem login
-  /* SignSwitch remLogin = SignSwitch(
-      savedRemember,
-      Text("Zapamatovat přihlášení",
-          style: TextStyle(color: kWhite, fontSize: 17, shadows: [
-            Shadow(blurRadius: 10.0, color: kBlack, offset: Offset(5.0, 5.0))
-          ]))); */
-
   @override
   Widget build(BuildContext context) {
-    // TODO rem login
-    /* getLocalData();
-    setState(() {
-      remLogin.value = savedRemember;
-    }); */
-
     return GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: Scaffold(
@@ -78,16 +57,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             kSignLinkButton,
                             () => Navigator.of(context)
                                 .pushNamed("ForgotPassword")),
-                        // TODO rem login
                         RoundedButton(
                             buttonName: "Přihlásit se",
                             onClick: () {
-                              // TODO rem login
-                              /* if (remember) {
-                                setLocalData(remember, mailController.text,
-                                    passController.text);
-                              } */
-
                               logResponse = DatabaseSign.loginUser(
                                 mailController.text,
                                 passController.text,
@@ -136,32 +108,4 @@ class _LoginScreenState extends State<LoginScreen> {
                       ]))
             ])));
   }
-
-// TODO rem login
-  /* getLocalData() async {
-    final prefs = await SharedPreferences.getInstance();
-    savedRemember = prefs.getBool("savedRemember") ?? false;
-    if (savedRemember) {
-      remember = savedRemember;
-      savedEmail = prefs.getString("savedEmail");
-      savedPass = prefs.getString("savedPass");
-
-      mailController.text = savedEmail;
-      passController.text = savedPass;
-    }
-  }
-
-  setLocalData(bool toRem, String toEmail, String toPass) async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setBool("savedRemember", toRem);
-    prefs.setString("savedEmail", toEmail);
-    prefs.setString("savedPass", toPass);
-  }
-
-  deleteLocalData() async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.remove('savedRemember');
-    prefs.remove('savedEmail');
-    prefs.remove('savedPass');
-  } */
 }

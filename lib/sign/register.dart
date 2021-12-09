@@ -1,5 +1,3 @@
-import 'dart:ui';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:letbike/db/dbSign.dart';
 import 'package:letbike/db/remoteSettings.dart';
