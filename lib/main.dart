@@ -26,7 +26,6 @@ class LetBike extends StatelessWidget {
       theme: ThemeData(
         textTheme:
             GoogleFonts.josefinSansTextTheme(Theme.of(context).textTheme),
-        primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       initialRoute: "/",

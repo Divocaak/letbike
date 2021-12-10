@@ -70,6 +70,7 @@ class DatabaseChat {
     final Response response = await get(
         Uri.encodeFull(url + "chatsGet.php/?itemId=" + itemId.toString()),
         headers: {"Accept": "application/json;charset=UTF-8"});
+    print(url + "chatsGet.php/?itemId=" + itemId.toString());
     if (response.statusCode == 200) {
       final parsed = jsonDecode(response.body).cast<Map<String, dynamic>>();
       return parsed.map<Chat>((chat) => Chat.fromJson(chat)).toList();

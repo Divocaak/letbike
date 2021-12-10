@@ -186,14 +186,13 @@ class _ItemPageState extends State<ItemPage>
   }
 
   Widget _buildCard(Chat chat, context) {
-    if (chat.email != itemInfo.me.username) {
+    if (chat.username != itemInfo.me.username) {
       return TextButton(
           onPressed: () {
             Navigator.of(context).pushNamed(ChatScreen.routeName,
                 arguments: ChatUsers(itemInfo, itemInfo.me, chat.id));
           },
-          child: Text(chat.email + " (" + chat.username + ")",
-              style: TextStyle(color: kWhite)));
+          child: Text(chat.username, style: TextStyle(color: kWhite)));
     } else {
       return SizedBox(
         height: 1,
