@@ -22,7 +22,7 @@ class ArticleCard {
                 onTap: () => Navigator.of(context)
                     .pushNamed(ArticlePage.routeName, arguments: article),
                 child: Stack(children: [
-                  ServerImage.build(
+                  ServerImage().build(
                       articlesFolder + "/" + article.id.toString() + "/0.jpg"),
                   Positioned(
                       left: 16,

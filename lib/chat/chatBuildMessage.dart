@@ -28,7 +28,7 @@ class ChatBuildMessage {
                 ),
               ),
               (img
-                  ? ServerImage.build(imgsFolder +
+                  ? ServerImage().build(imgsFolder +
                       "/messages/" +
                       (message.from.toString() +
                           message.to.toString() +

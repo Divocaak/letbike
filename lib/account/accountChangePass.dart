@@ -120,7 +120,7 @@ class _ChangePasswordState extends State<ChangePassword>
                                   return ErrorWidgets.futureBuilderError();
                                 }
                                 return Center(
-                                    child: CircularProgressIndicator());
+                                    child: Image.asset("assets/load.gif"));
                               },
                             ));
 

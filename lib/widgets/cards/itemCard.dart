@@ -23,14 +23,13 @@ class ItemCard {
             elevation: 0,
             color: kWhite.withOpacity(.05),
             margin: const EdgeInsets.all(5),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
             child: InkWell(
                 onTap: () => onCardClick(
                     context, item, loggedUser, forRating, touchable),
                 child: Stack(children: [
-                  ServerImage.build(imgsFolder +
+                  ServerImage().build(imgsFolder +
                       "/items/" +
                       (item.name.hashCode + item.sellerId).toString() +
                       "/0.jpg"),
@@ -114,7 +113,7 @@ class ItemCard {
                     return Text('Sorry there is an error',
                         style: TextStyle(color: kWhite));
                   }
-                  return Center(child: CircularProgressIndicator());
+                  return Center(child: Image.asset("assets/load.gif"));
                 },
               ), after: () {
             DatabaseItem.updateItemStatus(item.id, 2, item.soldTo);

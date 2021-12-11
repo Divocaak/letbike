@@ -72,7 +72,7 @@ class _ItemPageState extends State<ItemPage>
                         autoPlayAnimationDuration: Duration(seconds: 1)),
                     items: [
                       for (int i = 0; i < int.parse(itemInfo.item.imgs); i++)
-                        ServerImage.build(imgsFolder +
+                        ServerImage().build(imgsFolder +
                             "/items/" +
                             (itemInfo.item.name.hashCode +
                                     itemInfo.item.sellerId)
@@ -145,7 +145,7 @@ class _ItemPageState extends State<ItemPage>
                                   return ErrorWidgets.futureBuilderError();
                                 }
                                 return Center(
-                                    child: CircularProgressIndicator());
+                                    child: Image.asset("assets/load.gif"));
                               },
                             ));
                       }))
@@ -179,21 +179,20 @@ class _ItemPageState extends State<ItemPage>
                     return ErrorWidgets.futureBuilderEmpty(
                         () => chats = DatabaseChat.getChats(itemInfo.item.id));
                   }
-                  return Center(child: CircularProgressIndicator());
+                  return Center(child: Image.asset("assets/load.gif"));
                 },
               )));
     }
   }
 
   Widget _buildCard(Chat chat, context) {
-    if (chat.email != itemInfo.me.username) {
+    if (chat.username != itemInfo.me.username) {
       return TextButton(
           onPressed: () {
             Navigator.of(context).pushNamed(ChatScreen.routeName,
                 arguments: ChatUsers(itemInfo, itemInfo.me, chat.id));
           },
-          child: Text(chat.email + " (" + chat.username + ")",
-              style: TextStyle(color: kWhite)));
+          child: Text(chat.username, style: TextStyle(color: kWhite)));
     } else {
       return SizedBox(
         height: 1,

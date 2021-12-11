@@ -169,14 +169,13 @@ class Message {
 }
 
 class Chat {
-  String email;
   String username;
   int id;
 
-  Chat(this.email, this.username, this.id);
+  Chat(this.username, this.id);
 
   factory Chat.fromJson(Map<String, dynamic> json) {
-    return Chat(json["email"], json["username"], int.parse(json["id"]));
+    return Chat(json["username"], int.parse(json["id"]));
   }
 }
 
