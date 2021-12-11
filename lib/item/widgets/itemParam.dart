@@ -21,14 +21,15 @@ class ItemParam extends StatelessWidget {
                   width: 100,
                   color: kPrimaryColor,
                   alignment: Alignment.center,
-                  child: Text(ParamRow.params[keys[i]].name,
+                  child: Text(ParamRow.params[keys[i]]!.name,
                       style: TextStyle(color: kWhite))),
               Container(
                 height: 40,
                 width: 100,
                 color: kSecondaryColor,
                 alignment: Alignment.center,
-                child: Text(ParamRow.params[keys[i]].options[getVal(values[i])],
+                child: Text(
+                    ParamRow.params[keys[i]]!.options[getVal(values[i])],
                     style: TextStyle(color: kBlack)),
               )
             ],

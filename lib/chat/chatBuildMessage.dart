@@ -6,27 +6,25 @@ import 'package:letbike/widgets/images.dart';
 
 class ChatBuildMessage {
   static Widget buildMessage(context, Message message, ChatUsers chatUsers) {
-    bool myMessage = message.from == chatUsers.userA.id;
+    //bool myMessage = message.from == chatUsers.userA.id;
     bool img = message.img == 1 ? true : false;
     return Container(
-        margin: EdgeInsets.fromLTRB(
-            myMessage ? 200 : 15, 2, myMessage ? 15 : 200, 2),
+        /*  margin: EdgeInsets.fromLTRB(
+            myMessage ? 200 : 15, 2, myMessage ? 15 : 200, 2), */
         padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
         decoration: BoxDecoration(
-          color: myMessage ? kPrimaryColor : kSecondaryColor,
+          //color: myMessage ? kPrimaryColor : kSecondaryColor,
           borderRadius: BorderRadius.circular(30),
         ),
         child: Column(
-            crossAxisAlignment:
-                myMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+            /* crossAxisAlignment:
+                myMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start, */
             children: [
-              Text(
-                message.message,
-                textAlign: myMessage ? TextAlign.right : TextAlign.left,
-                style: TextStyle(
-                  color: myMessage ? kWhite : kBlack,
-                ),
-              ),
+              Text(message.message,
+                  //textAlign: myMessage ? TextAlign.right : TextAlign.left,
+                  style: TextStyle(
+                      //color: myMessage ? kWhite : kBlack,
+                      )),
               (img
                   ? ServerImage().build(imgsFolder +
                       "/messages/" +

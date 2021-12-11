@@ -10,14 +10,14 @@ class DatabaseRating {
   static Future<String> setRating(
       int userId, double ratingVal, String ratingText) async {
     final Response response = await post(
-      url +
+      Uri.parse(Uri.encodeFull(url +
           "ratingSet.php/?" +
           "&&userId=" +
           userId.toString() +
           "&&ratingVal=" +
           ratingVal.toString() +
           "&&ratingText=" +
-          ratingText,
+          ratingText)),
       headers: <String, String>{
         'Content-Type': 'application/json;charset=UTF-8'
       },
@@ -32,15 +32,12 @@ class DatabaseRating {
 
   static Future<List<Rating>> getRatings(int userId) async {
     final Response response = await get(
-        Uri.encodeFull(url + "ratingGet.php/?userId=" + userId.toString()),
+        Uri.parse(
+            Uri.encodeFull(url + "ratingGet.php/?userId=" + userId.toString())),
         headers: {"Accept": "application/json;charset=UTF-8"});
     if (response.statusCode == 200) {
-      if (response.body == "[]") {
-        return null;
-      } else {
-        final parsed = jsonDecode(response.body).cast<Map<String, dynamic>>();
-        return parsed.map<Rating>((rating) => Rating.fromJson(rating)).toList();
-      }
+      final parsed = jsonDecode(response.body).cast<Map<String, dynamic>>();
+      return parsed.map<Rating>((rating) => Rating.fromJson(rating)).toList();
     } else {
       throw Exception("Can't get items");
     }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:letbike/filters/filters.dart';
-import 'package:letbike/app/homePage.dart';
+import 'package:letbike/homePage.dart';
 import 'package:letbike/widgets/errorWidgets.dart';
 import 'package:multi_image_picker2/multi_image_picker2.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -19,20 +19,20 @@ class AddItem extends StatefulWidget {
 }
 
 class _AddItem extends State<AddItem> with TickerProviderStateMixin {
-  AddItemFiltersArgs args;
+  late AddItemFiltersArgs? args;
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController descController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
 
-  List<Asset> images = <Asset>[];
+  List<Asset>? images = <Asset>[];
 
   Widget buildGridView() {
     if (images != null) {
       return GridView.count(
         crossAxisCount: 3,
-        children: List.generate(images.length, (index) {
-          Asset asset = images[index];
+        children: List.generate(images!.length, (index) {
+          Asset asset = images![index];
           return AssetThumb(
             asset: asset,
             width: 50,
@@ -59,12 +59,12 @@ class _AddItem extends State<AddItem> with TickerProviderStateMixin {
     setState(() => images = <Asset>[]);
 
     List<Asset> resultList = <Asset>[];
-    String error;
+    String? error;
 
     if (await checkPerm() == 1) {
       try {
         resultList = await MultiImagePicker.pickImages(
-            maxImages: 9, enableCamera: true, selectedAssets: images);
+            maxImages: 9, enableCamera: true, selectedAssets: images!);
       } on Exception catch (e) {
         error = e.toString();
       }
@@ -81,7 +81,7 @@ class _AddItem extends State<AddItem> with TickerProviderStateMixin {
   }
 
   double volume = 0;
-  AnimationController animationController;
+  late AnimationController animationController;
 
   @override
   void initState() {
@@ -95,12 +95,12 @@ class _AddItem extends State<AddItem> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    args = ModalRoute.of(context).settings.arguments;
-    if (args.addItemData != null) {
-      nameController.text = args.addItemData.name;
-      descController.text = args.addItemData.desc;
-      priceController.text = args.addItemData.price;
-      images = args.addItemData.imgs;
+    args = ModalRoute.of(context)!.settings.arguments as AddItemFiltersArgs;
+    if (args?.addItemData != null) {
+      nameController.text = args!.addItemData!.name;
+      descController.text = args!.addItemData!.desc;
+      priceController.text = args!.addItemData!.price;
+      images = args!.addItemData!.imgs;
     }
 
     return GestureDetector(
@@ -128,19 +128,21 @@ class _AddItem extends State<AddItem> with TickerProviderStateMixin {
                         icon: Icons.text_fields,
                         hint: "Název předmětu",
                         inputAction: TextInputAction.next,
-                        controller: nameController),
+                        controller: nameController,
+                        obscure: false),
                     TextInput(
                         icon: Icons.text_fields,
                         hint: "Popis předmětu",
                         inputAction: TextInputAction.next,
-                        controller: descController),
+                        controller: descController,
+                        obscure: false),
                     TextInput(
-                      icon: Icons.attach_money,
-                      hint: "Cena",
-                      inputAction: TextInputAction.done,
-                      inputType: TextInputType.number,
-                      controller: priceController,
-                    ),
+                        icon: Icons.attach_money,
+                        hint: "Cena",
+                        inputAction: TextInputAction.done,
+                        inputType: TextInputType.number,
+                        controller: priceController,
+                        obscure: false),
                     Container(
                         height: 200,
                         decoration: BoxDecoration(
@@ -171,24 +173,22 @@ class _AddItem extends State<AddItem> with TickerProviderStateMixin {
                   ]),
               MainButtonClicked(buttons: [
                 SecondaryButtonData(
-                    Icons.arrow_back,
-                    () => Navigator.of(context).pushReplacementNamed(
-                        HomePage.routeName,
-                        arguments: new HomeArguments(args.args.user, {}))),
+                    Icons.arrow_back, () => Navigator.of(context).pop()),
                 SecondaryButtonData(
                     Icons.add,
-                    () => (images.length >= 1 &&
+                    () => (images!.length >= 1 &&
                             nameController.text != "" &&
                             descController.text != "" &&
                             priceController.text != "")
                         ? Navigator.of(context).pushNamed(FilterPage.routeName,
                             arguments: new AddItemFiltersArgs(
-                                args.args,
+                                args!.loggedUser,
+                                args!.filters,
                                 new AddItemData(
                                     nameController.text,
                                     descController.text,
                                     priceController.text,
-                                    images)))
+                                    images!)))
                         : ModalWindow.showModalWindow(
                             context, "Upozornění", ErrorWidgets.addItemError()))
               ], volume: volume)

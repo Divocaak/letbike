@@ -14,7 +14,7 @@ class DatabaseItem {
         images, "items", (item.name.hashCode + item.sellerId).toString());
 
     final Response response = await post(
-        url +
+        Uri.parse(Uri.encodeFull(url +
             "itemSet.php/?" +
             "seller_id=" +
             item.sellerId.toString() +
@@ -26,7 +26,7 @@ class DatabaseItem {
             item.price.toString() +
             "&&images=" +
             images.length.toString() +
-            passParamsToDb(item.itemParams),
+            passParamsToDb(item.itemParams))),
         headers: <String, String>{
           'Content-Type': 'application/json;charset=UTF-8'
         });
@@ -40,22 +40,18 @@ class DatabaseItem {
   static Future<List<Item>> getAllItems(int status, String userId,
       Map<String, String> itemParams, String soldTo) async {
     final Response response = await get(
-        Uri.encodeFull(url +
+        Uri.parse(Uri.encodeFull(url +
             "itemGetAll.php/?id=" +
             userId +
             "&&status=" +
             status.toString() +
             "&&soldTo=" +
             soldTo +
-            passParamsToDb(itemParams)),
+            passParamsToDb(itemParams))),
         headers: {"Accept": "application/json;charset=UTF-8"});
     if (response.statusCode == 200) {
-      if (response.body == "[]") {
-        return null;
-      } else {
-        final parsed = jsonDecode(response.body).cast<Map<String, dynamic>>();
-        return parsed.map<Item>((item) => Item.fromJson(item)).toList();
-      }
+      final parsed = jsonDecode(response.body).cast<Map<String, dynamic>>();
+      return parsed.map<Item>((item) => Item.fromJson(item)).toList();
     } else {
       throw Exception("Can't get items");
     }
@@ -64,13 +60,13 @@ class DatabaseItem {
   static Future<String> updateItemStatus(
       int itemId, int newStatus, int soldTo) async {
     final Response response = await get(
-        Uri.encodeFull(url +
+        Uri.parse(Uri.encodeFull(url +
             "itemUpdateStatus.php/?id=" +
             itemId.toString() +
             "&&status=" +
             newStatus.toString() +
             "&&soldTo=" +
-            soldTo.toString()),
+            soldTo.toString())),
         headers: {"Accept": "application/json;charset=UTF-8"});
     if (response.statusCode == 200) {
       return response.body;

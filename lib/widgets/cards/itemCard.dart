@@ -1,5 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:letbike/account/accountScreen.dart';
 import 'package:letbike/db/dbItem.dart';
 import 'package:letbike/db/dbRating.dart';
 import 'package:letbike/db/remoteSettings.dart';
@@ -108,7 +108,8 @@ class ItemCard {
                 future: rateResponse,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    return Text(snapshot.data, style: TextStyle(color: kWhite));
+                    return Text(snapshot.data!,
+                        style: TextStyle(color: kWhite));
                   } else if (snapshot.hasError) {
                     return Text('Sorry there is an error',
                         style: TextStyle(color: kWhite));
@@ -117,8 +118,6 @@ class ItemCard {
                 },
               ), after: () {
             DatabaseItem.updateItemStatus(item.id, 2, item.soldTo);
-            Navigator.of(context).pushReplacementNamed(AccountScreen.routeName,
-                arguments: loggedUser);
           });
         });
       }

@@ -1,4 +1,5 @@
 export 'categories.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:multi_image_picker2/multi_image_picker2.dart';
 
 class Item {
@@ -87,70 +88,6 @@ class Item {
       };
 }
 
-class User {
-  int id;
-  String username;
-  String email;
-  String password;
-  int score;
-  int phone;
-  String fName;
-  String lName;
-  String addressA;
-  String addressB;
-  String addressC;
-  int postal;
-  int status;
-
-  User(
-      this.id,
-      this.username,
-      this.email,
-      this.password,
-      this.score,
-      this.phone,
-      this.fName,
-      this.lName,
-      this.addressA,
-      this.addressB,
-      this.addressC,
-      this.postal,
-      this.status);
-
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
-        int.parse(json["id"]),
-        json["username"],
-        json["email"],
-        json["password"],
-        int.parse(json["score"]),
-        int.parse(json["phone"]),
-        json["fName"],
-        json["lName"],
-        json["addressA"],
-        json["addressB"],
-        json["addressC"],
-        int.parse(json["postal"]),
-        int.parse(json["status"]));
-  }
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "username": username,
-        "email": email,
-        "password": password,
-        "score": score,
-        "phone": phone,
-        "fName": fName,
-        "lName": lName,
-        "addressA": addressA,
-        "addressB": addressB,
-        "addressC": addressC,
-        "postal": postal,
-        "status": status
-      };
-}
-
 class Message {
   int from;
   int to;
@@ -218,17 +155,11 @@ class ItemInfo {
 }
 
 class AddItemFiltersArgs {
-  HomeArguments args;
-  AddItemData addItemData;
+  User loggedUser;
+  Map<String, String>? filters;
+  AddItemData? addItemData;
 
-  AddItemFiltersArgs(this.args, this.addItemData);
-}
-
-class HomeArguments {
-  User user;
-  Map<String, String> filters;
-
-  HomeArguments(this.user, this.filters);
+  AddItemFiltersArgs(this.loggedUser, this.filters, this.addItemData);
 }
 
 class AddItemData {

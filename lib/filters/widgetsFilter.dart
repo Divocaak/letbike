@@ -2,20 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:letbike/filters/filters.dart';
 import 'package:letbike/general/pallete.dart';
 
+// ignore: must_be_immutable
 class FilterDropdown extends StatefulWidget {
   FilterDropdown(
-      {Key key,
-      @required this.hint,
-      @required this.options,
-      @required this.filterKey,
-      this.fp})
-      : super(key: key);
+      {Key? key,
+      required String hint,
+      required List<String> options,
+      required String filterKey,
+      State<FilterPage>? fp})
+      : _hint = hint,
+        _options = options,
+        _filterKey = filterKey,
+        _fp = fp,
+        super(key: key);
 
-  int value;
-  final String hint;
-  final List<String> options;
-  final String filterKey;
-  State<FilterPage> fp;
+  late int value;
+  final String _hint;
+  final List<String> _options;
+  // ignore: unused_field
+  final String _filterKey;
+  State<FilterPage>? _fp;
 
   State<StatefulWidget> createState() => _FilterDropdownState();
 }
@@ -32,17 +38,17 @@ class _FilterDropdownState extends State<FilterDropdown> {
           borderRadius: BorderRadius.circular(12),
         ),
         child: DropdownButton(
-          hint: Text(widget.hint, style: TextStyle(color: kWhite)),
+          hint: Text(widget._hint, style: TextStyle(color: kWhite)),
           dropdownColor: kBlack,
           value: widget.value,
           onChanged: (newValue) {
             setState(() {
-              widget.value = newValue;
+              widget.value = newValue as int;
             });
 
-            if (widget.fp != null) widget.fp.setState(() {});
+            if (widget._fp != null) widget._fp!.setState(() {});
           },
-          items: widget.options.asMap().entries.map((entry) {
+          items: widget._options.asMap().entries.map((entry) {
             return DropdownMenuItem(
               child: new Text(entry.value, style: TextStyle(color: kWhite)),
               value: entry.key,
@@ -52,22 +58,28 @@ class _FilterDropdownState extends State<FilterDropdown> {
   }
 }
 
+// ignore: must_be_immutable
 class FilterSwitch extends StatefulWidget {
   FilterSwitch(
-      {Key key,
-      @required this.label,
-      @required this.left,
-      @required this.right,
-      @required this.filterKey,
-      this.fp})
-      : super(key: key);
+      {Key? key,
+      required String label,
+      required String left,
+      required String right,
+      required String filterKey,
+      State<FilterPage>? fp})
+      : _label = label,
+        _left = left,
+        _right = right,
+        _filterKey = filterKey,
+        super(key: key);
 
   bool value = false;
-  final String label;
-  final String left;
-  final String right;
-  final String filterKey;
-  State<FilterPage> fp;
+  final String _label;
+  final String _left;
+  final String _right;
+  // ignore: unused_field
+  final String _filterKey;
+  State<FilterPage>? _fp;
 
   State<StatefulWidget> createState() => _FilterSwitchState();
 }
@@ -84,7 +96,7 @@ class _FilterSwitchState extends State<FilterSwitch> {
           borderRadius: BorderRadius.circular(25),
         ),
         child: Row(children: [
-          Text(widget.label + ": " + widget.left,
+          Text(widget._label + ": " + widget._left,
               style: TextStyle(color: kWhite)),
           Switch(
             inactiveTrackColor: kError,
@@ -97,10 +109,10 @@ class _FilterSwitchState extends State<FilterSwitch> {
                 widget.value = value;
               });
 
-              if (widget.fp != null) widget.fp.setState(() {});
+              if (widget._fp != null) widget._fp!.setState(() {});
             },
           ),
-          Text(" " + widget.right, style: TextStyle(color: kWhite))
+          Text(" " + widget._right, style: TextStyle(color: kWhite))
         ]));
   }
 }

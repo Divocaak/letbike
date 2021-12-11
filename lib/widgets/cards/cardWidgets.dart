@@ -1,28 +1,28 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
-import 'package:letbike/general/objects.dart';
 import 'package:letbike/general/pallete.dart';
 import 'package:letbike/widgets/cards/articleCard.dart';
 import 'package:letbike/widgets/cards/itemCard.dart';
 import 'package:letbike/widgets/errorWidgets.dart';
 
 class CardWidgets {
-  static Widget cardsBuilder(Future<List<dynamic>> objectsToRenderFrom,
-      Function getObjects, bool articleCard,
-      {User loggedUser, bool forRating, bool touchable}) {
+  static Widget cardsBuilder(
+      Future<List<dynamic>>? objectsToRenderFrom, bool articleCard,
+      {User? loggedUser, bool? forRating, bool? touchable}) {
     return FutureBuilder<List<dynamic>>(
         future: objectsToRenderFrom,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return ListView.builder(
-                itemCount: snapshot.data.length,
+                itemCount: snapshot.data!.length,
                 itemBuilder: (context, i) {
                   return articleCard
-                      ? ArticleCard.buildCard(context, snapshot.data[i])
-                      : ItemCard.buildCard(context, snapshot.data[i],
-                          loggedUser, forRating, touchable);
+                      ? ArticleCard.buildCard(context, snapshot.data![i])
+                      : ItemCard.buildCard(context, snapshot.data![i],
+                          loggedUser!, forRating!, touchable!);
                 });
           } else if (!snapshot.hasData) {
-            return ErrorWidgets.futureBuilderEmpty(getObjects);
+            return ErrorWidgets.futureBuilderEmpty();
           } else if (snapshot.hasError) {
             return ErrorWidgets.futureBuilderError();
           }
@@ -45,6 +45,7 @@ class CardWidgets {
   }
 }
 
+// ignore: must_be_immutable
 class RatingBar extends StatefulWidget {
   RatingBar(this.rating, {key}) : super(key: key);
   double rating;

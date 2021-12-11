@@ -12,13 +12,13 @@ class DatabaseChat {
   static Future<List<Message>> getMessagesBetween(
       int seller, int buyer, int itemId) async {
     final Response response = await get(
-        Uri.encodeFull(url +
+        Uri.parse(Uri.encodeFull(url +
             "messageGet.php/?from=" +
             seller.toString() +
             "&&to=" +
             buyer.toString() +
             "&&itemId=" +
-            itemId.toString()),
+            itemId.toString())),
         headers: {"Accept": "application/json;charset=UTF-8"});
     if (response.statusCode == 200) {
       final parsed = jsonDecode(response.body).cast<Map<String, dynamic>>();
@@ -47,7 +47,7 @@ class DatabaseChat {
 
     String hasImg = images.length != 0 ? "1" : "0";
     final Response response = await get(
-        Uri.encodeFull(url +
+        Uri.parse(Uri.encodeFull(url +
             "messageSet.php/?from=" +
             from.toString() +
             "&&to=" +
@@ -57,7 +57,7 @@ class DatabaseChat {
             "&&message=" +
             message +
             "&&img=" +
-            hasImg),
+            hasImg)),
         headers: {"Accept": "application/json;charset=UTF-8"});
     if (response.statusCode == 200) {
       print("sent");
@@ -68,7 +68,8 @@ class DatabaseChat {
 
   static Future<List<Chat>> getChats(int itemId) async {
     final Response response = await get(
-        Uri.encodeFull(url + "chatsGet.php/?itemId=" + itemId.toString()),
+        Uri.parse(
+            Uri.encodeFull(url + "chatsGet.php/?itemId=" + itemId.toString())),
         headers: {"Accept": "application/json;charset=UTF-8"});
     print(url + "chatsGet.php/?itemId=" + itemId.toString());
     if (response.statusCode == 200) {

@@ -1,13 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:letbike/db/dbAccount.dart';
 import 'package:letbike/db/dbChat.dart';
 import 'package:letbike/db/dbItem.dart';
 import 'package:letbike/db/dbRating.dart';
-import 'package:letbike/db/remoteSettings.dart';
-import 'package:letbike/widgets/images.dart';
 import 'package:multi_image_picker2/multi_image_picker2.dart';
-import 'package:letbike/app/homePage.dart';
+import 'package:letbike/homePage.dart';
 import 'package:letbike/item/itemPage.dart';
 import 'package:letbike/chat/chatBuildMessage.dart';
 import 'package:letbike/widgets/textInput.dart';
@@ -15,11 +12,10 @@ import 'package:letbike/widgets/ratingRow.dart';
 import 'package:letbike/widgets/errorWidgets.dart';
 import 'package:letbike/widgets/buttonCircular.dart';
 import 'package:letbike/widgets/alertBox.dart';
-import 'package:letbike/widgets/accountInfoFIeld.dart';
 import 'package:letbike/general/objects.dart';
 import 'package:letbike/general/pallete.dart';
 
-ChatUsers chatUsers;
+late ChatUsers chatUsers;
 
 class ChatScreen extends StatefulWidget {
   @override
@@ -29,7 +25,7 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen>
     with SingleTickerProviderStateMixin {
-  Stream<List<Message>> messagesStream;
+  late Stream<List<Message>>? messagesStream;
 
   List<Asset> images = [];
 
@@ -38,8 +34,8 @@ class _ChatScreenState extends State<ChatScreen>
       images = [];
     });
 
-    List<Asset> resultList;
-    String error;
+    List<Asset>? resultList;
+    String? error;
 
     try {
       resultList = await MultiImagePicker.pickImages(
@@ -52,7 +48,7 @@ class _ChatScreenState extends State<ChatScreen>
     if (!mounted) return;
 
     setState(() {
-      images = resultList.length < 1 ? [] : resultList;
+      images = resultList!.length < 1 ? [] : resultList;
       if (error != null)
         ModalWindow.showModalWindow(
             context, "Error", Text("Error", style: TextStyle(color: kWhite)));
@@ -63,9 +59,9 @@ class _ChatScreenState extends State<ChatScreen>
 
   @override
   Widget build(BuildContext context) {
-    chatUsers = ModalRoute.of(context).settings.arguments;
-    messagesStream = DatabaseChat.getMessages(
-        chatUsers.userA.id, chatUsers.userB, chatUsers.itemInfo.item.id);
+    chatUsers = ModalRoute.of(context)!.settings.arguments as ChatUsers;
+    messagesStream = DatabaseChat.getMessages(123 /* chatUsers.userA.id */,
+        chatUsers.userB, chatUsers.itemInfo.item.id);
     bool cancelTrade = (chatUsers.itemInfo.item.status == 1 ? true : false);
     return GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
@@ -91,7 +87,7 @@ class _ChatScreenState extends State<ChatScreen>
                           kSecondaryColor, 40, Icons.person_search, kWhite, () {
                         otherPersonInfo();
                       }),
-                      (chatUsers.itemInfo.me.id ==
+                      (/* chatUsers.itemInfo.me.id */ 123 ==
                               chatUsers.itemInfo.item.sellerId
                           ? CircularButton(
                               kSecondaryColor,
@@ -112,10 +108,10 @@ class _ChatScreenState extends State<ChatScreen>
                       builder: (context, stream) {
                         if (stream.hasData) {
                           return ListView.builder(
-                              itemCount: stream.data.length,
+                              itemCount: (stream.data as List).length,
                               itemBuilder: (context, i) {
-                                return ChatBuildMessage.buildMessage(
-                                    context, stream.data[i], chatUsers);
+                                return ChatBuildMessage.buildMessage(context,
+                                    (stream.data as List)[i], chatUsers);
                               });
                         } else {
                           return Center(child: Image.asset("assets/load.gif"));
@@ -128,7 +124,8 @@ class _ChatScreenState extends State<ChatScreen>
                         child: TextInput(
                             icon: Icons.chat,
                             hint: "Napište zprávu",
-                            controller: chatInputController))),
+                            controller: chatInputController,
+                            obscure: false))),
                 CircularButton(
                     kSecondaryColor, 40, Icons.image, kWhite, loadAssets),
                 Padding(
@@ -137,12 +134,12 @@ class _ChatScreenState extends State<ChatScreen>
                         kSecondaryColor, 40, Icons.send, kWhite, () {
                       if (images.length != 0 ||
                           chatInputController.text != "") {
-                        DatabaseChat.sendMessage(
+                        /* DatabaseChat.sendMessage(
                             chatUsers.userA.id,
                             chatUsers.userB,
                             chatUsers.itemInfo.item.id,
                             chatInputController.text,
-                            images);
+                            images); */
 
                         if (images.length != 0) {
                           setState(() {
@@ -174,15 +171,14 @@ class _ChatScreenState extends State<ChatScreen>
               future: updateRes,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  return Text(snapshot.data, style: TextStyle(color: kWhite));
+                  return Text(snapshot.data!, style: TextStyle(color: kWhite));
                 } else if (snapshot.hasError) {
                   return ErrorWidgets.futureBuilderError();
                 }
                 return Center(child: Image.asset("assets/load.gif"));
               }),
-          after: () => Navigator.of(context).pushReplacementNamed(
-              HomePage.routeName,
-              arguments: HomeArguments(chatUsers.userA, {})));
+          after: () => Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => HomePage(loggedUser: chatUsers.userA))));
     });
   }
 
@@ -201,21 +197,20 @@ class _ChatScreenState extends State<ChatScreen>
               future: updateRes,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  return Text(snapshot.data, style: TextStyle(color: kWhite));
+                  return Text(snapshot.data!, style: TextStyle(color: kWhite));
                 } else if (snapshot.hasError) {
                   return ErrorWidgets.futureBuilderError();
                 }
                 return Center(child: Image.asset("assets/load.gif"));
               }),
-          after: () => Navigator.of(context).pushReplacementNamed(
-              HomePage.routeName,
-              arguments: HomeArguments(chatUsers.userA, {})));
+          after: () => Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => HomePage(loggedUser: chatUsers.userA))));
     });
   }
 
   Widget otherPersonInfo() {
-    Future<User> otherUser = DatabaseAccount.getUserInfo(chatUsers.userB);
-    Future<List<Rating>> ratings = DatabaseRating.getRatings(chatUsers.userB);
+    //Future<User>? otherUser = DatabaseAccount.getUserInfo(chatUsers.userB);
+    Future<List<Rating>>? ratings = DatabaseRating.getRatings(chatUsers.userB);
 
     return ModalWindow.showModalWindow(
         context,
@@ -224,7 +219,7 @@ class _ChatScreenState extends State<ChatScreen>
             width: 500,
             height: 700,
             child: ListView(children: [
-              FutureBuilder(
+              /* FutureBuilder(
                   future: otherUser,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
@@ -256,13 +251,13 @@ class _ChatScreenState extends State<ChatScreen>
                       return ErrorWidgets.futureBuilderError();
                     }
                     return Center(child: Image.asset("assets/load.gif"));
-                  }),
+                  }), */
               FutureBuilder(
                   future: ratings,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      List<Widget> ratings = [];
-                      for (dynamic rating in snapshot.data) {
+                      List<Widget>? ratings = [];
+                      for (dynamic rating in snapshot.data as List) {
                         ratings.add(RatingRow.buildRow(
                             rating.ratingValue, rating.ratingText));
                       }

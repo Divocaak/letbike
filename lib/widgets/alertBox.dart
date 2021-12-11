@@ -4,12 +4,9 @@ import 'package:letbike/general/pallete.dart';
 
 class ModalWindow {
   static showModalWindow(BuildContext context, String title, Widget body,
-      {Function after, Function onTrue}) {
+      {Function? after, Function? onTrue}) {
     AlertDialog modal = AlertDialog(
-      title: Text(
-        title,
-        style: TextStyle(color: kWhite),
-      ),
+      title: Text(title, style: TextStyle(color: kWhite)),
       content: body,
       backgroundColor: kBlack,
       elevation: 100,
@@ -19,18 +16,15 @@ class ModalWindow {
       actions: [
         if (after != null)
           TextButton(
-            child: Text(
-              Emojis.okButton,
-              style: TextStyle(color: kPrimaryColor),
-            ),
-            onPressed: () {
-              Navigator.of(context).pop();
+              child: Text(
+                Emojis.okButton,
+                style: TextStyle(color: kPrimaryColor),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
 
-              if (after != null) {
                 after();
-              }
-            },
-          ),
+              }),
         if (onTrue != null)
           TextButton(
             child: Text(Emojis.crossMarkButton,

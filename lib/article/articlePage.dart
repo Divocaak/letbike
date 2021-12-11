@@ -15,9 +15,7 @@ class ArticlePage extends StatefulWidget {
 
 class _ArticlePageState extends State<ArticlePage>
     with SingleTickerProviderStateMixin {
-  Article articleInfo;
-
-  AnimationController animationController;
+  Article? articleInfo;
 
   @override
   void initState() {
@@ -26,7 +24,7 @@ class _ArticlePageState extends State<ArticlePage>
 
   @override
   Widget build(BuildContext context) {
-    articleInfo = ModalRoute.of(context).settings.arguments;
+    articleInfo = ModalRoute.of(context)!.settings.arguments as Article;
     return Scaffold(
         floatingActionButton: MainButton(
             iconData: Icons.arrow_back,
@@ -34,13 +32,13 @@ class _ArticlePageState extends State<ArticlePage>
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         backgroundColor: kBlack,
         body: FutureBuilder(
-            future: DatabaseArticles.getArticle(articleInfo.id),
+            future: DatabaseArticles.getArticle(articleInfo!.id),
             builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
               if (snapshot.hasData) {
                 return Container(
                     padding: EdgeInsets.fromLTRB(10, 50, 10, 50),
                     child: Markdown(
-                        data: snapshot.data,
+                        data: snapshot.data!,
                         styleSheet: MarkdownStyleSheet(
                             h1: TextStyle(color: kWhite),
                             h2: TextStyle(color: kWhite),

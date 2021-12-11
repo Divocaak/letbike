@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:letbike/app/homePage.dart';
+import 'package:letbike/homePage.dart';
 import 'package:letbike/widgets/mainButtonEssentials.dart';
 import 'package:letbike/widgets/images.dart';
 import 'package:letbike/filters/widgetsFilter.dart';
@@ -16,10 +16,10 @@ class FilterPage extends StatefulWidget {
   static const routeName = "/filterPage";
 }
 
-Future<String> addResponse;
+Future<String>? addResponse;
 
 class _FilterPage extends State<FilterPage> {
-  AddItemFiltersArgs addItemArgs;
+  AddItemFiltersArgs? addItemArgs;
 
   @override
   void initState() {
@@ -28,39 +28,41 @@ class _FilterPage extends State<FilterPage> {
 
   @override
   Widget build(BuildContext context) {
-    addItemArgs = ModalRoute.of(context).settings.arguments;
-    categoryDd.fp = this;
+    addItemArgs =
+        ModalRoute.of(context)!.settings.arguments as AddItemFiltersArgs;
+    /* categoryDd.fp = this;
     partTypeDd.fp = this;
     partWheelCassetteSwitch.fp = this;
     partWheelBrakesSwitch.fp = this;
     partForkSuspensionSwitch.fp = this;
     partBrakeTypeDd.fp = this;
     otherTypeDd.fp = this;
-    accessoryTypeDd.fp = this;
+    accessoryTypeDd.fp = this; */
     return Scaffold(
         floatingActionButton: MainButton(
-            iconData: addItemArgs.addItemData == null ? Icons.save : Icons.add,
+            iconData: addItemArgs!.addItemData == null ? Icons.save : Icons.add,
             onPressed: () {
-              addItemArgs.args.filters = getParams();
-              if (addItemArgs.addItemData == null) {
-                Navigator.of(context).pushReplacementNamed(HomePage.routeName,
-                    arguments: addItemArgs.args);
+              addItemArgs!.filters = getParams();
+              if (addItemArgs!.addItemData == null) {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) =>
+                        HomePage(loggedUser: addItemArgs!.loggedUser)));
               } else {
                 addResponse = DatabaseItem.createItem(
                     new Item(
                         -1,
-                        addItemArgs.args.user.id,
-                        addItemArgs.addItemData.name,
-                        addItemArgs.addItemData.desc,
-                        double.parse(addItemArgs.addItemData.price),
+                        54768, //addItemArgs!.loggedUser.id,
+                        addItemArgs!.addItemData!.name,
+                        addItemArgs!.addItemData!.desc,
+                        double.parse(addItemArgs!.addItemData!.price),
                         0,
                         0,
                         "",
                         "",
                         0,
-                        addItemArgs.args.filters,
+                        addItemArgs!.filters!,
                         0),
-                    addItemArgs.addItemData.imgs);
+                    addItemArgs!.addItemData!.imgs);
 
                 ModalWindow.showModalWindow(
                     context,
@@ -69,17 +71,19 @@ class _FilterPage extends State<FilterPage> {
                         future: addResponse,
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
-                            return Text(snapshot.data,
+                            return Text(snapshot.data!,
                                 style: TextStyle(color: kWhite));
                           } else if (snapshot.hasError) {
                             return ErrorWidgets.futureBuilderError();
                           }
                           return Center(child: Image.asset("assets/load.gif"));
                         }), after: () {
-                  addItemArgs.args.filters = null;
+                  addItemArgs!.filters = {};
 
-                  Navigator.of(context).pushReplacementNamed(HomePage.routeName,
-                      arguments: addItemArgs.args);
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => HomePage(
+                          loggedUser: addItemArgs!.loggedUser,
+                          filters: addItemArgs!.filters)));
                 });
               }
             }),
@@ -333,13 +337,13 @@ class _FilterPage extends State<FilterPage> {
   TValue case2<TOptionType, TValue>(
     TOptionType selectedOption,
     Map<TOptionType, TValue> branches, [
-    TValue defaultValue,
+    TValue? defaultValue,
   ]) {
     if (!branches.containsKey(selectedOption)) {
-      return defaultValue;
+      return defaultValue!;
     }
 
-    return branches[selectedOption];
+    return branches[selectedOption]!;
   }
 
   Map<String, String> getParams() {

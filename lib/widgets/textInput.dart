@@ -3,23 +3,30 @@ import 'package:letbike/general/pallete.dart';
 
 class TextInput extends StatelessWidget {
   const TextInput(
-      {Key key,
-      @required this.icon,
-      @required this.hint,
-      @required this.controller,
-      this.inputType,
-      this.inputAction,
-      this.obscure,
-      this.validationIdentity})
-      : super(key: key);
+      {Key? key,
+      required IconData icon,
+      required String hint,
+      required TextEditingController controller,
+      required bool obscure,
+      TextInputType? inputType,
+      TextInputAction? inputAction,
+      String? validationIdentity})
+      : _icon = icon,
+        _hint = hint,
+        _controller = controller,
+        _inputType = inputType,
+        _inputAction = inputAction,
+        _obscure = obscure,
+        _validationIdentity = validationIdentity,
+        super(key: key);
 
-  final IconData icon;
-  final String hint;
-  final TextEditingController controller;
-  final TextInputType inputType;
-  final TextInputAction inputAction;
-  final bool obscure;
-  final String validationIdentity;
+  final IconData _icon;
+  final String _hint;
+  final TextEditingController _controller;
+  final bool _obscure;
+  final TextInputType? _inputType;
+  final TextInputAction? _inputAction;
+  final String? _validationIdentity;
 
   @override
   Widget build(BuildContext context) {
@@ -38,34 +45,34 @@ class TextInput extends StatelessWidget {
         ),
         child: Center(
           child: TextFormField(
-            controller: controller,
+            controller: _controller,
             decoration: InputDecoration(
               border: InputBorder.none,
               prefixIcon: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Icon(icon, size: 28, color: kWhite),
+                child: Icon(_icon, size: 28, color: kWhite),
               ),
-              hintText: hint,
+              hintText: _hint,
             ),
-            obscureText: obscure != null ? obscure : false,
-            keyboardType: inputType,
-            textInputAction: inputAction,
-            validator: (String value) {
-              if (validationIdentity != "" && validationIdentity != null) {
-                if (value.isEmpty) {
-                  return "Zadejte " + hint;
+            obscureText: _obscure,
+            keyboardType: _inputType,
+            textInputAction: _inputAction,
+            validator: (String? value) {
+              if (_validationIdentity != "" && _validationIdentity != null) {
+                if (value!.isEmpty) {
+                  return "Zadejte " + _hint;
                 }
 
-                if (validationIdentity == "regMail" ||
-                    validationIdentity == "logMail") {
+                if (_validationIdentity == "regMail" ||
+                    _validationIdentity == "logMail") {
                   if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
                       .hasMatch(value)) {
                     return "Zadejte platný e-mail";
                   }
                 }
 
-                if ((validationIdentity == "regPass" && value.length < 8) ||
-                    (validationIdentity == "changePassNew" &&
+                if ((_validationIdentity == "regPass" && value.length < 8) ||
+                    (_validationIdentity == "changePassNew" &&
                         value.length < 8)) {
                   return "Heslo musí obsahovat minimálně 8 znaků";
                 }

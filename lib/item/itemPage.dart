@@ -22,10 +22,10 @@ class ItemPage extends StatefulWidget {
 
 class _ItemPageState extends State<ItemPage>
     with SingleTickerProviderStateMixin {
-  Future<List<Chat>> chats;
-  ItemInfo itemInfo;
+  late Future<List<Chat>> chats;
+  late ItemInfo itemInfo;
 
-  AnimationController animationController;
+  late AnimationController animationController;
 
   @override
   void initState() {
@@ -40,7 +40,7 @@ class _ItemPageState extends State<ItemPage>
 
   @override
   Widget build(BuildContext context) {
-    itemInfo = ModalRoute.of(context).settings.arguments;
+    itemInfo = ModalRoute.of(context)!.settings.arguments as ItemInfo;
     chats = DatabaseChat.getChats(itemInfo.item.id);
     return Scaffold(
         backgroundColor: kBlack,
@@ -82,19 +82,16 @@ class _ItemPageState extends State<ItemPage>
                             ".jpg")
                     ])),
             Padding(
-                padding: EdgeInsets.fromLTRB(10, 10, 10, 5),
-                child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("Přidáno: " + itemInfo.item.dateStart,
-                          style: TextStyle(fontSize: 15, color: kWhite)),
-                      Text(itemInfo.item.price.toString() + " Kč",
-                          style: TextStyle(
-                              fontSize: 35,
-                              fontWeight: FontWeight.bold,
-                              color: kWhite))
-                    ])),
+                padding: EdgeInsets.only(left: 10, top: 15),
+                child: Text("Přidáno: " + itemInfo.item.dateStart,
+                    style: TextStyle(fontSize: 15, color: kWhite))),
+            Padding(
+                padding: EdgeInsets.only(left: 25, top: 10),
+                child: Text(itemInfo.item.price.toString() + " Kč",
+                    style: TextStyle(
+                        fontSize: 35,
+                        fontWeight: FontWeight.bold,
+                        color: kWhite))),
             Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 child: Center(
@@ -120,7 +117,7 @@ class _ItemPageState extends State<ItemPage>
                         child: ItemParam(itemInfo.item.itemParams)))),
             SecondaryButtonData(
                 Icons.arrow_back, () => Navigator.of(context).pop()),
-            SecondaryButtonData(Icons.chat, startChat),
+            /* SecondaryButtonData(Icons.chat, startChat),
             if (itemInfo.item.sellerId == itemInfo.me.id)
               SecondaryButtonData(
                   Icons.delete,
@@ -139,7 +136,7 @@ class _ItemPageState extends State<ItemPage>
                               future: deleteResponse,
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
-                                  return Text(snapshot.data,
+                                  return Text(snapshot.data!,
                                       style: TextStyle(color: kWhite));
                                 } else if (snapshot.hasError) {
                                   return ErrorWidgets.futureBuilderError();
@@ -148,12 +145,12 @@ class _ItemPageState extends State<ItemPage>
                                     child: Image.asset("assets/load.gif"));
                               },
                             ));
-                      }))
+                      })) */
           ], volume: volume)
         ]));
   }
 
-  void startChat() {
+  /* void startChat() {
     if (itemInfo.item.sellerId != itemInfo.me.id) {
       Navigator.of(context).pushReplacementNamed(ChatScreen.routeName,
           arguments: ChatUsers(itemInfo, itemInfo.me, itemInfo.item.sellerId));
@@ -169,9 +166,9 @@ class _ItemPageState extends State<ItemPage>
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return ListView.builder(
-                        itemCount: snapshot.data.length,
+                        itemCount: snapshot.data!.length,
                         itemBuilder: (context, i) {
-                          return _buildCard(snapshot.data[i], context);
+                          return _buildCard(snapshot.data![i], context);
                         });
                   } else if (snapshot.hasError) {
                     return ErrorWidgets.futureBuilderError();
@@ -183,9 +180,9 @@ class _ItemPageState extends State<ItemPage>
                 },
               )));
     }
-  }
+  } */
 
-  Widget _buildCard(Chat chat, context) {
+  /* Widget _buildCard(Chat chat, context) {
     if (chat.username != itemInfo.me.username) {
       return TextButton(
           onPressed: () {
@@ -198,5 +195,5 @@ class _ItemPageState extends State<ItemPage>
         height: 1,
       );
     }
-  }
+  } */
 }

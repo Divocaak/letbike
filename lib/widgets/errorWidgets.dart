@@ -23,7 +23,7 @@ class ErrorWidgets {
         ]));
   }
 
-  static Widget futureBuilderEmpty(Function reload) {
+  static Widget futureBuilderEmpty() {
     return Center(
         child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -37,13 +37,10 @@ class ErrorWidgets {
             height: 12,
           ),
           Text(
-            'Zatím tu nic není ' + Emojis.thinkingFace,
+            'Zatím tu nic není, zkuste to prosím později ' +
+                Emojis.thinkingFace,
             style: TextStyle(color: kWarning),
-          ),
-          SizedBox(height: 12),
-          TextButton(
-              onPressed: reload,
-              child: Icon(Icons.refresh, color: kPrimaryColor))
+          )
         ]));
   }
 
