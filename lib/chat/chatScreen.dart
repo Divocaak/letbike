@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:letbike/db/dbChat.dart';
-import 'package:letbike/db/dbItem.dart';
-import 'package:letbike/db/dbRating.dart';
+import 'package:letbike/remote/dbChat.dart';
+import 'package:letbike/remote/dbItem.dart';
+import 'package:letbike/remote/dbRating.dart';
 import 'package:multi_image_picker2/multi_image_picker2.dart';
 import 'package:letbike/homePage.dart';
 import 'package:letbike/item/itemPage.dart';

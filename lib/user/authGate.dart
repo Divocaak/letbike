@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:letbike/db/remoteSettings.dart';
+import 'package:letbike/remote/settings.dart';
 import 'package:letbike/general/pallete.dart';
 import 'package:letbike/homePage.dart';
 import 'package:flutterfire_ui/auth.dart';
@@ -35,7 +35,6 @@ class AuthGate extends StatelessWidget {
                     showAuthActionSwitch: false,
                     providerConfigs: [
                       GoogleProviderConfiguration(clientId: "clientId"),
-                      //AppleProviderConfiguration()
                     ]);
               }
 

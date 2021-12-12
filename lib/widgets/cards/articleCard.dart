@@ -4,7 +4,7 @@ import 'package:letbike/general/pallete.dart';
 import 'package:letbike/general/objects.dart';
 import 'package:letbike/article/articlePage.dart';
 import 'package:letbike/widgets/images.dart';
-import 'package:letbike/db/remoteSettings.dart';
+import 'package:letbike/remote/settings.dart';
 
 class ArticleCard {
   static Widget buildCard(context, Article article) {

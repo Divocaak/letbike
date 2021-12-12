@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:letbike/general/pallete.dart';
 import 'package:letbike/general/objects.dart';
-import 'package:letbike/db/remoteSettings.dart';
+import 'package:letbike/remote/settings.dart';
 import 'package:letbike/widgets/images.dart';
 
 class ChatBuildMessage {

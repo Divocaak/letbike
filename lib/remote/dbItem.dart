@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:async';
 import 'package:http/http.dart';
 import 'package:letbike/general/objects.dart';
-import 'package:letbike/db/remoteSettings.dart';
-import 'package:letbike/db/dbUploadImage.dart';
+import 'package:letbike/remote/settings.dart';
+import 'package:letbike/remote/dbUploadImage.dart';
 import 'package:multi_image_picker2/multi_image_picker2.dart';
 
 class DatabaseItem {

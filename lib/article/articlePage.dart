@@ -3,7 +3,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:letbike/widgets/mainButtonEssentials.dart';
 import 'package:letbike/general/pallete.dart';
 import 'package:letbike/general/objects.dart';
-import 'package:letbike/db/dbArticles.dart';
+import 'package:letbike/remote/dbArticles.dart';
 
 double volume = 0;
 

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:letbike/chat/chatScreen.dart';
-import 'package:letbike/db/dbChat.dart';
-import 'package:letbike/db/dbItem.dart';
+import 'package:letbike/remote/dbChat.dart';
+import 'package:letbike/remote/dbItem.dart';
 import 'package:letbike/widgets/images.dart';
 import 'package:letbike/widgets/mainButtonEssentials.dart';
 import 'package:letbike/widgets/errorWidgets.dart';
@@ -10,7 +10,7 @@ import 'package:letbike/widgets/alertBox.dart';
 import 'package:letbike/item/widgets/itemParam.dart';
 import 'package:letbike/general/objects.dart';
 import 'package:letbike/general/pallete.dart';
-import 'package:letbike/db/remoteSettings.dart';
+import 'package:letbike/remote/settings.dart';
 
 double volume = 0;
 

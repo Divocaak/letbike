@@ -4,7 +4,7 @@ import 'package:letbike/widgets/mainButtonEssentials.dart';
 import 'package:letbike/widgets/images.dart';
 import 'package:letbike/filters/widgetsFilter.dart';
 import 'package:letbike/general/objects.dart';
-import 'package:letbike/db/dbItem.dart';
+import 'package:letbike/remote/dbItem.dart';
 import 'package:letbike/general/pallete.dart';
 import 'package:letbike/widgets/alertBox.dart';
 import 'package:letbike/widgets/errorWidgets.dart';

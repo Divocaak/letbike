@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:letbike/db/dbItem.dart';
-import 'package:letbike/db/dbRating.dart';
-import 'package:letbike/db/remoteSettings.dart';
+import 'package:letbike/remote/dbItem.dart';
+import 'package:letbike/remote/dbRating.dart';
+import 'package:letbike/remote/settings.dart';
 import 'package:letbike/general/pallete.dart';
 import 'package:letbike/general/objects.dart';
 import 'package:letbike/item/itemPage.dart';
