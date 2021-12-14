@@ -3,7 +3,7 @@ import 'package:letbike/widgets/cards/cardWidgets.dart';
 import 'package:letbike/widgets/mainButtonEssentials.dart';
 import 'package:letbike/general/pallete.dart';
 import 'package:letbike/general/objects.dart';
-import 'package:letbike/remote/dbArticles.dart';
+import 'package:letbike/remote/articles.dart';
 
 class ArticlesScreen extends StatefulWidget {
   @override
@@ -12,11 +12,11 @@ class ArticlesScreen extends StatefulWidget {
 
 class _ArticlesScreenState extends State<ArticlesScreen>
     with SingleTickerProviderStateMixin {
-  late Future<List<Article>> articles;
+  late Future<List<Article>>? articles;
 
   @override
   Widget build(BuildContext context) {
-    articles = DatabaseArticles.getAllArticles();
+    articles = RemoteArticles.getAllArticles();
     return Scaffold(
         floatingActionButton: MainButton(
             iconData: Icons.arrow_back,

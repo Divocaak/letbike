@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:letbike/chat/chatScreen.dart';
 import 'package:letbike/remote/dbChat.dart';
-import 'package:letbike/remote/dbItem.dart';
+import 'package:letbike/remote/items.dart';
 import 'package:letbike/widgets/images.dart';
 import 'package:letbike/widgets/mainButtonEssentials.dart';
 import 'package:letbike/widgets/errorWidgets.dart';
@@ -61,26 +61,17 @@ class _ItemPageState extends State<ItemPage>
             Container(
                 height: 300,
                 width: MediaQuery.of(context).size.width,
-                child: CarouselSlider(
-                    options: CarouselOptions(
-                        aspectRatio: MediaQuery.of(context).size.width /
-                            MediaQuery.of(context).size.height,
-                        initialPage: 0,
-                        viewportFraction: 1,
-                        autoPlay: true,
-                        autoPlayInterval: Duration(seconds: 3),
-                        autoPlayAnimationDuration: Duration(seconds: 1)),
-                    items: [
-                      for (int i = 0; i < int.parse(itemInfo.item.imgs); i++)
-                        ServerImage().build(imgsFolder +
-                            "/items/" +
-                            (itemInfo.item.name.hashCode +
-                                    itemInfo.item.sellerId)
-                                .toString() +
-                            "/" +
-                            i.toString() +
-                            ".jpg")
-                    ])),
+                child:
+                    CarouselSlider(options: carouselOptions(context), items: [
+                  for (int i = 0; i < int.parse(itemInfo.item.imgs); i++)
+                    ServerImage().build(imgsFolder +
+                        "/items/" +
+                        (itemInfo.item.name.hashCode + itemInfo.item.sellerId)
+                            .toString() +
+                        "/" +
+                        i.toString() +
+                        ".jpg")
+                ])),
             Padding(
                 padding: EdgeInsets.only(left: 10, top: 15),
                 child: Text("Přidáno: " + itemInfo.item.dateStart,

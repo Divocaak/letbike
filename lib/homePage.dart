@@ -1,10 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:letbike/remote/dbItem.dart';
 import 'package:letbike/item/addItem.dart';
-import 'package:letbike/remote/users.dart';
-import 'package:letbike/user/bannedScreen.dart';
-import 'package:letbike/user/errorScreen.dart';
+import 'package:letbike/remote/items.dart';
 import 'package:letbike/user/userPage.dart';
 import 'package:letbike/widgets/cards/cardWidgets.dart';
 import 'package:letbike/filters/filters.dart';
@@ -30,7 +27,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
-  late Future<List<Item>> items;
+  late Future<List<Item>>? items;
 
   late AnimationController animationController;
 
@@ -38,80 +35,61 @@ class _HomePageState extends State<HomePage>
   void initState() {
     animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 250));
-    animationController.addListener(() {
-      setState(() {});
-    });
+    animationController.addListener(() => setState(() {}));
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    Future<int> userStatus =
-        RemoteUser.checkUserStatus(widget._loggedUser.providerData[0].uid!);
-    return FutureBuilder<int>(
-        future: userStatus,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
+    widget._filters?.forEach((k, v) => print(k + ": " + v));
+    items = RemoteItems.getAllItems(
+        0, "seller_id", widget._filters ?? {}, "sold_to");
+    return Scaffold(
+        floatingActionButton: MainButton(
+            iconData: Icons.menu,
+            onPressed: () {
+              if (animationController.isCompleted) {
+                animationController.reverse();
+                volume = 0;
+              } else {
+                animationController.forward();
+                volume = 0.5;
+              }
+            }),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        body: Stack(children: [
+          Container(
+              color: kBlack,
+              child: CardWidgets.cardsBuilder(items, false,
+                  loggedUser: widget._loggedUser,
+                  forRating: false,
+                  touchable: true)),
+          MainButtonClicked(buttons: [
+            SecondaryButtonData(
+                Icons.add,
+                () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) =>
+                        AddItem(loggedUser: widget._loggedUser)))),
+            // WAITING po rozfunkčnění přidávání
             // TODO otestovat
-            if (snapshot.data! == 1) {
-              widget._filters?.forEach((k, v) => print(k + ": " + v));
-              items = DatabaseItem.getAllItems(
-                  0, "seller_id", widget._filters ?? {}, "sold_to");
-              return Scaffold(
-                  floatingActionButton: MainButton(
-                      iconData: Icons.menu,
-                      onPressed: () {
-                        if (animationController.isCompleted) {
-                          animationController.reverse();
-                          volume = 0;
-                        } else {
-                          animationController.forward();
-                          volume = 0.5;
-                        }
-                      }),
-                  floatingActionButtonLocation:
-                      FloatingActionButtonLocation.endFloat,
-                  body: Stack(children: [
-                    Container(
-                        color: kBlack,
-                        child: CardWidgets.cardsBuilder(items, false,
-                            loggedUser: widget._loggedUser,
-                            forRating: false,
-                            touchable: true)),
-                    MainButtonClicked(buttons: [
-                      SecondaryButtonData(
-                          Icons.add,
-                          () => Navigator.pushReplacementNamed(
-                              context, AddItem.routeName,
-                              arguments: new AddItemFiltersArgs(
-                                  widget._loggedUser, null, null))),
-                      SecondaryButtonData(
-                          Icons.filter_alt,
-                          () => Navigator.pushReplacementNamed(
-                              context, FilterPage.routeName,
-                              arguments: new AddItemFiltersArgs(
-                                  widget._loggedUser, null, null))),
-                      SecondaryButtonData(
-                          Icons.person,
-                          () => Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) =>
-                                  UserPage(loggedUser: widget._loggedUser)))),
-                      SecondaryButtonData(
-                          Icons.article,
-                          () => Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => ArticlesScreen())))
-                    ], volume: volume)
-                  ]));
-            } else {
-              return BannedScreen();
-            }
-          }
-
-          if (snapshot.hasError) {
-            return ErrorScreen();
-          }
-          return Center(child: Image.asset("assets/load.gif"));
-        });
+            SecondaryButtonData(
+                Icons.filter_alt,
+                () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) =>
+                        FilterPage(loggedUser: widget._loggedUser)))),
+            // WAITING po rozfunkčnění přidávání
+            // TODO rozfunkčnit item listy
+            SecondaryButtonData(
+                Icons.person,
+                () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) =>
+                        UserPage(loggedUser: widget._loggedUser)))),
+            SecondaryButtonData(
+                Icons.article,
+                () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => ArticlesScreen())))
+          ], volume: volume)
+        ]));
   }
 }

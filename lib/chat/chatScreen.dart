@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:letbike/remote/dbChat.dart';
-import 'package:letbike/remote/dbItem.dart';
+import 'package:letbike/remote/items.dart';
 import 'package:letbike/remote/dbRating.dart';
 import 'package:multi_image_picker2/multi_image_picker2.dart';
 import 'package:letbike/homePage.dart';
@@ -124,8 +124,7 @@ class _ChatScreenState extends State<ChatScreen>
                         child: TextInput(
                             icon: Icons.chat,
                             hint: "Napište zprávu",
-                            controller: chatInputController,
-                            obscure: false))),
+                            controller: chatInputController))),
                 CircularButton(
                     kSecondaryColor, 40, Icons.image, kWhite, loadAssets),
                 Padding(
@@ -163,7 +162,7 @@ class _ChatScreenState extends State<ChatScreen>
         Text("Opravdu chcete zrušit předmětu této osobě?",
             style: TextStyle(color: kWhite)), onTrue: () {
       Future<String> updateRes =
-          DatabaseItem.updateItemStatus(chatUsers.itemInfo.item.id, 0, 0);
+          RemoteItems.updateItemStatus(chatUsers.itemInfo.item.id, 0, 0);
       ModalWindow.showModalWindow(
           context,
           "Oznámení",
@@ -188,7 +187,7 @@ class _ChatScreenState extends State<ChatScreen>
         "Opravdu?",
         Text("Opravdu chcete prodat předmět této osobě?",
             style: TextStyle(color: kWhite)), onTrue: () {
-      Future<String> updateRes = DatabaseItem.updateItemStatus(
+      Future<String> updateRes = RemoteItems.updateItemStatus(
           chatUsers.itemInfo.item.id, 1, chatUsers.userB);
       ModalWindow.showModalWindow(
           context,

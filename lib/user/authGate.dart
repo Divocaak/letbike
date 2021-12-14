@@ -1,53 +1,46 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:letbike/remote/settings.dart';
-import 'package:letbike/general/pallete.dart';
+import 'package:flutter/material.dart';
 import 'package:letbike/homePage.dart';
-import 'package:flutterfire_ui/auth.dart';
+import 'package:letbike/remote/users.dart';
 import 'package:letbike/widgets/images.dart';
-import 'package:url_launcher/url_launcher.dart';
 
-class AuthGate extends StatelessWidget {
+class AuthGate extends StatefulWidget {
+  AuthGate({Key? key, required User loggedUser})
+      : _loggedUser = loggedUser,
+        super(key: key);
+
+  final User _loggedUser;
+
   @override
-  Widget build(BuildContext context) =>
-      Stack(alignment: Alignment.center, children: [
-        StreamBuilder<User?>(
-            stream: FirebaseAuth.instance.authStateChanges(),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return SignInScreen(
-                    headerBuilder: (context, constraints, _) =>
-                        BackgroundImage(),
-                    footerBuilder: (context, _) {
-                      return Padding(
-                          padding: EdgeInsets.only(top: 16),
-                          child: TextButton(
-                              onPressed: () => openUrl("terms.pdf"),
-                              child: Container(
-                                  child: Text(
-                                      "Přihlášením souhlasíte s podmínkami",
-                                      style: TextStyle(color: kBlack)),
-                                  decoration: BoxDecoration(
-                                      border: Border(
-                                          bottom: BorderSide(
-                                              width: 1, color: kBlack))))));
-                    },
-                    showAuthActionSwitch: false,
-                    providerConfigs: [
-                      GoogleProviderConfiguration(clientId: "clientId"),
-                    ]);
+  _AuthGateState createState() => _AuthGateState();
+}
+
+class _AuthGateState extends State<AuthGate> {
+  @override
+  Widget build(BuildContext context) {
+    Future<int> userStatus = RemoteUser.checkUserStatus(widget._loggedUser.uid);
+    TextStyle textStyle = TextStyle(
+        color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold);
+    return Stack(alignment: Alignment.center, children: [
+      BackgroundImage(),
+      FutureBuilder<int>(
+          future: userStatus,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              if (snapshot.data! == 1) {
+                return HomePage(loggedUser: widget._loggedUser);
+              } else {
+                return Text("Jste zabanován, kontaktujte prosím podporu",
+                    style: textStyle);
               }
+            }
 
-              return HomePage(loggedUser: snapshot.data as User);
-            })
-      ]);
-
-  static void openUrl(String doc) async {
-    String url = docsFolder + "/" + doc;
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Nelze otevřít.';
-    }
+            if (snapshot.hasError) {
+              return Text("Někde se stala chyba, zkuste to prosím později",
+                  style: textStyle);
+            }
+            return Center(child: Image.asset("assets/load.gif"));
+          })
+    ]);
   }
 }

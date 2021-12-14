@@ -60,25 +60,4 @@ class ErrorWidgets {
           )
         ]));
   }
-
-  static Widget addItemError() {
-    return Center(
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-          Icon(
-            Icons.warning_rounded,
-            color: kWarning,
-          ),
-          SizedBox(
-            height: 12,
-          ),
-          Text(
-            'Vyplňte prosím název, popis a cenu inzerátu. Přidejte alespoň jeden obrázek. ' +
-                Emojis.foldedHands,
-            style: TextStyle(color: kWarning),
-          )
-        ]));
-  }
 }

@@ -7,28 +7,28 @@ import 'package:letbike/widgets/errorWidgets.dart';
 
 class CardWidgets {
   static Widget cardsBuilder(
-      Future<List<dynamic>>? objectsToRenderFrom, bool articleCard,
-      {User? loggedUser, bool? forRating, bool? touchable}) {
-    return FutureBuilder<List<dynamic>>(
-        future: objectsToRenderFrom,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return ListView.builder(
-                itemCount: snapshot.data!.length,
-                itemBuilder: (context, i) {
-                  return articleCard
-                      ? ArticleCard.buildCard(context, snapshot.data![i])
-                      : ItemCard.buildCard(context, snapshot.data![i],
-                          loggedUser!, forRating!, touchable!);
-                });
-          } else if (!snapshot.hasData) {
-            return ErrorWidgets.futureBuilderEmpty();
-          } else if (snapshot.hasError) {
-            return ErrorWidgets.futureBuilderError();
-          }
-          return Center(child: Image.asset("assets/load.gif"));
-        });
-  }
+          Future<List<dynamic>>? objectsToRenderFrom, bool articleCard,
+          {User? loggedUser, bool? forRating, bool? touchable}) =>
+      FutureBuilder<List<dynamic>>(
+          future: objectsToRenderFrom,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: Image.asset("assets/load.gif"));
+            } else {
+              if (snapshot.hasData) {
+                return ListView.builder(
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, i) => articleCard
+                        ? ArticleCard.buildCard(context, snapshot.data![i])
+                        : ItemCard.buildCard(context, snapshot.data![i],
+                            loggedUser!, forRating!, touchable!));
+              } else if (snapshot.hasError) {
+                return ErrorWidgets.futureBuilderError();
+              } else {
+                return ErrorWidgets.futureBuilderEmpty();
+              }
+            }
+          });
 
   static Widget text(
       String text, double fontSize, double offset, FontWeight fontWeight) {

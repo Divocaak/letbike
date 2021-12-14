@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:letbike/user/authGate.dart';
+import 'package:letbike/user/signGate.dart';
 import 'package:letbike/widgets/buttonRounded.dart';
 import 'package:letbike/widgets/images.dart';
 
@@ -17,7 +17,7 @@ class FirstScreen extends StatelessWidget {
           RoundedButton(
               buttonName: "Přihlásit se",
               onClick: () => Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => AuthGate())))
+                  MaterialPageRoute(builder: (context) => SignGate())))
         ])
       ]));
 }

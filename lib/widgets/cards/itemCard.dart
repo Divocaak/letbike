@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:letbike/remote/dbItem.dart';
+import 'package:letbike/remote/items.dart';
 import 'package:letbike/remote/dbRating.dart';
 import 'package:letbike/remote/settings.dart';
 import 'package:letbike/general/pallete.dart';
@@ -117,7 +117,7 @@ class ItemCard {
                   return Center(child: Image.asset("assets/load.gif"));
                 },
               ), after: () {
-            DatabaseItem.updateItemStatus(item.id, 2, item.soldTo);
+            RemoteItems.updateItemStatus(item.id, 2, item.soldTo);
           });
         });
       }

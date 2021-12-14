@@ -137,13 +137,13 @@ class Rating {
 
 class Article {
   int id;
-  String title;
-  String added;
+  String name;
+  String dateAdded;
 
-  Article(this.id, this.title, this.added);
+  Article(this.id, this.name, this.dateAdded);
 
   factory Article.fromJson(Map<String, dynamic> json) {
-    return Article(int.parse(json["id"]), json["title"], json["added"]);
+    return Article(int.parse(json["id"]), json["name"], json["dateAdded"]);
   }
 }
 
@@ -152,21 +152,4 @@ class ItemInfo {
   User me;
 
   ItemInfo(this.item, this.me);
-}
-
-class AddItemFiltersArgs {
-  User loggedUser;
-  Map<String, String>? filters;
-  AddItemData? addItemData;
-
-  AddItemFiltersArgs(this.loggedUser, this.filters, this.addItemData);
-}
-
-class AddItemData {
-  String name;
-  String desc;
-  String price;
-  List<Asset> imgs;
-
-  AddItemData(this.name, this.desc, this.price, this.imgs);
 }
