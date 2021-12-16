@@ -1,14 +1,17 @@
 import 'dart:convert';
 import 'dart:async';
+import 'dart:io';
 import 'package:http/http.dart';
 import 'package:letbike/general/objects.dart';
 import 'package:letbike/remote/settings.dart';
 
-class DatabaseRating {
+class RemoteRatings {
   static String url = scriptsUrl + 'rating/';
 
+  // WAITING po dodělání chatů/prodávání
+  // TODO refactor
   static Future<String> setRating(
-      int userId, double ratingVal, String ratingText) async {
+      String userId, double ratingVal, String ratingText) async {
     final Response response = await post(
       Uri.parse(Uri.encodeFull(url +
           "ratingSet.php/?" +
@@ -30,16 +33,19 @@ class DatabaseRating {
     }
   }
 
-  static Future<List<Rating>> getRatings(int userId) async {
-    final Response response = await get(
-        Uri.parse(
-            Uri.encodeFull(url + "ratingGet.php/?userId=" + userId.toString())),
-        headers: {"Accept": "application/json;charset=UTF-8"});
-    if (response.statusCode == 200) {
-      final parsed = jsonDecode(response.body).cast<Map<String, dynamic>>();
-      return parsed.map<Rating>((rating) => Rating.fromJson(rating)).toList();
-    } else {
-      throw Exception("Can't get items");
-    }
+  static Future<List<Rating>>? getRatings(String userId) async {
+    final Response response = await post(
+        Uri.parse(Uri.encodeFull(url + "ratingGet.php")),
+        headers: {
+          HttpHeaders.contentTypeHeader: 'application/json;charset=UTF-8'
+        },
+        body: jsonEncode({"userId": userId}));
+
+    return response.statusCode == 200 && response.body != "ERROR"
+        ? jsonDecode(response.body)
+            .cast()
+            .map<Rating>((rating) => Rating.fromJson(rating))
+            .toList()
+        : [];
   }
 }

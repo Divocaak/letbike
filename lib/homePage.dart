@@ -42,9 +42,7 @@ class _HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
-    widget._filters?.forEach((k, v) => print(k + ": " + v));
-    items = RemoteItems.getAllItems(
-        0, "seller_id", widget._filters ?? {}, "sold_to");
+    items = RemoteItems.getAllItems(1, itemParams: widget._filters);
     return Scaffold(
         floatingActionButton: MainButton(
             iconData: Icons.menu,
@@ -71,15 +69,12 @@ class _HomePageState extends State<HomePage>
                 () => Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) =>
                         AddItem(loggedUser: widget._loggedUser)))),
-            // WAITING po rozfunkčnění přidávání
-            // TODO otestovat
             SecondaryButtonData(
                 Icons.filter_alt,
                 () => Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) =>
                         FilterPage(loggedUser: widget._loggedUser)))),
-            // WAITING po rozfunkčnění přidávání
-            // TODO rozfunkčnit item listy
+            // TODO lifecycle itemu na obou stranách
             SecondaryButtonData(
                 Icons.person,
                 () => Navigator.of(context).push(MaterialPageRoute(

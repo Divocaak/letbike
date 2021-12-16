@@ -3,7 +3,7 @@ import 'package:http/http.dart';
 import 'package:multi_image_picker2/multi_image_picker2.dart';
 import 'package:letbike/remote/settings.dart';
 
-class DatabaseUploadImage {
+class RemoteImages {
   static uploadImages(
       List<Asset> images, String imgFolder, String folderIdentificator) async {
     var request = MultipartRequest('POST', Uri.parse(imgUploadEndPoint));

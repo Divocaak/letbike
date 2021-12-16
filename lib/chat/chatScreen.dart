@@ -1,11 +1,10 @@
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:letbike/remote/dbChat.dart';
 import 'package:letbike/remote/items.dart';
-import 'package:letbike/remote/dbRating.dart';
+import 'package:letbike/remote/ratings.dart';
 import 'package:multi_image_picker2/multi_image_picker2.dart';
-import 'package:letbike/homePage.dart';
-import 'package:letbike/item/itemPage.dart';
 import 'package:letbike/chat/chatBuildMessage.dart';
 import 'package:letbike/widgets/textInput.dart';
 import 'package:letbike/widgets/ratingRow.dart';
@@ -15,12 +14,24 @@ import 'package:letbike/widgets/alertBox.dart';
 import 'package:letbike/general/objects.dart';
 import 'package:letbike/general/pallete.dart';
 
-late ChatUsers chatUsers;
-
+// TODO refactor
 class ChatScreen extends StatefulWidget {
+  ChatScreen(
+      {Key? key,
+      required Item item,
+      required User loggedUser,
+      required User secondUser})
+      : _item = item,
+        _loggedUser = loggedUser,
+        _secondUser = secondUser,
+        super(key: key);
+
+  final Item _item;
+  final User _loggedUser;
+  final User _secondUser;
+
   @override
   _ChatScreenState createState() => _ChatScreenState();
-  static const routeName = "/chatScreen";
 }
 
 class _ChatScreenState extends State<ChatScreen>
@@ -30,18 +41,14 @@ class _ChatScreenState extends State<ChatScreen>
   List<Asset> images = [];
 
   Future<void> loadAssets() async {
-    setState(() {
-      images = [];
-    });
+    setState(() => images = []);
 
     List<Asset>? resultList;
     String? error;
 
     try {
-      resultList = await MultiImagePicker.pickImages(
-        maxImages: 1,
-        enableCamera: true,
-      );
+      resultList =
+          await MultiImagePicker.pickImages(maxImages: 1, enableCamera: true);
     } on Exception catch (e) {
       error = e.toString();
     }
@@ -59,10 +66,9 @@ class _ChatScreenState extends State<ChatScreen>
 
   @override
   Widget build(BuildContext context) {
-    chatUsers = ModalRoute.of(context)!.settings.arguments as ChatUsers;
-    messagesStream = DatabaseChat.getMessages(123 /* chatUsers.userA.id */,
-        chatUsers.userB, chatUsers.itemInfo.item.id);
-    bool cancelTrade = (chatUsers.itemInfo.item.status == 1 ? true : false);
+    messagesStream = DatabaseChat.getMessages(
+        widget._loggedUser, widget._secondUser, widget._item);
+    bool cancelTrade = (widget._item.status == 2 ? true : false);
     return GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: Scaffold(
@@ -73,22 +79,12 @@ class _ChatScreenState extends State<ChatScreen>
                 title: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      CircularButton(
-                          kSecondaryColor,
-                          40,
-                          Icons.arrow_back,
-                          kWhite,
-                          () => Navigator.of(context).pushReplacementNamed(
-                              ItemPage.routeName,
-                              arguments: chatUsers.itemInfo)),
-                      Text(chatUsers.itemInfo.item.name,
-                          style: TextStyle(fontSize: 20)),
-                      CircularButton(
-                          kSecondaryColor, 40, Icons.person_search, kWhite, () {
-                        otherPersonInfo();
-                      }),
-                      (/* chatUsers.itemInfo.me.id */ 123 ==
-                              chatUsers.itemInfo.item.sellerId
+                      CircularButton(kSecondaryColor, 40, Icons.arrow_back,
+                          kWhite, () => Navigator.of(context).pop()),
+                      Text(widget._item.name, style: TextStyle(fontSize: 20)),
+                      CircularButton(kSecondaryColor, 40, Icons.person_search,
+                          kWhite, () => otherPersonInfo()),
+                      (widget._loggedUser.uid == widget._item.sellerId
                           ? CircularButton(
                               kSecondaryColor,
                               40,
@@ -109,10 +105,11 @@ class _ChatScreenState extends State<ChatScreen>
                         if (stream.hasData) {
                           return ListView.builder(
                               itemCount: (stream.data as List).length,
-                              itemBuilder: (context, i) {
-                                return ChatBuildMessage.buildMessage(context,
-                                    (stream.data as List)[i], chatUsers);
-                              });
+                              itemBuilder: (context, i) =>
+                                  ChatBuildMessage.buildMessage(
+                                      context,
+                                      (stream.data as List)[i],
+                                      widget._loggedUser));
                         } else {
                           return Center(child: Image.asset("assets/load.gif"));
                         }
@@ -141,9 +138,7 @@ class _ChatScreenState extends State<ChatScreen>
                             images); */
 
                         if (images.length != 0) {
-                          setState(() {
-                            images = [];
-                          });
+                          setState(() => images = []);
                         }
 
                         if (chatInputController.text != "") {
@@ -155,61 +150,67 @@ class _ChatScreenState extends State<ChatScreen>
             ])));
   }
 
-  Widget cancelTradeBtn() {
-    return ModalWindow.showModalWindow(
-        context,
-        "Opravdu?",
-        Text("Opravdu chcete zrušit předmětu této osobě?",
-            style: TextStyle(color: kWhite)), onTrue: () {
-      Future<String> updateRes =
-          RemoteItems.updateItemStatus(chatUsers.itemInfo.item.id, 0, 0);
-      ModalWindow.showModalWindow(
+  Widget cancelTradeBtn() => ModalWindow.showModalWindow(
           context,
-          "Oznámení",
-          FutureBuilder<String>(
-              future: updateRes,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return Text(snapshot.data!, style: TextStyle(color: kWhite));
-                } else if (snapshot.hasError) {
-                  return ErrorWidgets.futureBuilderError();
-                }
-                return Center(child: Image.asset("assets/load.gif"));
-              }),
-          after: () => Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => HomePage(loggedUser: chatUsers.userA))));
-    });
-  }
+          "Opravdu?",
+          Text("Opravdu chcete zrušit prodej předmětu této osobě?",
+              style: TextStyle(color: kWhite)), onTrue: () {
+        Future<bool> updateRes =
+            RemoteItems.updateItemStatus(widget._item.id, 1, soldTo: "");
+        ModalWindow.showModalWindow(
+            context,
+            "Oznámení",
+            FutureBuilder<bool>(
+                future: updateRes,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: Image.asset("assets/load.gif"));
+                  } else {
+                    if (snapshot.hasData) {
+                      return Text("Zrušeno!", style: TextStyle(color: kWhite));
+                    } else if (snapshot.hasError) {
+                      return ErrorWidgets.futureBuilderError();
+                    } else {
+                      return ErrorWidgets.futureBuilderEmpty();
+                    }
+                  }
+                }),
+            after: () => Navigator.of(context).pop());
+      });
 
-  Widget acceptTrade() {
-    return ModalWindow.showModalWindow(
-        context,
-        "Opravdu?",
-        Text("Opravdu chcete prodat předmět této osobě?",
-            style: TextStyle(color: kWhite)), onTrue: () {
-      Future<String> updateRes = RemoteItems.updateItemStatus(
-          chatUsers.itemInfo.item.id, 1, chatUsers.userB);
-      ModalWindow.showModalWindow(
+  Widget acceptTrade() => ModalWindow.showModalWindow(
           context,
-          "Oznámení",
-          FutureBuilder<String>(
-              future: updateRes,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return Text(snapshot.data!, style: TextStyle(color: kWhite));
-                } else if (snapshot.hasError) {
-                  return ErrorWidgets.futureBuilderError();
-                }
-                return Center(child: Image.asset("assets/load.gif"));
-              }),
-          after: () => Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => HomePage(loggedUser: chatUsers.userA))));
-    });
-  }
+          "Opravdu?",
+          Text("Opravdu chcete prodat předmět této osobě?",
+              style: TextStyle(color: kWhite)), onTrue: () {
+        Future<bool> updateRes = RemoteItems.updateItemStatus(
+            widget._item.id, 2,
+            soldTo: widget._secondUser.uid);
+        ModalWindow.showModalWindow(
+            context,
+            "Oznámení",
+            FutureBuilder<bool>(
+                future: updateRes,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: Image.asset("assets/load.gif"));
+                  } else {
+                    if (snapshot.hasData) {
+                      return Text("Prodáno!", style: TextStyle(color: kWhite));
+                    } else if (snapshot.hasError) {
+                      return ErrorWidgets.futureBuilderError();
+                    } else {
+                      return ErrorWidgets.futureBuilderEmpty();
+                    }
+                  }
+                }),
+            after: () => Navigator.of(context).pop());
+      });
 
   Widget otherPersonInfo() {
     //Future<User>? otherUser = DatabaseAccount.getUserInfo(chatUsers.userB);
-    Future<List<Rating>>? ratings = DatabaseRating.getRatings(chatUsers.userB);
+    Future<List<Rating>>? ratings =
+        RemoteRatings.getRatings(widget._secondUser.uid);
 
     return ModalWindow.showModalWindow(
         context,
@@ -251,20 +252,23 @@ class _ChatScreenState extends State<ChatScreen>
                     }
                     return Center(child: Image.asset("assets/load.gif"));
                   }), */
-              FutureBuilder(
+              FutureBuilder<List<Rating>>(
                   future: ratings,
                   builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      List<Widget>? ratings = [];
-                      for (dynamic rating in snapshot.data as List) {
-                        ratings.add(RatingRow.buildRow(
-                            rating.ratingValue, rating.ratingText));
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: Image.asset("assets/load.gif"));
+                    } else {
+                      if (snapshot.hasData) {
+                        return ListView.builder(
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (context, i) =>
+                                RatingRow.buildRow(snapshot.data![i]));
+                      } else if (snapshot.hasError) {
+                        return ErrorWidgets.futureBuilderError();
+                      } else {
+                        return ErrorWidgets.futureBuilderEmpty();
                       }
-                      return Column(children: ratings);
-                    } else if (snapshot.hasError) {
-                      return ErrorWidgets.futureBuilderError();
                     }
-                    return Center(child: Image.asset("assets/load.gif"));
                   })
             ])));
   }

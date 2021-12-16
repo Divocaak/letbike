@@ -2,7 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:letbike/remote/items.dart';
-import 'package:letbike/remote/dbRating.dart';
+import 'package:letbike/remote/ratings.dart';
 import 'package:letbike/general/objects.dart';
 import 'package:letbike/general/pallete.dart';
 import 'package:letbike/user/signGate.dart';
@@ -46,14 +46,11 @@ class _UserPageState extends State<UserPage>
 
   @override
   Widget build(BuildContext context) {
-    // TODO idčka
-    items = RemoteItems.getAllItems(0, "user.id.toString()", {}, "sold_to");
-    soldItems = RemoteItems.getAllItems(1, "user.id.toString()", {}, "sold_to");
-    boughtItems =
-        RemoteItems.getAllItems(1, "seller_id", {}, "user.id.toString()");
-    ratedItems =
-        RemoteItems.getAllItems(2, "seller_id", {}, "user.id.toString()");
-    ratings = DatabaseRating.getRatings(/* user.id */ 123);
+    items = RemoteItems.getAllItems(1, sellerId: widget._loggedUser.uid);
+    soldItems = RemoteItems.getAllItems(2, sellerId: widget._loggedUser.uid);
+    boughtItems = RemoteItems.getAllItems(2, soldTo: widget._loggedUser.uid);
+    ratedItems = RemoteItems.getAllItems(3, soldTo: widget._loggedUser.uid);
+    ratings = RemoteRatings.getRatings(widget._loggedUser.uid);
 
     return Scaffold(
         backgroundColor: kBlack,
@@ -79,19 +76,9 @@ class _UserPageState extends State<UserPage>
                 "Jméno a příjmení: " + (widget._loggedUser.displayName ?? "")),
             AccountInfoField.infoField(
                 "Telefon: " + (widget._loggedUser.phoneNumber ?? "")),
-            Container(
-                child:
-                    CarouselSlider(options: carouselOptions(context), items: [
-              // TODO idčka!
-              itemStatusField(items!, "Moje inzeráty", false, true),
-              itemStatusField(soldItems!, "Prodané předměty", false, true),
-              itemStatusField(boughtItems!, "Zakoupené předměty", true, true),
-              itemStatusField(ratedItems!,
-                  "Ohodnocené předměty (již přijaté, uzavřené)", false, false)
-            ])),
             AccountInfoField.infoField("Hodnocení"),
             Container(
-                height: 300,
+                height: 200,
                 child: FutureBuilder<List<Rating>>(
                     future: ratings,
                     builder: (context, snapshot) {
@@ -101,16 +88,25 @@ class _UserPageState extends State<UserPage>
                         if (snapshot.hasData) {
                           return ListView.builder(
                               itemCount: snapshot.data!.length,
-                              itemBuilder: (context, i) => RatingRow.buildRow(
-                                  snapshot.data![i].ratingValue,
-                                  snapshot.data![i].ratingText));
+                              itemBuilder: (context, i) =>
+                                  RatingRow.buildRow(snapshot.data![i]));
                         } else if (snapshot.hasError) {
                           return ErrorWidgets.futureBuilderError();
                         } else {
                           return ErrorWidgets.futureBuilderEmpty();
                         }
                       }
-                    }))
+                    })),
+            Container(
+                child:
+                    CarouselSlider(options: carouselOptions(context), items: [
+              itemStatusField(items!, "Moje inzeráty", touchable: true),
+              itemStatusField(soldItems!, "Prodané předměty", touchable: true),
+              itemStatusField(boughtItems!, "Zakoupené předměty",
+                  forRating: true, touchable: true),
+              itemStatusField(
+                  ratedItems!, "Ohodnocené předměty (již přijaté, uzavřené)")
+            ]))
           ]),
           MainButtonClicked(buttons: [
             SecondaryButtonData(Icons.logout, () async {
@@ -124,18 +120,18 @@ class _UserPageState extends State<UserPage>
         ]));
   }
 
-  Widget itemStatusField(Future<List<Item>> items, String label, bool forRating,
-          bool touchable) =>
+  Widget itemStatusField(Future<List<Item>> items, String label,
+          {bool? forRating, bool? touchable}) =>
       Column(children: [
         AccountInfoField.infoField(label),
         Container(
-            height: 600,
+            height: 350,
             child: FutureBuilder<List<Item>>(
                 future: items,
                 builder: (context, snapshot) => CardWidgets.cardsBuilder(
                     items, false,
                     loggedUser: widget._loggedUser,
-                    forRating: forRating,
-                    touchable: touchable)))
+                    forRating: forRating ?? false,
+                    touchable: touchable ?? false)))
       ]);
 }

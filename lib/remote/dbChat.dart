@@ -1,16 +1,17 @@
 import 'dart:convert';
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart';
 import 'package:letbike/general/objects.dart';
 import 'package:letbike/remote/settings.dart';
-import 'package:letbike/remote/dbUploadImage.dart';
+import 'package:letbike/remote/images.dart';
 import 'package:multi_image_picker2/multi_image_picker2.dart';
 
 class DatabaseChat {
   static String url = scriptsUrl + 'chat/';
 
   static Future<List<Message>> getMessagesBetween(
-      int seller, int buyer, int itemId) async {
+      User seller, User buyer, Item item) async {
     final Response response = await get(
         Uri.parse(Uri.encodeFull(url +
             "messageGet.php/?from=" +
@@ -18,7 +19,7 @@ class DatabaseChat {
             "&&to=" +
             buyer.toString() +
             "&&itemId=" +
-            itemId.toString())),
+            item.id.toString())),
         headers: {"Accept": "application/json;charset=UTF-8"});
     if (response.statusCode == 200) {
       final parsed = jsonDecode(response.body).cast<Map<String, dynamic>>();
@@ -31,17 +32,17 @@ class DatabaseChat {
   }
 
   static Stream<List<Message>> getMessages(
-      int seller, int buyer, int itemId) async* {
+      User seller, User buyer, Item item) async* {
     while (true) {
       await Future.delayed(Duration.zero);
-      yield await getMessagesBetween(seller, buyer, itemId);
+      yield await getMessagesBetween(seller, buyer, item);
     }
   }
 
   static Future sendMessage(
       int from, int to, int itemId, String message, List<Asset> images) async {
     if (images.length != 0) {
-      DatabaseUploadImage.uploadImages(images, "messages",
+      RemoteImages.uploadImages(images, "messages",
           (from.toString() + to.toString() + message.hashCode.toString()));
     }
 

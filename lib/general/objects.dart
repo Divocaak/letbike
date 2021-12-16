@@ -1,91 +1,45 @@
 export 'categories.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:multi_image_picker2/multi_image_picker2.dart';
 
 class Item {
   int id;
-  int sellerId;
+  String sellerId;
+  String? soldTo;
   String name;
-  String description;
-  double price;
-  int score;
-  int paid;
+  String? description;
+  int price;
   String dateStart;
-  //String dateEnd;
+  String? dateEnd;
   String imgs;
   int status;
-  Map<String, String> itemParams;
-  int soldTo;
+  Map<String, dynamic>? itemParams;
 
   Item(
       this.id,
       this.sellerId,
+      this.soldTo,
       this.name,
       this.description,
       this.price,
-      this.score,
-      this.paid,
       this.dateStart,
-      //this.dateEnd,
+      this.dateEnd,
       this.imgs,
       this.status,
-      this.itemParams,
-      this.soldTo);
+      this.itemParams);
 
-  factory Item.fromJson(Map<String, dynamic> json) {
-    return Item(
-        int.parse(json["id"]),
-        int.parse(json["sellerId"]),
-        json["name"],
-        json["description"],
-        double.parse(json["price"]),
-        int.parse(json["score"]),
-        int.parse(json["paid"]),
-        json["dateStart"],
-        //json["dateEnd"],
-        json["imgs"],
-        int.parse(json["status"]),
-        getParams(json),
-        int.parse(json["soldTo"]));
-  }
-
-  static Map<String, String> getParams(Map<String, dynamic> json) {
-    Map<String, String> mapToRet = {};
-    json.forEach((key, value) {
-      if (key != "id" &&
-          key != "sellerId" &&
-          key != "name" &&
-          key != "description" &&
-          key != "price" &&
-          key != "score" &&
-          key != "paid" &&
-          key != "dateStart" &&
-          //key != "dateEnd" &&
-          key != "imgs" &&
-          key != "param" &&
-          key != "status" &&
-          key != "soldTo") {
-        mapToRet[key] = value;
-      }
-    });
-
-    return mapToRet;
-  }
-
-  Map<String, dynamic> toasfasJson() => {
-        "id": id,
-        "sellerId": sellerId,
-        "name": name,
-        "description": description,
-        "price": price,
-        "score": score,
-        "paid": paid,
-        "dateStart": dateStart,
-        //"dateEnd": dateEnd,
-        "imgs": imgs,
-        "status": status,
-        "soldTo": soldTo
-      };
+  factory Item.fromJson(Map<String, dynamic> json) => Item(
+      int.parse(json["id"]),
+      json["sellerId"],
+      json["soldTo"],
+      json["name"],
+      json["description"],
+      int.parse(json["price"]),
+      json["dateStart"],
+      json["dateEnd"],
+      json["imgs"],
+      int.parse(json["status"]),
+      json["params"]);
 }
 
 class Message {
@@ -116,23 +70,23 @@ class Chat {
   }
 }
 
-class ChatUsers {
-  ItemInfo itemInfo;
+class ChatUsersa {
+  Item item;
   User userA;
   int userB;
 
-  ChatUsers(this.itemInfo, this.userA, this.userB);
+  ChatUsersa(this.item, this.userA, this.userB);
 }
 
 class Rating {
-  double ratingValue;
-  String ratingText;
+  int value;
+  String text;
+  String dateAdded;
 
-  Rating(this.ratingValue, this.ratingText);
+  Rating(this.value, this.text, this.dateAdded);
 
-  factory Rating.fromJson(Map<String, dynamic> json) {
-    return Rating(double.parse(json["ratingVal"]), json["ratingText"]);
-  }
+  factory Rating.fromJson(Map<String, dynamic> json) =>
+      Rating(int.parse(json["val"]), json["text"], json["date"]);
 }
 
 class Article {
@@ -145,11 +99,4 @@ class Article {
   factory Article.fromJson(Map<String, dynamic> json) {
     return Article(int.parse(json["id"]), json["name"], json["dateAdded"]);
   }
-}
-
-class ItemInfo {
-  Item item;
-  User me;
-
-  ItemInfo(this.item, this.me);
 }

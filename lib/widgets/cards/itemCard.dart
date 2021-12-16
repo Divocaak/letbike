@@ -1,21 +1,23 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:letbike/remote/items.dart';
-import 'package:letbike/remote/dbRating.dart';
+import 'package:letbike/remote/ratings.dart';
 import 'package:letbike/remote/settings.dart';
 import 'package:letbike/general/pallete.dart';
 import 'package:letbike/general/objects.dart';
 import 'package:letbike/item/itemPage.dart';
 import 'package:letbike/widgets/alertBox.dart';
+import 'package:letbike/widgets/errorWidgets.dart';
 import 'package:letbike/widgets/images.dart';
 import 'cardWidgets.dart';
 
 TextEditingController ratingController = TextEditingController();
-double rating = 50;
+double rating = 5;
 
 class ItemCard {
   static Widget buildCard(
       context, Item item, User loggedUser, bool forRating, bool touchable) {
+    // TODO přesunout stejný věci co má i articleCard do jednoho CardEssential widgetu, refactor!
     return Container(
         height: 240,
         child: Card(
@@ -31,7 +33,7 @@ class ItemCard {
                 child: Stack(children: [
                   ServerImage().build(imgsFolder +
                       "/items/" +
-                      (item.name.hashCode + item.sellerId).toString() +
+                      (loggedUser.uid + item.name.hashCode.toString()) +
                       "/0.jpg"),
                   Column(children: [
                     Expanded(
@@ -46,8 +48,11 @@ class ItemCard {
                               flex: 4,
                               child: Padding(
                                   padding: EdgeInsets.symmetric(horizontal: 10),
-                                  child: CardWidgets.text(item.description, 18,
-                                      1, FontWeight.normal))),
+                                  child: CardWidgets.text(
+                                      item.description ?? "",
+                                      18,
+                                      1,
+                                      FontWeight.normal))),
                           Expanded(
                               flex: 2,
                               child: Padding(
@@ -66,59 +71,59 @@ class ItemCard {
       context, Item item, User loggedUser, bool forRating, bool touchable) {
     if (touchable) {
       if (!forRating) {
-        Navigator.of(context).pushNamed(ItemPage.routeName,
-            arguments: new ItemInfo(item, loggedUser));
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) =>
+                ItemPage(item: item, loggedUser: loggedUser)));
       } else {
+        // TODO tohle celý předělat, možná opravit
         ModalWindow.showModalWindow(
             context,
             "Ohodnoťte prodejce",
             Container(
                 width: 500,
                 height: 500,
-                child: ListView(
-                  children: [
-                    Text(
-                        "Prodejce ohodnoťte až poté, co Vám přijde zakoupený předmět.",
-                        style: TextStyle(color: kWhite)),
-                    RatingBar(rating),
-                    Expanded(
-                        child: TextField(
-                            keyboardType: TextInputType.multiline,
-                            maxLines: 10,
-                            maxLength: 250,
-                            style: TextStyle(color: kWhite),
-                            controller: ratingController,
-                            decoration: InputDecoration(
-                                hintText: "Ohodnoťte uživatele a předmět",
-                                hintStyle: TextStyle(color: kWhite),
-                                counterStyle: TextStyle(color: kWhite),
-                                border: new OutlineInputBorder(
+                child: ListView(children: [
+                  Text(
+                      "Prodejce ohodnoťte až poté, co Vám přijde zakoupený předmět.",
+                      style: TextStyle(color: kWhite)),
+                  RatingBar(rating),
+                  Expanded(
+                      child: TextField(
+                          keyboardType: TextInputType.multiline,
+                          maxLines: 10,
+                          maxLength: 250,
+                          style: TextStyle(color: kWhite),
+                          controller: ratingController,
+                          decoration: InputDecoration(
+                              hintText: "Ohodnoťte uživatele a předmět",
+                              hintStyle: TextStyle(color: kWhite),
+                              counterStyle: TextStyle(color: kWhite),
+                              border: new OutlineInputBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(25)),
-                                  borderSide: new BorderSide(color: kWhite),
-                                ))))
-                  ],
-                )), after: () {
-          Future<String> rateResponse = DatabaseRating.setRating(
+                                  borderSide: new BorderSide(color: kWhite)))))
+                ])), after: () {
+          Future<String> rateResponse = RemoteRatings.setRating(
               item.sellerId, rating, ratingController.text);
           ModalWindow.showModalWindow(
               context,
               "Oznámení",
               FutureBuilder<String>(
-                future: rateResponse,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return Text(snapshot.data!,
-                        style: TextStyle(color: kWhite));
-                  } else if (snapshot.hasError) {
-                    return Text('Sorry there is an error',
-                        style: TextStyle(color: kWhite));
-                  }
-                  return Center(child: Image.asset("assets/load.gif"));
-                },
-              ), after: () {
-            RemoteItems.updateItemStatus(item.id, 2, item.soldTo);
-          });
+                  future: rateResponse,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: Image.asset("assets/load.gif"));
+                    } else {
+                      if (snapshot.hasData) {
+                        return Text(snapshot.data!,
+                            style: TextStyle(color: kWhite));
+                      } else {
+                        return ErrorWidgets.futureBuilderError();
+                      }
+                    }
+                  }),
+              after: () => RemoteItems.updateItemStatus(item.id, 2,
+                  soldTo: item.soldTo));
         });
       }
     }

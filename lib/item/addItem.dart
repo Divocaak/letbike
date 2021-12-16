@@ -2,6 +2,7 @@ import 'package:emojis/emojis.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:letbike/filters/filters.dart';
+import 'package:letbike/widgets/errorWidgets.dart';
 import 'package:multi_image_picker2/multi_image_picker2.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:letbike/widgets/textInput.dart';
@@ -9,6 +10,7 @@ import 'package:letbike/widgets/mainButtonEssentials.dart';
 import 'package:letbike/widgets/images.dart';
 import 'package:letbike/general/pallete.dart';
 
+// ignore: must_be_immutable
 class AddItem extends StatefulWidget {
   AddItem({Key? key, required User loggedUser})
       : _loggedUser = loggedUser,
@@ -157,15 +159,11 @@ class _AddItem extends State<AddItem> with TickerProviderStateMixin {
                               price: priceController.text,
                               images: widget._images!)))
                       : ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Row(children: [
-                          Icon(Icons.warning_rounded, color: kWarning),
-                          SizedBox(width: 10),
-                          Flexible(
-                              child: Text(
-                                  'Vyplňte prosím název, popis a cenu inzerátu. Přidejte alespoň jeden obrázek. ' +
-                                      Emojis.foldedHands,
-                                  style: TextStyle(color: kWarning)))
-                        ]))))
+                          content: ErrorWidgets.snackBarMessage(
+                              'Vyplňte prosím název, popis a cenu inzerátu. Přidejte alespoň jeden obrázek. ' +
+                                  Emojis.foldedHands,
+                              kWarning,
+                              Icons.warning))))
             ], volume: volume)
           ])));
 }

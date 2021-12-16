@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:letbike/general/pallete.dart';
 import 'package:letbike/general/objects.dart';
@@ -5,8 +6,8 @@ import 'package:letbike/remote/settings.dart';
 import 'package:letbike/widgets/images.dart';
 
 class ChatBuildMessage {
-  static Widget buildMessage(context, Message message, ChatUsers chatUsers) {
-    //bool myMessage = message.from == chatUsers.userA.id;
+  static Widget buildMessage(context, Message message, User loggedUser) {
+    //bool myMessage = message.from == loggedUser.uid;
     bool img = message.img == 1 ? true : false;
     return Container(
         /*  margin: EdgeInsets.fromLTRB(
