@@ -19,7 +19,7 @@ class CircularButton extends StatelessWidget {
       child: IconButton(
         icon: Icon(icon, color: iconColor),
         enableFeedback: true,
-        onPressed: onClick,
+        onPressed: () => onClick(),
       ),
     );
   }

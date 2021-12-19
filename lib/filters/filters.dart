@@ -1,106 +1,107 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:letbike/app/homePage.dart';
+import 'package:letbike/homePage.dart';
 import 'package:letbike/widgets/mainButtonEssentials.dart';
 import 'package:letbike/widgets/images.dart';
 import 'package:letbike/filters/widgetsFilter.dart';
 import 'package:letbike/general/objects.dart';
-import 'package:letbike/db/dbItem.dart';
+import 'package:letbike/remote/items.dart';
 import 'package:letbike/general/pallete.dart';
 import 'package:letbike/widgets/alertBox.dart';
 import 'package:letbike/widgets/errorWidgets.dart';
+import 'package:multi_image_picker2/multi_image_picker2.dart';
 
 class FilterPage extends StatefulWidget {
+  FilterPage(
+      {Key? key,
+      required User loggedUser,
+      String? name,
+      String? desc,
+      String? price,
+      List<Asset>? images})
+      : _loggedUser = loggedUser,
+        _name = name,
+        _desc = desc,
+        _price = price,
+        _images = images,
+        super(key: key);
+
+  final User _loggedUser;
+  final String? _name;
+  final String? _desc;
+  final String? _price;
+  final List<Asset>? _images;
+
   @override
   _FilterPage createState() => _FilterPage();
-
-  static const routeName = "/filterPage";
 }
 
-Future<String> addResponse;
+Future<bool>? addResponse;
 
 class _FilterPage extends State<FilterPage> {
-  AddItemFiltersArgs addItemArgs;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
-    addItemArgs = ModalRoute.of(context).settings.arguments;
-    categoryDd.fp = this;
-    partTypeDd.fp = this;
-    partWheelCassetteSwitch.fp = this;
-    partWheelBrakesSwitch.fp = this;
-    partForkSuspensionSwitch.fp = this;
-    partBrakeTypeDd.fp = this;
-    otherTypeDd.fp = this;
-    accessoryTypeDd.fp = this;
+    categoryDd.setFp(this);
+    partTypeDd.setFp(this);
+    partWheelCassetteSwitch.setFp(this);
+    partWheelBrakesSwitch.setFp(this);
+    partForkSuspensionSwitch.setFp(this);
+    partBrakeTypeDd.setFp(this);
+    otherTypeDd.setFp(this);
+    accessoryTypeDd.setFp(this);
     return Scaffold(
         floatingActionButton: MainButton(
-            iconData: addItemArgs.addItemData == null ? Icons.save : Icons.add,
+            iconData: widget._name == null ? Icons.save : Icons.add,
             onPressed: () {
-              addItemArgs.args.filters = getParams();
-              if (addItemArgs.addItemData == null) {
-                Navigator.of(context).pushReplacementNamed(HomePage.routeName,
-                    arguments: addItemArgs.args);
+              if (widget._name == null) {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => HomePage(
+                        loggedUser: widget._loggedUser, filters: getParams())));
               } else {
-                addResponse = DatabaseItem.createItem(
-                    new Item(
-                        -1,
-                        addItemArgs.args.user.id,
-                        addItemArgs.addItemData.name,
-                        addItemArgs.addItemData.desc,
-                        double.parse(addItemArgs.addItemData.price),
-                        0,
-                        0,
-                        "",
-                        "",
-                        0,
-                        addItemArgs.args.filters,
-                        0),
-                    addItemArgs.addItemData.imgs);
+                addResponse = RemoteItems.createItem(
+                    widget._loggedUser.uid,
+                    widget._name!,
+                    widget._desc!,
+                    widget._price!,
+                    getParams(),
+                    widget._images!);
 
                 ModalWindow.showModalWindow(
                     context,
                     "Oznámení",
-                    FutureBuilder<String>(
+                    FutureBuilder<bool>(
                         future: addResponse,
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return Text(snapshot.data,
-                                style: TextStyle(color: kWhite));
-                          } else if (snapshot.hasError) {
-                            return ErrorWidgets.futureBuilderError();
-                          }
-                          return Center(child: Image.asset("assets/load.gif"));
-                        }), after: () {
-                  addItemArgs.args.filters = null;
-
-                  Navigator.of(context).pushReplacementNamed(HomePage.routeName,
-                      arguments: addItemArgs.args);
-                });
+                        builder: (context, snapshot) =>
+                            (snapshot.connectionState == ConnectionState.waiting
+                                ? Center(child: Image.asset("assets/load.gif"))
+                                : (snapshot.hasData
+                                    ? Text("Inzerát úspěšně přidán",
+                                        style: TextStyle(color: kWhite))
+                                    : (snapshot.hasError
+                                        ? ErrorWidgets.futureBuilderError()
+                                        : ErrorWidgets.futureBuilderEmpty())))),
+                    after: () => Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                HomePage(loggedUser: widget._loggedUser))));
               }
             }),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         body: Stack(children: [
           BackgroundImage(),
-          ListView(
-            children: [
-              usedSwitch,
-              categoryDd,
-              case2(
-                  categoryDd.value,
-                  {
-                    0: bikeColumn(),
-                    1: partsColumn(),
-                    2: accessoriesColumn(),
-                    3: otherColumn()
-                  },
-                  Container())
-            ],
-          )
+          ListView(children: [
+            usedSwitch,
+            categoryDd,
+            case2(
+                categoryDd.value,
+                {
+                  0: bikeColumn(),
+                  1: partsColumn(),
+                  2: accessoriesColumn(),
+                  3: otherColumn()
+                },
+                Container())
+          ])
         ]));
   }
 
@@ -137,7 +138,7 @@ class _FilterPage extends State<FilterPage> {
             18: partGearChangeTypeDd,
             19: partHandlebars(),
             20: partSaddlePipe(),
-            21: partShockAbsTypeDd,
+            21: partShockAbsTypeDd
           },
           Container())
     ]);
@@ -262,7 +263,7 @@ class _FilterPage extends State<FilterPage> {
             11: accessoryBoots(),
             13: accessoryLightLightSwitch,
             15: accessoryLockTypeDd,
-            16: accessoryCarRackTypeSwitch,
+            16: accessoryCarRackTypeSwitch
           },
           Container())
     ]);
@@ -303,14 +304,8 @@ class _FilterPage extends State<FilterPage> {
   Widget otherColumn() {
     return Column(children: [
       otherTypeDd,
-      case2(
-          otherTypeDd.value,
-          {
-            0: otherEBike(),
-            1: otherTrainer(),
-            2: otherScooter(),
-          },
-          Container())
+      case2(otherTypeDd.value,
+          {0: otherEBike(), 1: otherTrainer(), 2: otherScooter()}, Container())
     ]);
   }
 
@@ -331,15 +326,13 @@ class _FilterPage extends State<FilterPage> {
   }
 
   TValue case2<TOptionType, TValue>(
-    TOptionType selectedOption,
-    Map<TOptionType, TValue> branches, [
-    TValue defaultValue,
-  ]) {
+      TOptionType selectedOption, Map<TOptionType, TValue> branches,
+      [TValue? defaultValue]) {
     if (!branches.containsKey(selectedOption)) {
-      return defaultValue;
+      return defaultValue!;
     }
 
-    return branches[selectedOption];
+    return branches[selectedOption]!;
   }
 
   Map<String, String> getParams() {
@@ -554,8 +547,7 @@ class _FilterPage extends State<FilterPage> {
     Map<String, String> filters = {};
     for (dynamic valueWidget in valWidgets) {
       if (valueWidget != null && valueWidget.value != null) {
-        filters[valueWidget.filterKey.toString()] =
-            valueWidget.value.toString();
+        filters[valueWidget.getKey()] = valueWidget.value.toString();
       }
     }
 
@@ -925,9 +917,8 @@ class _FilterPage extends State<FilterPage> {
       hint: "Typ", options: Lock.type, filterKey: "accessoryLockTypeDd");
 
   FilterSwitch accessoryCarRackTypeSwitch = new FilterSwitch(
-    label: "Typ",
-    left: "Na střechu",
-    right: "Na tažné",
-    filterKey: "accessoryCarRackTypeSwitch",
-  );
+      label: "Typ",
+      left: "Na střechu",
+      right: "Na tažné",
+      filterKey: "accessoryCarRackTypeSwitch");
 }

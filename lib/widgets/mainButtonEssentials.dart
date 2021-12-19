@@ -3,11 +3,14 @@ import 'package:letbike/general/pallete.dart';
 import 'package:letbike/widgets/buttonCircular.dart';
 
 class MainButton extends StatelessWidget {
-  MainButton({Key key, @required this.iconData, @required this.onPressed})
-      : super(key: key);
+  MainButton(
+      {Key? key, required IconData iconData, required Function onPressed})
+      : _iconData = iconData,
+        _onPressed = onPressed,
+        super(key: key);
 
-  final IconData iconData;
-  final Function onPressed;
+  final IconData _iconData;
+  final Function _onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -15,17 +18,23 @@ class MainButton extends StatelessWidget {
         padding: EdgeInsets.only(bottom: 35, right: 35),
         child: FloatingActionButton(
             backgroundColor: kPrimaryColor,
-            child: Icon(iconData, color: kWhite),
-            onPressed: onPressed));
+            child: Icon(_iconData, color: kWhite),
+            onPressed: () => _onPressed()));
   }
 }
 
+// ignore: must_be_immutable
 class MainButtonClicked extends StatefulWidget {
-  MainButtonClicked({Key key, @required this.buttons, @required this.volume})
-      : super(key: key);
+  MainButtonClicked(
+      {Key? key,
+      required List<SecondaryButtonData> buttons,
+      required double volume})
+      : _buttons = buttons,
+        _volume = volume,
+        super(key: key);
 
-  final List<SecondaryButtonData> buttons;
-  double volume;
+  final List<SecondaryButtonData> _buttons;
+  double _volume;
 
   static List<SecondaryButtonPos> positions = [
     SecondaryButtonPos(40, 150),
@@ -41,24 +50,24 @@ class MainButtonClickedState extends State<MainButtonClicked> {
   @override
   Widget build(BuildContext context) {
     return IgnorePointer(
-        ignoring: widget.volume == 0 ? true : false,
+        ignoring: widget._volume == 0 ? true : false,
         child: Container(
-            color: Colors.black.withOpacity(widget.volume),
+            color: Colors.black.withOpacity(widget._volume),
             child: TextButton(
                 onPressed: () => setState(() {
-                      widget.volume = 0;
+                      widget._volume = 0;
                     }),
                 child: Stack(children: [
-                  for (int i = 0; i < widget.buttons.length; i++)
+                  for (int i = 0; i < widget._buttons.length; i++)
                     Positioned(
                         bottom: MainButtonClicked.positions[i].x,
                         right: MainButtonClicked.positions[i].y,
                         child: CircularButton(
-                            kSecondaryColor.withOpacity(widget.volume * 2),
+                            kSecondaryColor.withOpacity(widget._volume * 2),
                             40,
-                            widget.buttons[i].icon,
-                            kWhite.withOpacity(widget.volume * 2),
-                            widget.buttons[i].onClick))
+                            widget._buttons[i].icon,
+                            kWhite.withOpacity(widget._volume * 2),
+                            widget._buttons[i].onClick))
                 ]))));
   }
 }

@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_options.dart';
 import 'package:flutter/material.dart';
 
 const kPrimaryColor = Color(0xFF75c8cc);
@@ -13,3 +14,12 @@ const TextStyle kSignLinkButton =
 
 const TextStyle kMainButtonStyle = TextStyle(color: kBlack);
 const TextStyle kCaptionTextSatyle = TextStyle(color: Colors.purple);
+
+CarouselOptions carouselOptions(context) => CarouselOptions(
+    aspectRatio:
+        MediaQuery.of(context).size.width / MediaQuery.of(context).size.height,
+    initialPage: 0,
+    viewportFraction: 1,
+    autoPlay: true,
+    autoPlayInterval: Duration(seconds: 3),
+    autoPlayAnimationDuration: Duration(seconds: 1));

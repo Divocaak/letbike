@@ -1,241 +1,78 @@
 export 'categories.dart';
-import 'package:multi_image_picker2/multi_image_picker2.dart';
 
 class Item {
   int id;
-  int sellerId;
+  String sellerId;
+  String? soldTo;
   String name;
-  String description;
-  double price;
-  int score;
-  int paid;
+  String? description;
+  int price;
   String dateStart;
-  //String dateEnd;
+  String? dateEnd;
   String imgs;
   int status;
-  Map<String, String> itemParams;
-  int soldTo;
+  Map<String, dynamic>? itemParams;
 
   Item(
       this.id,
       this.sellerId,
+      this.soldTo,
       this.name,
       this.description,
       this.price,
-      this.score,
-      this.paid,
       this.dateStart,
-      //this.dateEnd,
+      this.dateEnd,
       this.imgs,
       this.status,
-      this.itemParams,
-      this.soldTo);
+      this.itemParams);
 
-  factory Item.fromJson(Map<String, dynamic> json) {
-    return Item(
-        int.parse(json["id"]),
-        int.parse(json["sellerId"]),
-        json["name"],
-        json["description"],
-        double.parse(json["price"]),
-        int.parse(json["score"]),
-        int.parse(json["paid"]),
-        json["dateStart"],
-        //json["dateEnd"],
-        json["imgs"],
-        int.parse(json["status"]),
-        getParams(json),
-        int.parse(json["soldTo"]));
-  }
-
-  static Map<String, String> getParams(Map<String, dynamic> json) {
-    Map<String, String> mapToRet = {};
-    json.forEach((key, value) {
-      if (key != "id" &&
-          key != "sellerId" &&
-          key != "name" &&
-          key != "description" &&
-          key != "price" &&
-          key != "score" &&
-          key != "paid" &&
-          key != "dateStart" &&
-          //key != "dateEnd" &&
-          key != "imgs" &&
-          key != "param" &&
-          key != "status" &&
-          key != "soldTo") {
-        mapToRet[key] = value;
-      }
-    });
-
-    return mapToRet;
-  }
-
-  Map<String, dynamic> toasfasJson() => {
-        "id": id,
-        "sellerId": sellerId,
-        "name": name,
-        "description": description,
-        "price": price,
-        "score": score,
-        "paid": paid,
-        "dateStart": dateStart,
-        //"dateEnd": dateEnd,
-        "imgs": imgs,
-        "status": status,
-        "soldTo": soldTo
-      };
-}
-
-class User {
-  int id;
-  String username;
-  String email;
-  String password;
-  int score;
-  int phone;
-  String fName;
-  String lName;
-  String addressA;
-  String addressB;
-  String addressC;
-  int postal;
-  int status;
-
-  User(
-      this.id,
-      this.username,
-      this.email,
-      this.password,
-      this.score,
-      this.phone,
-      this.fName,
-      this.lName,
-      this.addressA,
-      this.addressB,
-      this.addressC,
-      this.postal,
-      this.status);
-
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
-        int.parse(json["id"]),
-        json["username"],
-        json["email"],
-        json["password"],
-        int.parse(json["score"]),
-        int.parse(json["phone"]),
-        json["fName"],
-        json["lName"],
-        json["addressA"],
-        json["addressB"],
-        json["addressC"],
-        int.parse(json["postal"]),
-        int.parse(json["status"]));
-  }
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "username": username,
-        "email": email,
-        "password": password,
-        "score": score,
-        "phone": phone,
-        "fName": fName,
-        "lName": lName,
-        "addressA": addressA,
-        "addressB": addressB,
-        "addressC": addressC,
-        "postal": postal,
-        "status": status
-      };
+  factory Item.fromJson(Map<String, dynamic> json) => Item(
+      int.parse(json["id"]),
+      json["sellerId"],
+      json["soldTo"],
+      json["name"],
+      json["description"],
+      int.parse(json["price"]),
+      json["dateStart"],
+      json["dateEnd"],
+      json["imgs"],
+      int.parse(json["status"]),
+      json["params"]);
 }
 
 class Message {
-  int from;
-  int to;
+  bool myMessage;
   String message;
   int img;
+  String imgPath;
 
-  Message(this.from, this.to, this.message, this.img);
+  Message(this.myMessage, this.message, this.img, this.imgPath);
 
-  factory Message.fromJson(Map<String, dynamic> json) {
-    return Message(int.parse(json["from_id"]), int.parse(json["to_id"]),
-        json["message"], int.parse(json["img"]));
-  }
-
-  Map<String, dynamic> toJson() =>
-      {"from_id": from, "to_id": to, "message": message, "img": img};
-}
-
-class Chat {
-  String username;
-  int id;
-
-  Chat(this.username, this.id);
-
-  factory Chat.fromJson(Map<String, dynamic> json) {
-    return Chat(json["username"], int.parse(json["id"]));
-  }
-}
-
-class ChatUsers {
-  ItemInfo itemInfo;
-  User userA;
-  int userB;
-
-  ChatUsers(this.itemInfo, this.userA, this.userB);
+  factory Message.fromJson(Map<String, dynamic> json) => Message(
+      json["isMyMessage"],
+      json["message"],
+      int.parse(json["img"]),
+      (json["imgPath"] + json["message"].hashCode.toString()));
 }
 
 class Rating {
-  double ratingValue;
-  String ratingText;
+  int value;
+  String text;
+  String dateAdded;
 
-  Rating(this.ratingValue, this.ratingText);
+  Rating(this.value, this.text, this.dateAdded);
 
-  factory Rating.fromJson(Map<String, dynamic> json) {
-    return Rating(double.parse(json["ratingVal"]), json["ratingText"]);
-  }
+  factory Rating.fromJson(Map<String, dynamic> json) =>
+      Rating(int.parse(json["val"]), json["text"], json["date"]);
 }
 
 class Article {
   int id;
-  String title;
-  String added;
-
-  Article(this.id, this.title, this.added);
-
-  factory Article.fromJson(Map<String, dynamic> json) {
-    return Article(int.parse(json["id"]), json["title"], json["added"]);
-  }
-}
-
-class ItemInfo {
-  Item item;
-  User me;
-
-  ItemInfo(this.item, this.me);
-}
-
-class AddItemFiltersArgs {
-  HomeArguments args;
-  AddItemData addItemData;
-
-  AddItemFiltersArgs(this.args, this.addItemData);
-}
-
-class HomeArguments {
-  User user;
-  Map<String, String> filters;
-
-  HomeArguments(this.user, this.filters);
-}
-
-class AddItemData {
   String name;
-  String desc;
-  String price;
-  List<Asset> imgs;
+  String dateAdded;
 
-  AddItemData(this.name, this.desc, this.price, this.imgs);
+  Article(this.id, this.name, this.dateAdded);
+
+  factory Article.fromJson(Map<String, dynamic> json) =>
+      Article(int.parse(json["id"]), json["name"], json["dateAdded"]);
 }

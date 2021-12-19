@@ -3,78 +3,43 @@ import 'package:letbike/general/pallete.dart';
 
 class TextInput extends StatelessWidget {
   const TextInput(
-      {Key key,
-      @required this.icon,
-      @required this.hint,
-      @required this.controller,
-      this.inputType,
-      this.inputAction,
-      this.obscure,
-      this.validationIdentity})
-      : super(key: key);
+      {Key? key,
+      required IconData icon,
+      required String hint,
+      required TextEditingController controller,
+      TextInputType? inputType,
+      TextInputAction? inputAction})
+      : _icon = icon,
+        _hint = hint,
+        _controller = controller,
+        _inputType = inputType,
+        _inputAction = inputAction,
+        super(key: key);
 
-  final IconData icon;
-  final String hint;
-  final TextEditingController controller;
-  final TextInputType inputType;
-  final TextInputAction inputAction;
-  final bool obscure;
-  final String validationIdentity;
+  final IconData _icon;
+  final String _hint;
+  final TextEditingController _controller;
+  final TextInputType? _inputType;
+  final TextInputAction? _inputAction;
 
   @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return Padding(
+  Widget build(BuildContext context) => Padding(
       padding: const EdgeInsets.symmetric(vertical: 10.0),
       child: Container(
-        height: 10 * 5.5,
-        width: size.width * 0.8,
-        padding: EdgeInsets.symmetric(
-          horizontal: 10,
-        ),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30),
-          color: kSecondaryColor,
-        ),
-        child: Center(
-          child: TextFormField(
-            controller: controller,
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              prefixIcon: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Icon(icon, size: 28, color: kWhite),
-              ),
-              hintText: hint,
-            ),
-            obscureText: obscure != null ? obscure : false,
-            keyboardType: inputType,
-            textInputAction: inputAction,
-            validator: (String value) {
-              if (validationIdentity != "" && validationIdentity != null) {
-                if (value.isEmpty) {
-                  return "Zadejte " + hint;
-                }
-
-                if (validationIdentity == "regMail" ||
-                    validationIdentity == "logMail") {
-                  if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
-                      .hasMatch(value)) {
-                    return "Zadejte platný e-mail";
-                  }
-                }
-
-                if ((validationIdentity == "regPass" && value.length < 8) ||
-                    (validationIdentity == "changePassNew" &&
-                        value.length < 8)) {
-                  return "Heslo musí obsahovat minimálně 8 znaků";
-                }
-              }
-              return null;
-            },
-          ),
-        ),
-      ),
-    );
-  }
+          height: 10 * 5.5,
+          width: MediaQuery.of(context).size.width * 0.8,
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(30), color: kSecondaryColor),
+          child: Center(
+              child: TextFormField(
+                  controller: _controller,
+                  decoration: InputDecoration(
+                      border: InputBorder.none,
+                      prefixIcon: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                          child: Icon(_icon, size: 28, color: kWhite)),
+                      hintText: _hint),
+                  keyboardType: _inputType,
+                  textInputAction: _inputAction))));
 }
