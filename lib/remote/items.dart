@@ -56,16 +56,14 @@ class RemoteItems {
         : [];
   }
 
-  static Future<bool> updateItemStatus(int itemId, int newStatus,
+  static Future<bool?> updateItemStatus(int itemId, int newStatus,
       {String? soldTo}) async {
     final Response response = await post(
-        Uri.parse(Uri.encodeFull(scriptsUrl + "itemUpdateStatus.php")),
+        Uri.parse(Uri.encodeFull(url + "itemUpdateStatus.php")),
         headers: {HttpHeaders.contentTypeHeader: 'application/json'},
         body: jsonEncode(
             {"itemId": itemId, "newStatus": newStatus, "soldTo": soldTo}));
 
-    return response.statusCode == 200 && response.body != "ERROR"
-        ? true
-        : false;
+    return response.statusCode == 200 && response.body != "ERROR" ? true : null;
   }
 }

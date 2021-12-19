@@ -81,22 +81,17 @@ class _UserPageState extends State<UserPage>
                 height: 200,
                 child: FutureBuilder<List<Rating>>(
                     future: ratings,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(child: Image.asset("assets/load.gif"));
-                      } else {
-                        if (snapshot.hasData) {
-                          return ListView.builder(
-                              itemCount: snapshot.data!.length,
-                              itemBuilder: (context, i) =>
-                                  RatingRow.buildRow(snapshot.data![i]));
-                        } else if (snapshot.hasError) {
-                          return ErrorWidgets.futureBuilderError();
-                        } else {
-                          return ErrorWidgets.futureBuilderEmpty();
-                        }
-                      }
-                    })),
+                    builder: (context, snapshot) =>
+                        (snapshot.connectionState == ConnectionState.waiting
+                            ? Center(child: Image.asset("assets/load.gif"))
+                            : (snapshot.hasData
+                                ? ListView.builder(
+                                    itemCount: snapshot.data!.length,
+                                    itemBuilder: (context, i) =>
+                                        RatingRow.buildRow(snapshot.data![i]))
+                                : (snapshot.hasError
+                                    ? ErrorWidgets.futureBuilderError()
+                                    : ErrorWidgets.futureBuilderEmpty()))))),
             Container(
                 child:
                     CarouselSlider(options: carouselOptions(context), items: [

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:letbike/filters/filters.dart';
 import 'package:letbike/widgets/errorWidgets.dart';
 import 'package:multi_image_picker2/multi_image_picker2.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:letbike/widgets/textInput.dart';
 import 'package:letbike/widgets/mainButtonEssentials.dart';
 import 'package:letbike/widgets/images.dart';
@@ -17,7 +16,7 @@ class AddItem extends StatefulWidget {
         super(key: key);
 
   final User _loggedUser;
-  List<Asset>? _images;
+  List<Asset>? _images = [];
 
   @override
   _AddItem createState() => _AddItem();
@@ -28,54 +27,7 @@ class _AddItem extends State<AddItem> with TickerProviderStateMixin {
   final TextEditingController descController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
 
-  Future<int> checkPerm() async {
-    var status = await Permission.camera.status;
-    if (status != PermissionStatus.granted) {
-      await Permission.camera.request();
-      return Permission.camera.value;
-    } else {
-      return 1;
-    }
-  }
-
-  Future<void> loadAssets() async {
-    setState(() => widget._images = []);
-
-    List<Asset>? resultList;
-    String? error;
-
-    if (await checkPerm() == 1) {
-      try {
-        resultList = await MultiImagePicker.pickImages(
-            maxImages: 9, enableCamera: true, selectedAssets: widget._images!);
-      } on Exception catch (e) {
-        error = e.toString();
-      }
-
-      if (!mounted) return;
-
-      if (resultList != null) {
-        setState(() => widget._images = resultList);
-      }
-      if (error != null) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("Chyba: " + error)));
-      }
-    }
-  }
-
-  Widget buildGridView() {
-    if (widget._images != null) {
-      return GridView.count(
-          crossAxisCount: 3,
-          children: List.generate(widget._images!.length, (index) {
-            Asset asset = widget._images![index];
-            return AssetThumb(asset: asset, width: 50, height: 50);
-          }));
-    } else {
-      return Container();
-    }
-  }
+  final ImagePickerController imagePickerController = ImagePickerController();
 
   double volume = 0;
   late AnimationController animationController;
@@ -138,8 +90,19 @@ class _AddItem extends State<AddItem> with TickerProviderStateMixin {
                     Container(
                         child: TextButton(
                             child: Text("Vybrat fotografie (minimálně 1)"),
-                            onPressed: loadAssets)),
-                    Expanded(child: Container(child: buildGridView()))
+                            onPressed: () async {
+                              await imagePickerController.loadAssets(
+                                  this,
+                                  widget._images,
+                                  9,
+                                  mounted,
+                                  context,
+                                  (List<Asset> a) => widget._images = a);
+                            })),
+                    Expanded(
+                        child: Container(
+                            child: imagePickerController.buildGridView(
+                                widget._images, 3, 50)))
                   ]))
             ]),
             MainButtonClicked(buttons: [

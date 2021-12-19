@@ -8,29 +8,16 @@ import 'package:letbike/remote/settings.dart';
 class RemoteRatings {
   static String url = scriptsUrl + 'rating/';
 
-  // WAITING po dodělání chatů/prodávání
-  // TODO refactor
-  static Future<String> setRating(
-      String userId, double ratingVal, String ratingText) async {
+  static Future<bool?> setRating(String userId, int val, String text) async {
     final Response response = await post(
-      Uri.parse(Uri.encodeFull(url +
-          "ratingSet.php/?" +
-          "&&userId=" +
-          userId.toString() +
-          "&&ratingVal=" +
-          ratingVal.toString() +
-          "&&ratingText=" +
-          ratingText)),
-      headers: <String, String>{
-        'Content-Type': 'application/json;charset=UTF-8'
-      },
-    );
+        Uri.parse(Uri.encodeFull(url + "ratingSet.php")),
+        headers: {
+          HttpHeaders.contentTypeHeader: 'application/json;charset=UTF-8'
+        },
+        body: jsonEncode(
+            {"userId": userId, "val": val.toString(), "text": text}));
 
-    if (response.statusCode == 200) {
-      return response.body;
-    } else {
-      throw Exception("Can't add rating");
-    }
+    return response.statusCode == 200 && response.body != "ERROR" ? true : null;
   }
 
   static Future<List<Rating>>? getRatings(String userId) async {

@@ -34,7 +34,7 @@ class SignGate extends StatelessWidget {
                     },
                     showAuthActionSwitch: false,
                     providerConfigs: [
-                      GoogleProviderConfiguration(clientId: "clientId"),
+                      GoogleProviderConfiguration(clientId: "clientId")
                     ]);
               }
 
@@ -43,7 +43,7 @@ class SignGate extends StatelessWidget {
       ]);
 
   static void openUrl(String doc) async {
-    String url = docsFolder + "/" + doc;
+    String url = docsFolder + doc;
     if (await canLaunch(url)) {
       await launch(url);
     } else {

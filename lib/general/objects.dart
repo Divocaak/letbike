@@ -1,7 +1,5 @@
 export 'categories.dart';
 
-import 'package:firebase_auth/firebase_auth.dart';
-
 class Item {
   int id;
   String sellerId;
@@ -43,39 +41,18 @@ class Item {
 }
 
 class Message {
-  int from;
-  int to;
+  bool myMessage;
   String message;
   int img;
+  String imgPath;
 
-  Message(this.from, this.to, this.message, this.img);
+  Message(this.myMessage, this.message, this.img, this.imgPath);
 
-  factory Message.fromJson(Map<String, dynamic> json) {
-    return Message(int.parse(json["from_id"]), int.parse(json["to_id"]),
-        json["message"], int.parse(json["img"]));
-  }
-
-  Map<String, dynamic> toJson() =>
-      {"from_id": from, "to_id": to, "message": message, "img": img};
-}
-
-class Chat {
-  String username;
-  int id;
-
-  Chat(this.username, this.id);
-
-  factory Chat.fromJson(Map<String, dynamic> json) {
-    return Chat(json["username"], int.parse(json["id"]));
-  }
-}
-
-class ChatUsersa {
-  Item item;
-  User userA;
-  int userB;
-
-  ChatUsersa(this.item, this.userA, this.userB);
+  factory Message.fromJson(Map<String, dynamic> json) => Message(
+      json["isMyMessage"],
+      json["message"],
+      int.parse(json["img"]),
+      (json["imgPath"] + json["message"].hashCode.toString()));
 }
 
 class Rating {
@@ -96,7 +73,6 @@ class Article {
 
   Article(this.id, this.name, this.dateAdded);
 
-  factory Article.fromJson(Map<String, dynamic> json) {
-    return Article(int.parse(json["id"]), json["name"], json["dateAdded"]);
-  }
+  factory Article.fromJson(Map<String, dynamic> json) =>
+      Article(int.parse(json["id"]), json["name"], json["dateAdded"]);
 }

@@ -2,6 +2,8 @@ import 'package:emojis/emojis.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:letbike/chat/chatScreen.dart';
+import 'package:letbike/remote/chats.dart';
 import 'package:letbike/remote/items.dart';
 import 'package:letbike/widgets/errorWidgets.dart';
 import 'package:letbike/widgets/images.dart';
@@ -29,7 +31,7 @@ class ItemPage extends StatefulWidget {
 
 class _ItemPageState extends State<ItemPage>
     with SingleTickerProviderStateMixin {
-  late Future<List<Chat>>? chats;
+  late Future<List<String>>? chats;
 
   late AnimationController animationController;
 
@@ -65,7 +67,7 @@ class _ItemPageState extends State<ItemPage>
               child: CarouselSlider(options: carouselOptions(context), items: [
                 for (int i = 0; i < int.parse(widget._item.imgs); i++)
                   ServerImage().build(imgsFolder +
-                      "/items/" +
+                      "items/" +
                       (widget._loggedUser.uid +
                           widget._item.name.hashCode.toString()) +
                       "/" +
@@ -108,34 +110,48 @@ class _ItemPageState extends State<ItemPage>
                       child: ItemParam(widget._item.itemParams!)))),
           SecondaryButtonData(
               Icons.arrow_back, () => Navigator.of(context).pop()),
-          /* SecondaryButtonData(Icons.chat, (){if (itemInfo.item.sellerId != itemInfo.me.id) {
-      Navigator.of(context).pushReplacementNamed(ChatScreen.routeName,
-          arguments: ChatUsers(itemInfo, itemInfo.me, itemInfo.item.sellerId));
-    } else {
-      ModalWindow.showModalWindow(
-          context,
-          "Vyberte chat",
-          Container(
-              height: 500,
-              width: 500,
-              child: FutureBuilder<List<Chat>>(
-                future: chats,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return ListView.builder(
-                        itemCount: snapshot.data!.length,
-                        itemBuilder: (context, i) {
-                          return _buildCard(snapshot.data![i], context);
-                        });
-                  } else if (snapshot.hasError) {
-                    return ErrorWidgets.futureBuilderError();
-                  } else if (!snapshot.hasData) {
-                    return ErrorWidgets.futureBuilderEmpty(
-                        () => chats = DatabaseChat.getChats(itemInfo.item.id));
-                  }
-                  return Center(child: Image.asset("assets/load.gif"));
-                }
-              )));}), */
+          SecondaryButtonData(Icons.chat, () {
+            if (widget._item.sellerId != widget._loggedUser.uid) {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => ChatScreen(
+                      item: widget._item,
+                      loggedUser: widget._loggedUser,
+                      secondUserUid: widget._item.sellerId)));
+            } else {
+              chats =
+                  RemoteChats.getChats(widget._item.id, widget._item.sellerId);
+              ModalWindow.showModalWindow(
+                  context,
+                  "Vyberte chat",
+                  Container(
+                      height: 500,
+                      width: 500,
+                      child: FutureBuilder<List<String>>(
+                          future: chats,
+                          builder: (context, snapshot) => (snapshot
+                                      .connectionState ==
+                                  ConnectionState.waiting
+                              ? Center(child: Image.asset("assets/load.gif"))
+                              : (snapshot.hasData
+                                  ? ListView.builder(
+                                      itemCount: snapshot.data!.length,
+                                      itemBuilder: (context, i) => TextButton(
+                                          onPressed: () => Navigator.of(context)
+                                              .push(MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ChatScreen(
+                                                          item: widget._item,
+                                                          loggedUser: widget
+                                                              ._loggedUser,
+                                                          secondUserUid: snapshot
+                                                              .data![i]))),
+                                          child: Text(snapshot.data![i],
+                                              style: TextStyle(color: kWhite))))
+                                  : (snapshot.hasError
+                                      ? ErrorWidgets.futureBuilderError()
+                                      : ErrorWidgets.futureBuilderEmpty()))))));
+            }
+          }),
           if (widget._item.sellerId == widget._loggedUser.uid)
             SecondaryButtonData(
                 Icons.delete,
@@ -144,45 +160,24 @@ class _ItemPageState extends State<ItemPage>
                         "Opravdu?",
                         Text("Přejete si inzerát odstranit?",
                             style: TextStyle(color: kWhite)), onTrue: () {
-                      Future<bool> deleteResponse =
+                      Future<bool?> deleteResponse =
                           RemoteItems.updateItemStatus(widget._item.id, 6);
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: FutureBuilder<bool>(
+                          content: FutureBuilder<bool?>(
                               future: deleteResponse,
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return Center(
-                                      child: Image.asset("assets/load.gif"));
-                                } else {
-                                  if (snapshot.hasData) {
-                                    // TODO otestovat ikona? xd
-                                    return ErrorWidgets.snackBarMessage(
-                                        "Stav předmětu změněn " +
-                                            Emojis.checkMark,
-                                        kWhite,
-                                        Icons.done);
-                                  } else {
-                                    return ErrorWidgets.snackBarError();
-                                  }
-                                }
-                              })));
+                              builder: (context, snapshot) =>
+                                  (snapshot.connectionState ==
+                                          ConnectionState.waiting
+                                      ? Center(
+                                          child: Image.asset("assets/load.gif"))
+                                      : (snapshot.hasData
+                                          ? ErrorWidgets.snackBarMessage(
+                                              "Stav předmětu změněn " +
+                                                  Emojis.checkMark,
+                                              kWhite,
+                                              Icons.done)
+                                          : ErrorWidgets.snackBarError())))));
                     }))
         ], volume: volume)
       ]));
 }
-
-  /* Widget _buildCard(Chat chat, context) {
-    if (chat.username != itemInfo.me.username) {
-      return TextButton(
-          onPressed: () {
-            Navigator.of(context).pushNamed(ChatScreen.routeName,
-                arguments: ChatUsers(itemInfo, itemInfo.me, chat.id));
-          },
-          child: Text(chat.username, style: TextStyle(color: kWhite)));
-    } else {
-      return SizedBox(
-        height: 1,
-      );
-    }
-  } */

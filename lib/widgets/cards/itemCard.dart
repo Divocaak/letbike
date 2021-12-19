@@ -2,70 +2,43 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:letbike/remote/items.dart';
 import 'package:letbike/remote/ratings.dart';
-import 'package:letbike/remote/settings.dart';
 import 'package:letbike/general/pallete.dart';
 import 'package:letbike/general/objects.dart';
 import 'package:letbike/item/itemPage.dart';
 import 'package:letbike/widgets/alertBox.dart';
 import 'package:letbike/widgets/errorWidgets.dart';
-import 'package:letbike/widgets/images.dart';
 import 'cardWidgets.dart';
 
 TextEditingController ratingController = TextEditingController();
-double rating = 5;
 
 class ItemCard {
-  static Widget buildCard(
-      context, Item item, User loggedUser, bool forRating, bool touchable) {
-    // TODO přesunout stejný věci co má i articleCard do jednoho CardEssential widgetu, refactor!
-    return Container(
-        height: 240,
-        child: Card(
-            clipBehavior: Clip.antiAlias,
-            elevation: 0,
-            color: kWhite.withOpacity(.05),
-            margin: const EdgeInsets.all(5),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            child: InkWell(
-                onTap: () => onCardClick(
-                    context, item, loggedUser, forRating, touchable),
-                child: Stack(children: [
-                  ServerImage().build(imgsFolder +
-                      "/items/" +
-                      (loggedUser.uid + item.name.hashCode.toString()) +
-                      "/0.jpg"),
-                  Column(children: [
-                    Expanded(
-                        flex: 1,
-                        child: CardWidgets.text(
-                            item.name, 32, 2, FontWeight.bold)),
-                    Expanded(flex: 3, child: Container()),
-                    Expanded(
-                        flex: 1,
-                        child: Row(children: [
-                          Expanded(
-                              flex: 4,
-                              child: Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 10),
-                                  child: CardWidgets.text(
-                                      item.description ?? "",
-                                      18,
-                                      1,
-                                      FontWeight.normal))),
-                          Expanded(
-                              flex: 2,
-                              child: Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 10),
-                                  child: CardWidgets.text(
-                                      item.price.toString() + "Kč",
-                                      24,
-                                      2,
-                                      FontWeight.bold)))
-                        ]))
-                  ])
-                ]))));
-  }
+  static Widget buildCard(context, Item item, User loggedUser, bool forRating,
+          bool touchable) =>
+      CardWidgets.cardEssentials(
+          () => onCardClick(context, item, loggedUser, forRating, touchable),
+          loggedUser.uid + item.name.hashCode.toString(),
+          Column(children: [
+            Expanded(
+                flex: 1,
+                child: CardWidgets.text(item.name, 32, 2, FontWeight.bold)),
+            Expanded(flex: 3, child: Container()),
+            Expanded(
+                flex: 1,
+                child: Row(children: [
+                  Expanded(
+                      flex: 4,
+                      child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          child: CardWidgets.text(item.description ?? "", 18, 1,
+                              FontWeight.normal))),
+                  Expanded(
+                      flex: 2,
+                      child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          child: CardWidgets.text(item.price.toString() + "Kč",
+                              24, 2, FontWeight.bold)))
+                ]))
+          ]));
 
   static void onCardClick(
       context, Item item, User loggedUser, bool forRating, bool touchable) {
@@ -75,7 +48,7 @@ class ItemCard {
             builder: (context) =>
                 ItemPage(item: item, loggedUser: loggedUser)));
       } else {
-        // TODO tohle celý předělat, možná opravit
+        RatingBar ratingBar = RatingBar();
         ModalWindow.showModalWindow(
             context,
             "Ohodnoťte prodejce",
@@ -86,12 +59,12 @@ class ItemCard {
                   Text(
                       "Prodejce ohodnoťte až poté, co Vám přijde zakoupený předmět.",
                       style: TextStyle(color: kWhite)),
-                  RatingBar(rating),
+                  ratingBar,
                   Expanded(
                       child: TextField(
                           keyboardType: TextInputType.multiline,
                           maxLines: 10,
-                          maxLength: 250,
+                          maxLength: 100,
                           style: TextStyle(color: kWhite),
                           controller: ratingController,
                           decoration: InputDecoration(
@@ -103,27 +76,26 @@ class ItemCard {
                                       BorderRadius.all(Radius.circular(25)),
                                   borderSide: new BorderSide(color: kWhite)))))
                 ])), after: () {
-          Future<String> rateResponse = RemoteRatings.setRating(
-              item.sellerId, rating, ratingController.text);
+          Future<bool?> rateResponse = RemoteRatings.setRating(
+              item.sellerId, ratingBar.getRatingVal(), ratingController.text);
           ModalWindow.showModalWindow(
               context,
               "Oznámení",
-              FutureBuilder<String>(
+              FutureBuilder<bool?>(
                   future: rateResponse,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(child: Image.asset("assets/load.gif"));
-                    } else {
-                      if (snapshot.hasData) {
-                        return Text(snapshot.data!,
-                            style: TextStyle(color: kWhite));
-                      } else {
-                        return ErrorWidgets.futureBuilderError();
-                      }
-                    }
-                  }),
-              after: () => RemoteItems.updateItemStatus(item.id, 2,
-                  soldTo: item.soldTo));
+                  builder: (context, snapshot) =>
+                      (snapshot.connectionState == ConnectionState.waiting
+                          ? Center(child: Image.asset("assets/load.gif"))
+                          : (snapshot.hasData
+                              ? Text("Uživatel ohodnocen.",
+                                  style: TextStyle(color: kWhite))
+                              : (snapshot.hasError
+                                  ? ErrorWidgets.futureBuilderError()
+                                  : ErrorWidgets.futureBuilderEmpty())))),
+              after: () {
+            RemoteItems.updateItemStatus(item.id, 3, soldTo: item.soldTo);
+            Navigator.of(context).pop();
+          });
         });
       }
     }

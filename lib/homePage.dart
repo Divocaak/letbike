@@ -74,7 +74,6 @@ class _HomePageState extends State<HomePage>
                 () => Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) =>
                         FilterPage(loggedUser: widget._loggedUser)))),
-            // TODO lifecycle itemu na obou stranách
             SecondaryButtonData(
                 Icons.person,
                 () => Navigator.of(context).push(MaterialPageRoute(

@@ -71,22 +71,15 @@ class _FilterPage extends State<FilterPage> {
                     "Oznámení",
                     FutureBuilder<bool>(
                         future: addResponse,
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return Center(
-                                child: Image.asset("assets/load.gif"));
-                          } else {
-                            if (snapshot.hasData) {
-                              return Text("Inzerát úspěšně přidán",
-                                  style: TextStyle(color: kWhite));
-                            } else if (snapshot.hasError) {
-                              return ErrorWidgets.futureBuilderError();
-                            } else {
-                              return ErrorWidgets.futureBuilderEmpty();
-                            }
-                          }
-                        }),
+                        builder: (context, snapshot) =>
+                            (snapshot.connectionState == ConnectionState.waiting
+                                ? Center(child: Image.asset("assets/load.gif"))
+                                : (snapshot.hasData
+                                    ? Text("Inzerát úspěšně přidán",
+                                        style: TextStyle(color: kWhite))
+                                    : (snapshot.hasError
+                                        ? ErrorWidgets.futureBuilderError()
+                                        : ErrorWidgets.futureBuilderEmpty())))),
                     after: () => Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
                             builder: (context) =>
