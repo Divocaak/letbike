@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:letbike/remote/items.dart';
 import 'package:letbike/remote/ratings.dart';
+import 'package:letbike/remote/settings.dart';
 import 'package:letbike/general/pallete.dart';
 import 'package:letbike/general/objects.dart';
 import 'package:letbike/item/itemPage.dart';
@@ -16,7 +17,10 @@ class ItemCard {
           bool touchable) =>
       CardWidgets.cardEssentials(
           () => onCardClick(context, item, loggedUser, forRating, touchable),
-          loggedUser.uid + item.name.hashCode.toString(),
+          imgsFolder +
+              "items/" +
+              loggedUser.uid +
+              item.name.hashCode.toString(),
           Column(children: [
             Expanded(
                 flex: 1,
