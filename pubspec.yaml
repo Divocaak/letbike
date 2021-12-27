@@ -3,7 +3,7 @@ description: Cyclist marketplace
 
 publish_to: 'none'
 
-version: 1.0.5+1
+version: 1.0.5+3
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -24,6 +24,7 @@ dependencies:
   google_sign_in: ^5.2.1
   firebase_auth: ^3.3.3
   flutterfire_ui: ^0.2.0+2
+  cupertino_icons: ^1.0.4
   
 flutter_icons:
   image_path: "assets/icon.png"

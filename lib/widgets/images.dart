@@ -30,13 +30,12 @@ class BackgroundImage extends StatelessWidget {
 
 class ServerImage {
   Widget build(String path) => Center(
-        child: FadeInImage.assetNetwork(
-            fit: BoxFit.fitWidth,
-            placeholder: 'assets/load.gif',
-            image: path,
-            imageErrorBuilder: (context, exception, stackTrace) =>
-                ErrorWidgets.imageLoadingError(Icons.image)));
-  
+      child: FadeInImage.assetNetwork(
+          fit: BoxFit.fitWidth,
+          placeholder: 'assets/load.gif',
+          image: path,
+          imageErrorBuilder: (context, exception, stackTrace) =>
+              ErrorWidgets.imageLoadingError(Icons.image)));
 }
 
 class ImagePickerController extends State {
