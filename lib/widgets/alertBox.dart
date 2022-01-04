@@ -16,23 +16,19 @@ class ModalWindow {
       actions: [
         if (after != null)
           TextButton(
-              child: Text(
-                Emojis.okButton,
-                style: TextStyle(color: kPrimaryColor),
-              ),
+              child:
+                  Text(Emojis.okButton, style: TextStyle(color: kPrimaryColor)),
               onPressed: () {
                 Navigator.of(context).pop();
-
                 after();
               }),
         if (onTrue != null)
           TextButton(
-            child: Text(Emojis.crossMarkButton,
-                style: TextStyle(color: kSecondaryColor)),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
+              child: Text(Emojis.crossMarkButton,
+                  style: TextStyle(color: kSecondaryColor)),
+              onPressed: () {
+                Navigator.of(context).pop();
+              }),
         if (onTrue != null)
           TextButton(
               child: Text(Emojis.checkMarkButton,
@@ -44,11 +40,6 @@ class ModalWindow {
       ],
     );
 
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return modal;
-      },
-    );
+    showDialog(context: context, builder: (BuildContext context) => modal);
   }
 }

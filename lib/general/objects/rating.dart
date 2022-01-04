@@ -1,24 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:letbike/general/objects.dart';
 import 'package:letbike/general/pallete.dart';
 
-class RatingRow {
-  static Widget buildRow(Rating rating) => SizedBox(
+class Rating {
+  int value;
+  String text;
+  String dateAdded;
+
+  Rating(this.value, this.text, this.dateAdded);
+
+  factory Rating.fromJson(Map<String, dynamic> json) =>
+      Rating(int.parse(json["val"]), json["text"], json["date"]);
+
+  Widget buildRow() => SizedBox(
       height: 50,
       child: Column(children: [
         Row(children: [
           Expanded(
               flex: 2,
-              child: Text(rating.value.toString(),
+              child: Text(value.toString(),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontWeight: FontWeight.bold, color: kPrimaryColor))),
-          Expanded(
-              flex: 8,
-              child: Text(rating.text, style: TextStyle(color: kWhite)))
+          Expanded(flex: 8, child: Text(text, style: TextStyle(color: kWhite)))
         ]),
         Expanded(
-            child: Text(rating.dateAdded,
+            child: Text(dateAdded,
                 style: TextStyle(color: kWhite.withOpacity(.7))))
       ]));
 }

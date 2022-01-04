@@ -1,18 +1,18 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:letbike/general/objects/item.dart';
+import 'package:letbike/general/objects/message.dart';
+import 'package:letbike/general/objects/rating.dart';
 import 'package:letbike/remote/chats.dart';
 import 'package:letbike/remote/items.dart';
 import 'package:letbike/remote/ratings.dart';
 import 'package:letbike/widgets/images.dart';
 import 'package:multi_image_picker2/multi_image_picker2.dart';
-import 'package:letbike/chat/chatBuildMessage.dart';
 import 'package:letbike/widgets/textInput.dart';
-import 'package:letbike/widgets/ratingRow.dart';
 import 'package:letbike/widgets/errorWidgets.dart';
 import 'package:letbike/widgets/buttonCircular.dart';
 import 'package:letbike/widgets/alertBox.dart';
-import 'package:letbike/general/objects.dart';
 import 'package:letbike/general/pallete.dart';
 
 // ignore: must_be_immutable
@@ -86,10 +86,11 @@ class _ChatScreenState extends State<ChatScreen>
                                                 itemCount:
                                                     snapshot.data!.length,
                                                 itemBuilder: (context, i) =>
-                                                    RatingRow.buildRow(
-                                                        snapshot.data![i]))
+                                                    snapshot.data![i]
+                                                        .buildRow())
                                             : (snapshot.hasError
-                                                ? ErrorWidgets.futureBuilderError()
+                                                ? ErrorWidgets
+                                                    .futureBuilderError()
                                                 : ErrorWidgets.futureBuilderEmpty()))))));
                       }),
                       (widget._loggedUser.uid == widget._item.sellerId
@@ -155,10 +156,8 @@ class _ChatScreenState extends State<ChatScreen>
                                   ? ListView.builder(
                                       itemCount: (stream.data as List).length,
                                       itemBuilder: (context, i) =>
-                                          ChatBuildMessage.buildMessage(
-                                              context,
-                                              (stream.data as List)[i],
-                                              widget._loggedUser))
+                                          (stream.data as List)[i].buildMessage(
+                                              context, widget._loggedUser))
                                   : (stream.hasError
                                       ? ErrorWidgets.futureBuilderError()
                                       : ErrorWidgets.futureBuilderEmpty()))))),

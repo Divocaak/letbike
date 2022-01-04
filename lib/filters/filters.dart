@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:letbike/general/categories.dart';
 import 'package:letbike/homePage.dart';
 import 'package:letbike/widgets/mainButtonEssentials.dart';
 import 'package:letbike/widgets/images.dart';
 import 'package:letbike/filters/widgetsFilter.dart';
-import 'package:letbike/general/objects.dart';
 import 'package:letbike/remote/items.dart';
 import 'package:letbike/general/pallete.dart';
 import 'package:letbike/widgets/alertBox.dart';

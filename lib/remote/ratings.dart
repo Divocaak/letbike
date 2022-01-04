@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
 import 'package:http/http.dart';
-import 'package:letbike/general/objects.dart';
+import 'package:letbike/general/objects/rating.dart';
 import 'package:letbike/remote/settings.dart';
 
 class RemoteRatings {
