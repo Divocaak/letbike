@@ -15,11 +15,5 @@ const TextStyle kSignLinkButton =
 const TextStyle kMainButtonStyle = TextStyle(color: kBlack);
 const TextStyle kCaptionTextSatyle = TextStyle(color: Colors.purple);
 
-CarouselOptions carouselOptions(context) => CarouselOptions(
-    aspectRatio:
-        MediaQuery.of(context).size.width / MediaQuery.of(context).size.height,
-    initialPage: 0,
-    viewportFraction: 1,
-    autoPlay: true,
-    autoPlayInterval: Duration(seconds: 3),
-    autoPlayAnimationDuration: Duration(seconds: 1));
+CarouselOptions carouselOptions(context) =>
+    CarouselOptions(height: 1000, viewportFraction: .925, autoPlay: true);

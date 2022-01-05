@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:letbike/general/objects/article.dart';
 import 'package:letbike/remote/articles.dart';
 import 'package:letbike/widgets/mainButtonEssentials.dart';
 import 'package:letbike/general/pallete.dart';
-import 'package:letbike/general/objects.dart';
 
 double volume = 0;
 

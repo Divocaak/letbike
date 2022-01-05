@@ -1,13 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:letbike/general/objects/item.dart';
 import 'package:letbike/item/addItem.dart';
 import 'package:letbike/remote/items.dart';
 import 'package:letbike/user/userPage.dart';
-import 'package:letbike/widgets/cards/cardWidgets.dart';
 import 'package:letbike/filters/filters.dart';
 import 'package:letbike/article/articlesScreen.dart';
+import 'package:letbike/widgets/errorWidgets.dart';
 import 'package:letbike/widgets/mainButtonEssentials.dart';
-import 'package:letbike/general/objects.dart';
 import 'package:letbike/general/pallete.dart';
 
 double volume = 0;
@@ -59,10 +59,19 @@ class _HomePageState extends State<HomePage>
         body: Stack(children: [
           Container(
               color: kBlack,
-              child: CardWidgets.cardsBuilder(items, false,
-                  loggedUser: widget._loggedUser,
-                  forRating: false,
-                  touchable: true)),
+              child: FutureBuilder<List<dynamic>>(
+                  future: items,
+                  builder: (context, snapshot) =>
+                      (snapshot.connectionState == ConnectionState.waiting
+                          ? Center(child: Image.asset("assets/load.gif"))
+                          : (snapshot.hasData
+                              ? ListView.builder(
+                                  itemCount: snapshot.data!.length,
+                                  itemBuilder: (context, i) => snapshot.data![i]
+                                      .buildCard(context, widget._loggedUser))
+                              : (snapshot.hasError
+                                  ? ErrorWidgets.futureBuilderError()
+                                  : ErrorWidgets.futureBuilderEmpty()))))),
           MainButtonClicked(buttons: [
             SecondaryButtonData(
                 Icons.add,

@@ -3,14 +3,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:letbike/chat/chatScreen.dart';
+import 'package:letbike/general/objects/item.dart';
 import 'package:letbike/remote/chats.dart';
 import 'package:letbike/remote/items.dart';
 import 'package:letbike/widgets/errorWidgets.dart';
 import 'package:letbike/widgets/images.dart';
 import 'package:letbike/widgets/mainButtonEssentials.dart';
 import 'package:letbike/widgets/alertBox.dart';
-import 'package:letbike/item/widgets/itemParam.dart';
-import 'package:letbike/general/objects.dart';
 import 'package:letbike/general/pallete.dart';
 import 'package:letbike/remote/settings.dart';
 
@@ -107,7 +106,7 @@ class _ItemPageState extends State<ItemPage>
                   Container(
                       height: 300,
                       width: 250,
-                      child: ItemParam(widget._item.itemParams!)))),
+                      child: widget._item.buildParams(context)))),
           SecondaryButtonData(
               Icons.arrow_back, () => Navigator.of(context).pop()),
           SecondaryButtonData(Icons.chat, () {
@@ -128,9 +127,7 @@ class _ItemPageState extends State<ItemPage>
                       width: 500,
                       child: FutureBuilder<List<String>>(
                           future: chats,
-                          builder: (context, snapshot) => (snapshot
-                                      .connectionState ==
-                                  ConnectionState.waiting
+                          builder: (context, snapshot) => (snapshot.connectionState == ConnectionState.waiting
                               ? Center(child: Image.asset("assets/load.gif"))
                               : (snapshot.hasData
                                   ? ListView.builder(
@@ -138,18 +135,12 @@ class _ItemPageState extends State<ItemPage>
                                       itemBuilder: (context, i) => TextButton(
                                           onPressed: () => Navigator.of(context)
                                               .push(MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ChatScreen(
-                                                          item: widget._item,
-                                                          loggedUser: widget
-                                                              ._loggedUser,
-                                                          secondUserUid: snapshot
-                                                              .data![i]))),
-                                          child: Text(snapshot.data![i],
-                                              style: TextStyle(color: kWhite))))
-                                  : (snapshot.hasError
-                                      ? ErrorWidgets.futureBuilderError()
-                                      : ErrorWidgets.futureBuilderEmpty()))))));
+                                                  builder: (context) => ChatScreen(
+                                                      item: widget._item,
+                                                      loggedUser: widget._loggedUser,
+                                                      secondUserUid: snapshot.data![i]))),
+                                          child: Text(snapshot.data![i], style: TextStyle(color: kWhite))))
+                                  : (snapshot.hasError ? ErrorWidgets.futureBuilderError() : ErrorWidgets.futureBuilderEmpty()))))));
             }
           }),
           if (widget._item.sellerId == widget._loggedUser.uid)

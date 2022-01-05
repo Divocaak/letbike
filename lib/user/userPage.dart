@@ -1,17 +1,16 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:letbike/general/objects/item.dart';
+import 'package:letbike/general/objects/rating.dart';
 import 'package:letbike/remote/items.dart';
 import 'package:letbike/remote/ratings.dart';
-import 'package:letbike/general/objects.dart';
 import 'package:letbike/general/pallete.dart';
 import 'package:letbike/user/signGate.dart';
 import 'package:letbike/widgets/accountInfoField.dart';
-import 'package:letbike/widgets/cards/cardWidgets.dart';
 import 'package:letbike/widgets/errorWidgets.dart';
 import 'package:letbike/widgets/images.dart';
 import 'package:letbike/widgets/mainButtonEssentials.dart';
-import 'package:letbike/widgets/ratingRow.dart';
 
 class UserPage extends StatefulWidget {
   const UserPage({Key? key, required User loggedUser})
@@ -34,6 +33,8 @@ class _UserPageState extends State<UserPage>
   late Future<List<Rating>>? ratings;
 
   late AnimationController animationController;
+
+  final TextEditingController ratingController = TextEditingController();
 
   @override
   void initState() {
@@ -66,41 +67,51 @@ class _UserPageState extends State<UserPage>
               }
             }),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        body: Stack(children: [
-          ListView(children: [
-            Center(
-                child: ServerImage().build(widget._loggedUser.photoURL ?? "")),
-            AccountInfoField.infoField(
-                "E-mail: " + (widget._loggedUser.email ?? "")),
-            AccountInfoField.infoField(
-                "Jméno a příjmení: " + (widget._loggedUser.displayName ?? "")),
-            AccountInfoField.infoField(
-                "Telefon: " + (widget._loggedUser.phoneNumber ?? "")),
-            AccountInfoField.infoField("Hodnocení"),
-            Container(
-                height: 200,
-                child: FutureBuilder<List<Rating>>(
-                    future: ratings,
-                    builder: (context, snapshot) =>
-                        (snapshot.connectionState == ConnectionState.waiting
-                            ? Center(child: Image.asset("assets/load.gif"))
-                            : (snapshot.hasData
-                                ? ListView.builder(
-                                    itemCount: snapshot.data!.length,
-                                    itemBuilder: (context, i) =>
-                                        RatingRow.buildRow(snapshot.data![i]))
-                                : (snapshot.hasError
-                                    ? ErrorWidgets.futureBuilderError()
-                                    : ErrorWidgets.futureBuilderEmpty()))))),
-            Container(
+        body: SafeArea(
+            child: Stack(children: [
+          Column(children: [
+            Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+              ServerImage().build(widget._loggedUser.photoURL ?? ""),
+              Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    AccountInfoField.infoField(widget._loggedUser.email ?? ""),
+                    AccountInfoField.infoField(
+                        widget._loggedUser.displayName ?? ""),
+                    AccountInfoField.infoField(
+                        widget._loggedUser.phoneNumber ?? ""),
+                  ])
+            ]),
+            Flexible(
                 child:
                     CarouselSlider(options: carouselOptions(context), items: [
-              itemStatusField(items!, "Moje inzeráty", touchable: true),
-              itemStatusField(soldItems!, "Prodané předměty", touchable: true),
-              itemStatusField(boughtItems!, "Zakoupené předměty",
-                  forRating: true, touchable: true),
+              Column(children: [
+                AccountInfoField.infoField("Hodnocení"),
+                Expanded(
+                    child: FutureBuilder<List<Rating>>(
+                        future: ratings,
+                        builder: (context, snapshot) =>
+                            (snapshot.connectionState == ConnectionState.waiting
+                                ? Center(child: Image.asset("assets/load.gif"))
+                                : (snapshot.hasData
+                                    ? ListView.builder(
+                                        itemCount: snapshot.data!.length,
+                                        itemBuilder: (context, i) =>
+                                            snapshot.data![i].buildRow())
+                                    : (snapshot.hasError
+                                        ? ErrorWidgets.futureBuilderError()
+                                        : ErrorWidgets.futureBuilderEmpty())))))
+              ]),
+              itemStatusField(items!, "Moje inzeráty"),
               itemStatusField(
-                  ratedItems!, "Ohodnocené předměty (již přijaté, uzavřené)")
+                soldItems!,
+                "Prodané předměty",
+              ),
+              itemStatusField(boughtItems!, "Zakoupené předměty",
+                  ratingController: ratingController),
+              itemStatusField(
+                  ratedItems!, "Ohodnocené předměty (již přijaté, uzavřené)",
+                  touchable: false)
             ]))
           ]),
           MainButtonClicked(buttons: [
@@ -112,21 +123,28 @@ class _UserPageState extends State<UserPage>
             SecondaryButtonData(
                 Icons.arrow_back, () => Navigator.of(context).pop())
           ], volume: volume)
-        ]));
+        ])));
   }
 
   Widget itemStatusField(Future<List<Item>> items, String label,
-          {bool? forRating, bool? touchable}) =>
+          {bool touchable = true, TextEditingController? ratingController}) =>
       Column(children: [
         AccountInfoField.infoField(label),
-        Container(
-            height: 350,
-            child: FutureBuilder<List<Item>>(
+        Expanded(
+            child: FutureBuilder<List<dynamic>>(
                 future: items,
-                builder: (context, snapshot) => CardWidgets.cardsBuilder(
-                    items, false,
-                    loggedUser: widget._loggedUser,
-                    forRating: forRating ?? false,
-                    touchable: touchable ?? false)))
+                builder: (context, snapshot) =>
+                    (snapshot.connectionState == ConnectionState.waiting
+                        ? Center(child: Image.asset("assets/load.gif"))
+                        : (snapshot.hasData
+                            ? ListView.builder(
+                                itemCount: snapshot.data!.length,
+                                itemBuilder: (context, i) => snapshot.data![i]
+                                    .buildCard(context, widget._loggedUser,
+                                        touchable: touchable,
+                                        ratingController: ratingController))
+                            : (snapshot.hasError
+                                ? ErrorWidgets.futureBuilderError()
+                                : ErrorWidgets.futureBuilderEmpty())))))
       ]);
 }
