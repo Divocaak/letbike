@@ -67,35 +67,41 @@ class _UserPageState extends State<UserPage>
               }
             }),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        body: Stack(children: [
-          ListView(children: [
-            Center(
-                child: ServerImage().build(widget._loggedUser.photoURL ?? "")),
-            AccountInfoField.infoField(
-                "E-mail: " + (widget._loggedUser.email ?? "")),
-            AccountInfoField.infoField(
-                "Jméno a příjmení: " + (widget._loggedUser.displayName ?? "")),
-            AccountInfoField.infoField(
-                "Telefon: " + (widget._loggedUser.phoneNumber ?? "")),
-            AccountInfoField.infoField("Hodnocení"),
-            Container(
-                height: 200,
-                child: FutureBuilder<List<Rating>>(
-                    future: ratings,
-                    builder: (context, snapshot) =>
-                        (snapshot.connectionState == ConnectionState.waiting
-                            ? Center(child: Image.asset("assets/load.gif"))
-                            : (snapshot.hasData
-                                ? ListView.builder(
-                                    itemCount: snapshot.data!.length,
-                                    itemBuilder: (context, i) =>
-                                        snapshot.data![i].buildRow())
-                                : (snapshot.hasError
-                                    ? ErrorWidgets.futureBuilderError()
-                                    : ErrorWidgets.futureBuilderEmpty()))))),
-            Container(
+        body: SafeArea(
+            child: Stack(children: [
+          Column(children: [
+            Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+              ServerImage().build(widget._loggedUser.photoURL ?? ""),
+              Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    AccountInfoField.infoField(widget._loggedUser.email ?? ""),
+                    AccountInfoField.infoField(
+                        widget._loggedUser.displayName ?? ""),
+                    AccountInfoField.infoField(
+                        widget._loggedUser.phoneNumber ?? ""),
+                  ])
+            ]),
+            Flexible(
                 child:
                     CarouselSlider(options: carouselOptions(context), items: [
+              Column(children: [
+                AccountInfoField.infoField("Hodnocení"),
+                Expanded(
+                    child: FutureBuilder<List<Rating>>(
+                        future: ratings,
+                        builder: (context, snapshot) =>
+                            (snapshot.connectionState == ConnectionState.waiting
+                                ? Center(child: Image.asset("assets/load.gif"))
+                                : (snapshot.hasData
+                                    ? ListView.builder(
+                                        itemCount: snapshot.data!.length,
+                                        itemBuilder: (context, i) =>
+                                            snapshot.data![i].buildRow())
+                                    : (snapshot.hasError
+                                        ? ErrorWidgets.futureBuilderError()
+                                        : ErrorWidgets.futureBuilderEmpty())))))
+              ]),
               itemStatusField(items!, "Moje inzeráty"),
               itemStatusField(
                 soldItems!,
@@ -117,15 +123,14 @@ class _UserPageState extends State<UserPage>
             SecondaryButtonData(
                 Icons.arrow_back, () => Navigator.of(context).pop())
           ], volume: volume)
-        ]));
+        ])));
   }
 
   Widget itemStatusField(Future<List<Item>> items, String label,
           {bool touchable = true, TextEditingController? ratingController}) =>
       Column(children: [
         AccountInfoField.infoField(label),
-        Container(
-            height: 350,
+        Expanded(
             child: FutureBuilder<List<dynamic>>(
                 future: items,
                 builder: (context, snapshot) =>

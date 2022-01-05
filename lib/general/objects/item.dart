@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:letbike/general/categories.dart';
 import 'package:letbike/general/pallete.dart';
 import 'package:letbike/item/itemPage.dart';
 import 'package:letbike/remote/items.dart';
@@ -59,7 +60,7 @@ class Item {
                   width: 100,
                   color: kPrimaryColor,
                   alignment: Alignment.center,
-                  child: Text(itemParams![keys[i]]!.name,
+                  child: Text(ParamRow.params[keys[i]]!.name,
                       style: TextStyle(color: kWhite))),
               Container(
                   height: 40,
@@ -67,7 +68,7 @@ class Item {
                   color: kSecondaryColor,
                   alignment: Alignment.center,
                   child: Text(
-                      itemParams![keys[i]]!.options[
+                      ParamRow.params[keys[i]]!.options[
                           (values[i] == "true" || values[i] == "false")
                               ? (values[i] == "false" ? 0 : 1)
                               : int.parse(values[i])],
