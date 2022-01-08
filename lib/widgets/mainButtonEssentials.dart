@@ -13,14 +13,12 @@ class MainButton extends StatelessWidget {
   final Function _onPressed;
 
   @override
-  Widget build(BuildContext context) {
-    return Padding(
-        padding: EdgeInsets.only(bottom: 35, right: 35),
-        child: FloatingActionButton(
-            backgroundColor: kPrimaryColor,
-            child: Icon(_iconData, color: kWhite),
-            onPressed: () => _onPressed()));
-  }
+  Widget build(BuildContext context) => Padding(
+      padding: EdgeInsets.only(bottom: 35, right: 35),
+      child: FloatingActionButton(
+          backgroundColor: kPrimaryColor,
+          child: Icon(_iconData, color: kWhite),
+          onPressed: () => _onPressed()));
 }
 
 // ignore: must_be_immutable
@@ -48,28 +46,26 @@ class MainButtonClicked extends StatefulWidget {
 
 class MainButtonClickedState extends State<MainButtonClicked> {
   @override
-  Widget build(BuildContext context) {
-    return IgnorePointer(
-        ignoring: widget._volume == 0 ? true : false,
-        child: Container(
-            color: Colors.black.withOpacity(widget._volume),
-            child: TextButton(
-                onPressed: () => setState(() {
-                      widget._volume = 0;
-                    }),
-                child: Stack(children: [
-                  for (int i = 0; i < widget._buttons.length; i++)
-                    Positioned(
-                        bottom: MainButtonClicked.positions[i].x,
-                        right: MainButtonClicked.positions[i].y,
-                        child: CircularButton(
-                            kSecondaryColor.withOpacity(widget._volume * 2),
-                            40,
-                            widget._buttons[i].icon,
-                            kWhite.withOpacity(widget._volume * 2),
-                            widget._buttons[i].onClick))
-                ]))));
-  }
+  Widget build(BuildContext context) => IgnorePointer(
+      ignoring: widget._volume == 0 ? true : false,
+      child: Container(
+          color: Colors.black.withOpacity(widget._volume),
+          child: TextButton(
+              onPressed: () => setState(() {
+                    widget._volume = 0;
+                  }),
+              child: Stack(children: [
+                for (int i = 0; i < widget._buttons.length; i++)
+                  Positioned(
+                      bottom: MainButtonClicked.positions[i].x,
+                      right: MainButtonClicked.positions[i].y,
+                      child: CircularButton(
+                          kSecondaryColor.withOpacity(widget._volume * 2),
+                          40,
+                          widget._buttons[i].icon,
+                          kWhite.withOpacity(widget._volume * 2),
+                          widget._buttons[i].onClick))
+              ]))));
 }
 
 class SecondaryButtonData {

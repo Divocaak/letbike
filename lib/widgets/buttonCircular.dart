@@ -11,16 +11,12 @@ class CircularButton extends StatelessWidget {
       this.color, this.size, this.icon, this.iconColor, this.onClick);
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
+  Widget build(BuildContext context) => Container(
       decoration: BoxDecoration(color: color, shape: BoxShape.circle),
       width: size,
       height: size,
       child: IconButton(
-        icon: Icon(icon, color: iconColor),
-        enableFeedback: true,
-        onPressed: () => onClick(),
-      ),
-    );
-  }
+          icon: Icon(icon, color: iconColor),
+          enableFeedback: true,
+          onPressed: () => onClick()));
 }

@@ -39,8 +39,10 @@ class FilterPage extends StatefulWidget {
 Future<bool>? addResponse;
 
 class _FilterPage extends State<FilterPage> {
+  late BackgroundImage bgImage;
+
   @override
-  Widget build(BuildContext context) {
+  void initState() {
     categoryDd.setFp(this);
     partTypeDd.setFp(this);
     partWheelCassetteSwitch.setFp(this);
@@ -49,61 +51,65 @@ class _FilterPage extends State<FilterPage> {
     partBrakeTypeDd.setFp(this);
     otherTypeDd.setFp(this);
     accessoryTypeDd.setFp(this);
-    return Scaffold(
-        floatingActionButton: MainButton(
-            iconData: widget._name == null ? Icons.save : Icons.add,
-            onPressed: () {
-              if (widget._name == null) {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => HomePage(
-                        loggedUser: widget._loggedUser, filters: getParams())));
-              } else {
-                addResponse = RemoteItems.createItem(
-                    widget._loggedUser.uid,
-                    widget._name!,
-                    widget._desc!,
-                    widget._price!,
-                    getParams(),
-                    widget._images!);
-
-                ModalWindow.showModalWindow(
-                    context,
-                    "Oznámení",
-                    FutureBuilder<bool>(
-                        future: addResponse,
-                        builder: (context, snapshot) =>
-                            (snapshot.connectionState == ConnectionState.waiting
-                                ? Center(child: Image.asset("assets/load.gif"))
-                                : (snapshot.hasData
-                                    ? Text("Inzerát úspěšně přidán",
-                                        style: TextStyle(color: kWhite))
-                                    : (snapshot.hasError
-                                        ? ErrorWidgets.futureBuilderError()
-                                        : ErrorWidgets.futureBuilderEmpty())))),
-                    after: () => Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                HomePage(loggedUser: widget._loggedUser))));
-              }
-            }),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        body: Stack(children: [
-          BackgroundImage(),
-          ListView(children: [
-            usedSwitch,
-            categoryDd,
-            case2(
-                categoryDd.value,
-                {
-                  0: bikeColumn(),
-                  1: partsColumn(),
-                  2: accessoriesColumn(),
-                  3: otherColumn()
-                },
-                Container())
-          ])
-        ]));
+    bgImage = BackgroundImage();
+    super.initState();
   }
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+      floatingActionButton: MainButton(
+          iconData: widget._name == null ? Icons.save : Icons.add,
+          onPressed: () {
+            if (widget._name == null) {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => HomePage(
+                      loggedUser: widget._loggedUser, filters: getParams())));
+            } else {
+              addResponse = RemoteItems.createItem(
+                  widget._loggedUser.uid,
+                  widget._name!,
+                  widget._desc!,
+                  widget._price!,
+                  getParams(),
+                  widget._images!);
+
+              ModalWindow.showModalWindow(
+                  context,
+                  "Oznámení",
+                  FutureBuilder<bool>(
+                      future: addResponse,
+                      builder: (context, snapshot) =>
+                          (snapshot.connectionState == ConnectionState.waiting
+                              ? Center(child: Image.asset("assets/load.gif"))
+                              : (snapshot.hasData
+                                  ? Text("Inzerát úspěšně přidán",
+                                      style: TextStyle(color: kWhite))
+                                  : (snapshot.hasError
+                                      ? ErrorWidgets.futureBuilderError()
+                                      : ErrorWidgets.futureBuilderEmpty())))),
+                  after: () => Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              HomePage(loggedUser: widget._loggedUser))));
+            }
+          }),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      body: Stack(children: [
+        bgImage,
+        ListView(children: [
+          usedSwitch,
+          categoryDd,
+          case2(
+              categoryDd.value,
+              {
+                0: bikeColumn(),
+                1: partsColumn(),
+                2: accessoriesColumn(),
+                3: otherColumn()
+              },
+              Container())
+        ])
+      ]));
 
 //__________________________________________________________________________bike
   Widget bikeColumn() {

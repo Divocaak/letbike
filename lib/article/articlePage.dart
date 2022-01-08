@@ -5,21 +5,12 @@ import 'package:letbike/remote/articles.dart';
 import 'package:letbike/widgets/mainButtonEssentials.dart';
 import 'package:letbike/general/pallete.dart';
 
-double volume = 0;
-
-class ArticlePage extends StatefulWidget {
+class ArticlePage extends StatelessWidget {
   ArticlePage({Key? key, required Article article})
       : _article = article,
         super(key: key);
-
   final Article _article;
 
-  @override
-  _ArticlePageState createState() => _ArticlePageState();
-}
-
-class _ArticlePageState extends State<ArticlePage>
-    with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) => Scaffold(
       floatingActionButton: MainButton(
@@ -28,7 +19,7 @@ class _ArticlePageState extends State<ArticlePage>
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       backgroundColor: kBlack,
       body: FutureBuilder(
-          future: RemoteArticles.getArticle(widget._article.id),
+          future: RemoteArticles.getArticle(_article.id),
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
             if (snapshot.hasData) {
               return Container(
@@ -36,13 +27,17 @@ class _ArticlePageState extends State<ArticlePage>
                   child: Markdown(
                       data: snapshot.data!,
                       styleSheet: MarkdownStyleSheet(
-                          h1: TextStyle(color: kWhite),
-                          h2: TextStyle(color: kWhite),
-                          h3: TextStyle(color: kWhite),
-                          h4: TextStyle(color: kWhite),
-                          h5: TextStyle(color: kWhite),
-                          h6: TextStyle(color: kWhite),
+                          h1: TextStyle(color: kPrimaryColor),
+                          h2: TextStyle(color: kSecondaryColor),
+                          h3: TextStyle(color: kPrimaryColor),
+                          h4: TextStyle(color: kSecondaryColor),
+                          h5: TextStyle(color: kPrimaryColor),
+                          h6: TextStyle(color: kSecondaryColor),
                           p: TextStyle(color: kWhite),
+                          blockquoteDecoration: BoxDecoration(
+                              border: Border.all(color: Colors.transparent),
+                              borderRadius: BorderRadius.circular(10),
+                              color: Color.lerp(kBlack, Colors.white, .2)),
                           listBullet: TextStyle(color: kWhite))));
             }
 

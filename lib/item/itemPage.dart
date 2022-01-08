@@ -2,7 +2,7 @@ import 'package:emojis/emojis.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:letbike/chat/chatScreen.dart';
+import 'package:letbike/chatScreen.dart';
 import 'package:letbike/general/objects/item.dart';
 import 'package:letbike/remote/chats.dart';
 import 'package:letbike/remote/items.dart';

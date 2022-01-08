@@ -15,27 +15,30 @@ class _ArticlesScreenState extends State<ArticlesScreen>
   late Future<List<Article>>? articles;
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
     articles = RemoteArticles.getAllArticles();
-    return Scaffold(
-        floatingActionButton: MainButton(
-            iconData: Icons.arrow_back,
-            onPressed: () => Navigator.of(context).pop()),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        body: Container(
-            color: kBlack,
-            child: FutureBuilder<List<dynamic>>(
-                future: articles,
-                builder: (context, snapshot) =>
-                    (snapshot.connectionState == ConnectionState.waiting
-                        ? Center(child: Image.asset("assets/load.gif"))
-                        : (snapshot.hasData
-                            ? ListView.builder(
-                                itemCount: snapshot.data!.length,
-                                itemBuilder: (context, i) =>
-                                    snapshot.data![i].buildCard(context))
-                            : (snapshot.hasError
-                                ? ErrorWidgets.futureBuilderError()
-                                : ErrorWidgets.futureBuilderEmpty()))))));
+    super.initState();
   }
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+      floatingActionButton: MainButton(
+          iconData: Icons.arrow_back,
+          onPressed: () => Navigator.of(context).pop()),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      body: Container(
+          color: kBlack,
+          child: FutureBuilder<List<dynamic>>(
+              future: articles,
+              builder: (context, snapshot) =>
+                  (snapshot.connectionState == ConnectionState.waiting
+                      ? Center(child: Image.asset("assets/load.gif"))
+                      : (snapshot.hasData
+                          ? ListView.builder(
+                              itemCount: snapshot.data!.length,
+                              itemBuilder: (context, i) =>
+                                  snapshot.data![i].buildCard(context))
+                          : (snapshot.hasError
+                              ? ErrorWidgets.futureBuilderError()
+                              : ErrorWidgets.futureBuilderEmpty()))))));
 }

@@ -33,7 +33,7 @@ class RemoteItems {
         : false;
   }
 
-  static Future<List<Item>>? getAllItems(int status,
+  static Future<List<Item>?> getAllItems(int status,
       {String? sellerId,
       Map<String, String>? itemParams,
       String? soldTo}) async {
@@ -53,7 +53,7 @@ class RemoteItems {
             .cast()
             .map<Item>((item) => Item.fromJson(item))
             .toList()
-        : [];
+        : null;
   }
 
   static Future<bool?> updateItemStatus(int itemId, int newStatus,

@@ -32,11 +32,14 @@ class _AddItem extends State<AddItem> with TickerProviderStateMixin {
   double volume = 0;
   late AnimationController animationController;
 
+  late BackgroundImage bgImage;
+
   @override
   void initState() {
     animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 250));
     animationController.addListener(() => setState(() {}));
+    bgImage = BackgroundImage();
     super.initState();
   }
 
@@ -58,7 +61,7 @@ class _AddItem extends State<AddItem> with TickerProviderStateMixin {
               }),
           floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
           body: Stack(children: [
-            BackgroundImage(),
+            bgImage,
             Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
               TextInput(
                   icon: Icons.text_fields,

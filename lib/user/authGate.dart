@@ -16,31 +16,39 @@ class AuthGate extends StatefulWidget {
 }
 
 class _AuthGateState extends State<AuthGate> {
+  late Future<int> userStatus;
+  final TextStyle textStyle =
+      TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold);
+  late BackgroundImage bgImage;
+
   @override
-  Widget build(BuildContext context) {
-    Future<int> userStatus = RemoteUser.checkUserStatus(widget._loggedUser.uid);
-    TextStyle textStyle = TextStyle(
-        color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold);
-    return Stack(alignment: Alignment.center, children: [
-      BackgroundImage(),
-      FutureBuilder<int>(
-          future: userStatus,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              if (snapshot.data! == 1) {
-                return HomePage(loggedUser: widget._loggedUser);
-              } else {
-                return Text("Jste zabanován, kontaktujte prosím podporu",
+  void initState() {
+    userStatus = RemoteUser.checkUserStatus(widget._loggedUser.uid);
+    bgImage = BackgroundImage();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) =>
+      Stack(alignment: Alignment.center, children: [
+        bgImage,
+        FutureBuilder<int>(
+            future: userStatus,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                if (snapshot.data! == 1) {
+                  return HomePage(loggedUser: widget._loggedUser);
+                } else {
+                  return Text("Jste zabanován, kontaktujte prosím podporu",
+                      style: textStyle);
+                }
+              }
+
+              if (snapshot.hasError) {
+                return Text("Někde se stala chyba, zkuste to prosím později",
                     style: textStyle);
               }
-            }
-
-            if (snapshot.hasError) {
-              return Text("Někde se stala chyba, zkuste to prosím později",
-                  style: textStyle);
-            }
-            return Center(child: Image.asset("assets/load.gif"));
-          })
-    ]);
-  }
+              return Center(child: Image.asset("assets/load.gif"));
+            })
+      ]);
 }

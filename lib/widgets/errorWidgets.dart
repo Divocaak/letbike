@@ -43,6 +43,7 @@ class ErrorWidgets {
         SizedBox(width: 10),
         Flexible(child: Text(message, style: TextStyle(color: color)))
       ]);
+
   static Widget snackBarError() => Row(children: [
         Icon(Icons.error_outline, color: kError),
         SizedBox(width: 10),
