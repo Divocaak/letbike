@@ -102,12 +102,7 @@ class _ItemPageState extends State<ItemPage>
           SecondaryButtonData(
               Icons.info,
               () => ModalWindow.showModalWindow(
-                  context,
-                  "Parametry",
-                  Container(
-                      height: 300,
-                      width: 250,
-                      child: widget._item.buildParams(context)))),
+                  context, "Parametry", widget._item.buildParams(context))),
           SecondaryButtonData(
               Icons.arrow_back, () => Navigator.of(context).pop()),
           SecondaryButtonData(Icons.chat, () {
@@ -128,24 +123,38 @@ class _ItemPageState extends State<ItemPage>
                       backgroundColor: Colors.transparent,
                       color: kPrimaryColor,
                       strokeWidth: 5,
-                      child: Container(
-                          height: 500,
-                          width: 500,
+                      child: SizedBox.expand(
                           child: FutureBuilder<List<String>?>(
                               future: chats,
-                              builder: (context, snapshot) => (snapshot.connectionState ==
-                                      ConnectionState.waiting
-                                  ? Center(
-                                      child: Image.asset("assets/load.gif"))
-                                  : (snapshot.hasData
-                                      ? ListView.builder(
-                                          itemCount: snapshot.data!.length,
-                                          itemBuilder: (context, i) => TextButton(
-                                              onPressed: () => Navigator.of(context)
-                                                  .push(MaterialPageRoute(
-                                                      builder: (context) => ChatScreen(item: widget._item, loggedUser: widget._loggedUser, secondUserUid: snapshot.data![i]))),
-                                              child: Text(snapshot.data![i], style: TextStyle(color: kWhite))))
-                                      : (snapshot.hasError ? ErrorWidgets.futureBuilderError() : ErrorWidgets.futureBuilderEmpty())))))));
+                              builder: (context, snapshot) {
+                                switch (snapshot.connectionState) {
+                                  case ConnectionState.waiting:
+                                    return Center(
+                                        child: Image.asset("assets/load.gif"));
+                                  default:
+                                    if (snapshot.hasError)
+                                      return ErrorWidgets.futureBuilderError();
+                                    else if (!snapshot.hasData ||
+                                        (snapshot.hasData &&
+                                            snapshot.data!.length < 1))
+                                      return ErrorWidgets.futureBuilderEmpty();
+                                    return ListView.builder(
+                                        itemCount: snapshot.data!.length,
+                                        itemBuilder: (context, i) => TextButton(
+                                            onPressed: () => Navigator.of(context)
+                                                .push(MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ChatScreen(
+                                                            item: widget._item,
+                                                            loggedUser: widget
+                                                                ._loggedUser,
+                                                            secondUserUid: snapshot
+                                                                .data![i]))),
+                                            child: Text(snapshot.data![i],
+                                                style:
+                                                    TextStyle(color: kWhite))));
+                                }
+                              }))));
             }
           }),
           if (widget._item.sellerId == widget._loggedUser.uid)

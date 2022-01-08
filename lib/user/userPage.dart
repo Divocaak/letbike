@@ -95,22 +95,30 @@ class _UserPageState extends State<UserPage>
                     Column(children: [
                       AccountInfoField.infoField("Hodnocení"),
                       Expanded(
-                          child: FutureBuilder<List<Rating>?>(
-                              future: ratings,
-                              builder: (context, snapshot) => (snapshot
-                                          .connectionState ==
-                                      ConnectionState.waiting
-                                  ? Center(
-                                      child: Image.asset("assets/load.gif"))
-                                  : (snapshot.hasData
-                                      ? ListView.builder(
-                                          itemCount: snapshot.data!.length,
-                                          itemBuilder: (context, i) =>
-                                              snapshot.data![i].buildRow())
-                                      : (snapshot.hasError
-                                          ? ErrorWidgets.futureBuilderError()
-                                          : ErrorWidgets
-                                              .futureBuilderEmpty())))))
+                          child: SizedBox.expand(
+                              child: FutureBuilder<List<Rating>?>(
+                                  future: ratings,
+                                  builder: (context, snapshot) {
+                                    switch (snapshot.connectionState) {
+                                      case ConnectionState.waiting:
+                                        return Center(
+                                            child:
+                                                Image.asset("assets/load.gif"));
+                                      default:
+                                        if (snapshot.hasError)
+                                          return ErrorWidgets
+                                              .futureBuilderError();
+                                        else if (!snapshot.hasData ||
+                                            (snapshot.hasData &&
+                                                snapshot.data!.length < 1))
+                                          return ErrorWidgets
+                                              .futureBuilderEmpty();
+                                        return ListView.builder(
+                                            itemCount: snapshot.data!.length,
+                                            itemBuilder: (context, i) =>
+                                                snapshot.data![i].buildRow());
+                                    }
+                                  })))
                     ]),
                     itemStatusField(items, "Moje inzeráty"),
                     itemStatusField(soldItems, "Prodané předměty"),
@@ -137,21 +145,27 @@ class _UserPageState extends State<UserPage>
       Column(children: [
         AccountInfoField.infoField(label),
         Expanded(
-            child: FutureBuilder<List<Item>?>(
-                future: items,
-                builder: (context, snapshot) =>
-                    (snapshot.connectionState == ConnectionState.waiting
-                        ? Center(child: Image.asset("assets/load.gif"))
-                        : (snapshot.hasData
-                            ? ListView.builder(
-                                itemCount: snapshot.data!.length,
-                                itemBuilder: (context, i) => snapshot.data![i]
-                                    .buildCard(context, widget._loggedUser,
-                                        touchable: touchable,
-                                        ratingController: ratingController))
-                            : (snapshot.hasError
-                                ? ErrorWidgets.futureBuilderError()
-                                : ErrorWidgets.futureBuilderEmpty())))))
+            child: SizedBox.expand(
+                child: FutureBuilder<List<Item>?>(
+                    future: items,
+                    builder: (context, snapshot) {
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.waiting:
+                          return Center(child: Image.asset("assets/load.gif"));
+                        default:
+                          if (snapshot.hasError)
+                            return ErrorWidgets.futureBuilderError();
+                          else if (!snapshot.hasData ||
+                              (snapshot.hasData && snapshot.data!.length < 1))
+                            return ErrorWidgets.futureBuilderEmpty();
+                          return ListView.builder(
+                              itemCount: snapshot.data!.length,
+                              itemBuilder: (context, i) => snapshot.data![i]
+                                  .buildCard(context, widget._loggedUser,
+                                      touchable: touchable,
+                                      ratingController: ratingController));
+                      }
+                    })))
       ]);
 
   Future<void> _pullRefresh() async {

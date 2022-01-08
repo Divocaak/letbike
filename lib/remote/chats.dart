@@ -11,7 +11,7 @@ import 'package:multi_image_picker2/multi_image_picker2.dart';
 class RemoteChats {
   static String url = scriptsUrl + 'chat/';
 
-  static Future<List<Message>>? getMessagesBetween(
+  static Future<List<Message>?> getMessagesBetween(
       String meId, String secondUserId, Item item) async {
     final Response response = await post(
         Uri.parse(Uri.encodeFull(url + "messageGet.php")),
@@ -26,7 +26,7 @@ class RemoteChats {
             .cast()
             .map<Message>((message) => Message.fromJson(message))
             .toList()
-        : [];
+        : null;
   }
 
   static Stream<List<Message>?> getMessages(

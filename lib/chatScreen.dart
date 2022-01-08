@@ -68,34 +68,37 @@ class _ChatScreenState extends State<ChatScreen>
                         kWhite, () => Navigator.of(context).pop()),
                     Text(widget._item.name, style: TextStyle(fontSize: 20)),
                     CircularButton(
-                        kSecondaryColor, 40, Icons.person_search, kWhite, () {
-                      Future<List<Rating>?> ratings =
-                          RemoteRatings.getRatings(widget._secondUserUid);
-
-                      return ModalWindow.showModalWindow(
-                          context,
-                          "Hodnocení uživatele",
-                          Container(
-                              width: 500,
-                              height: 200,
-                              child: FutureBuilder<List<Rating>?>(
-                                  future: ratings,
-                                  builder: (context, snapshot) => (snapshot
-                                              .connectionState ==
-                                          ConnectionState.waiting
-                                      ? Center(
-                                          child: Image.asset("assets/load.gif"))
-                                      : (snapshot.hasData
-                                          ? ListView.builder(
-                                              itemCount: snapshot.data!.length,
-                                              itemBuilder: (context, i) =>
-                                                  snapshot.data![i].buildRow())
-                                          : (snapshot.hasError
-                                              ? ErrorWidgets
-                                                  .futureBuilderError()
-                                              : ErrorWidgets
-                                                  .futureBuilderEmpty()))))));
-                    }),
+                        kSecondaryColor,
+                        40,
+                        Icons.person_search,
+                        kWhite,
+                        () => ModalWindow.showModalWindow(
+                            context,
+                            "Hodnocení uživatele",
+                            FutureBuilder<List<Rating>?>(
+                                future: RemoteRatings.getRatings(
+                                    widget._secondUserUid),
+                                builder: (context, snapshot) {
+                                  switch (snapshot.connectionState) {
+                                    case ConnectionState.waiting:
+                                      return Center(
+                                          child:
+                                              Image.asset("assets/load.gif"));
+                                    default:
+                                      if (snapshot.hasError)
+                                        return ErrorWidgets
+                                            .futureBuilderError();
+                                      else if (!snapshot.hasData ||
+                                          (snapshot.hasData &&
+                                              snapshot.data!.length < 1))
+                                        return ErrorWidgets
+                                            .futureBuilderEmpty();
+                                      return ListView.builder(
+                                          itemCount: snapshot.data!.length,
+                                          itemBuilder: (context, i) =>
+                                              snapshot.data![i].buildRow());
+                                  }
+                                }))),
                     (widget._loggedUser.uid == widget._item.sellerId
                         ? CircularButton(
                             kSecondaryColor,
@@ -126,23 +129,27 @@ class _ChatScreenState extends State<ChatScreen>
                                       "Oznámení",
                                       FutureBuilder<bool?>(
                                           future: updateRes,
-                                          builder: (context, snapshot) => (snapshot
-                                                      .connectionState ==
-                                                  ConnectionState.waiting
-                                              ? Center(
-                                                  child: Image.asset(
-                                                      "assets/load.gif"))
-                                              : (snapshot.hasData
-                                                  ? Text(
-                                                      cancelTrade
-                                                          ? "Zrušeno!"
-                                                          : "Prodáno!",
-                                                      style: TextStyle(
-                                                          color: kWhite))
-                                                  : (snapshot.hasError
-                                                      ? ErrorWidgets
-                                                          .futureBuilderError()
-                                                      : ErrorWidgets.futureBuilderEmpty())))),
+                                          builder: (context, snapshot) {
+                                            switch (snapshot.connectionState) {
+                                              case ConnectionState.waiting:
+                                                return Center(
+                                                    child: Image.asset(
+                                                        "assets/load.gif"));
+                                              default:
+                                                if (snapshot.hasError)
+                                                  return ErrorWidgets
+                                                      .futureBuilderError();
+                                                else if (!snapshot.hasData)
+                                                  return ErrorWidgets
+                                                      .futureBuilderEmpty();
+                                                return Text(
+                                                    cancelTrade
+                                                        ? "Zrušeno!"
+                                                        : "Prodáno!",
+                                                    style: TextStyle(
+                                                        color: kWhite));
+                                            }
+                                          }),
                                       after: () => Navigator.of(context).pop());
                                 }))
                         : Container())

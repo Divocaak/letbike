@@ -33,22 +33,26 @@ class _ArticlesScreenState extends State<ArticlesScreen>
               backgroundColor: Colors.transparent,
               color: kPrimaryColor,
               strokeWidth: 5,
-              child: Container(
-                  color: kBlack,
+              child: SizedBox.expand(
                   child: FutureBuilder<List<Article>?>(
                       future: articles,
-                      builder: (context, snapshot) => (snapshot
-                                  .connectionState ==
-                              ConnectionState.waiting
-                          ? Center(child: Image.asset("assets/load.gif"))
-                          : (snapshot.hasData
-                              ? ListView.builder(
-                                  itemCount: snapshot.data!.length,
-                                  itemBuilder: (context, i) =>
-                                      snapshot.data![i].buildCard(context))
-                              : (snapshot.hasError
-                                  ? ErrorWidgets.futureBuilderError()
-                                  : ErrorWidgets.futureBuilderEmpty()))))))));
+                      builder: (context, snapshot) {
+                        switch (snapshot.connectionState) {
+                          case ConnectionState.waiting:
+                            return Center(
+                                child: Image.asset("assets/load.gif"));
+                          default:
+                            if (snapshot.hasError)
+                              return ErrorWidgets.futureBuilderError();
+                            else if (!snapshot.hasData ||
+                                (snapshot.hasData && snapshot.data!.length < 1))
+                              return ErrorWidgets.futureBuilderEmpty();
+                            return ListView.builder(
+                                itemCount: snapshot.data!.length,
+                                itemBuilder: (context, i) =>
+                                    snapshot.data![i].buildCard(context));
+                        }
+                      })))));
 
   Future<void> _pullRefresh() async {
     Future<List<Article>?> _articles = RemoteArticles.getAllArticles();
