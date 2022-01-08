@@ -55,24 +55,24 @@ class Item {
     return ListView.builder(
         itemCount: itemParams!.length,
         itemBuilder: (context, i) => Row(children: [
-              Container(
-                  height: 40,
-                  width: 100,
-                  color: kPrimaryColor,
-                  alignment: Alignment.center,
-                  child: Text(ParamRow.params[keys[i]]!.name,
-                      style: TextStyle(color: kWhite))),
-              Container(
-                  height: 40,
-                  width: 100,
-                  color: kSecondaryColor,
-                  alignment: Alignment.center,
-                  child: Text(
-                      ParamRow.params[keys[i]]!.options[
-                          (values[i] == "true" || values[i] == "false")
-                              ? (values[i] == "false" ? 0 : 1)
-                              : int.parse(values[i])],
-                      style: TextStyle(color: kBlack)))
+              Expanded(
+                  child: Container(
+                      padding: EdgeInsets.symmetric(vertical: 15),
+                      color: kPrimaryColor,
+                      child: Text(ParamRow.params[keys[i]]!.name,
+                          style: TextStyle(color: kWhite),
+                          textAlign: TextAlign.center))),
+              Expanded(
+                  child: Container(
+                      padding: EdgeInsets.symmetric(vertical: 15),
+                      color: kSecondaryColor,
+                      child: Text(
+                          ParamRow.params[keys[i]]!.options[
+                              (values[i] == "true" || values[i] == "false")
+                                  ? (values[i] == "false" ? 0 : 1)
+                                  : int.parse(values[i])],
+                          style: TextStyle(color: kWhite),
+                          textAlign: TextAlign.center))),
             ]));
   }
 
@@ -116,30 +116,27 @@ class Item {
         ModalWindow.showModalWindow(
             context,
             "Ohodnoťte prodejce",
-            Container(
-                width: 500,
-                height: 500,
-                child: ListView(children: [
-                  Text(
-                      "Prodejce ohodnoťte až poté, co Vám přijde zakoupený předmět.",
-                      style: TextStyle(color: kWhite)),
-                  ratingBar,
-                  Expanded(
-                      child: TextField(
-                          keyboardType: TextInputType.multiline,
-                          maxLines: 10,
-                          maxLength: 100,
-                          style: TextStyle(color: kWhite),
-                          controller: ratingController,
-                          decoration: InputDecoration(
-                              hintText: "Ohodnoťte uživatele a předmět",
-                              hintStyle: TextStyle(color: kWhite),
-                              counterStyle: TextStyle(color: kWhite),
-                              border: new OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(25)),
-                                  borderSide: new BorderSide(color: kWhite)))))
-                ])), after: () {
+            ListView(children: [
+              Text(
+                  "Prodejce ohodnoťte až poté, co Vám přijde zakoupený předmět.",
+                  style: TextStyle(color: kWhite)),
+              ratingBar,
+              Expanded(
+                  child: TextField(
+                      keyboardType: TextInputType.multiline,
+                      maxLines: 10,
+                      maxLength: 100,
+                      style: TextStyle(color: kWhite),
+                      controller: ratingController,
+                      decoration: InputDecoration(
+                          hintText: "Ohodnoťte uživatele a předmět",
+                          hintStyle: TextStyle(color: kWhite),
+                          counterStyle: TextStyle(color: kWhite),
+                          border: new OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(25)),
+                              borderSide: new BorderSide(color: kWhite)))))
+            ]), after: () {
           Future<bool?> rateResponse = RemoteRatings.setRating(
               sellerId, ratingBar.getRatingVal(), ratingController.text);
           ModalWindow.showModalWindow(
@@ -147,16 +144,19 @@ class Item {
               "Oznámení",
               FutureBuilder<bool?>(
                   future: rateResponse,
-                  builder: (context, snapshot) =>
-                      (snapshot.connectionState == ConnectionState.waiting
-                          ? Center(child: Image.asset("assets/load.gif"))
-                          : (snapshot.hasData
-                              ? Text("Uživatel ohodnocen.",
-                                  style: TextStyle(color: kWhite))
-                              : (snapshot.hasError
-                                  ? ErrorWidgets.futureBuilderError()
-                                  : ErrorWidgets.futureBuilderEmpty())))),
-              after: () {
+                  builder: (context, snapshot) {
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.waiting:
+                        return Center(child: Image.asset("assets/load.gif"));
+                      default:
+                        if (snapshot.hasError)
+                          return ErrorWidgets.futureBuilderError();
+                        else if (!snapshot.hasData)
+                          return ErrorWidgets.futureBuilderEmpty();
+                        return Text("Uživatel ohodnocen.",
+                            style: TextStyle(color: kWhite));
+                    }
+                  }), after: () {
             RemoteItems.updateItemStatus(id, 3, soldTo: soldTo);
             Navigator.of(context).pop();
           });

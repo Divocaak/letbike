@@ -12,30 +12,52 @@ class ArticlesScreen extends StatefulWidget {
 
 class _ArticlesScreenState extends State<ArticlesScreen>
     with SingleTickerProviderStateMixin {
-  late Future<List<Article>>? articles;
+  late Future<List<Article>?> articles;
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
     articles = RemoteArticles.getAllArticles();
-    return Scaffold(
-        floatingActionButton: MainButton(
-            iconData: Icons.arrow_back,
-            onPressed: () => Navigator.of(context).pop()),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        body: Container(
-            color: kBlack,
-            child: FutureBuilder<List<dynamic>>(
-                future: articles,
-                builder: (context, snapshot) =>
-                    (snapshot.connectionState == ConnectionState.waiting
-                        ? Center(child: Image.asset("assets/load.gif"))
-                        : (snapshot.hasData
-                            ? ListView.builder(
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+      floatingActionButton: MainButton(
+          iconData: Icons.arrow_back,
+          onPressed: () => Navigator.of(context).pop()),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      backgroundColor: kBlack,
+      body: SafeArea(
+          child: RefreshIndicator(
+              onRefresh: _pullRefresh,
+              backgroundColor: Colors.transparent,
+              color: kPrimaryColor,
+              strokeWidth: 5,
+              child: SizedBox.expand(
+                  child: FutureBuilder<List<Article>?>(
+                      future: articles,
+                      builder: (context, snapshot) {
+                        switch (snapshot.connectionState) {
+                          case ConnectionState.waiting:
+                            return Center(
+                                child: Image.asset("assets/load.gif"));
+                          default:
+                            if (snapshot.hasError)
+                              return ErrorWidgets.futureBuilderError();
+                            else if (!snapshot.hasData ||
+                                (snapshot.hasData && snapshot.data!.length < 1))
+                              return ErrorWidgets.futureBuilderEmpty();
+                            return ListView.builder(
                                 itemCount: snapshot.data!.length,
                                 itemBuilder: (context, i) =>
-                                    snapshot.data![i].buildCard(context))
-                            : (snapshot.hasError
-                                ? ErrorWidgets.futureBuilderError()
-                                : ErrorWidgets.futureBuilderEmpty()))))));
+                                    snapshot.data![i].buildCard(context));
+                        }
+                      })))));
+
+  Future<void> _pullRefresh() async {
+    Future<List<Article>?> _articles = RemoteArticles.getAllArticles();
+    await Future.delayed(Duration(seconds: 1));
+    articles = _articles;
+    setState(() {});
   }
 }

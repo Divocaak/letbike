@@ -39,8 +39,10 @@ class FilterPage extends StatefulWidget {
 Future<bool>? addResponse;
 
 class _FilterPage extends State<FilterPage> {
+  late BackgroundImage bgImage;
+
   @override
-  Widget build(BuildContext context) {
+  void initState() {
     categoryDd.setFp(this);
     partTypeDd.setFp(this);
     partWheelCassetteSwitch.setFp(this);
@@ -49,291 +51,248 @@ class _FilterPage extends State<FilterPage> {
     partBrakeTypeDd.setFp(this);
     otherTypeDd.setFp(this);
     accessoryTypeDd.setFp(this);
-    return Scaffold(
-        floatingActionButton: MainButton(
-            iconData: widget._name == null ? Icons.save : Icons.add,
-            onPressed: () {
-              if (widget._name == null) {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => HomePage(
-                        loggedUser: widget._loggedUser, filters: getParams())));
-              } else {
-                addResponse = RemoteItems.createItem(
-                    widget._loggedUser.uid,
-                    widget._name!,
-                    widget._desc!,
-                    widget._price!,
-                    getParams(),
-                    widget._images!);
-
-                ModalWindow.showModalWindow(
-                    context,
-                    "Oznámení",
-                    FutureBuilder<bool>(
-                        future: addResponse,
-                        builder: (context, snapshot) =>
-                            (snapshot.connectionState == ConnectionState.waiting
-                                ? Center(child: Image.asset("assets/load.gif"))
-                                : (snapshot.hasData
-                                    ? Text("Inzerát úspěšně přidán",
-                                        style: TextStyle(color: kWhite))
-                                    : (snapshot.hasError
-                                        ? ErrorWidgets.futureBuilderError()
-                                        : ErrorWidgets.futureBuilderEmpty())))),
-                    after: () => Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                HomePage(loggedUser: widget._loggedUser))));
-              }
-            }),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        body: Stack(children: [
-          BackgroundImage(),
-          ListView(children: [
-            usedSwitch,
-            categoryDd,
-            case2(
-                categoryDd.value,
-                {
-                  0: bikeColumn(),
-                  1: partsColumn(),
-                  2: accessoriesColumn(),
-                  3: otherColumn()
-                },
-                Container())
-          ])
-        ]));
+    bgImage = BackgroundImage();
+    super.initState();
   }
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+      floatingActionButton: MainButton(
+          iconData: widget._name == null ? Icons.save : Icons.add,
+          onPressed: () {
+            if (widget._name == null) {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => HomePage(
+                      loggedUser: widget._loggedUser, filters: getParams())));
+            } else {
+              addResponse = RemoteItems.createItem(
+                  widget._loggedUser.uid,
+                  widget._name!,
+                  widget._desc!,
+                  widget._price!,
+                  getParams(),
+                  widget._images!);
+
+              ModalWindow.showModalWindow(
+                  context,
+                  "Oznámení",
+                  FutureBuilder<bool>(
+                      future: addResponse,
+                      builder: (context, snapshot) {
+                        switch (snapshot.connectionState) {
+                          case ConnectionState.waiting:
+                            return Center(
+                                child: Image.asset("assets/load.gif"));
+                          default:
+                            if (snapshot.hasError)
+                              return ErrorWidgets.futureBuilderError();
+                            else if (!snapshot.hasData)
+                              return ErrorWidgets.futureBuilderEmpty();
+                            return Text("Inzerát úspěšně přidán",
+                                style: TextStyle(color: kWhite));
+                        }
+                      }),
+                  after: () => Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              HomePage(loggedUser: widget._loggedUser))));
+            }
+          }),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      body: Stack(children: [
+        bgImage,
+        SafeArea(
+            child: ListView(children: [
+          usedSwitch,
+          categoryDd,
+          case2(categoryDd.value, {
+            0: bikeColumn(),
+            1: partsColumn(),
+            2: accessoriesColumn(),
+            3: otherColumn()
+          })
+        ]))
+      ]));
 
 //__________________________________________________________________________bike
-  Widget bikeColumn() {
-    return Column(children: [bikeBrandDd, bikeTypeDd]);
-  }
+  Widget bikeColumn() => Column(children: [bikeBrandDd, bikeTypeDd]);
 
 //_________________________________________________________________________parts
-  Widget partsColumn() {
-    return Column(children: [
-      partTypeDd,
-      case2(
-          partTypeDd.value,
-          {
-            0: partWheelColumn(),
-            1: partCranksColumn(),
-            2: partConverter(),
-            3: partSaddle(),
-            4: partFork(),
-            5: partBowdenTypeDd,
-            6: partBrakes(),
-            7: partTube(),
-            8: partGripsTypeDd,
-            9: partHeadsetTypeDd,
-            10: partCassetteTypeDd,
-            11: partAxisTypeDd,
-            12: partPedalsTypeDd,
-            13: partTires(),
-            14: partStemTypeDd,
-            15: partEbikeTypeDd,
-            16: partRimSizeDd,
-            17: partFrame(),
-            18: partGearChangeTypeDd,
-            19: partHandlebars(),
-            20: partSaddlePipe(),
-            21: partShockAbsTypeDd
-          },
-          Container())
-    ]);
-  }
+  Widget partsColumn() => Column(children: [
+        partTypeDd,
+        case2(partTypeDd.value, {
+          0: partWheelColumn(),
+          1: partCranksColumn(),
+          2: partConverter(),
+          3: partSaddle(),
+          4: partFork(),
+          5: partBowdenTypeDd,
+          6: partBrakes(),
+          7: partTube(),
+          8: partGripsTypeDd,
+          9: partHeadsetTypeDd,
+          10: partCassetteTypeDd,
+          11: partAxisTypeDd,
+          12: partPedalsTypeDd,
+          13: partTires(),
+          14: partStemTypeDd,
+          15: partEbikeTypeDd,
+          16: partRimSizeDd,
+          17: partFrame(),
+          18: partGearChangeTypeDd,
+          19: partHandlebars(),
+          20: partSaddlePipe(),
+          21: partShockAbsTypeDd
+        })
+      ]);
 
-  Widget partWheelColumn() {
-    return Column(children: [
-      partWheelBrandDd,
-      partWheelSizeDd,
-      partWheelMaterialDd,
-      partWheelSpokesSwitch,
-      partWheelTypeSwitch,
-      partWheelAxisDd,
-      partWheelBrakesSwitch,
-      (partWheelBrakesSwitch.value
-          ? partWheelMoreDiscBrakesSwitch
-          : Container()),
-      partWheelCassetteSwitch,
-      (partWheelCassetteSwitch.value ? partWheelMoreNutDd : Container()),
-      partWheelCompatibilityDd
-    ]);
-  }
+  Widget partWheelColumn() => Column(children: [
+        partWheelBrandDd,
+        partWheelSizeDd,
+        partWheelMaterialDd,
+        partWheelSpokesSwitch,
+        partWheelTypeSwitch,
+        partWheelAxisDd,
+        partWheelBrakesSwitch,
+        (partWheelBrakesSwitch.value
+            ? partWheelMoreDiscBrakesSwitch
+            : Container()),
+        partWheelCassetteSwitch,
+        (partWheelCassetteSwitch.value ? partWheelMoreNutDd : Container()),
+        partWheelCompatibilityDd
+      ]);
 
-  Widget partCranksColumn() {
-    return Column(children: [
-      partCranksBrandDd,
-      partCranksCompatibilityDd,
-      partCranksMaterialDd,
-      partCranksAxisDd
-    ]);
-  }
+  Widget partCranksColumn() => Column(children: [
+        partCranksBrandDd,
+        partCranksCompatibilityDd,
+        partCranksMaterialDd,
+        partCranksAxisDd
+      ]);
 
-  Widget partConverter() {
-    return Column(children: [partConverterBrandDd, partConverterNumOfSpeedsDd]);
-  }
+  Widget partConverter() =>
+      Column(children: [partConverterBrandDd, partConverterNumOfSpeedsDd]);
 
-  Widget partSaddle() {
-    return Column(children: [partSaddleBrandDd, partSaddleGenderDd]);
-  }
+  Widget partSaddle() =>
+      Column(children: [partSaddleBrandDd, partSaddleGenderDd]);
 
-  Widget partFork() {
-    return Column(children: [
-      partForkBrandDd,
-      partForkSizeDd,
-      partForkSuspensionSwitch,
-      (partForkSuspensionSwitch.value
-          ? partForkMoreSuspensionSwitch
-          : Container()),
-      partForkCompatibilityDd,
-      partForkMaterialDd,
-      partForkMaterialColDd
-    ]);
-  }
+  Widget partFork() => Column(children: [
+        partForkBrandDd,
+        partForkSizeDd,
+        partForkSuspensionSwitch,
+        (partForkSuspensionSwitch.value
+            ? partForkMoreSuspensionSwitch
+            : Container()),
+        partForkCompatibilityDd,
+        partForkMaterialDd,
+        partForkMaterialColDd
+      ]);
 
-  Widget partBrakes() {
-    return Column(children: [
-      partBrakeBrandDd,
-      partBrakeTypeDd,
-      if (partBrakeTypeDd.value == 0)
-        Column(children: [
-          partBrakeMoreDiscSwitch,
-          partBrakeMoreDiscDd,
-          partBrakeMoreBlockDd
-        ])
-    ]);
-  }
+  Widget partBrakes() => Column(children: [
+        partBrakeBrandDd,
+        partBrakeTypeDd,
+        if (partBrakeTypeDd.value == 0)
+          Column(children: [
+            partBrakeMoreDiscSwitch,
+            partBrakeMoreDiscDd,
+            partBrakeMoreBlockDd
+          ])
+      ]);
 
-  Widget partTube() {
-    return Column(children: [partTubeSizeDd, partTubeTypeDd]);
-  }
+  Widget partTube() => Column(children: [partTubeSizeDd, partTubeTypeDd]);
 
-  Widget partTires() {
-    return Column(children: [
-      partTiresSizeDd,
-      partTiresWidthDd,
-      partTiresBrandDd,
-      partTiresTypeDd,
-      partTiresMaterialSwitch
-    ]);
-  }
+  Widget partTires() => Column(children: [
+        partTiresSizeDd,
+        partTiresWidthDd,
+        partTiresBrandDd,
+        partTiresTypeDd,
+        partTiresMaterialSwitch
+      ]);
 
-  Widget partFrame() {
-    return Column(
-        children: [partFrameSizeDd, partFrameForkDd, partFrameTypeDd]);
-  }
+  Widget partFrame() =>
+      Column(children: [partFrameSizeDd, partFrameForkDd, partFrameTypeDd]);
 
-  Widget partHandlebars() {
-    return Column(children: [
-      partHandlebarsTypeDd,
-      partHandlebarsMaterialDd,
-      partHandlebarsWidthDd,
-      partHandlebarsSizeDd
-    ]);
-  }
+  Widget partHandlebars() => Column(children: [
+        partHandlebarsTypeDd,
+        partHandlebarsMaterialDd,
+        partHandlebarsWidthDd,
+        partHandlebarsSizeDd
+      ]);
 
-  Widget partSaddlePipe() {
-    return Column(children: [
-      partSaddlePipeTypeDd,
-      partSaddlePipeLengthDd,
-      partSaddlePipeMaterialDd,
-      partSaddlePipeSizeDd
-    ]);
-  }
+  Widget partSaddlePipe() => Column(children: [
+        partSaddlePipeTypeDd,
+        partSaddlePipeLengthDd,
+        partSaddlePipeMaterialDd,
+        partSaddlePipeSizeDd
+      ]);
 
 //___________________________________________________________________accessories
-  Widget accessoriesColumn() {
-    return Column(children: [
-      accessoryTypeDd,
-      case2(
-          accessoryTypeDd.value,
-          {
-            0: accessoryMudguard(),
-            2: accessoryGlasses(),
-            3: accessoryCompsTypeDd,
-            4: accessoryKidSaddleTypeDd,
-            5: accessoryHelmetTypeSwitch,
-            6: accessoryPumpsTypeDd,
-            7: accessoryBottleHolderTypeDd,
-            8: accessoryToolsTypeDd,
-            9: accessoryRack(),
-            10: accessoryClothes(),
-            11: accessoryBoots(),
-            13: accessoryLightLightSwitch,
-            15: accessoryLockTypeDd,
-            16: accessoryCarRackTypeSwitch
-          },
-          Container())
-    ]);
-  }
+  Widget accessoriesColumn() => Column(children: [
+        accessoryTypeDd,
+        case2(accessoryTypeDd.value, {
+          0: accessoryMudguard(),
+          2: accessoryGlasses(),
+          3: accessoryCompsTypeDd,
+          4: accessoryKidSaddleTypeDd,
+          5: accessoryHelmetTypeSwitch,
+          6: accessoryPumpsTypeDd,
+          7: accessoryBottleHolderTypeDd,
+          8: accessoryToolsTypeDd,
+          9: accessoryRack(),
+          10: accessoryClothes(),
+          11: accessoryBoots(),
+          13: accessoryLightLightSwitch,
+          15: accessoryLockTypeDd,
+          16: accessoryCarRackTypeSwitch
+        })
+      ]);
 
-  Widget accessoryMudguard() {
-    return Column(
-        children: [accessoryMudguardsTypeDd, accessoryMudguardsSizeDd]);
-  }
+  Widget accessoryMudguard() =>
+      Column(children: [accessoryMudguardsTypeDd, accessoryMudguardsSizeDd]);
 
-  Widget accessoryGlasses() {
-    return Column(children: [
-      accessoryGlassesTypeDd,
-      accessoryGlassesGlassDd,
-      accessoryGlassesGenderDd,
-      accessoryGlassesChangeGlassSwitch,
-      accessoryGlassesChangeHolderSwitch
-    ]);
-  }
+  Widget accessoryGlasses() => Column(children: [
+        accessoryGlassesTypeDd,
+        accessoryGlassesGlassDd,
+        accessoryGlassesGenderDd,
+        accessoryGlassesChangeGlassSwitch,
+        accessoryGlassesChangeHolderSwitch
+      ]);
 
-  Widget accessoryRack() {
-    return Column(children: [accessoryRackTypeSwitch, accessoryRackSizeDd]);
-  }
+  Widget accessoryRack() =>
+      Column(children: [accessoryRackTypeSwitch, accessoryRackSizeDd]);
 
-  Widget accessoryClothes() {
-    return Column(children: [
-      accessoryClothesTypeDd,
-      accessoryClothesGenderDd,
-      accessoryClothesSizeDd
-    ]);
-  }
+  Widget accessoryClothes() => Column(children: [
+        accessoryClothesTypeDd,
+        accessoryClothesGenderDd,
+        accessoryClothesSizeDd
+      ]);
 
-  Widget accessoryBoots() {
-    return Column(children: [accessoryBootsTypeDd, accessoryBootsSizeDd]);
-  }
+  Widget accessoryBoots() =>
+      Column(children: [accessoryBootsTypeDd, accessoryBootsSizeDd]);
 
 //_________________________________________________________________________other
-  Widget otherColumn() {
-    return Column(children: [
-      otherTypeDd,
-      case2(otherTypeDd.value,
-          {0: otherEBike(), 1: otherTrainer(), 2: otherScooter()}, Container())
-    ]);
-  }
+  Widget otherColumn() => Column(children: [
+        otherTypeDd,
+        case2(otherTypeDd.value,
+            {0: otherEBike(), 1: otherTrainer(), 2: otherScooter()})
+      ]);
 
-  Widget otherEBike() {
-    return Column(children: [otherEBikeBrandDd, otherEBikeTypeSwitch]);
-  }
+  Widget otherEBike() =>
+      Column(children: [otherEBikeBrandDd, otherEBikeTypeSwitch]);
 
-  Widget otherTrainer() {
-    return Column(children: [otherTrainerBrandDd, otherTrainerTypeDd]);
-  }
+  Widget otherTrainer() =>
+      Column(children: [otherTrainerBrandDd, otherTrainerTypeDd]);
 
-  Widget otherScooter() {
-    return Column(children: [
-      otherScooterBrandDd,
-      otherScooterSizeDd,
-      otherScooterCompSwitch
-    ]);
-  }
+  Widget otherScooter() => Column(children: [
+        otherScooterBrandDd,
+        otherScooterSizeDd,
+        otherScooterCompSwitch
+      ]);
 
   TValue case2<TOptionType, TValue>(
-      TOptionType selectedOption, Map<TOptionType, TValue> branches,
-      [TValue? defaultValue]) {
-    if (!branches.containsKey(selectedOption)) {
-      return defaultValue!;
-    }
-
-    return branches[selectedOption]!;
-  }
+          TOptionType selectedOption, Map<TOptionType, TValue> branches) =>
+      !branches.containsKey(selectedOption)
+          ? Container() as TValue
+          : branches[selectedOption]!;
 
   Map<String, String> getParams() {
     List<dynamic> valWidgets = [usedSwitch, categoryDd];

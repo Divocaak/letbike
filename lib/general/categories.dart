@@ -151,7 +151,7 @@ class Wheel {
     "Veltec",
     "Vision Tech",
     "XLC",
-    "Zipp",
+    "Zipp"
   ];
 
   static List<String> size = [
@@ -380,16 +380,10 @@ class Tire {
     "27.5",
     "28",
     "29",
-    "jiné",
+    "jiné"
   ];
 
-  static List<String> width = [
-    "30C",
-    "32C",
-    "35C",
-    "38C",
-    "jiné",
-  ];
+  static List<String> width = ["30C", "32C", "35C", "38C", "jiné"];
 
   static List<String> brand = [
     "Maxxis",
@@ -417,7 +411,7 @@ class Tire {
     "Vittoria",
     "WTB",
     "ZIPP",
-    "jiné",
+    "jiné"
   ];
 
   static List<String> type = [
@@ -426,7 +420,7 @@ class Tire {
     "Crossová",
     "Dětské",
     "Galusky",
-    "Velopásky",
+    "Velopásky"
   ];
 }
 
@@ -443,13 +437,13 @@ class Tube {
     "27.5",
     "28",
     "29",
-    "jiné",
+    "jiné"
   ];
 
   static List<String> type = [
     "AV (auto/moto ventilek)",
     "FV (galuskový ventilek)",
-    "DV (velo ventilek)",
+    "DV (velo ventilek)"
   ];
 }
 
@@ -474,17 +468,10 @@ class Frame {
     "58 - 60",
     "60 - 62",
     "62 - 64",
-    "jiné",
+    "jiné"
   ];
 
-  static List<String> fork = [
-    "24",
-    "26",
-    "27.5",
-    "28",
-    "29",
-    "jiné",
-  ];
+  static List<String> fork = ["24", "26", "27.5", "28", "29", "jiné"];
 
   static List<String> type = [
     "Horské MTB",
@@ -493,7 +480,7 @@ class Frame {
     "Silniční",
     "Freeride, Downhill",
     "Dětské",
-    "BMX",
+    "BMX"
   ];
 }
 
@@ -507,30 +494,14 @@ class Handlebars {
     "Aerodynamická",
     "Cruiser",
     "Butterfly",
-    "Moustache",
+    "Moustache"
   ];
 
-  static List<String> material = [
-    "karbon",
-    "hliníkové",
-    "ocel",
-  ];
+  static List<String> material = ["karbon", "hliníkové", "ocel"];
 
-  static List<String> width = [
-    "36",
-    "38",
-    "40",
-    "42",
-    "44",
-    "46",
-    "jiné",
-  ];
+  static List<String> width = ["36", "38", "40", "42", "44", "46", "jiné"];
 
-  static List<String> size = [
-    "25.4",
-    "31.8",
-    "jiné",
-  ];
+  static List<String> size = ["25.4", "31.8", "jiné"];
 }
 
 class SaddleTube {
@@ -538,23 +509,14 @@ class SaddleTube {
     "Horské MTB",
     "silníční",
     "odpružené",
-    "teleskopické",
+    "teleskopické"
   ];
 
-  static List<String> length = [
-    "330mm",
-    "350mm",
-    "400mm",
-    "jiné",
-  ];
+  static List<String> length = ["330mm", "350mm", "400mm", "jiné"];
 
   static List<String> material = ["karbon", "hliník", "ocel"];
 
-  static List<String> size = [
-    "30.9",
-    "31.6",
-    "ostatní",
-  ];
+  static List<String> size = ["30.9", "31.6", "ostatní"];
 }
 
 class Stem {
@@ -563,7 +525,7 @@ class Stem {
     "Ahead průměr řidítek 25,4mm",
     "Ahead průměr řidítek 35mm",
     "Ahead ostatní Ø",
-    "Ostatní",
+    "Ostatní"
   ];
 }
 
@@ -576,7 +538,7 @@ class AxisCat {
     "Rychloupínáky a Osy",
     "Pastorky",
     "Osy",
-    "Příslušenství",
+    "Příslušenství"
   ];
 }
 
@@ -592,7 +554,7 @@ class Cassette {
     "5 rychlostní",
     "Volnokolečka",
     "Kryty",
-    "Příslušenství",
+    "Příslušenství"
   ];
 }
 
@@ -602,7 +564,7 @@ class ShockAbs {
     "pružinové",
     "Pružiny",
     "Vložky vymezovací",
-    "Náhradní díly",
+    "Náhradní díly"
   ];
 }
 
@@ -615,7 +577,7 @@ class GearChanger {
     "silniční",
     "Set řazení a brzdy",
     "Set řazení a brzdy silniční",
-    "Set řazení a brzdy Di2",
+    "Set řazení a brzdy Di2"
   ];
 }
 
@@ -625,7 +587,7 @@ class Pedals {
     "nášlapné ",
     "dětské",
     "Kufry pro nášlapné pedály",
-    "Příslušenství",
+    "Příslušenství"
   ];
 }
 
@@ -639,7 +601,7 @@ class Rim {
     '20"',
     '16"',
     '12"',
-    'ostatní',
+    'ostatní'
   ];
 }
 
@@ -653,16 +615,12 @@ class Grips {
     "ostatní",
     "Omotávky",
     "Záslepky do řídítek",
-    "Příslušenství",
+    "Příslušenství"
   ];
 }
 
 class EBikeComponents {
-  static List<String> type = [
-    "Baterie",
-    "Nabíječky",
-    "Displeje a ovladače",
-  ];
+  static List<String> type = ["Baterie", "Nabíječky", "Displeje a ovladače"];
 }
 
 class Headset {
@@ -671,7 +629,7 @@ class Headset {
     "závitové",
     "integrované",
     "Kroužky pod hlavové složení",
-    "Příslušenství",
+    "Příslušenství"
   ];
 }
 
@@ -683,7 +641,7 @@ class Bowden {
     "Koncovky lanka",
     "Konvovky bowdenu",
     "Kompletní sady",
-    "Příslušenství",
+    "Příslušenství"
   ];
 }
 
@@ -708,31 +666,16 @@ class Clothes {
     "oblečení",
     "Čepice",
     "Ponožky",
-    "Návleky",
+    "Návleky"
   ];
 
-  static List<String> gender = [
-    "Pánské",
-    "Dámské",
-    "Dětské",
-  ];
+  static List<String> gender = ["Pánské", "Dámské", "Dětské"];
 
-  static List<String> size = [
-    "XS",
-    "S",
-    "M",
-    "L",
-    "XL",
-    "XXL",
-  ];
+  static List<String> size = ["XS", "S", "M", "L", "XL", "XXL"];
 }
 
 class Boots {
-  static List<String> type = [
-    "Horské",
-    "Silniční",
-    "Turistická",
-  ];
+  static List<String> type = ["Horské", "Silniční", "Turistická"];
 
   static List<String> size = [
     "36",
@@ -749,7 +692,7 @@ class Boots {
     "47",
     "48",
     "49",
-    "jiné",
+    "jiné"
   ];
 }
 
@@ -762,23 +705,11 @@ class Comp {
 }
 
 class Glasses {
-  static List<String> type = [
-    "Závodní",
-    "Sportovní",
-    "Lifestyle",
-  ];
+  static List<String> type = ["Závodní", "Sportovní", "Lifestyle"];
 
-  static List<String> glass = [
-    "fotochromatická",
-    "keramická",
-    "polarizační",
-  ];
+  static List<String> glass = ["fotochromatická", "keramická", "polarizační"];
 
-  static List<String> gender = [
-    "Pánské",
-    "Dámské",
-    "Dětské",
-  ];
+  static List<String> gender = ["Pánské", "Dámské", "Dětské"];
 }
 
 class KidSaddle {
@@ -787,26 +718,16 @@ class KidSaddle {
     "Na rám",
     "Pod sedlo",
     "Vodící tyče",
-    "Vozík za kolo",
+    "Vozík za kolo"
   ];
 }
 
 class BottleHolder {
-  static List<String> type = [
-    "Do rámu",
-    "Pod sedlo",
-    "Na řídítka",
-  ];
+  static List<String> type = ["Do rámu", "Pod sedlo", "Na řídítka"];
 }
 
 class Rack {
-  static List<String> type = [
-    "20´",
-    "24´",
-    "26´",
-    "28´",
-    "29´",
-  ];
+  static List<String> type = ["20´", "24´", "26´", "28´", "29´"];
 }
 
 class Tools {
@@ -820,7 +741,7 @@ class Tools {
     "Maziva a čistidla",
     "Měřidla",
     "Nýtovače",
-    "Ostatní",
+    "Ostatní"
   ];
 }
 
@@ -830,16 +751,12 @@ class Pump {
     "Cestovní",
     "Na vidlice",
     "Jednorázové bombičky",
-    "Náhradní díly",
+    "Náhradní díly"
   ];
 }
 
 class Mudguard {
-  static List<String> type = [
-    "Přední",
-    "Zadní",
-    "Sada",
-  ];
+  static List<String> type = ["Přední", "Zadní", "Sada"];
 
   static List<String> size = [
     "12’",
@@ -849,7 +766,7 @@ class Mudguard {
     "24’",
     "26’",
     "28’",
-    "29’",
+    "29’"
   ];
 }
 
@@ -859,7 +776,7 @@ class Lock {
     "Řetězové",
     "Skládací",
     "U-zámky",
-    "Kódové",
+    "Kódové"
   ];
 }
 
@@ -906,7 +823,7 @@ class Scooter {
     "přední 26’ a zadní 16’",
     "přední 28’ a zadní 28’",
     "přední 22’ a zadní 12’",
-    "přední 230 mm, zadní 180 mm",
+    "přední 230 mm, zadní 180 mm"
   ];
 
   static List<String> brand = [
@@ -1085,6 +1002,6 @@ class ParamRow {
     "otherTrainerTypeDd": ParamRowOpt("Typ brždění", Trainer.brakes),
     "otherScooterBrandDd": ParamRowOpt("Značka", Scooter.brand),
     "otherScooterSizeDd": ParamRowOpt("Velikost koleček", Scooter.size),
-    "otherScooterCompSwitch": ParamRowOpt("Počítač", ["Ne", "Ano"]),
+    "otherScooterCompSwitch": ParamRowOpt("Počítač", ["Ne", "Ano"])
   };
 }

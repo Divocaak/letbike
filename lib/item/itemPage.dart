@@ -2,7 +2,7 @@ import 'package:emojis/emojis.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:letbike/chat/chatScreen.dart';
+import 'package:letbike/chatScreen.dart';
 import 'package:letbike/general/objects/item.dart';
 import 'package:letbike/remote/chats.dart';
 import 'package:letbike/remote/items.dart';
@@ -30,7 +30,7 @@ class ItemPage extends StatefulWidget {
 
 class _ItemPageState extends State<ItemPage>
     with SingleTickerProviderStateMixin {
-  late Future<List<String>>? chats;
+  late Future<List<String>?> chats;
 
   late AnimationController animationController;
 
@@ -59,7 +59,8 @@ class _ItemPageState extends State<ItemPage>
           }),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: Stack(children: [
-        ListView(children: [
+        SafeArea(
+            child: ListView(children: [
           Container(
               height: 300,
               width: MediaQuery.of(context).size.width,
@@ -96,17 +97,12 @@ class _ItemPageState extends State<ItemPage>
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               child: Text(widget._item.description ?? "",
                   style: TextStyle(fontSize: 20, color: kWhite)))
-        ]),
+        ])),
         MainButtonClicked(buttons: [
           SecondaryButtonData(
               Icons.info,
               () => ModalWindow.showModalWindow(
-                  context,
-                  "Parametry",
-                  Container(
-                      height: 300,
-                      width: 250,
-                      child: widget._item.buildParams(context)))),
+                  context, "Parametry", widget._item.buildParams(context))),
           SecondaryButtonData(
               Icons.arrow_back, () => Navigator.of(context).pop()),
           SecondaryButtonData(Icons.chat, () {
@@ -122,25 +118,43 @@ class _ItemPageState extends State<ItemPage>
               ModalWindow.showModalWindow(
                   context,
                   "Vyberte chat",
-                  Container(
-                      height: 500,
-                      width: 500,
-                      child: FutureBuilder<List<String>>(
-                          future: chats,
-                          builder: (context, snapshot) => (snapshot.connectionState == ConnectionState.waiting
-                              ? Center(child: Image.asset("assets/load.gif"))
-                              : (snapshot.hasData
-                                  ? ListView.builder(
-                                      itemCount: snapshot.data!.length,
-                                      itemBuilder: (context, i) => TextButton(
-                                          onPressed: () => Navigator.of(context)
-                                              .push(MaterialPageRoute(
-                                                  builder: (context) => ChatScreen(
-                                                      item: widget._item,
-                                                      loggedUser: widget._loggedUser,
-                                                      secondUserUid: snapshot.data![i]))),
-                                          child: Text(snapshot.data![i], style: TextStyle(color: kWhite))))
-                                  : (snapshot.hasError ? ErrorWidgets.futureBuilderError() : ErrorWidgets.futureBuilderEmpty()))))));
+                  RefreshIndicator(
+                      onRefresh: _pullRefresh,
+                      backgroundColor: Colors.transparent,
+                      color: kPrimaryColor,
+                      strokeWidth: 5,
+                      child: SizedBox.expand(
+                          child: FutureBuilder<List<String>?>(
+                              future: chats,
+                              builder: (context, snapshot) {
+                                switch (snapshot.connectionState) {
+                                  case ConnectionState.waiting:
+                                    return Center(
+                                        child: Image.asset("assets/load.gif"));
+                                  default:
+                                    if (snapshot.hasError)
+                                      return ErrorWidgets.futureBuilderError();
+                                    else if (!snapshot.hasData ||
+                                        (snapshot.hasData &&
+                                            snapshot.data!.length < 1))
+                                      return ErrorWidgets.futureBuilderEmpty();
+                                    return ListView.builder(
+                                        itemCount: snapshot.data!.length,
+                                        itemBuilder: (context, i) => TextButton(
+                                            onPressed: () => Navigator.of(context)
+                                                .push(MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ChatScreen(
+                                                            item: widget._item,
+                                                            loggedUser: widget
+                                                                ._loggedUser,
+                                                            secondUserUid: snapshot
+                                                                .data![i]))),
+                                            child: Text(snapshot.data![i],
+                                                style:
+                                                    TextStyle(color: kWhite))));
+                                }
+                              }))));
             }
           }),
           if (widget._item.sellerId == widget._loggedUser.uid)
@@ -171,4 +185,12 @@ class _ItemPageState extends State<ItemPage>
                     }))
         ], volume: volume)
       ]));
+
+  Future<void> _pullRefresh() async {
+    Future<List<String>?> _chats =
+        RemoteChats.getChats(widget._item.id, widget._item.sellerId);
+    await Future.delayed(Duration(seconds: 1));
+    chats = _chats;
+    setState(() {});
+  }
 }
