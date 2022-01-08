@@ -62,7 +62,7 @@ class RemoteChats {
     }
   }
 
-  static Future<List<String>>? getChats(int itemId, String sellerId) async {
+  static Future<List<String>?> getChats(int itemId, String sellerId) async {
     final Response response = await post(
         Uri.parse(Uri.encodeFull(url + "chatsGet.php")),
         headers: {
@@ -72,6 +72,6 @@ class RemoteChats {
 
     return response.statusCode == 200 && response.body != "ERROR"
         ? List<String>.from(jsonDecode(response.body))
-        : [];
+        : null;
   }
 }

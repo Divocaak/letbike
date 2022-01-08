@@ -55,22 +55,31 @@ class _HomePageState extends State<HomePage>
             }
           }),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      backgroundColor: kBlack,
       body: Stack(children: [
-        Container(
-            color: kBlack,
-            child: FutureBuilder<List<Item>?>(
-                future: items,
-                builder: (context, snapshot) =>
-                    (snapshot.connectionState == ConnectionState.waiting
-                        ? Center(child: Image.asset("assets/load.gif"))
-                        : (snapshot.hasData
-                            ? ListView.builder(
-                                itemCount: snapshot.data!.length,
-                                itemBuilder: (context, i) => snapshot.data![i]
-                                    .buildCard(context, widget._loggedUser))
-                            : (snapshot.hasError
-                                ? ErrorWidgets.futureBuilderError()
-                                : ErrorWidgets.futureBuilderEmpty()))))),
+        SafeArea(
+            child: RefreshIndicator(
+                onRefresh: _pullRefresh,
+                backgroundColor: Colors.transparent,
+                color: kPrimaryColor,
+                strokeWidth: 5,
+                child: Container(
+                    color: kBlack,
+                    child: FutureBuilder<List<Item>?>(
+                        future: items,
+                        builder: (context, snapshot) => (snapshot
+                                    .connectionState ==
+                                ConnectionState.waiting
+                            ? Center(child: Image.asset("assets/load.gif"))
+                            : (snapshot.hasData
+                                ? ListView.builder(
+                                    itemCount: snapshot.data!.length,
+                                    itemBuilder: (context, i) => snapshot
+                                        .data![i]
+                                        .buildCard(context, widget._loggedUser))
+                                : (snapshot.hasError
+                                    ? ErrorWidgets.futureBuilderError()
+                                    : ErrorWidgets.futureBuilderEmpty()))))))),
         MainButtonClicked(buttons: [
           SecondaryButtonData(
               Icons.add,
@@ -93,4 +102,12 @@ class _HomePageState extends State<HomePage>
                   MaterialPageRoute(builder: (context) => ArticlesScreen())))
         ], volume: volume)
       ]));
+
+  Future<void> _pullRefresh() async {
+    Future<List<Item>?> _items =
+        RemoteItems.getAllItems(1, itemParams: widget._filters);
+    await Future.delayed(Duration(seconds: 1));
+    items = _items;
+    setState(() {});
+  }
 }

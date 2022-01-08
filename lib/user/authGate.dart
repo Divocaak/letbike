@@ -29,8 +29,8 @@ class _AuthGateState extends State<AuthGate> {
   }
 
   @override
-  Widget build(BuildContext context) =>
-      Stack(alignment: Alignment.center, children: [
+  Widget build(BuildContext context) => Scaffold(
+          body: Stack(alignment: Alignment.center, children: [
         bgImage,
         FutureBuilder<int>(
             future: userStatus,
@@ -50,5 +50,5 @@ class _AuthGateState extends State<AuthGate> {
               }
               return Center(child: Image.asset("assets/load.gif"));
             })
-      ]);
+      ]));
 }

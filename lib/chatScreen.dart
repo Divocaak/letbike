@@ -147,7 +147,8 @@ class _ChatScreenState extends State<ChatScreen>
                                 }))
                         : Container())
                   ])),
-          body: Column(children: [
+          body: SafeArea(
+              child: Column(children: [
             Expanded(
                 child: StreamBuilder(
                     stream: messagesStream,
@@ -203,5 +204,5 @@ class _ChatScreenState extends State<ChatScreen>
                     }
                   }))
             ])
-          ])));
+          ]))));
 }

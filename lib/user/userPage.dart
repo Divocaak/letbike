@@ -1,12 +1,12 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:letbike/firstScreen.dart';
 import 'package:letbike/general/objects/item.dart';
 import 'package:letbike/general/objects/rating.dart';
 import 'package:letbike/remote/items.dart';
 import 'package:letbike/remote/ratings.dart';
 import 'package:letbike/general/pallete.dart';
-import 'package:letbike/user/signGate.dart';
 import 'package:letbike/widgets/accountInfoField.dart';
 import 'package:letbike/widgets/errorWidgets.dart';
 import 'package:letbike/widgets/images.dart';
@@ -65,9 +65,9 @@ class _UserPageState extends State<UserPage>
             }
           }),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      body: SafeArea(
-          child: Stack(children: [
-        Column(children: [
+      body: Stack(children: [
+        SafeArea(
+            child: Column(children: [
           Flexible(
               flex: 1,
               child: Row(
@@ -85,44 +85,52 @@ class _UserPageState extends State<UserPage>
                   ])),
           Flexible(
               flex: 3,
-              child: CarouselSlider(options: carouselOptions(context), items: [
-                Column(children: [
-                  AccountInfoField.infoField("Hodnocení"),
-                  Expanded(
-                      child: FutureBuilder<List<Rating>?>(
-                          future: ratings,
-                          builder: (context, snapshot) => (snapshot
-                                      .connectionState ==
-                                  ConnectionState.waiting
-                              ? Center(child: Image.asset("assets/load.gif"))
-                              : (snapshot.hasData
-                                  ? ListView.builder(
-                                      itemCount: snapshot.data!.length,
-                                      itemBuilder: (context, i) =>
-                                          snapshot.data![i].buildRow())
-                                  : (snapshot.hasError
-                                      ? ErrorWidgets.futureBuilderError()
-                                      : ErrorWidgets.futureBuilderEmpty())))))
-                ]),
-                itemStatusField(items, "Moje inzeráty"),
-                itemStatusField(soldItems, "Prodané předměty"),
-                itemStatusField(boughtItems, "Zakoupené předměty",
-                    ratingController: ratingController),
-                itemStatusField(
-                    ratedItems, "Ohodnocené předměty (již přijaté, uzavřené)",
-                    touchable: false)
-              ]))
-        ]),
+              child: RefreshIndicator(
+                  onRefresh: _pullRefresh,
+                  backgroundColor: Colors.transparent,
+                  color: kPrimaryColor,
+                  strokeWidth: 5,
+                  child:
+                      CarouselSlider(options: carouselOptions(context), items: [
+                    Column(children: [
+                      AccountInfoField.infoField("Hodnocení"),
+                      Expanded(
+                          child: FutureBuilder<List<Rating>?>(
+                              future: ratings,
+                              builder: (context, snapshot) => (snapshot
+                                          .connectionState ==
+                                      ConnectionState.waiting
+                                  ? Center(
+                                      child: Image.asset("assets/load.gif"))
+                                  : (snapshot.hasData
+                                      ? ListView.builder(
+                                          itemCount: snapshot.data!.length,
+                                          itemBuilder: (context, i) =>
+                                              snapshot.data![i].buildRow())
+                                      : (snapshot.hasError
+                                          ? ErrorWidgets.futureBuilderError()
+                                          : ErrorWidgets
+                                              .futureBuilderEmpty())))))
+                    ]),
+                    itemStatusField(items, "Moje inzeráty"),
+                    itemStatusField(soldItems, "Prodané předměty"),
+                    itemStatusField(boughtItems, "Zakoupené předměty",
+                        ratingController: ratingController),
+                    itemStatusField(ratedItems,
+                        "Ohodnocené předměty (již přijaté, uzavřené)",
+                        touchable: false)
+                  ])))
+        ])),
         MainButtonClicked(buttons: [
           SecondaryButtonData(Icons.logout, () async {
             await FirebaseAuth.instance.signOut();
             Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => SignGate()));
+                MaterialPageRoute(builder: (context) => FirstScreen()));
           }),
           SecondaryButtonData(
               Icons.arrow_back, () => Navigator.of(context).pop())
         ], volume: volume)
-      ])));
+      ]));
 
   Widget itemStatusField(Future<List<Item>?> items, String label,
           {bool touchable = true, TextEditingController? ratingController}) =>
@@ -145,4 +153,24 @@ class _UserPageState extends State<UserPage>
                                 ? ErrorWidgets.futureBuilderError()
                                 : ErrorWidgets.futureBuilderEmpty())))))
       ]);
+
+  Future<void> _pullRefresh() async {
+    Future<List<Item>?> _items =
+        RemoteItems.getAllItems(1, sellerId: widget._loggedUser.uid);
+    Future<List<Item>?> _soldItems =
+        RemoteItems.getAllItems(2, sellerId: widget._loggedUser.uid);
+    Future<List<Item>?> _boughtItems =
+        RemoteItems.getAllItems(2, soldTo: widget._loggedUser.uid);
+    Future<List<Item>?> _ratedItems =
+        RemoteItems.getAllItems(3, soldTo: widget._loggedUser.uid);
+    Future<List<Rating>?> _ratings =
+        RemoteRatings.getRatings(widget._loggedUser.uid);
+    await Future.delayed(Duration(seconds: 1));
+    items = _items;
+    soldItems = _soldItems;
+    boughtItems = _boughtItems;
+    ratedItems = _ratedItems;
+    ratings = _ratings;
+    setState(() {});
+  }
 }

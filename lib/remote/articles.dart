@@ -6,19 +6,17 @@ import 'package:letbike/general/objects/article.dart';
 import 'package:letbike/remote/settings.dart';
 
 class RemoteArticles {
-  static Future<List<Article>>? getAllArticles() async {
+  static Future<List<Article>?> getAllArticles() async {
     final Response response = await get(
         Uri.parse(Uri.encodeFull(scriptsUrl + "articleGetAll.php")),
         headers: {HttpHeaders.contentTypeHeader: "application/json"});
 
-    if (response.statusCode == 200) {
-      return jsonDecode(response.body)
-          .cast<Map<String, dynamic>>()
-          .map<Article>((article) => Article.fromJson(article))
-          .toList();
-    } else {
-      return [];
-    }
+    return response.statusCode == 200
+        ? jsonDecode(response.body)
+            .cast<Map<String, dynamic>>()
+            .map<Article>((article) => Article.fromJson(article))
+            .toList()
+        : null;
   }
 
   static Future<String>? getArticle(int id) async {

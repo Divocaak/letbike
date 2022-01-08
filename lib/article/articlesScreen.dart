@@ -12,7 +12,7 @@ class ArticlesScreen extends StatefulWidget {
 
 class _ArticlesScreenState extends State<ArticlesScreen>
     with SingleTickerProviderStateMixin {
-  late Future<List<Article>>? articles;
+  late Future<List<Article>?> articles;
 
   @override
   void initState() {
@@ -26,19 +26,34 @@ class _ArticlesScreenState extends State<ArticlesScreen>
           iconData: Icons.arrow_back,
           onPressed: () => Navigator.of(context).pop()),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      body: Container(
-          color: kBlack,
-          child: FutureBuilder<List<dynamic>>(
-              future: articles,
-              builder: (context, snapshot) =>
-                  (snapshot.connectionState == ConnectionState.waiting
-                      ? Center(child: Image.asset("assets/load.gif"))
-                      : (snapshot.hasData
-                          ? ListView.builder(
-                              itemCount: snapshot.data!.length,
-                              itemBuilder: (context, i) =>
-                                  snapshot.data![i].buildCard(context))
-                          : (snapshot.hasError
-                              ? ErrorWidgets.futureBuilderError()
-                              : ErrorWidgets.futureBuilderEmpty()))))));
+      backgroundColor: kBlack,
+      body: SafeArea(
+          child: RefreshIndicator(
+              onRefresh: _pullRefresh,
+              backgroundColor: Colors.transparent,
+              color: kPrimaryColor,
+              strokeWidth: 5,
+              child: Container(
+                  color: kBlack,
+                  child: FutureBuilder<List<Article>?>(
+                      future: articles,
+                      builder: (context, snapshot) => (snapshot
+                                  .connectionState ==
+                              ConnectionState.waiting
+                          ? Center(child: Image.asset("assets/load.gif"))
+                          : (snapshot.hasData
+                              ? ListView.builder(
+                                  itemCount: snapshot.data!.length,
+                                  itemBuilder: (context, i) =>
+                                      snapshot.data![i].buildCard(context))
+                              : (snapshot.hasError
+                                  ? ErrorWidgets.futureBuilderError()
+                                  : ErrorWidgets.futureBuilderEmpty()))))))));
+
+  Future<void> _pullRefresh() async {
+    Future<List<Article>?> _articles = RemoteArticles.getAllArticles();
+    await Future.delayed(Duration(seconds: 1));
+    articles = _articles;
+    setState(() {});
+  }
 }

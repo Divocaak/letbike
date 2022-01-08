@@ -8,16 +8,19 @@ class FirstScreen extends StatelessWidget {
   Widget build(BuildContext context) => Scaffold(
           body: Stack(alignment: Alignment.center, children: [
         BackgroundImage(),
-        Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-          Text("LetBike",
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 60,
-                  fontWeight: FontWeight.bold)),
-          RoundedButton(
-              buttonName: "Přihlásit se",
-              onClick: () => Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => SignGate())))
-        ])
+        SafeArea(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+              Text("LetBike",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 60,
+                      fontWeight: FontWeight.bold)),
+              RoundedButton(
+                  buttonName: "Přihlásit se",
+                  onClick: () => Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (context) => SignGate())))
+            ]))
       ]));
 }
