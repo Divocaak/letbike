@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:letbike/general/objects/chat.dart';
 import 'package:letbike/general/objects/item.dart';
 import 'package:letbike/general/objects/message.dart';
 import 'package:letbike/general/objects/rating.dart';
@@ -21,15 +22,15 @@ class ChatScreen extends StatefulWidget {
       {Key? key,
       required Item item,
       required User loggedUser,
-      required String secondUserUid})
+      required Chat chat})
       : _item = item,
         _loggedUser = loggedUser,
-        _secondUserUid = secondUserUid,
+        _chat = chat,
         super(key: key);
 
   final Item _item;
   final User _loggedUser;
-  final String _secondUserUid;
+  final Chat _chat;
   List<Asset> _images = [];
 
   @override
@@ -48,7 +49,7 @@ class _ChatScreenState extends State<ChatScreen>
   @override
   void initState() {
     messagesStream = RemoteChats.getMessages(
-        widget._loggedUser.uid, widget._secondUserUid, widget._item);
+        widget._loggedUser.uid, widget._chat.buyId, widget._item);
     cancelTrade = (widget._item.status == 2 ? true : false);
     super.initState();
   }
@@ -61,23 +62,30 @@ class _ChatScreenState extends State<ChatScreen>
           appBar: AppBar(
               backgroundColor: cancelTrade ? kGreen : kPrimaryColor,
               automaticallyImplyLeading: false,
-              title: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    CircularButton(kSecondaryColor, 40, Icons.arrow_back,
-                        kWhite, () => Navigator.of(context).pop()),
-                    Text(widget._item.name, style: TextStyle(fontSize: 20)),
-                    CircularButton(
-                        kSecondaryColor,
-                        40,
-                        Icons.person_search,
-                        kWhite,
-                        () => ModalWindow.showModalWindow(
-                            context,
-                            "Hodnocení uživatele",
+              title: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                CircularButton(kSecondaryColor, 40, Icons.arrow_back, kWhite,
+                    () => Navigator.of(context).pop()),
+                Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    child: Text(widget._item.name,
+                        style: TextStyle(fontSize: 20))),
+                if (widget._item.sellerId == widget._loggedUser.uid)
+                  CircularButton(
+                      kSecondaryColor,
+                      40,
+                      Icons.person_search,
+                      kWhite,
+                      () => ModalWindow.showModalWindow(
+                          context,
+                          "O zájemci",
+                          Column(children: [
+                            Text(widget._chat.buyName,
+                                style: TextStyle(color: kWhite)),
+                            Text(widget._chat.buyMail,
+                                style: TextStyle(color: kWhite)),
                             FutureBuilder<List<Rating>?>(
                                 future: RemoteRatings.getRatings(
-                                    widget._secondUserUid),
+                                    widget._chat.buyId),
                                 builder: (context, snapshot) {
                                   switch (snapshot.connectionState) {
                                     case ConnectionState.waiting:
@@ -98,62 +106,59 @@ class _ChatScreenState extends State<ChatScreen>
                                           itemBuilder: (context, i) =>
                                               snapshot.data![i].buildRow());
                                   }
-                                }))),
-                    (widget._loggedUser.uid == widget._item.sellerId
-                        ? CircularButton(
-                            kSecondaryColor,
-                            40,
-                            (cancelTrade
-                                ? Icons.money_off
-                                : Icons.attach_money),
-                            kWhite,
-                            () => ModalWindow.showModalWindow(
-                                    context,
-                                    "Opravdu?",
-                                    Text(
-                                        "Opravdu chcete " +
-                                            (cancelTrade
-                                                ? "zrušit prodej předmětu"
-                                                : "prodat předmět") +
-                                            " této osobě?",
-                                        style: TextStyle(color: kWhite)),
-                                    onTrue: () {
-                                  Future<bool?> updateRes =
-                                      RemoteItems.updateItemStatus(
-                                          widget._item.id, cancelTrade ? 1 : 2,
-                                          soldTo: cancelTrade
-                                              ? ""
-                                              : widget._secondUserUid);
-                                  ModalWindow.showModalWindow(
-                                      context,
-                                      "Oznámení",
-                                      FutureBuilder<bool?>(
-                                          future: updateRes,
-                                          builder: (context, snapshot) {
-                                            switch (snapshot.connectionState) {
-                                              case ConnectionState.waiting:
-                                                return Center(
-                                                    child: Image.asset(
-                                                        "assets/load.gif"));
-                                              default:
-                                                if (snapshot.hasError)
-                                                  return ErrorWidgets
-                                                      .futureBuilderError();
-                                                else if (!snapshot.hasData)
-                                                  return ErrorWidgets
-                                                      .futureBuilderEmpty();
-                                                return Text(
-                                                    cancelTrade
-                                                        ? "Zrušeno!"
-                                                        : "Prodáno!",
-                                                    style: TextStyle(
-                                                        color: kWhite));
-                                            }
-                                          }),
-                                      after: () => Navigator.of(context).pop());
-                                }))
-                        : Container())
-                  ])),
+                                })
+                          ]))),
+                if (widget._loggedUser.uid == widget._item.sellerId)
+                  SizedBox(width: 10),
+                if (widget._loggedUser.uid == widget._item.sellerId)
+                  CircularButton(
+                      kSecondaryColor,
+                      40,
+                      (cancelTrade ? Icons.money_off : Icons.attach_money),
+                      kWhite,
+                      () => ModalWindow.showModalWindow(
+                              context,
+                              "Opravdu?",
+                              Text(
+                                  "Opravdu chcete " +
+                                      (cancelTrade
+                                          ? "zrušit prodej předmětu"
+                                          : "prodat předmět") +
+                                      " této osobě?",
+                                  style: TextStyle(color: kWhite)), onTrue: () {
+                            Future<bool?> updateRes =
+                                RemoteItems.updateItemStatus(
+                                    widget._item.id, cancelTrade ? 1 : 2,
+                                    soldTo:
+                                        cancelTrade ? "" : widget._chat.buyId);
+                            ModalWindow.showModalWindow(
+                                context,
+                                "Oznámení",
+                                FutureBuilder<bool?>(
+                                    future: updateRes,
+                                    builder: (context, snapshot) {
+                                      switch (snapshot.connectionState) {
+                                        case ConnectionState.waiting:
+                                          return Center(
+                                              child: Image.asset(
+                                                  "assets/load.gif"));
+                                        default:
+                                          if (snapshot.hasError)
+                                            return ErrorWidgets
+                                                .futureBuilderError();
+                                          else if (!snapshot.hasData)
+                                            return ErrorWidgets
+                                                .futureBuilderEmpty();
+                                          return Text(
+                                              cancelTrade
+                                                  ? "Zrušeno!"
+                                                  : "Prodáno!",
+                                              style: TextStyle(color: kWhite));
+                                      }
+                                    }),
+                                after: () => Navigator.of(context).pop());
+                          }))
+              ])),
           body: SafeArea(
               child: Column(children: [
             Expanded(
@@ -199,7 +204,7 @@ class _ChatScreenState extends State<ChatScreen>
                         chatInputController.text != "") {
                       RemoteChats.sendMessage(
                           widget._loggedUser.uid,
-                          widget._secondUserUid,
+                          widget._chat.buyId,
                           widget._item.id,
                           chatInputController.text,
                           widget._images);

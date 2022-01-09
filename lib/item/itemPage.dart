@@ -3,9 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:letbike/chatScreen.dart';
+import 'package:letbike/general/objects/chat.dart';
 import 'package:letbike/general/objects/item.dart';
+import 'package:letbike/general/objects/rating.dart';
 import 'package:letbike/remote/chats.dart';
 import 'package:letbike/remote/items.dart';
+import 'package:letbike/remote/ratings.dart';
 import 'package:letbike/widgets/errorWidgets.dart';
 import 'package:letbike/widgets/images.dart';
 import 'package:letbike/widgets/mainButtonEssentials.dart';
@@ -30,7 +33,7 @@ class ItemPage extends StatefulWidget {
 
 class _ItemPageState extends State<ItemPage>
     with SingleTickerProviderStateMixin {
-  late Future<List<String>?> chats;
+  late Future<List<Chat>?> chats;
 
   late AnimationController animationController;
 
@@ -75,16 +78,17 @@ class _ItemPageState extends State<ItemPage>
                       ".jpg")
               ])),
           Padding(
-              padding: EdgeInsets.only(left: 10, top: 15),
+              padding: EdgeInsets.only(left: 10, top: 10),
               child: Text("Přidáno: " + widget._item.dateStart,
-                  style: TextStyle(fontSize: 15, color: kWhite))),
+                  style:
+                      TextStyle(fontSize: 15, color: kWhite.withOpacity(.4)))),
           Padding(
               padding: EdgeInsets.only(left: 25, top: 10),
               child: Text(widget._item.price.toString() + " Kč",
                   style: TextStyle(
-                      fontSize: 35,
+                      fontSize: 30,
                       fontWeight: FontWeight.bold,
-                      color: kWhite))),
+                      color: kWhite.withOpacity(.6)))),
           Padding(
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               child: Center(
@@ -92,11 +96,60 @@ class _ItemPageState extends State<ItemPage>
                       style: TextStyle(
                           fontSize: 40,
                           fontWeight: FontWeight.bold,
-                          color: kWhite)))),
+                          color: kPrimaryColor)))),
           Padding(
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               child: Text(widget._item.description ?? "",
-                  style: TextStyle(fontSize: 20, color: kWhite)))
+                  style: TextStyle(fontSize: 20, color: kWhite))),
+          if (widget._item.sellerId != widget._loggedUser.uid)
+            Column(children: [
+              Padding(
+                  padding: EdgeInsets.only(top: 25, bottom: 10),
+                  child: Center(
+                    child: Text(
+                      "O prodejci",
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: kSecondaryColor),
+                    ),
+                  )),
+              Padding(
+                  padding: EdgeInsets.symmetric(vertical: 5),
+                  child: Center(
+                      child: Text(widget._item.sellerName,
+                          style: TextStyle(fontSize: 20, color: kWhite)))),
+              Padding(
+                  padding: EdgeInsets.symmetric(vertical: 5),
+                  child: Center(
+                      child: Text(widget._item.sellerMail,
+                          style: TextStyle(fontSize: 15, color: kWhite)))),
+              Padding(
+                  padding: EdgeInsets.only(top: 20),
+                  child: Container(
+                      height: MediaQuery.of(context).size.height / 2,
+                      child: FutureBuilder<List<Rating>?>(
+                          future:
+                              RemoteRatings.getRatings(widget._item.sellerId),
+                          builder: (context, snapshot) {
+                            switch (snapshot.connectionState) {
+                              case ConnectionState.waiting:
+                                return Center(
+                                    child: Image.asset("assets/load.gif"));
+                              default:
+                                if (snapshot.hasError)
+                                  return ErrorWidgets.futureBuilderError();
+                                else if (!snapshot.hasData ||
+                                    (snapshot.hasData &&
+                                        snapshot.data!.length < 1))
+                                  return ErrorWidgets.futureBuilderEmpty();
+                                return ListView.builder(
+                                    itemCount: snapshot.data!.length,
+                                    itemBuilder: (context, i) =>
+                                        snapshot.data![i].buildRow());
+                            }
+                          })))
+            ])
         ])),
         MainButtonClicked(buttons: [
           SecondaryButtonData(
@@ -111,7 +164,7 @@ class _ItemPageState extends State<ItemPage>
                   builder: (context) => ChatScreen(
                       item: widget._item,
                       loggedUser: widget._loggedUser,
-                      secondUserUid: widget._item.sellerId)));
+                      chat: Chat(widget._item.sellerId, "", ""))));
             } else {
               chats =
                   RemoteChats.getChats(widget._item.id, widget._item.sellerId);
@@ -124,7 +177,7 @@ class _ItemPageState extends State<ItemPage>
                       color: kPrimaryColor,
                       strokeWidth: 5,
                       child: SizedBox.expand(
-                          child: FutureBuilder<List<String>?>(
+                          child: FutureBuilder<List<Chat>?>(
                               future: chats,
                               builder: (context, snapshot) {
                                 switch (snapshot.connectionState) {
@@ -140,19 +193,27 @@ class _ItemPageState extends State<ItemPage>
                                       return ErrorWidgets.futureBuilderEmpty();
                                     return ListView.builder(
                                         itemCount: snapshot.data!.length,
-                                        itemBuilder: (context, i) => TextButton(
-                                            onPressed: () => Navigator.of(context)
-                                                .push(MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        ChatScreen(
-                                                            item: widget._item,
-                                                            loggedUser: widget
-                                                                ._loggedUser,
-                                                            secondUserUid: snapshot
-                                                                .data![i]))),
-                                            child: Text(snapshot.data![i],
-                                                style:
-                                                    TextStyle(color: kWhite))));
+                                        itemBuilder: (context, i) {
+                                          Chat chat = snapshot.data![i];
+                                          return TextButton(
+                                              onPressed: () => Navigator.of(
+                                                      context)
+                                                  .push(MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          ChatScreen(
+                                                              item:
+                                                                  widget._item,
+                                                              loggedUser: widget
+                                                                  ._loggedUser,
+                                                              chat: chat))),
+                                              child: Text(
+                                                  chat.buyName +
+                                                      " (" +
+                                                      chat.buyMail +
+                                                      ")",
+                                                  style: TextStyle(
+                                                      color: kWhite)));
+                                        });
                                 }
                               }))));
             }
@@ -187,7 +248,7 @@ class _ItemPageState extends State<ItemPage>
       ]));
 
   Future<void> _pullRefresh() async {
-    Future<List<String>?> _chats =
+    Future<List<Chat>?> _chats =
         RemoteChats.getChats(widget._item.id, widget._item.sellerId);
     await Future.delayed(Duration(seconds: 1));
     chats = _chats;

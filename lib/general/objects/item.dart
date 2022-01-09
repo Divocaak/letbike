@@ -22,6 +22,8 @@ class Item {
   String imgs;
   int status;
   Map<String, dynamic>? itemParams;
+  String sellerName;
+  String sellerMail;
 
   Item(
       this.id,
@@ -34,7 +36,9 @@ class Item {
       this.dateEnd,
       this.imgs,
       this.status,
-      this.itemParams);
+      this.itemParams,
+      this.sellerName,
+      this.sellerMail);
 
   factory Item.fromJson(Map<String, dynamic> json) => Item(
       int.parse(json["id"]),
@@ -47,7 +51,9 @@ class Item {
       json["dateEnd"],
       json["imgs"],
       int.parse(json["status"]),
-      json["params"]);
+      json["params"],
+      json["sellerName"],
+      json["sellerMail"]);
 
   Widget buildParams(BuildContext context) {
     List<String> keys = itemParams!.keys.toList();
