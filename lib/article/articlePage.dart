@@ -4,7 +4,7 @@ import 'package:letbike/general/objects/article.dart';
 import 'package:letbike/remote/articles.dart';
 import 'package:letbike/widgets/errorWidgets.dart';
 import 'package:letbike/widgets/mainButtonEssentials.dart';
-import 'package:letbike/general/pallete.dart';
+import 'package:letbike/general/settings.dart';
 
 class ArticlePage extends StatelessWidget {
   ArticlePage({Key? key, required Article article})

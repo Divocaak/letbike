@@ -9,7 +9,7 @@ import 'package:letbike/article/articlesScreen.dart';
 import 'package:letbike/widgets/alertBox.dart';
 import 'package:letbike/widgets/errorWidgets.dart';
 import 'package:letbike/widgets/mainButtonEssentials.dart';
-import 'package:letbike/general/pallete.dart';
+import 'package:letbike/general/settings.dart';
 
 double volume = 0;
 

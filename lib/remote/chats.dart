@@ -2,9 +2,10 @@ import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
 import 'package:http/http.dart';
+import 'package:letbike/general/objects/chat.dart';
 import 'package:letbike/general/objects/item.dart';
 import 'package:letbike/general/objects/message.dart';
-import 'package:letbike/remote/settings.dart';
+import 'package:letbike/general/settings.dart';
 import 'package:letbike/remote/images.dart';
 import 'package:multi_image_picker2/multi_image_picker2.dart';
 
@@ -62,7 +63,7 @@ class RemoteChats {
     }
   }
 
-  static Future<List<String>?> getChats(int itemId, String sellerId) async {
+  static Future<List<Chat>?> getChats(int itemId, String sellerId) async {
     final Response response = await post(
         Uri.parse(Uri.encodeFull(url + "chatsGet.php")),
         headers: {
@@ -71,7 +72,10 @@ class RemoteChats {
         body: jsonEncode({"itemId": itemId, "sellerId": sellerId}));
 
     return response.statusCode == 200 && response.body != "ERROR"
-        ? List<String>.from(jsonDecode(response.body))
+        ? jsonDecode(response.body)
+            .cast()
+            .map<Chat>((chat) => Chat.fromJson(chat))
+            .toList()
         : null;
   }
 }

@@ -1,11 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:letbike/general/categories.dart';
-import 'package:letbike/general/pallete.dart';
+import 'package:letbike/general/settings.dart';
 import 'package:letbike/item/itemPage.dart';
 import 'package:letbike/remote/items.dart';
 import 'package:letbike/remote/ratings.dart';
-import 'package:letbike/remote/settings.dart';
 import 'package:letbike/widgets/alertBox.dart';
 import 'package:letbike/widgets/cardWidgets.dart';
 import 'package:letbike/widgets/errorWidgets.dart';
@@ -22,6 +21,8 @@ class Item {
   String imgs;
   int status;
   Map<String, dynamic>? itemParams;
+  String sellerName;
+  String sellerMail;
 
   Item(
       this.id,
@@ -34,7 +35,9 @@ class Item {
       this.dateEnd,
       this.imgs,
       this.status,
-      this.itemParams);
+      this.itemParams,
+      this.sellerName,
+      this.sellerMail);
 
   factory Item.fromJson(Map<String, dynamic> json) => Item(
       int.parse(json["id"]),
@@ -47,7 +50,9 @@ class Item {
       json["dateEnd"],
       json["imgs"],
       int.parse(json["status"]),
-      json["params"]);
+      json["params"],
+      json["sellerName"],
+      json["sellerMail"]);
 
   Widget buildParams(BuildContext context) {
     List<String> keys = itemParams!.keys.toList();
@@ -81,7 +86,7 @@ class Item {
       CardWidgets.cardEssentials(
           () => onCardClick(context, loggedUser,
               touchable: touchable, ratingController: ratingController),
-          imgsFolder + "items/" + loggedUser.uid + name.hashCode.toString(),
+          imgsFolder + "items/" + sellerId + name.hashCode.toString(),
           Column(children: [
             Expanded(
                 flex: 1, child: CardWidgets.text(name, 32, 2, FontWeight.bold)),

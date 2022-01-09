@@ -23,7 +23,10 @@ class _AuthGateState extends State<AuthGate> {
 
   @override
   void initState() {
-    userStatus = RemoteUser.checkUserStatus(widget._loggedUser.uid);
+    userStatus = RemoteUser.checkUserStatus(
+        widget._loggedUser.uid,
+        widget._loggedUser.displayName ?? "jméno",
+        widget._loggedUser.email ?? "email");
     bgImage = BackgroundImage();
     super.initState();
   }

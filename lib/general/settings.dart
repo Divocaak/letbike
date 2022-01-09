@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 const kPrimaryColor = Color(0xFF75c8cc);
 const kSecondaryColor = Color(0xFFaedfdb);
@@ -17,3 +18,20 @@ const TextStyle kCaptionTextSatyle = TextStyle(color: Colors.purple);
 
 CarouselOptions carouselOptions(context) =>
     CarouselOptions(height: 1000, viewportFraction: .925, autoPlay: true);
+
+const String baseUrl = 'http://letbike.xf.cz/';
+const String imgsFolder = baseUrl + 'imgs/';
+const String articlesFolder = baseUrl + 'articles/';
+const String docsFolder = baseUrl + 'docs/';
+const String scriptsUrl = baseUrl + 'scripts/app/';
+const String imgUploadEndPoint = scriptsUrl + 'uploadImage.php';
+
+class General {
+  static void openUrl(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Nelze otevřít.';
+    }
+  }
+}
