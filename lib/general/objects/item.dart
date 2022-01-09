@@ -81,7 +81,7 @@ class Item {
       CardWidgets.cardEssentials(
           () => onCardClick(context, loggedUser,
               touchable: touchable, ratingController: ratingController),
-          imgsFolder + "items/" + loggedUser.uid + name.hashCode.toString(),
+          imgsFolder + "items/" + sellerId + name.hashCode.toString(),
           Column(children: [
             Expanded(
                 flex: 1, child: CardWidgets.text(name, 32, 2, FontWeight.bold)),

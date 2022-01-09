@@ -68,7 +68,7 @@ class _ItemPageState extends State<ItemPage>
                 for (int i = 0; i < int.parse(widget._item.imgs); i++)
                   ServerImage().build(imgsFolder +
                       "items/" +
-                      (widget._loggedUser.uid +
+                      (widget._item.sellerId +
                           widget._item.name.hashCode.toString()) +
                       "/" +
                       i.toString() +
