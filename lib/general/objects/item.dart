@@ -1,11 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:letbike/general/categories.dart';
-import 'package:letbike/general/pallete.dart';
+import 'package:letbike/general/settings.dart';
 import 'package:letbike/item/itemPage.dart';
 import 'package:letbike/remote/items.dart';
 import 'package:letbike/remote/ratings.dart';
-import 'package:letbike/remote/settings.dart';
 import 'package:letbike/widgets/alertBox.dart';
 import 'package:letbike/widgets/cardWidgets.dart';
 import 'package:letbike/widgets/errorWidgets.dart';

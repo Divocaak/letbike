@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:letbike/remote/settings.dart';
+import 'package:letbike/general/settings.dart';
 import 'package:letbike/widgets/errorWidgets.dart';
 import 'dart:math';
 

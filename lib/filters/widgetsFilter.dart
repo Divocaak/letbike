@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:letbike/filters/filters.dart';
-import 'package:letbike/general/pallete.dart';
+import 'package:letbike/general/settings.dart';
 
 // ignore: must_be_immutable
 class FilterDropdown extends StatefulWidget {

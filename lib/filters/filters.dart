@@ -6,7 +6,7 @@ import 'package:letbike/widgets/mainButtonEssentials.dart';
 import 'package:letbike/widgets/images.dart';
 import 'package:letbike/filters/widgetsFilter.dart';
 import 'package:letbike/remote/items.dart';
-import 'package:letbike/general/pallete.dart';
+import 'package:letbike/general/settings.dart';
 import 'package:letbike/widgets/alertBox.dart';
 import 'package:letbike/widgets/errorWidgets.dart';
 import 'package:multi_image_picker2/multi_image_picker2.dart';

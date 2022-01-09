@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:multi_image_picker2/multi_image_picker2.dart';
-import 'package:letbike/remote/settings.dart';
+import 'package:letbike/general/settings.dart';
 
 class RemoteImages {
   static uploadImages(

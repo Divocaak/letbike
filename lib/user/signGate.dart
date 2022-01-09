@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:letbike/remote/settings.dart';
-import 'package:letbike/general/pallete.dart';
+import 'package:letbike/general/settings.dart';
 import 'package:flutterfire_ui/auth.dart';
 import 'package:letbike/user/authGate.dart';
 import 'package:letbike/widgets/images.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class SignGate extends StatelessWidget {
   @override
@@ -22,7 +20,8 @@ class SignGate extends StatelessWidget {
                       return Padding(
                           padding: EdgeInsets.only(top: 16),
                           child: TextButton(
-                              onPressed: () => openUrl("terms.pdf"),
+                              onPressed: () =>
+                                  General.openUrl(docsFolder + "terms.pdf"),
                               child: Container(
                                   child: Text(
                                       "Přihlášením souhlasíte s podmínkami",
@@ -41,13 +40,4 @@ class SignGate extends StatelessWidget {
               return AuthGate(loggedUser: snapshot.data as User);
             })
       ]);
-
-  static void openUrl(String doc) async {
-    String url = docsFolder + doc;
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Nelze otevřít.';
-    }
-  }
 }

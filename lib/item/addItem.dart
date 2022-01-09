@@ -7,7 +7,7 @@ import 'package:multi_image_picker2/multi_image_picker2.dart';
 import 'package:letbike/widgets/textInput.dart';
 import 'package:letbike/widgets/mainButtonEssentials.dart';
 import 'package:letbike/widgets/images.dart';
-import 'package:letbike/general/pallete.dart';
+import 'package:letbike/general/settings.dart';
 
 // ignore: must_be_immutable
 class AddItem extends StatefulWidget {

@@ -14,7 +14,7 @@ import 'package:letbike/widgets/textInput.dart';
 import 'package:letbike/widgets/errorWidgets.dart';
 import 'package:letbike/widgets/buttonCircular.dart';
 import 'package:letbike/widgets/alertBox.dart';
-import 'package:letbike/general/pallete.dart';
+import 'package:letbike/general/settings.dart';
 
 // ignore: must_be_immutable
 class ChatScreen extends StatefulWidget {

@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import 'package:letbike/general/pallete.dart';
+import 'package:letbike/general/settings.dart';
 import 'package:letbike/widgets/images.dart';
 
 class CardWidgets {

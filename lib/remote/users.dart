@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
 import 'package:http/http.dart';
-import 'package:letbike/remote/settings.dart';
+import 'package:letbike/general/settings.dart';
 
 class RemoteUser {
   static Future<int> checkUserStatus(
