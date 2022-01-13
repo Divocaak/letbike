@@ -6,7 +6,6 @@ import 'package:letbike/remote/items.dart';
 import 'package:letbike/user/userPage.dart';
 import 'package:letbike/filters/filters.dart';
 import 'package:letbike/article/articlesScreen.dart';
-import 'package:letbike/widgets/alertBox.dart';
 import 'package:letbike/widgets/errorWidgets.dart';
 import 'package:letbike/widgets/mainButtonEssentials.dart';
 import 'package:letbike/general/settings.dart';
@@ -74,9 +73,9 @@ class _HomePageState extends State<HomePage>
                                 return Center(
                                     child: Image.asset("assets/load.gif"));
                               default:
-                                if (snapshot.hasError)
+                                if (snapshot.hasError) {
                                   return ErrorWidgets.futureBuilderError();
-                                else if (!snapshot.hasData ||
+                                } else if (!snapshot.hasData ||
                                     (snapshot.hasData &&
                                         snapshot.data!.length < 1))
                                   return ErrorWidgets.futureBuilderEmpty();

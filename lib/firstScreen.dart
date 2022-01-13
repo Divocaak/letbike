@@ -15,11 +15,21 @@ class FirstScreen extends StatelessWidget {
                 children: [
               Expanded(
                   flex: 3,
-                  child: Text("LetBike",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 60,
-                          fontWeight: FontWeight.bold))),
+                  child: Column(children: [
+                    Text("LetBike",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 60,
+                            fontWeight: FontWeight.bold)),
+                    Flexible(
+                        child: Container(
+                            margin: EdgeInsets.all(100),
+                            clipBehavior: Clip.antiAlias,
+                            decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10))),
+                            child: Image.asset("assets/icon.png")))
+                  ])),
               Flexible(
                   child: RoundedButton(
                       buttonName: "Přihlásit se",
