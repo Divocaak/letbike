@@ -9,6 +9,7 @@ import 'package:letbike/general/objects/rating.dart';
 import 'package:letbike/remote/chats.dart';
 import 'package:letbike/remote/items.dart';
 import 'package:letbike/remote/ratings.dart';
+import 'package:letbike/remote/saves.dart';
 import 'package:letbike/widgets/errorWidgets.dart';
 import 'package:letbike/widgets/images.dart';
 import 'package:letbike/widgets/mainButtonEssentials.dart';
@@ -36,11 +37,17 @@ class _ItemPageState extends State<ItemPage>
 
   late AnimationController animationController;
 
+  late bool localSavedVal;
+  late Future<bool> remoteSavedVal;
+
   @override
   void initState() {
     animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 250));
     animationController.addListener(() => setState(() {}));
+    localSavedVal = false;
+    remoteSavedVal =
+        RemoteSaves.getSave(widget._loggedUser.uid, widget._item.id);
 
     super.initState();
   }
@@ -82,12 +89,40 @@ class _ItemPageState extends State<ItemPage>
                   style:
                       TextStyle(fontSize: 15, color: kWhite.withOpacity(.4)))),
           Padding(
-              padding: EdgeInsets.only(left: 25, top: 10),
-              child: Text(widget._item.price.toString() + " Kč",
-                  style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      color: kWhite.withOpacity(.6)))),
+              padding: EdgeInsets.only(left: 25, top: 10, right: 25),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(widget._item.price.toString() + " Kč",
+                        style: TextStyle(
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
+                            color: kWhite.withOpacity(.6))),
+                    if (widget._item.sellerId != widget._loggedUser.uid)
+                      FutureBuilder<bool>(
+                          future: remoteSavedVal,
+                          builder: (context, snapshot) {
+                            switch (snapshot.connectionState) {
+                              case ConnectionState.waiting:
+                                return Icon(Icons.hourglass_empty);
+                              default:
+                                if (snapshot.hasError)
+                                  return Icon(Icons.error);
+                                else if (!snapshot.hasData)
+                                  return Icon(Icons.circle);
+                                localSavedVal = snapshot.data as bool;
+                                return IconButton(
+                                    onPressed: () => setState(
+                                        () => localSavedVal = !localSavedVal),
+                                    icon: Icon(
+                                        localSavedVal
+                                            ? Icons.star
+                                            : Icons.star_outline,
+                                        color: kPrimaryColor,
+                                        size: 30));
+                            }
+                          })
+                  ])),
           Padding(
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               child: Center(
