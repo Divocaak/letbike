@@ -45,7 +45,6 @@ class _ItemPageState extends State<ItemPage>
     animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 250));
     animationController.addListener(() => setState(() {}));
-    localSavedVal = false;
     remoteSavedVal =
         RemoteSaves.getSave(widget._loggedUser.uid, widget._item.id);
 
@@ -110,10 +109,43 @@ class _ItemPageState extends State<ItemPage>
                                   return Icon(Icons.error);
                                 else if (!snapshot.hasData)
                                   return Icon(Icons.circle);
+                                print("from snapshot");
                                 localSavedVal = snapshot.data as bool;
                                 return IconButton(
-                                    onPressed: () => setState(
-                                        () => localSavedVal = !localSavedVal),
+                                    onPressed: () => setState(() {
+                                          print(localSavedVal);
+                                          localSavedVal = !localSavedVal;
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                                  content: FutureBuilder<
+                                                          String?>(
+                                                      future:
+                                                          RemoteSaves.setSave(
+                                                              widget._loggedUser
+                                                                  .uid,
+                                                              widget._item.id,
+                                                              localSavedVal),
+                                                      builder:
+                                                          (context, snapshot) {
+                                                        switch (snapshot
+                                                            .connectionState) {
+                                                          case ConnectionState
+                                                              .waiting:
+                                                            return Center(
+                                                                child: Image.asset(
+                                                                    "assets/load.gif"));
+                                                          default:
+                                                            if (snapshot
+                                                                    .hasError ||
+                                                                !snapshot
+                                                                    .hasData)
+                                                              return ErrorWidgets
+                                                                  .snackBarError();
+                                                            return Text(
+                                                                snapshot.data!);
+                                                        }
+                                                      })));
+                                        }),
                                     icon: Icon(
                                         localSavedVal
                                             ? Icons.star
