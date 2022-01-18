@@ -27,6 +27,7 @@ double volume = 0;
 class _UserPageState extends State<UserPage>
     with SingleTickerProviderStateMixin {
   late Future<List<Item>?> items;
+  late Future<List<Item>?> savedItems;
   late Future<List<Item>?> soldItems;
   late Future<List<Item>?> boughtItems;
   late Future<List<Item>?> ratedItems;
@@ -42,6 +43,7 @@ class _UserPageState extends State<UserPage>
         AnimationController(vsync: this, duration: Duration(milliseconds: 250));
     animationController.addListener(() => setState(() {}));
     items = RemoteItems.getAllItems(1, sellerId: widget._loggedUser.uid);
+    savedItems = RemoteItems.getAllItems(1, saverId: widget._loggedUser.uid);
     soldItems = RemoteItems.getAllItems(2, sellerId: widget._loggedUser.uid);
     boughtItems = RemoteItems.getAllItems(2, soldTo: widget._loggedUser.uid);
     ratedItems = RemoteItems.getAllItems(3, soldTo: widget._loggedUser.uid);
@@ -121,6 +123,7 @@ class _UserPageState extends State<UserPage>
                                   })))
                     ]),
                     itemStatusField(items, "Moje inzeráty"),
+                    itemStatusField(savedItems, "Uložené inzeráty"),
                     itemStatusField(soldItems, "Prodané předměty"),
                     itemStatusField(boughtItems, "Zakoupené předměty",
                         ratingController: ratingController),

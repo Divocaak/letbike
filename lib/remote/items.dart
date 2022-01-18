@@ -36,7 +36,8 @@ class RemoteItems {
   static Future<List<Item>?> getAllItems(int status,
       {String? sellerId,
       Map<String, String>? itemParams,
-      String? soldTo}) async {
+      String? soldTo,
+      String? saverId}) async {
     final Response response = await post(
         Uri.parse(Uri.encodeFull(url + "itemGetAll.php")),
         headers: {
@@ -46,7 +47,8 @@ class RemoteItems {
           "sellerId": sellerId,
           "status": status,
           "params": itemParams,
-          "soldTo": soldTo
+          "soldTo": soldTo,
+          "saverId": saverId
         }));
     return response.statusCode == 200
         ? jsonDecode(response.body)
