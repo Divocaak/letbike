@@ -38,15 +38,20 @@ class _ItemPageState extends State<ItemPage>
   late AnimationController animationController;
 
   late bool localSavedVal;
-  late Future<bool> remoteSavedVal;
 
   @override
   void initState() {
     animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 250));
     animationController.addListener(() => setState(() {}));
-    remoteSavedVal =
+    Future<bool> remoteSavedVal =
         RemoteSaves.getSave(widget._loggedUser.uid, widget._item.id);
+
+    localSavedVal = false;
+    if (widget._item.sellerId != widget._loggedUser.uid) {
+      remoteSavedVal.then((data) => localSavedVal = data,
+          onError: (e) => localSavedVal = false);
+    }
 
     super.initState();
   }
@@ -98,62 +103,36 @@ class _ItemPageState extends State<ItemPage>
                             fontWeight: FontWeight.bold,
                             color: kWhite.withOpacity(.6))),
                     if (widget._item.sellerId != widget._loggedUser.uid)
-                      FutureBuilder<bool>(
-                          future: remoteSavedVal,
-                          builder: (context, snapshot) {
-                            switch (snapshot.connectionState) {
-                              case ConnectionState.waiting:
-                                return Icon(Icons.hourglass_empty);
-                              default:
-                                if (snapshot.hasError)
-                                  return Icon(Icons.error);
-                                else if (!snapshot.hasData)
-                                  return Icon(Icons.circle);
-                                print("from snapshot");
-                                localSavedVal = snapshot.data as bool;
-                                return IconButton(
-                                    onPressed: () => setState(() {
-                                          print(localSavedVal);
-                                          localSavedVal = !localSavedVal;
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(SnackBar(
-                                                  content: FutureBuilder<
-                                                          String?>(
-                                                      future:
-                                                          RemoteSaves.setSave(
-                                                              widget._loggedUser
-                                                                  .uid,
-                                                              widget._item.id,
-                                                              localSavedVal),
-                                                      builder:
-                                                          (context, snapshot) {
-                                                        switch (snapshot
-                                                            .connectionState) {
-                                                          case ConnectionState
-                                                              .waiting:
-                                                            return Center(
-                                                                child: Image.asset(
-                                                                    "assets/load.gif"));
-                                                          default:
-                                                            if (snapshot
-                                                                    .hasError ||
-                                                                !snapshot
-                                                                    .hasData)
-                                                              return ErrorWidgets
-                                                                  .snackBarError();
-                                                            return Text(
-                                                                snapshot.data!);
-                                                        }
-                                                      })));
-                                        }),
-                                    icon: Icon(
-                                        localSavedVal
-                                            ? Icons.star
-                                            : Icons.star_outline,
-                                        color: kPrimaryColor,
-                                        size: 30));
-                            }
-                          })
+                      IconButton(
+                          onPressed: () => setState(() {
+                                localSavedVal = !localSavedVal;
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: FutureBuilder<String?>(
+                                            future: RemoteSaves.setSave(
+                                                widget._loggedUser.uid,
+                                                widget._item.id,
+                                                localSavedVal),
+                                            builder: (context, snapshot) {
+                                              switch (
+                                                  snapshot.connectionState) {
+                                                case ConnectionState.waiting:
+                                                  return Center(
+                                                      child: Image.asset(
+                                                          "assets/load.gif"));
+                                                default:
+                                                  if (snapshot.hasError ||
+                                                      !snapshot.hasData)
+                                                    return ErrorWidgets
+                                                        .snackBarError();
+                                                  return Text(snapshot.data!);
+                                              }
+                                            })));
+                              }),
+                          icon: Icon(
+                              localSavedVal ? Icons.star : Icons.star_outline,
+                              color: kPrimaryColor,
+                              size: 30))
                   ])),
           Padding(
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
