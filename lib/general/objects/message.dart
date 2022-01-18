@@ -32,8 +32,8 @@ class Message {
                 textAlign: myMessage ? TextAlign.right : TextAlign.left,
                 style: TextStyle(color: myMessage ? kWhite : kBlack)),
             (img == 1
-                ? ServerImage()
-                    .build(imgsFolder + "messages/" + imgPath + "/0.jpg")
+                ? ServerImage(
+                    path: imgsFolder + "messages/" + imgPath + "/0.jpg")
                 : Container())
           ]));
 }

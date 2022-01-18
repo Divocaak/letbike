@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import 'package:letbike/general/settings.dart';
 import 'package:letbike/widgets/images.dart';
 
+// TODO constructors
 class CardWidgets {
   static Widget text(
           String text, double fontSize, double offset, FontWeight fontWeight) =>
@@ -29,7 +30,7 @@ class CardWidgets {
               child: InkWell(
                   onTap: () => onTap(),
                   child: Stack(children: [
-                    ServerImage().build(imgPath + "/0.jpg"),
+                    ServerImage(path: imgPath + "/0.jpg"),
                     body
                   ]))));
 }

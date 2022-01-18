@@ -75,14 +75,14 @@ class _UserPageState extends State<UserPage>
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    ServerImage().build(widget._loggedUser.photoURL ?? ""),
+                    ServerImage(path: widget._loggedUser.photoURL ?? ""),
                     Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          AccountInfoField.infoField(
-                              widget._loggedUser.email ?? ""),
-                          AccountInfoField.infoField(
-                              widget._loggedUser.displayName ?? "")
+                          AccountInfoField(
+                              text: widget._loggedUser.email ?? ""),
+                          AccountInfoField(
+                              text: widget._loggedUser.displayName ?? "")
                         ])
                   ])),
           Flexible(
@@ -95,7 +95,7 @@ class _UserPageState extends State<UserPage>
                   child:
                       CarouselSlider(options: carouselOptions(context), items: [
                     Column(children: [
-                      AccountInfoField.infoField("Hodnocení"),
+                      AccountInfoField(text: "Hodnocení"),
                       Expanded(
                           child: SizedBox.expand(
                               child: FutureBuilder<List<Rating>?>(
@@ -146,7 +146,7 @@ class _UserPageState extends State<UserPage>
   Widget itemStatusField(Future<List<Item>?> items, String label,
           {bool touchable = true, TextEditingController? ratingController}) =>
       Column(children: [
-        AccountInfoField.infoField(label),
+        AccountInfoField(text: label),
         Expanded(
             child: SizedBox.expand(
                 child: FutureBuilder<List<Item>?>(

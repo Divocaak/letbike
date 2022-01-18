@@ -79,13 +79,14 @@ class _ItemPageState extends State<ItemPage>
               width: MediaQuery.of(context).size.width,
               child: CarouselSlider(options: carouselOptions(context), items: [
                 for (int i = 0; i < int.parse(widget._item.imgs); i++)
-                  ServerImage().build(imgsFolder +
-                      "items/" +
-                      (widget._item.sellerId +
-                          widget._item.name.hashCode.toString()) +
-                      "/" +
-                      i.toString() +
-                      ".jpg")
+                  ServerImage(
+                      path: imgsFolder +
+                          "items/" +
+                          (widget._item.sellerId +
+                              widget._item.name.hashCode.toString()) +
+                          "/" +
+                          i.toString() +
+                          ".jpg")
               ])),
           Padding(
               padding: EdgeInsets.only(left: 10, top: 10),
