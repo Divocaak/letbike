@@ -60,11 +60,11 @@ class MainButtonClickedState extends State<MainButtonClicked> {
                       bottom: MainButtonClicked.positions[i].x,
                       right: MainButtonClicked.positions[i].y,
                       child: CircularButton(
-                          kSecondaryColor.withOpacity(widget._volume * 2),
-                          40,
-                          widget._buttons[i].icon,
-                          kWhite.withOpacity(widget._volume * 2),
-                          widget._buttons[i].onClick))
+                          color:
+                              kSecondaryColor.withOpacity(widget._volume * 2),
+                          icon: widget._buttons[i].icon,
+                          iconColor: kWhite.withOpacity(widget._volume * 2),
+                          onClick: widget._buttons[i].onClick))
               ]))));
 }
 

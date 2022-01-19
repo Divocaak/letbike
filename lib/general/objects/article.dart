@@ -13,18 +13,22 @@ class Article {
   factory Article.fromJson(Map<String, dynamic> json) =>
       Article(int.parse(json["id"]), json["name"], json["dateAdded"]);
 
-  Widget buildCard(context) => CardWidgets.cardEssentials(
-      () => Navigator.of(context).push(
+  Widget buildCard(context) => CardBody(
+      onTap: () => Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => ArticlePage(article: this))),
-      articlesFolder + id.toString(),
-      Positioned(
+      imgPath: articlesFolder + id.toString(),
+      child: Positioned(
           left: 16,
           bottom: 32,
           child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CardWidgets.text(name, 32, 2, FontWeight.bold),
-                CardWidgets.text(dateAdded, 18, 1, FontWeight.normal)
+                CardText(
+                    text: name,
+                    fontSize: 32,
+                    offset: 2,
+                    fontWeight: FontWeight.bold),
+                CardText(text: dateAdded, fontSize: 18)
               ])));
 }

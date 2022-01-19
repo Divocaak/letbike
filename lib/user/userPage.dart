@@ -27,6 +27,7 @@ double volume = 0;
 class _UserPageState extends State<UserPage>
     with SingleTickerProviderStateMixin {
   late Future<List<Item>?> items;
+  late Future<List<Item>?> savedItems;
   late Future<List<Item>?> soldItems;
   late Future<List<Item>?> boughtItems;
   late Future<List<Item>?> ratedItems;
@@ -42,6 +43,7 @@ class _UserPageState extends State<UserPage>
         AnimationController(vsync: this, duration: Duration(milliseconds: 250));
     animationController.addListener(() => setState(() {}));
     items = RemoteItems.getAllItems(1, sellerId: widget._loggedUser.uid);
+    savedItems = RemoteItems.getAllItems(1, saverId: widget._loggedUser.uid);
     soldItems = RemoteItems.getAllItems(2, sellerId: widget._loggedUser.uid);
     boughtItems = RemoteItems.getAllItems(2, soldTo: widget._loggedUser.uid);
     ratedItems = RemoteItems.getAllItems(3, soldTo: widget._loggedUser.uid);
@@ -73,14 +75,14 @@ class _UserPageState extends State<UserPage>
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    ServerImage().build(widget._loggedUser.photoURL ?? ""),
+                    ServerImage(path: widget._loggedUser.photoURL ?? ""),
                     Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          AccountInfoField.infoField(
-                              widget._loggedUser.email ?? ""),
-                          AccountInfoField.infoField(
-                              widget._loggedUser.displayName ?? "")
+                          AccountInfoField(
+                              text: widget._loggedUser.email ?? ""),
+                          AccountInfoField(
+                              text: widget._loggedUser.displayName ?? "")
                         ])
                   ])),
           Flexible(
@@ -93,7 +95,7 @@ class _UserPageState extends State<UserPage>
                   child:
                       CarouselSlider(options: carouselOptions(context), items: [
                     Column(children: [
-                      AccountInfoField.infoField("Hodnocení"),
+                      AccountInfoField(text: "Hodnocení"),
                       Expanded(
                           child: SizedBox.expand(
                               child: FutureBuilder<List<Rating>?>(
@@ -121,6 +123,7 @@ class _UserPageState extends State<UserPage>
                                   })))
                     ]),
                     itemStatusField(items, "Moje inzeráty"),
+                    itemStatusField(savedItems, "Uložené inzeráty"),
                     itemStatusField(soldItems, "Prodané předměty"),
                     itemStatusField(boughtItems, "Zakoupené předměty",
                         ratingController: ratingController),
@@ -143,7 +146,7 @@ class _UserPageState extends State<UserPage>
   Widget itemStatusField(Future<List<Item>?> items, String label,
           {bool touchable = true, TextEditingController? ratingController}) =>
       Column(children: [
-        AccountInfoField.infoField(label),
+        AccountInfoField(text: label),
         Expanded(
             child: SizedBox.expand(
                 child: FutureBuilder<List<Item>?>(

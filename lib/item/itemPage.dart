@@ -9,6 +9,7 @@ import 'package:letbike/general/objects/rating.dart';
 import 'package:letbike/remote/chats.dart';
 import 'package:letbike/remote/items.dart';
 import 'package:letbike/remote/ratings.dart';
+import 'package:letbike/remote/saves.dart';
 import 'package:letbike/widgets/errorWidgets.dart';
 import 'package:letbike/widgets/images.dart';
 import 'package:letbike/widgets/mainButtonEssentials.dart';
@@ -36,11 +37,21 @@ class _ItemPageState extends State<ItemPage>
 
   late AnimationController animationController;
 
+  late bool localSavedVal;
+
   @override
   void initState() {
     animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 250));
     animationController.addListener(() => setState(() {}));
+    Future<bool> remoteSavedVal =
+        RemoteSaves.getSave(widget._loggedUser.uid, widget._item.id);
+
+    localSavedVal = false;
+    if (widget._item.sellerId != widget._loggedUser.uid) {
+      remoteSavedVal.then((data) => localSavedVal = data,
+          onError: (e) => localSavedVal = false);
+    }
 
     super.initState();
   }
@@ -68,13 +79,14 @@ class _ItemPageState extends State<ItemPage>
               width: MediaQuery.of(context).size.width,
               child: CarouselSlider(options: carouselOptions(context), items: [
                 for (int i = 0; i < int.parse(widget._item.imgs); i++)
-                  ServerImage().build(imgsFolder +
-                      "items/" +
-                      (widget._item.sellerId +
-                          widget._item.name.hashCode.toString()) +
-                      "/" +
-                      i.toString() +
-                      ".jpg")
+                  ServerImage(
+                      path: imgsFolder +
+                          "items/" +
+                          (widget._item.sellerId +
+                              widget._item.name.hashCode.toString()) +
+                          "/" +
+                          i.toString() +
+                          ".jpg")
               ])),
           Padding(
               padding: EdgeInsets.only(left: 10, top: 10),
@@ -82,12 +94,47 @@ class _ItemPageState extends State<ItemPage>
                   style:
                       TextStyle(fontSize: 15, color: kWhite.withOpacity(.4)))),
           Padding(
-              padding: EdgeInsets.only(left: 25, top: 10),
-              child: Text(widget._item.price.toString() + " Kč",
-                  style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      color: kWhite.withOpacity(.6)))),
+              padding: EdgeInsets.only(left: 25, top: 10, right: 25),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(widget._item.price.toString() + " Kč",
+                        style: TextStyle(
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
+                            color: kWhite.withOpacity(.6))),
+                    if (widget._item.sellerId != widget._loggedUser.uid)
+                      IconButton(
+                          onPressed: () => setState(() {
+                                localSavedVal = !localSavedVal;
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: FutureBuilder<String?>(
+                                            future: RemoteSaves.setSave(
+                                                widget._loggedUser.uid,
+                                                widget._item.id,
+                                                localSavedVal),
+                                            builder: (context, snapshot) {
+                                              switch (
+                                                  snapshot.connectionState) {
+                                                case ConnectionState.waiting:
+                                                  return Center(
+                                                      child: Image.asset(
+                                                          "assets/load.gif"));
+                                                default:
+                                                  if (snapshot.hasError ||
+                                                      !snapshot.hasData)
+                                                    return ErrorWidgets
+                                                        .snackBarError();
+                                                  return Text(snapshot.data!);
+                                              }
+                                            })));
+                              }),
+                          icon: Icon(
+                              localSavedVal ? Icons.star : Icons.star_outline,
+                              color: kPrimaryColor,
+                              size: 30))
+                  ])),
           Padding(
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               child: Center(

@@ -63,19 +63,17 @@ class _ChatScreenState extends State<ChatScreen>
               backgroundColor: cancelTrade ? kGreen : kPrimaryColor,
               automaticallyImplyLeading: false,
               title: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                CircularButton(kSecondaryColor, 40, Icons.arrow_back, kWhite,
-                    () => Navigator.of(context).pop()),
+                CircularButton(
+                    icon: Icons.arrow_back,
+                    onClick: () => Navigator.of(context).pop()),
                 Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10),
                     child: Text(widget._item.name,
                         style: TextStyle(fontSize: 20))),
                 if (widget._item.sellerId == widget._loggedUser.uid)
                   CircularButton(
-                      kSecondaryColor,
-                      40,
-                      Icons.person_search,
-                      kWhite,
-                      () => ModalWindow.showModalWindow(
+                      icon: Icons.person_search,
+                      onClick: () => ModalWindow.showModalWindow(
                           context,
                           "O zájemci",
                           Column(children: [
@@ -112,11 +110,9 @@ class _ChatScreenState extends State<ChatScreen>
                   SizedBox(width: 10),
                 if (widget._loggedUser.uid == widget._item.sellerId)
                   CircularButton(
-                      kSecondaryColor,
-                      40,
-                      (cancelTrade ? Icons.money_off : Icons.attach_money),
-                      kWhite,
-                      () => ModalWindow.showModalWindow(
+                      icon:
+                          (cancelTrade ? Icons.money_off : Icons.attach_money),
+                      onClick: () => ModalWindow.showModalWindow(
                               context,
                               "Opravdu?",
                               Text(
@@ -185,11 +181,11 @@ class _ChatScreenState extends State<ChatScreen>
                           hint: "Napište zprávu",
                           controller: chatInputController))),
               CircularButton(
-                  widget._images.length > 0 ? kPrimaryColor : kSecondaryColor,
-                  40,
-                  Icons.image,
-                  kWhite,
-                  () => imagePickerController.loadAssets(
+                  color: widget._images.length > 0
+                      ? kPrimaryColor
+                      : kSecondaryColor,
+                  icon: Icons.image,
+                  onClick: () => imagePickerController.loadAssets(
                       this,
                       widget._images,
                       1,
@@ -198,23 +194,24 @@ class _ChatScreenState extends State<ChatScreen>
                       (List<Asset> a) => widget._images = a)),
               Padding(
                   padding: EdgeInsets.symmetric(horizontal: 5),
-                  child: CircularButton(kSecondaryColor, 40, Icons.send, kWhite,
-                      () {
-                    if (widget._images.length > 0 ||
-                        chatInputController.text != "") {
-                      RemoteChats.sendMessage(
-                          widget._loggedUser.uid,
-                          widget._chat.buyId,
-                          widget._item.id,
-                          chatInputController.text,
-                          widget._images);
+                  child: CircularButton(
+                      icon: Icons.send,
+                      onClick: () {
+                        if (widget._images.length > 0 ||
+                            chatInputController.text != "") {
+                          RemoteChats.sendMessage(
+                              widget._loggedUser.uid,
+                              widget._chat.buyId,
+                              widget._item.id,
+                              chatInputController.text,
+                              widget._images);
 
-                      widget._images = [];
-                      chatInputController.clear();
+                          widget._images = [];
+                          chatInputController.clear();
 
-                      setState(() {});
-                    }
-                  }))
+                          setState(() {});
+                        }
+                      }))
             ])
           ]))));
 }

@@ -83,13 +83,18 @@ class Item {
 
   Widget buildCard(context, User loggedUser,
           {bool touchable = true, TextEditingController? ratingController}) =>
-      CardWidgets.cardEssentials(
-          () => onCardClick(context, loggedUser,
+      CardBody(
+          onTap: () => onCardClick(context, loggedUser,
               touchable: touchable, ratingController: ratingController),
-          imgsFolder + "items/" + sellerId + name.hashCode.toString(),
-          Column(children: [
+          imgPath: imgsFolder + "items/" + sellerId + name.hashCode.toString(),
+          child: Column(children: [
             Expanded(
-                flex: 1, child: CardWidgets.text(name, 32, 2, FontWeight.bold)),
+                flex: 1,
+                child: CardText(
+                    text: name,
+                    fontSize: 32,
+                    offset: 2,
+                    fontWeight: FontWeight.bold)),
             Expanded(flex: 3, child: Container()),
             Expanded(
                 flex: 1,
@@ -98,14 +103,17 @@ class Item {
                       flex: 4,
                       child: Padding(
                           padding: EdgeInsets.symmetric(horizontal: 10),
-                          child: CardWidgets.text(
-                              description ?? "", 18, 1, FontWeight.normal))),
+                          child:
+                              CardText(text: description ?? "", fontSize: 18))),
                   Expanded(
                       flex: 2,
                       child: Padding(
                           padding: EdgeInsets.symmetric(horizontal: 10),
-                          child: CardWidgets.text(
-                              price.toString() + "Kč", 24, 2, FontWeight.bold)))
+                          child: CardText(
+                              text: price.toString() + "Kč",
+                              fontSize: 24,
+                              offset: 2,
+                              fontWeight: FontWeight.bold)))
                 ]))
           ]));
 
