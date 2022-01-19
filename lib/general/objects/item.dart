@@ -8,6 +8,7 @@ import 'package:letbike/remote/ratings.dart';
 import 'package:letbike/widgets/alertBox.dart';
 import 'package:letbike/widgets/cardWidgets.dart';
 import 'package:letbike/widgets/errorWidgets.dart';
+import 'package:letbike/widgets/ratingBar.dart';
 
 class Item {
   int id;
