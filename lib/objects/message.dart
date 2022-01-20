@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:letbike/general/settings.dart';
-import 'package:letbike/widgets/images.dart';
+import 'package:letbike/widgets/image_server.dart';
 
 class Message {
   bool myMessage;

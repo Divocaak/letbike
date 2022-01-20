@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:letbike/general/settings.dart';
-import 'package:letbike/user/signGate.dart';
-import 'package:letbike/widgets/buttonRounded.dart';
-import 'package:letbike/widgets/images.dart';
+import 'package:letbike/screens/sign_screen.dart';
+import 'package:letbike/widgets/button_rounded.dart';
+import 'package:letbike/widgets/image_background.dart';
 
 class FirstScreen extends StatelessWidget {
   @override

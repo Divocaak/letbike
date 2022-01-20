@@ -1,16 +1,18 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:letbike/firstScreen.dart';
-import 'package:letbike/general/objects/item.dart';
-import 'package:letbike/general/objects/rating.dart';
+import 'package:letbike/screens/first_screen.dart';
+import 'package:letbike/objects/item.dart';
+import 'package:letbike/objects/rating.dart';
 import 'package:letbike/remote/items.dart';
 import 'package:letbike/remote/ratings.dart';
 import 'package:letbike/general/settings.dart';
-import 'package:letbike/widgets/accountInfoField.dart';
-import 'package:letbike/widgets/errorWidgets.dart';
-import 'package:letbike/widgets/images.dart';
-import 'package:letbike/widgets/mainButtonEssentials.dart';
+import 'package:letbike/widgets/account_info.dart';
+import 'package:letbike/widgets/button_main.dart';
+import 'package:letbike/widgets/error_widgets.dart';
+import 'package:letbike/widgets/image_server.dart';
+import 'package:letbike/widgets/button_main_clicked.dart';
+import 'package:letbike/widgets/item_column.dart';
 
 class UserPage extends StatefulWidget {
   const UserPage({Key? key, required User loggedUser})
@@ -122,13 +124,27 @@ class _UserPageState extends State<UserPage>
                                     }
                                   })))
                     ]),
-                    itemStatusField(items, "Moje inzeráty"),
-                    itemStatusField(savedItems, "Uložené inzeráty"),
-                    itemStatusField(soldItems, "Prodané předměty"),
-                    itemStatusField(boughtItems, "Zakoupené předměty",
+                    ItemColumn(
+                        user: widget._loggedUser,
+                        items: items,
+                        label: "Moje inzeráty"),
+                    ItemColumn(
+                        user: widget._loggedUser,
+                        items: savedItems,
+                        label: "Uložené inzeráty"),
+                    ItemColumn(
+                        user: widget._loggedUser,
+                        items: soldItems,
+                        label: "Prodané předměty"),
+                    ItemColumn(
+                        user: widget._loggedUser,
+                        items: boughtItems,
+                        label: "Zakoupené předměty",
                         ratingController: ratingController),
-                    itemStatusField(ratedItems,
-                        "Ohodnocené předměty (již přijaté, uzavřené)",
+                    ItemColumn(
+                        user: widget._loggedUser,
+                        items: ratedItems,
+                        label: "Ohodnocené předměty (již přijaté, uzavřené)",
                         touchable: false)
                   ])))
         ])),
@@ -142,34 +158,6 @@ class _UserPageState extends State<UserPage>
               Icons.arrow_back, () => Navigator.of(context).pop())
         ], volume: volume)
       ]));
-
-  Widget itemStatusField(Future<List<Item>?> items, String label,
-          {bool touchable = true, TextEditingController? ratingController}) =>
-      Column(children: [
-        AccountInfoField(text: label),
-        Expanded(
-            child: SizedBox.expand(
-                child: FutureBuilder<List<Item>?>(
-                    future: items,
-                    builder: (context, snapshot) {
-                      switch (snapshot.connectionState) {
-                        case ConnectionState.waiting:
-                          return Center(child: Image.asset("assets/load.gif"));
-                        default:
-                          if (snapshot.hasError)
-                            return ErrorWidgets.futureBuilderError();
-                          else if (!snapshot.hasData ||
-                              (snapshot.hasData && snapshot.data!.length < 1))
-                            return ErrorWidgets.futureBuilderEmpty();
-                          return ListView.builder(
-                              itemCount: snapshot.data!.length,
-                              itemBuilder: (context, i) => snapshot.data![i]
-                                  .buildCard(context, widget._loggedUser,
-                                      touchable: touchable,
-                                      ratingController: ratingController));
-                      }
-                    })))
-      ]);
 
   Future<void> _pullRefresh() async {
     Future<List<Item>?> _items =

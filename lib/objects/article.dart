@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:letbike/article/articlePage.dart';
+import 'package:letbike/screens/article_screen.dart';
 import 'package:letbike/general/settings.dart';
-import 'package:letbike/widgets/cardWidgets.dart';
+import 'package:letbike/widgets/card_body.dart';
+import 'package:letbike/widgets/card_text.dart';
 
 class Article {
   int id;

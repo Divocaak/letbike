@@ -1,13 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:letbike/general/categories.dart';
+import 'package:letbike/objects/categories.dart';
 import 'package:letbike/general/settings.dart';
-import 'package:letbike/item/itemPage.dart';
+import 'package:letbike/screens/item_screen.dart';
 import 'package:letbike/remote/items.dart';
 import 'package:letbike/remote/ratings.dart';
-import 'package:letbike/widgets/alertBox.dart';
-import 'package:letbike/widgets/cardWidgets.dart';
-import 'package:letbike/widgets/errorWidgets.dart';
+import 'package:letbike/widgets/alert_box.dart';
+import 'package:letbike/widgets/card_body.dart';
+import 'package:letbike/widgets/card_text.dart';
+import 'package:letbike/widgets/error_widgets.dart';
+import 'package:letbike/widgets/rating_bar.dart';
 
 class Item {
   int id;

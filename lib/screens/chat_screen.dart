@@ -1,19 +1,19 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:letbike/general/objects/chat.dart';
-import 'package:letbike/general/objects/item.dart';
-import 'package:letbike/general/objects/message.dart';
-import 'package:letbike/general/objects/rating.dart';
+import 'package:letbike/objects/chat.dart';
+import 'package:letbike/objects/item.dart';
+import 'package:letbike/objects/message.dart';
+import 'package:letbike/objects/rating.dart';
 import 'package:letbike/remote/chats.dart';
 import 'package:letbike/remote/items.dart';
 import 'package:letbike/remote/ratings.dart';
-import 'package:letbike/widgets/images.dart';
+import 'package:letbike/widgets/image_picker_controller.dart';
 import 'package:multi_image_picker2/multi_image_picker2.dart';
-import 'package:letbike/widgets/textInput.dart';
-import 'package:letbike/widgets/errorWidgets.dart';
-import 'package:letbike/widgets/buttonCircular.dart';
-import 'package:letbike/widgets/alertBox.dart';
+import 'package:letbike/widgets/text_input.dart';
+import 'package:letbike/widgets/error_widgets.dart';
+import 'package:letbike/widgets/button_circular.dart';
+import 'package:letbike/widgets/alert_box.dart';
 import 'package:letbike/general/settings.dart';
 
 // ignore: must_be_immutable

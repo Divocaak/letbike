@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:letbike/general/settings.dart';
 import 'package:flutterfire_ui/auth.dart';
-import 'package:letbike/user/authGate.dart';
-import 'package:letbike/widgets/images.dart';
+import 'package:letbike/screens/auth_screen.dart';
+import 'package:letbike/widgets/image_background.dart';
 
 class SignGate extends StatelessWidget {
   @override

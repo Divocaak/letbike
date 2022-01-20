@@ -1,13 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:letbike/general/objects/item.dart';
-import 'package:letbike/item/addItem.dart';
+import 'package:letbike/objects/item.dart';
+import 'package:letbike/screens/add_item_screen.dart';
 import 'package:letbike/remote/items.dart';
-import 'package:letbike/user/userPage.dart';
-import 'package:letbike/filters/filters.dart';
-import 'package:letbike/article/articlesScreen.dart';
-import 'package:letbike/widgets/errorWidgets.dart';
-import 'package:letbike/widgets/mainButtonEssentials.dart';
+import 'package:letbike/screens/user_screen.dart';
+import 'package:letbike/screens/filter_screen.dart';
+import 'package:letbike/screens/articles_screen.dart';
+import 'package:letbike/widgets/button_main.dart';
+import 'package:letbike/widgets/error_widgets.dart';
+import 'package:letbike/widgets/button_main_clicked.dart';
 import 'package:letbike/general/settings.dart';
 
 double volume = 0;
