@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:letbike/firstScreen.dart';
+import 'package:letbike/screens/first_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
+import 'general/firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:letbike/homePage.dart';
+import 'package:letbike/screens/home_screen.dart';
 import 'package:letbike/remote/users.dart';
-import 'package:letbike/widgets/images.dart';
+import 'package:letbike/widgets/image_background.dart';
 
 class AuthGate extends StatefulWidget {
   AuthGate({Key? key, required User loggedUser})

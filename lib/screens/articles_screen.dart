@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:letbike/general/objects/article.dart';
-import 'package:letbike/widgets/errorWidgets.dart';
-import 'package:letbike/widgets/mainButtonEssentials.dart';
+import 'package:letbike/objects/article.dart';
+import 'package:letbike/widgets/button_main.dart';
+import 'package:letbike/widgets/error_widgets.dart';
 import 'package:letbike/general/settings.dart';
 import 'package:letbike/remote/articles.dart';
 

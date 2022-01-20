@@ -1,25 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:letbike/general/settings.dart';
-import 'package:letbike/widgets/buttonCircular.dart';
-
-class MainButton extends StatelessWidget {
-  MainButton(
-      {Key? key, required IconData iconData, required Function onPressed})
-      : _iconData = iconData,
-        _onPressed = onPressed,
-        super(key: key);
-
-  final IconData _iconData;
-  final Function _onPressed;
-
-  @override
-  Widget build(BuildContext context) => Padding(
-      padding: EdgeInsets.only(bottom: 35, right: 35),
-      child: FloatingActionButton(
-          backgroundColor: kPrimaryColor,
-          child: Icon(_iconData, color: kWhite),
-          onPressed: () => _onPressed()));
-}
+import 'package:letbike/widgets/button_circular.dart';
 
 // ignore: must_be_immutable
 class MainButtonClicked extends StatefulWidget {
@@ -34,11 +15,11 @@ class MainButtonClicked extends StatefulWidget {
   final List<SecondaryButtonData> _buttons;
   double _volume;
 
-  static List<SecondaryButtonPos> positions = [
-    SecondaryButtonPos(40, 150),
-    SecondaryButtonPos(120, 120),
-    SecondaryButtonPos(150, 40),
-    SecondaryButtonPos(200, 100)
+  static List<Map<String, double>> positions = [
+    {"x": 40, "y": 150},
+    {"x": 120, "y": 120},
+    {"x": 150, "y": 40},
+    {"x": 200, "y": 100}
   ];
 
   State<StatefulWidget> createState() => MainButtonClickedState();
@@ -57,8 +38,8 @@ class MainButtonClickedState extends State<MainButtonClicked> {
               child: Stack(children: [
                 for (int i = 0; i < widget._buttons.length; i++)
                   Positioned(
-                      bottom: MainButtonClicked.positions[i].x,
-                      right: MainButtonClicked.positions[i].y,
+                      bottom: MainButtonClicked.positions[i]["x"],
+                      right: MainButtonClicked.positions[i]["y"],
                       child: CircularButton(
                           color:
                               kSecondaryColor.withOpacity(widget._volume * 2),
@@ -73,11 +54,4 @@ class SecondaryButtonData {
   Function onClick;
 
   SecondaryButtonData(this.icon, this.onClick);
-}
-
-class SecondaryButtonPos {
-  double x;
-  double y;
-
-  SecondaryButtonPos(this.x, this.y);
 }

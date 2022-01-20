@@ -1,14 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:letbike/general/categories.dart';
-import 'package:letbike/homePage.dart';
-import 'package:letbike/widgets/mainButtonEssentials.dart';
-import 'package:letbike/widgets/images.dart';
-import 'package:letbike/filters/widgetsFilter.dart';
+import 'package:letbike/objects/categories.dart';
+import 'package:letbike/screens/home_screen.dart';
+import 'package:letbike/widgets/button_main.dart';
+import 'package:letbike/widgets/filter_dropdown.dart';
+import 'package:letbike/widgets/image_background.dart';
+import 'package:letbike/widgets/filter_switch.dart';
 import 'package:letbike/remote/items.dart';
 import 'package:letbike/general/settings.dart';
-import 'package:letbike/widgets/alertBox.dart';
-import 'package:letbike/widgets/errorWidgets.dart';
+import 'package:letbike/widgets/alert_box.dart';
+import 'package:letbike/widgets/error_widgets.dart';
 import 'package:multi_image_picker2/multi_image_picker2.dart';
 
 class FilterPage extends StatefulWidget {
