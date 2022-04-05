@@ -13,7 +13,7 @@ dependencies:
     sdk: flutter
 
   http: ^0.13.3
-  permission_handler: ^6.1.1
+  permission_handler: ^9.2.0
   flutter_markdown: ^0.6.1
   url_launcher: ^6.0.3
   emojis: ^0.9.3
@@ -23,7 +23,7 @@ dependencies:
   firebase_core: ^1.10.5
   google_sign_in: ^5.2.1
   firebase_auth: ^3.3.3
-  flutterfire_ui: ^0.2.0+2
+  flutterfire_ui: ^0.4.0
   cupertino_icons: ^1.0.4
   
 flutter_icons:
