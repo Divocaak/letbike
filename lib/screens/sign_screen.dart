@@ -12,6 +12,8 @@ class SignGate extends StatelessWidget {
         StreamBuilder<User?>(
             stream: FirebaseAuth.instance.authStateChanges(),
             builder: (context, snapshot) {
+              print("aaa");
+              print(snapshot.data);
               if (!snapshot.hasData) {
                 return SignInScreen(
                     headerBuilder: (context, constraints, _) =>
@@ -33,10 +35,11 @@ class SignGate extends StatelessWidget {
                     },
                     showAuthActionSwitch: false,
                     providerConfigs: [
-                      GoogleProviderConfiguration(clientId: "clientId")
+                      GoogleProviderConfiguration(
+                          clientId:
+                              "922511656456-cbo300fdjk9q1t2sk7nil013mpblghv0.apps.googleusercontent.com")
                     ]);
               }
-
               return AuthGate(loggedUser: snapshot.data as User);
             })
       ]);

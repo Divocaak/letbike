@@ -1,62 +1,56 @@
 {
-  "project_info": {
-    "project_number": "922511656456",
-    "project_id": "letbike-a7457",
-    "storage_bucket": "letbike-a7457.appspot.com"
-  },
-  "client": [
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:922511656456:android:45e2508c7dd1ad6fa573bd",
-        "android_client_info": {
-          "package_name": "cz.divocak.letbike"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "922511656456-e4i4svr51osmu1v88maq357rjsua8buv.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "cz.divocak.letbike",
-            "certificate_hash": "ad821ec116ad496d1fe506f172ef26570dd522d3"
-          }
+    "project_info": {
+        "project_number": "922511656456",
+        "project_id": "letbike-a7457",
+        "storage_bucket": "letbike-a7457.appspot.com"
+    },
+    "client": [{
+        "client_info": {
+            "mobilesdk_app_id": "1:922511656456:android:45e2508c7dd1ad6fa573bd",
+            "android_client_info": {
+                "package_name": "cz.divocak.letbike"
+            }
         },
-        {
-          "client_id": "922511656456-t76ao7qnjm7o63vv2vaj799nu8bt6ap8.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "cz.divocak.letbike",
-            "certificate_hash": "6b85f310bcad78acce2db46fbcd3896e058f387b"
-          }
-        },
-        {
-          "client_id": "922511656456-cbo300fdjk9q1t2sk7nil013mpblghv0.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyB7dlGzCnoALib8Hp0OKnatFq0s7Fwg37U"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "922511656456-cbo300fdjk9q1t2sk7nil013mpblghv0.apps.googleusercontent.com",
-              "client_type": 3
+        "oauth_client": [{
+                "client_id": "922511656456-e4i4svr51osmu1v88maq357rjsua8buv.apps.googleusercontent.com",
+                "client_type": 1,
+                "android_info": {
+                    "package_name": "cz.divocak.letbike",
+                    "certificate_hash": "ad821ec116ad496d1fe506f172ef26570dd522d3"
+                }
             },
             {
-              "client_id": "922511656456-da49hug54dkesaog9gi8bfnq36l0pjp3.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "cz.divocak.letbike"
-              }
+                "client_id": "922511656456-t76ao7qnjm7o63vv2vaj799nu8bt6ap8.apps.googleusercontent.com",
+                "client_type": 1,
+                "android_info": {
+                    "package_name": "cz.divocak.letbike",
+                    "certificate_hash": "6b85f310bcad78acce2db46fbcd3896e058f387b"
+                }
+            },
+            {
+                "client_id": "922511656456-cbo300fdjk9q1t2sk7nil013mpblghv0.apps.googleusercontent.com",
+                "client_type": 3
             }
-          ]
+        ],
+        "api_key": [{
+            "current_key": "AIzaSyB7dlGzCnoALib8Hp0OKnatFq0s7Fwg37U"
+        }],
+        "services": {
+            "appinvite_service": {
+                "other_platform_oauth_client": [{
+                        "client_id": "922511656456-cbo300fdjk9q1t2sk7nil013mpblghv0.apps.googleusercontent.com",
+                        "client_type": 3
+                    },
+                    {
+                        "client_id": "922511656456-da49hug54dkesaog9gi8bfnq36l0pjp3.apps.googleusercontent.com",
+                        "client_type": 2,
+                        "ios_info": {
+                            "bundle_id": "cz.divocak.letbike"
+                        }
+                    }
+                ]
+            }
         }
-      }
-    }
-  ],
-  "configuration_version": "1"
+    }],
+    "configuration_version": "1"
 }
