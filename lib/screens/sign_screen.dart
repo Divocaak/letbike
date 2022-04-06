@@ -12,8 +12,6 @@ class SignGate extends StatelessWidget {
         StreamBuilder<User?>(
             stream: FirebaseAuth.instance.authStateChanges(),
             builder: (context, snapshot) {
-              print("aaa");
-              print(snapshot.data);
               if (!snapshot.hasData) {
                 return SignInScreen(
                     headerBuilder: (context, constraints, _) =>

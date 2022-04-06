@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:letbike/screens/first_screen.dart';
 import 'package:letbike/objects/item.dart';
 import 'package:letbike/objects/rating.dart';
@@ -150,7 +151,16 @@ class _UserPageState extends State<UserPage>
         ])),
         MainButtonClicked(buttons: [
           SecondaryButtonData(Icons.logout, () async {
-            await FirebaseAuth.instance.signOut();
+            try {
+              await GoogleSignIn().disconnect().whenComplete(() async {
+                await FirebaseAuth.instance.signOut();
+              });
+            } catch (e) {
+              print(e);
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(SnackBar(content: Text(e.toString())));
+            }
+
             Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (context) => FirstScreen()));
           }),
