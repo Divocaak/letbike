@@ -11,6 +11,7 @@ import 'package:letbike/widgets/button_main.dart';
 import 'package:letbike/widgets/error_widgets.dart';
 import 'package:letbike/widgets/button_main_clicked.dart';
 import 'package:letbike/general/settings.dart';
+import 'package:letbike/widgets/item_column.dart';
 
 double volume = 0;
 
@@ -43,13 +44,13 @@ class _HomePageState extends State<HomePage>
     super.initState();
   }
 
-  @override
+  // ads
+  /* @override
   void dispose() {
     super.dispose();
     _inlineAdaptiveAd?.dispose();
   }
 
-  // ads
   static const _insets = 16.0;
   BannerAd? _inlineAdaptiveAd;
   bool _isLoaded = false;
@@ -118,7 +119,7 @@ class _HomePageState extends State<HomePage>
           }
           return Container();
         },
-      );
+      ); */
 
   @override
   Widget build(BuildContext context) {
@@ -165,14 +166,12 @@ class _HomePageState extends State<HomePage>
                                             context, widget._loggedUser));
                             }
                           })))),
-          Container(
-              color: kBlack,
-              child:
-                  _getAdWidget() /* CardWidgets.cardsBuilder(items, false,
-                  loggedUser: widget._loggedUser,
-                  forRating: false,
-                  touchable: true) */
-              ),
+          /* Container(color: kBlack, child: _getAdWidget()
+              CardWidgets.cardsBuilder(items, false,
+                      loggedUser: widget._loggedUser,
+                      forRating: false,
+                      touchable: true)
+              ), */
           MainButtonClicked(buttons: [
             SecondaryButtonData(
                 Icons.add,
