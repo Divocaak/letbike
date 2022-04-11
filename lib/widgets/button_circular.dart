@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:letbike/settings.dart';
+import 'package:letbike/general/settings.dart';
 
 class CircularButton extends StatelessWidget {
   const CircularButton(

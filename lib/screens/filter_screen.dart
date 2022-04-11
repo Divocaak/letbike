@@ -7,7 +7,7 @@ import 'package:letbike/widgets/filter_dropdown.dart';
 import 'package:letbike/widgets/image_background.dart';
 import 'package:letbike/widgets/filter_switch.dart';
 import 'package:letbike/remote/items.dart';
-import 'package:letbike/settings.dart';
+import 'package:letbike/general/settings.dart';
 import 'package:letbike/widgets/alert_box.dart';
 import 'package:letbike/widgets/error_widgets.dart';
 import 'package:multi_image_picker2/multi_image_picker2.dart';

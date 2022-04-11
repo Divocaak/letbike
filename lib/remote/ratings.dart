@@ -3,7 +3,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:http/http.dart';
 import 'package:letbike/objects/rating.dart';
-import 'package:letbike/settings.dart';
+import 'package:letbike/general/settings.dart';
 
 class RemoteRatings {
   static String url = scriptsUrl + 'rating/';

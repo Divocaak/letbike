@@ -1,6 +1,6 @@
 import 'package:emojis/emojis.dart';
 import 'package:flutter/material.dart';
-import 'package:letbike/settings.dart';
+import 'package:letbike/general/settings.dart';
 
 class ModalWindow {
   static showModalWindow(BuildContext context, String title, Widget body,

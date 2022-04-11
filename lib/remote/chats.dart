@@ -5,7 +5,7 @@ import 'package:http/http.dart';
 import 'package:letbike/objects/chat.dart';
 import 'package:letbike/objects/item.dart';
 import 'package:letbike/objects/message.dart';
-import 'package:letbike/settings.dart';
+import 'package:letbike/general/settings.dart';
 import 'package:letbike/remote/images.dart';
 import 'package:multi_image_picker2/multi_image_picker2.dart';
 

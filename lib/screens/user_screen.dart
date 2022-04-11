@@ -1,13 +1,12 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:letbike/screens/first_screen.dart';
+import 'package:letbike/general/authentification.dart';
 import 'package:letbike/objects/item.dart';
 import 'package:letbike/objects/rating.dart';
 import 'package:letbike/remote/items.dart';
 import 'package:letbike/remote/ratings.dart';
-import 'package:letbike/settings.dart';
+import 'package:letbike/general/settings.dart';
 import 'package:letbike/widgets/account_info.dart';
 import 'package:letbike/widgets/button_main.dart';
 import 'package:letbike/widgets/error_widgets.dart';
@@ -29,6 +28,9 @@ double volume = 0;
 
 class _UserPageState extends State<UserPage>
     with SingleTickerProviderStateMixin {
+  // ignore: unused_field
+  bool _isSigningOut = false;
+
   late Future<List<Item>?> items;
   late Future<List<Item>?> savedItems;
   late Future<List<Item>?> soldItems;
@@ -151,18 +153,9 @@ class _UserPageState extends State<UserPage>
         ])),
         MainButtonClicked(buttons: [
           SecondaryButtonData(Icons.logout, () async {
-            try {
-              await GoogleSignIn().disconnect().whenComplete(() async {
-                await FirebaseAuth.instance.signOut();
-              });
-            } catch (e) {
-              print(e);
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(content: Text(e.toString())));
-            }
-
-            Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => FirstScreen()));
+            setState(() => _isSigningOut = true);
+            await Authentication.signOut(context: context);
+            setState(() => _isSigningOut = false);
           }),
           SecondaryButtonData(
               Icons.arrow_back, () => Navigator.of(context).pop())

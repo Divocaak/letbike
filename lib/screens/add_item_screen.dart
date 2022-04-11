@@ -9,7 +9,7 @@ import 'package:multi_image_picker2/multi_image_picker2.dart';
 import 'package:letbike/widgets/text_input.dart';
 import 'package:letbike/widgets/button_main_clicked.dart';
 import 'package:letbike/widgets/image_background.dart';
-import 'package:letbike/settings.dart';
+import 'package:letbike/general/settings.dart';
 
 // ignore: must_be_immutable
 class AddItem extends StatefulWidget {

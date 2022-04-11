@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import 'package:letbike/settings.dart';
+import 'package:letbike/general/settings.dart';
 import 'package:letbike/widgets/image_server.dart';
 
 class CardBody extends StatelessWidget {

@@ -15,7 +15,7 @@ import 'package:letbike/widgets/error_widgets.dart';
 import 'package:letbike/widgets/image_server.dart';
 import 'package:letbike/widgets/button_main_clicked.dart';
 import 'package:letbike/widgets/alert_box.dart';
-import 'package:letbike/settings.dart';
+import 'package:letbike/general/settings.dart';
 
 double volume = 0;
 
