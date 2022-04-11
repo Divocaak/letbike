@@ -11,7 +11,6 @@ import 'package:letbike/widgets/button_main.dart';
 import 'package:letbike/widgets/error_widgets.dart';
 import 'package:letbike/widgets/button_main_clicked.dart';
 import 'package:letbike/general/settings.dart';
-import 'package:letbike/widgets/item_column.dart';
 
 double volume = 0;
 
@@ -41,7 +40,32 @@ class _HomePageState extends State<HomePage>
     animationController.addListener(() => setState(() {}));
     items = RemoteItems.getAllItems(1, itemParams: widget._filters);
 
+    loadNativeAd();
+
     super.initState();
+  }
+
+  late NativeAd _ad;
+  bool isLoaded = false;
+
+  void loadNativeAd() {
+    _ad = NativeAd(
+        adUnitId: "ca-app-pub-8451063166378874/4317911543",
+        factoryId: "listTile",
+        listener: NativeAdListener(
+            onAdLoaded: (ad) => setState(() => isLoaded = true),
+            onAdFailedToLoad: (ad, e) {
+              ad.dispose();
+              print("===");
+              print(e);
+              print(e.code);
+              print(e.message);
+              print(e.responseInfo);
+              print("===");
+            }),
+        request: const AdRequest());
+
+    _ad.load();
   }
 
   // ads
@@ -161,9 +185,17 @@ class _HomePageState extends State<HomePage>
                                   return ErrorWidgets.futureBuilderEmpty();
                                 return ListView.builder(
                                     itemCount: snapshot.data!.length,
-                                    itemBuilder: (context, i) =>
-                                        snapshot.data![i].buildCard(
-                                            context, widget._loggedUser));
+                                    itemBuilder: (context, i) {
+                                      if (isLoaded && i == 1) {
+                                        return Container(
+                                            child: AdWidget(ad: _ad),
+                                            height: 200,
+                                            color: Colors.lime);
+                                      }
+
+                                      return snapshot.data![i].buildCard(
+                                          context, widget._loggedUser);
+                                    });
                             }
                           })))),
           /* Container(color: kBlack, child: _getAdWidget()
