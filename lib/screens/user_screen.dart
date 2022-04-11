@@ -1,7 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:letbike/screens/first_screen.dart';
+import 'package:letbike/general/authentification.dart';
 import 'package:letbike/objects/item.dart';
 import 'package:letbike/objects/rating.dart';
 import 'package:letbike/remote/items.dart';
@@ -28,6 +28,9 @@ double volume = 0;
 
 class _UserPageState extends State<UserPage>
     with SingleTickerProviderStateMixin {
+  // ignore: unused_field
+  bool _isSigningOut = false;
+
   late Future<List<Item>?> items;
   late Future<List<Item>?> savedItems;
   late Future<List<Item>?> soldItems;
@@ -150,9 +153,9 @@ class _UserPageState extends State<UserPage>
         ])),
         MainButtonClicked(buttons: [
           SecondaryButtonData(Icons.logout, () async {
-            await FirebaseAuth.instance.signOut();
-            Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => FirstScreen()));
+            setState(() => _isSigningOut = true);
+            await Authentication.signOut(context: context);
+            setState(() => _isSigningOut = false);
           }),
           SecondaryButtonData(
               Icons.arrow_back, () => Navigator.of(context).pop())
