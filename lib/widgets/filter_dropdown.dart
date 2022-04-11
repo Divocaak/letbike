@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:letbike/general/settings.dart';
+import 'package:letbike/settings.dart';
 import 'package:letbike/screens/filter_screen.dart';
 
 // ignore: must_be_immutable

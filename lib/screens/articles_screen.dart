@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:letbike/objects/article.dart';
 import 'package:letbike/widgets/button_main.dart';
 import 'package:letbike/widgets/error_widgets.dart';
-import 'package:letbike/general/settings.dart';
+import 'package:letbike/settings.dart';
 import 'package:letbike/remote/articles.dart';
 
 class ArticlesScreen extends StatefulWidget {

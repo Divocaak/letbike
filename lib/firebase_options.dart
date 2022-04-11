@@ -49,11 +49,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyDY7LysokXSJhZU45sDkEHS5gJhw-IaDQY',
-    appId: '1:922511656456:ios:8a5f7e56741663d0a573bd',
+    appId: '1:922511656456:ios:6773163aa6628c43a573bd',
     messagingSenderId: '922511656456',
     projectId: 'letbike-a7457',
     storageBucket: 'letbike-a7457.appspot.com',
-    androidClientId: '922511656456-e4i4svr51osmu1v88maq357rjsua8buv.apps.googleusercontent.com',
+    androidClientId: '922511656456-92p6mh5jj1catj9tjgjcbl0eks2beaq9.apps.googleusercontent.com',
     iosClientId: '922511656456-da49hug54dkesaog9gi8bfnq36l0pjp3.apps.googleusercontent.com',
     iosBundleId: 'cz.divocak.letbike',
   );

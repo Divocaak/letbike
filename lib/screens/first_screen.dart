@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:letbike/general/settings.dart';
+import 'package:letbike/settings.dart';
 import 'package:letbike/screens/sign_screen.dart';
 import 'package:letbike/widgets/button_rounded.dart';
 import 'package:letbike/widgets/image_background.dart';

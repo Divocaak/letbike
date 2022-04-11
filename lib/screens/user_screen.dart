@@ -7,7 +7,7 @@ import 'package:letbike/objects/item.dart';
 import 'package:letbike/objects/rating.dart';
 import 'package:letbike/remote/items.dart';
 import 'package:letbike/remote/ratings.dart';
-import 'package:letbike/general/settings.dart';
+import 'package:letbike/settings.dart';
 import 'package:letbike/widgets/account_info.dart';
 import 'package:letbike/widgets/button_main.dart';
 import 'package:letbike/widgets/error_widgets.dart';

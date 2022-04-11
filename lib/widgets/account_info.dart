@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:letbike/general/settings.dart';
+import 'package:letbike/settings.dart';
 
 class AccountInfoField extends StatelessWidget {
   const AccountInfoField({Key? key, required String text})

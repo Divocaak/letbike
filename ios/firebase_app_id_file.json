@@ -1,7 +1,7 @@
 {
-    "file_generated_by": "FlutterFire CLI",
-    "purpose": "FirebaseAppID & ProjectID for this Firebase app in this directory",
-    "GOOGLE_APP_ID": "1:922511656456:ios:8a5f7e56741663d0a573bd",
-    "FIREBASE_PROJECT_ID": "letbike-a7457",
-    "GCM_SENDER_ID": "922511656456"
+  "file_generated_by": "FlutterFire CLI",
+  "purpose": "FirebaseAppID & ProjectID for this Firebase app in this directory",
+  "GOOGLE_APP_ID": "1:922511656456:ios:6773163aa6628c43a573bd",
+  "FIREBASE_PROJECT_ID": "letbike-a7457",
+  "GCM_SENDER_ID": "922511656456"
 }

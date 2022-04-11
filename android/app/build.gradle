@@ -45,7 +45,7 @@ android {
 
     defaultConfig {
         applicationId "cz.divocak.letbike"
-        minSdkVersion 20
+        minSdkVersion 23
         targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

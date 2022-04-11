@@ -3,7 +3,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:http/http.dart';
 import 'package:letbike/objects/article.dart';
-import 'package:letbike/general/settings.dart';
+import 'package:letbike/settings.dart';
 
 class RemoteArticles {
   static Future<List<Article>?> getAllArticles() async {
