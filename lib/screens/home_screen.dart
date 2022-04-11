@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:letbike/objects/item.dart';
 import 'package:letbike/screens/add_item_screen.dart';
 import 'package:letbike/remote/items.dart';
@@ -41,6 +42,83 @@ class _HomePageState extends State<HomePage>
 
     super.initState();
   }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _inlineAdaptiveAd?.dispose();
+  }
+
+  // ads
+  static const _insets = 16.0;
+  BannerAd? _inlineAdaptiveAd;
+  bool _isLoaded = false;
+  AdSize? _adSize;
+  late Orientation _currentOrientation;
+  double get _adWidth => MediaQuery.of(context).size.width - (2 * _insets);
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _currentOrientation = MediaQuery.of(context).orientation;
+    _loadAd();
+  }
+
+  void _loadAd() async {
+    await _inlineAdaptiveAd?.dispose();
+    setState(() {
+      _inlineAdaptiveAd = null;
+      _isLoaded = false;
+    });
+
+    AdSize size = AdSize.getCurrentOrientationInlineAdaptiveBannerAdSize(
+        _adWidth.truncate());
+
+    _inlineAdaptiveAd = BannerAd(
+        // TODO: replace this test ad unit with your own ad unit.
+        adUnitId: 'ca-app-pub-3940256099942544/9214589741',
+        size: size,
+        request: AdRequest(),
+        listener: BannerAdListener(onAdLoaded: (Ad ad) async {
+          print('Inline adaptive banner loaded: ${ad.responseInfo}');
+          BannerAd bannerAd = (ad as BannerAd);
+          final AdSize? size = await bannerAd.getPlatformAdSize();
+          if (size == null) {
+            print('Error: getPlatformAdSize() returned null for $bannerAd');
+            return;
+          }
+
+          setState(() {
+            _inlineAdaptiveAd = bannerAd;
+            _isLoaded = true;
+            _adSize = size;
+          });
+        }, onAdFailedToLoad: (Ad ad, LoadAdError error) {
+          print('Inline adaptive banner failedToLoad: $error');
+          ad.dispose();
+        }));
+    await _inlineAdaptiveAd!.load();
+  }
+
+  Widget _getAdWidget() => OrientationBuilder(
+        builder: (context, orientation) {
+          if (_currentOrientation == orientation &&
+              _inlineAdaptiveAd != null &&
+              _isLoaded &&
+              _adSize != null) {
+            return Align(
+                child: Container(
+                    width: _adWidth,
+                    height: _adSize!.height.toDouble(),
+                    child: AdWidget(ad: _inlineAdaptiveAd!)));
+          }
+          if (_currentOrientation != orientation) {
+            _currentOrientation = orientation;
+            _loadAd();
+          }
+          return Container();
+        },
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -87,6 +165,14 @@ class _HomePageState extends State<HomePage>
                                             context, widget._loggedUser));
                             }
                           })))),
+          Container(
+              color: kBlack,
+              child:
+                  _getAdWidget() /* CardWidgets.cardsBuilder(items, false,
+                  loggedUser: widget._loggedUser,
+                  forRating: false,
+                  touchable: true) */
+              ),
           MainButtonClicked(buttons: [
             SecondaryButtonData(
                 Icons.add,
