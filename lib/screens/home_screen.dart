@@ -11,6 +11,7 @@ import 'package:letbike/widgets/button_main.dart';
 import 'package:letbike/widgets/error_widgets.dart';
 import 'package:letbike/widgets/button_main_clicked.dart';
 import 'package:letbike/general/settings.dart';
+import 'dart:io' show Platform;
 
 double volume = 0;
 
@@ -29,121 +30,21 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
+  late Map<int, Map<String, dynamic>> ads;
   late Future<List<Item>?> items;
 
   late AnimationController animationController;
 
   @override
   void initState() {
+    ads = {};
     animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 250));
     animationController.addListener(() => setState(() {}));
     items = RemoteItems.getAllItems(1, itemParams: widget._filters);
 
-    loadNativeAd();
-
     super.initState();
   }
-
-  late NativeAd _ad;
-  bool isLoaded = false;
-
-  void loadNativeAd() {
-    _ad = NativeAd(
-        adUnitId: "ca-app-pub-8451063166378874/4317911543",
-        factoryId: "listTile",
-        listener: NativeAdListener(
-            onAdLoaded: (ad) => setState(() => isLoaded = true),
-            onAdFailedToLoad: (ad, e) {
-              ad.dispose();
-              print("===");
-              print(e);
-              print(e.code);
-              print(e.message);
-              print(e.responseInfo);
-              print("===");
-            }),
-        request: const AdRequest());
-
-    _ad.load();
-  }
-
-  // ads
-  /* @override
-  void dispose() {
-    super.dispose();
-    _inlineAdaptiveAd?.dispose();
-  }
-
-  static const _insets = 16.0;
-  BannerAd? _inlineAdaptiveAd;
-  bool _isLoaded = false;
-  AdSize? _adSize;
-  late Orientation _currentOrientation;
-  double get _adWidth => MediaQuery.of(context).size.width - (2 * _insets);
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _currentOrientation = MediaQuery.of(context).orientation;
-    _loadAd();
-  }
-
-  void _loadAd() async {
-    await _inlineAdaptiveAd?.dispose();
-    setState(() {
-      _inlineAdaptiveAd = null;
-      _isLoaded = false;
-    });
-
-    AdSize size = AdSize.getCurrentOrientationInlineAdaptiveBannerAdSize(
-        _adWidth.truncate());
-
-    _inlineAdaptiveAd = BannerAd(
-        // TODO: replace this test ad unit with your own ad unit.
-        adUnitId: 'ca-app-pub-3940256099942544/9214589741',
-        size: size,
-        request: AdRequest(),
-        listener: BannerAdListener(onAdLoaded: (Ad ad) async {
-          print('Inline adaptive banner loaded: ${ad.responseInfo}');
-          BannerAd bannerAd = (ad as BannerAd);
-          final AdSize? size = await bannerAd.getPlatformAdSize();
-          if (size == null) {
-            print('Error: getPlatformAdSize() returned null for $bannerAd');
-            return;
-          }
-
-          setState(() {
-            _inlineAdaptiveAd = bannerAd;
-            _isLoaded = true;
-            _adSize = size;
-          });
-        }, onAdFailedToLoad: (Ad ad, LoadAdError error) {
-          print('Inline adaptive banner failedToLoad: $error');
-          ad.dispose();
-        }));
-    await _inlineAdaptiveAd!.load();
-  }
-
-  Widget _getAdWidget() => OrientationBuilder(
-        builder: (context, orientation) {
-          if (_currentOrientation == orientation &&
-              _inlineAdaptiveAd != null &&
-              _isLoaded &&
-              _adSize != null) {
-            return Align(
-                child: Container(
-                    width: _adWidth,
-                    height: _adSize!.height.toDouble(),
-                    child: AdWidget(ad: _inlineAdaptiveAd!)));
-          }
-          if (_currentOrientation != orientation) {
-            _currentOrientation = orientation;
-            _loadAd();
-          }
-          return Container();
-        },
-      ); */
 
   @override
   Widget build(BuildContext context) {
@@ -183,27 +84,61 @@ class _HomePageState extends State<HomePage>
                                     (snapshot.hasData &&
                                         snapshot.data!.length < 1))
                                   return ErrorWidgets.futureBuilderEmpty();
-                                return ListView.builder(
+                                return ListView.separated(
                                     itemCount: snapshot.data!.length,
                                     itemBuilder: (context, i) {
-                                      if (isLoaded && i == 1) {
-                                        return Container(
-                                            child: AdWidget(ad: _ad),
-                                            height: 200,
-                                            color: Colors.lime);
-                                      }
-
                                       return snapshot.data![i].buildCard(
                                           context, widget._loggedUser);
+                                    },
+                                    separatorBuilder: (context, i) {
+                                      if ((i + 1) % 3 == 0) {
+                                        if (ads[i] == null) {
+                                          ads[i] = {};
+                                          ads[i]!["loaded"] = false;
+                                          ads[i]!["ad"] = NativeAd(
+                                              adUnitId: Platform.isAndroid
+                                                  ? "ca-app-pub-8451063166378874/4317911543"
+                                                  : "ca-app-pub-8451063166378874/2462469041",
+                                              factoryId: "listTile",
+                                              listener: NativeAdListener(
+                                                  onAdLoaded: (Ad ad) =>
+                                                      setState(() =>
+                                                          ads[i]!["loaded"] =
+                                                              true),
+                                                  onAdFailedToLoad: (ad, e) {
+                                                    ad.dispose();
+                                                    print(e);
+                                                  }),
+                                              request: const AdRequest());
+                                          ads[i]!["ad"].load();
+                                        }
+
+                                        return ads[i]!["loaded"]
+                                            ? Container(
+                                                height: 100,
+                                                child: Card(
+                                                    clipBehavior:
+                                                        Clip.antiAlias,
+                                                    elevation: 0,
+                                                    color:
+                                                        kWhite.withOpacity(.2),
+                                                    margin:
+                                                        const EdgeInsets.all(5),
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        20)),
+                                                    child: AdWidget(
+                                                        ad: ads[i]!["ad"])))
+                                            : CircularProgressIndicator();
+                                      } else {
+                                        return Container();
+                                      }
                                     });
                             }
                           })))),
-          /* Container(color: kBlack, child: _getAdWidget()
-              CardWidgets.cardsBuilder(items, false,
-                      loggedUser: widget._loggedUser,
-                      forRating: false,
-                      touchable: true)
-              ), */
           MainButtonClicked(buttons: [
             SecondaryButtonData(
                 Icons.add,

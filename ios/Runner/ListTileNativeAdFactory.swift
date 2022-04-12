@@ -1,7 +1,5 @@
-// TODO: Import google_mobile_ads
 import google_mobile_ads
 
-// TODO: Implement ListTileNativeAdFactory
 class ListTileNativeAdFactory : FLTNativeAdFactory {
 
     func createNativeAd(_ nativeAd: GADNativeAd,
