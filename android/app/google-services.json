@@ -12,19 +12,11 @@
             }
         },
         "oauth_client": [{
-                "client_id": "922511656456-e4i4svr51osmu1v88maq357rjsua8buv.apps.googleusercontent.com",
+                "client_id": "922511656456-92p6mh5jj1catj9tjgjcbl0eks2beaq9.apps.googleusercontent.com",
                 "client_type": 1,
                 "android_info": {
                     "package_name": "cz.divocak.letbike",
-                    "certificate_hash": "ad821ec116ad496d1fe506f172ef26570dd522d3"
-                }
-            },
-            {
-                "client_id": "922511656456-t76ao7qnjm7o63vv2vaj799nu8bt6ap8.apps.googleusercontent.com",
-                "client_type": 1,
-                "android_info": {
-                    "package_name": "cz.divocak.letbike",
-                    "certificate_hash": "6b85f310bcad78acce2db46fbcd3896e058f387b"
+                    "certificate_hash": "7a461162394e617d064aed40311bc173e245381a"
                 }
             },
             {
@@ -50,7 +42,8 @@
                     }
                 ]
             }
-        }
+        },
+        "admob_app_id": "ca-app-pub-8451063166378874~7838545734"
     }],
     "configuration_version": "1"
 }

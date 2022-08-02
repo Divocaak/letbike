@@ -11,6 +11,7 @@ import 'package:letbike/widgets/button_main.dart';
 import 'package:letbike/widgets/error_widgets.dart';
 import 'package:letbike/widgets/button_main_clicked.dart';
 import 'package:letbike/general/settings.dart';
+//import 'package:flutter_native_admob/flutter_native_admob.dart';
 import 'dart:io' show Platform;
 
 double volume = 0;
@@ -42,6 +43,12 @@ class _HomePageState extends State<HomePage>
         AnimationController(vsync: this, duration: Duration(milliseconds: 250));
     animationController.addListener(() => setState(() {}));
     items = RemoteItems.getAllItems(1, itemParams: widget._filters);
+
+    MobileAds.instance.updateRequestConfiguration(RequestConfiguration(
+        testDeviceIds: [
+          '33BE2250B43518CCDA7DE426D04EE231',
+          '0faf99b3cf596954617f26a2639b9681'
+        ]));
 
     super.initState();
   }
