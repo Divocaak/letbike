@@ -28,8 +28,9 @@ const String imgUploadEndPoint = scriptsUrl + 'uploadImage.php';
 
 class General {
   static void openUrl(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
+    Uri uri = Uri.parse(Uri.encodeFull(url));
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
     } else {
       throw 'Nelze otevřít.';
     }
