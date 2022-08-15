@@ -10,7 +10,7 @@ import 'package:letbike/remote/chats.dart';
 import 'package:letbike/remote/items.dart';
 import 'package:letbike/remote/ratings.dart';
 import 'package:letbike/remote/saves.dart';
-import 'package:letbike/widgets/button_main.dart';
+import 'package:letbike/widgets/new/button_main.dart';
 import 'package:letbike/widgets/error_widgets.dart';
 import 'package:letbike/widgets/image_server.dart';
 import 'package:letbike/widgets/button_main_clicked.dart';

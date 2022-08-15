@@ -10,6 +10,8 @@ const kError = Color(0xFFFF101F);
 const kWarning = Color(0xFFFFFC31);
 const kGreen = Color(0xFF50C878);
 
+const double kButtonCircleSmall = 40;
+
 const TextStyle kSignLinkButton =
     TextStyle(fontSize: 22, color: Colors.white, height: 1.5);
 

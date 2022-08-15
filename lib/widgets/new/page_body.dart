@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:letbike/general/settings.dart';
-import 'package:letbike/widgets/button_main.dart';
+import 'package:letbike/widgets/new/button_main.dart';
 
 class PageBody extends StatelessWidget {
   const PageBody(
@@ -12,14 +12,10 @@ class PageBody extends StatelessWidget {
   final Widget _body;
   final MainButton _mainButton;
 
+// TODO ability to use background image widget
   @override
-  Widget build(BuildContext context) => SafeArea(
-      child: Scaffold(
-          floatingActionButton: _mainButton,
-          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-          backgroundColor: kBlack,
-          body: Stack(children: [
-            IgnorePointer(ignoring: false, child: Container(color: Colors.red)),
-            _body
-          ])));
+  Widget build(BuildContext context) => Scaffold(
+      resizeToAvoidBottomInset: false,
+      backgroundColor: kBlack,
+      body: Stack(children: [SafeArea(child: _body), _mainButton]));
 }

@@ -12,7 +12,7 @@ class CircularButton extends StatelessWidget {
       : _icon = icon,
         _onClick = onClick,
         _color = color ?? kSecondaryColor,
-        _size = size ?? 40,
+        _size = size ?? kButtonCircleSmall,
         _iconColor = iconColor ?? kWhite,
         super(key: key);
 

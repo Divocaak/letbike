@@ -1,22 +1,20 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:letbike/objects/item.dart';
-import 'package:letbike/screens/add_item_screen.dart';
 import 'package:letbike/remote/items.dart';
-import 'package:letbike/screens/user_screen.dart';
-import 'package:letbike/screens/filter_screen.dart';
+import 'package:letbike/screens/add_item_screen.dart';
 import 'package:letbike/screens/articles_screen.dart';
-import 'package:letbike/widgets/button_main.dart';
+import 'package:letbike/screens/filter_screen.dart';
+import 'package:letbike/widgets/new/button_main.dart';
 import 'package:letbike/widgets/error_widgets.dart';
-import 'package:letbike/widgets/button_main_clicked.dart';
 import 'package:letbike/general/settings.dart';
-//import 'package:flutter_native_admob/flutter_native_admob.dart';
+import 'package:letbike/widgets/new/button_main_sub.dart';
 import 'dart:io' show Platform;
 
 import 'package:letbike/widgets/new/page_body.dart';
-
-double volume = 0;
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key, required User loggedUser, Map<String, String>? filters})
@@ -34,18 +32,12 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   late Map<int, Map<String, dynamic>> ads;
-  late Future<List<Item>?> items;
 
   late AnimationController animationController;
 
   @override
   void initState() {
     ads = {};
-    animationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 250));
-    animationController.addListener(() => setState(() {}));
-    items = RemoteItems.getAllItems(1, itemParams: widget._filters);
-
     MobileAds.instance.updateRequestConfiguration(RequestConfiguration(
         testDeviceIds: [
           '33BE2250B43518CCDA7DE426D04EE231',
@@ -59,12 +51,12 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) => PageBody(
       body: RefreshIndicator(
           onRefresh: _pullRefresh,
-          backgroundColor: Colors.transparent,
           color: kPrimaryColor,
           strokeWidth: 5,
           child: SizedBox.expand(
               child: FutureBuilder<List<Item>?>(
-                  future: items,
+                  future:
+                      RemoteItems.getAllItems(1, itemParams: widget._filters),
                   builder: (context, snapshot) {
                     switch (snapshot.connectionState) {
                       case ConnectionState.waiting:
@@ -104,7 +96,7 @@ class _HomePageState extends State<HomePage>
 
                                 return ads[i]!["loaded"]
                                     ? Container(
-                                        height: 100,
+                                        height: 150,
                                         child: Card(
                                             clipBehavior: Clip.antiAlias,
                                             elevation: 0,
@@ -121,24 +113,30 @@ class _HomePageState extends State<HomePage>
                             });
                     }
                   }))),
-      mainButton: MainButton(
-          iconData: Icons.menu,
-          showButtons: !animationController.isCompleted,
-          onPressed: () {
-            if (animationController.isCompleted) {
-              animationController.reverse();
-              volume = 0;
-            } else {
-              animationController.forward();
-              volume = 0.5;
-            }
-          }));
+      mainButton: MainButton(secondaryButtons: [
+        MainButtonSub(icon: Icons.settings, label: "Nastavení", onClick: () {}),
+        MainButtonSub(
+            icon: Icons.article,
+            label: "Články",
+            onClick: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (builder) => ArticlesScreen()))),
+        MainButtonSub(icon: Icons.person, label: "Můj účet", onClick: () {}),
+        MainButtonSub(
+            icon: Icons.filter_alt,
+            label: "Filtrovat",
+            onClick: () => Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                    builder: (builder) =>
+                        FilterPage(loggedUser: widget._loggedUser)))),
+        MainButtonSub(
+            icon: Icons.add,
+            label: "Přidat inzerát",
+            onClick: () => Navigator.of(context).push(MaterialPageRoute(
+                builder: (builder) => AddItem(loggedUser: widget._loggedUser))))
+      ]));
 
   Future<void> _pullRefresh() async {
-    Future<List<Item>?> _items =
-        RemoteItems.getAllItems(1, itemParams: widget._filters);
-    await Future.delayed(Duration(seconds: 1));
-    items = _items;
-    setState(() {});
+    // TODO mby todo?
+    widget.createState();
   }
 }

@@ -12,7 +12,7 @@ import 'package:letbike/widgets/image_picker_controller.dart';
 import 'package:multi_image_picker2/multi_image_picker2.dart';
 import 'package:letbike/widgets/text_input.dart';
 import 'package:letbike/widgets/error_widgets.dart';
-import 'package:letbike/widgets/button_circular.dart';
+import 'package:letbike/widgets/new/button_circular.dart';
 import 'package:letbike/widgets/alert_box.dart';
 import 'package:letbike/general/settings.dart';
 

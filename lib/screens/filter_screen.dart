@@ -2,14 +2,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:letbike/objects/categories.dart';
 import 'package:letbike/screens/home_screen.dart';
-import 'package:letbike/widgets/button_main.dart';
+import 'package:letbike/widgets/new/button_main.dart';
 import 'package:letbike/widgets/filter_dropdown.dart';
-import 'package:letbike/widgets/image_background.dart';
 import 'package:letbike/widgets/filter_switch.dart';
 import 'package:letbike/remote/items.dart';
 import 'package:letbike/general/settings.dart';
 import 'package:letbike/widgets/alert_box.dart';
 import 'package:letbike/widgets/error_widgets.dart';
+import 'package:letbike/widgets/new/page_body.dart';
 import 'package:multi_image_picker2/multi_image_picker2.dart';
 
 class FilterPage extends StatefulWidget {
@@ -37,11 +37,8 @@ class FilterPage extends StatefulWidget {
   _FilterPage createState() => _FilterPage();
 }
 
-Future<bool>? addResponse;
-
+// TODO load already set filters
 class _FilterPage extends State<FilterPage> {
-  late BackgroundImage bgImage;
-
   @override
   void initState() {
     categoryDd.setFp(this);
@@ -52,33 +49,40 @@ class _FilterPage extends State<FilterPage> {
     partBrakeTypeDd.setFp(this);
     otherTypeDd.setFp(this);
     accessoryTypeDd.setFp(this);
-    bgImage = BackgroundImage();
     super.initState();
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-      floatingActionButton: MainButton(
+  Widget build(BuildContext context) => PageBody(
+      body: ListView(children: [
+        usedSwitch,
+        categoryDd,
+        case2(categoryDd.value, {
+          0: bikeColumn(),
+          1: partsColumn(),
+          2: accessoriesColumn(),
+          3: otherColumn()
+        })
+      ]),
+      mainButton: MainButton(
           iconData: widget._name == null ? Icons.save : Icons.add,
           onPressed: () {
             if (widget._name == null) {
-              Navigator.of(context).push(MaterialPageRoute(
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
                   builder: (context) => HomePage(
                       loggedUser: widget._loggedUser, filters: getParams())));
             } else {
-              addResponse = RemoteItems.createItem(
-                  widget._loggedUser.uid,
-                  widget._name!,
-                  widget._desc!,
-                  widget._price!,
-                  getParams(),
-                  widget._images!);
-
               ModalWindow.showModalWindow(
                   context,
                   "Oznámení",
                   FutureBuilder<bool>(
-                      future: addResponse,
+                      future: RemoteItems.createItem(
+                          widget._loggedUser.uid,
+                          widget._name!,
+                          widget._desc!,
+                          widget._price!,
+                          getParams(),
+                          widget._images!),
                       builder: (context, snapshot) {
                         switch (snapshot.connectionState) {
                           case ConnectionState.waiting:
@@ -98,22 +102,7 @@ class _FilterPage extends State<FilterPage> {
                           builder: (context) =>
                               HomePage(loggedUser: widget._loggedUser))));
             }
-          }),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      body: Stack(children: [
-        bgImage,
-        SafeArea(
-            child: ListView(children: [
-          usedSwitch,
-          categoryDd,
-          case2(categoryDd.value, {
-            0: bikeColumn(),
-            1: partsColumn(),
-            2: accessoriesColumn(),
-            3: otherColumn()
-          })
-        ]))
-      ]));
+          }));
 
 //__________________________________________________________________________bike
   Widget bikeColumn() => Column(children: [bikeBrandDd, bikeTypeDd]);
