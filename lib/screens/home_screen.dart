@@ -8,6 +8,7 @@ import 'package:letbike/remote/items.dart';
 import 'package:letbike/screens/add_item_screen.dart';
 import 'package:letbike/screens/articles_screen.dart';
 import 'package:letbike/screens/filter_screen.dart';
+import 'package:letbike/screens/user_screen.dart';
 import 'package:letbike/widgets/new/button_main.dart';
 import 'package:letbike/widgets/error_widgets.dart';
 import 'package:letbike/general/settings.dart';
@@ -63,6 +64,7 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) => PageBody(
       body: Column(children: <Widget>[
         ButtonsTabBar(
+          // TODO do not repeat yourself
             controller: tabController,
             backgroundColor: kPrimaryColor,
             unselectedBackgroundColor: kSecondaryColor,
@@ -175,7 +177,12 @@ class _HomePageState extends State<HomePage>
             label: "Články",
             onClick: () => Navigator.of(context).push(
                 MaterialPageRoute(builder: (builder) => ArticlesScreen()))),
-        MainButtonSub(icon: Icons.person, label: "Můj účet", onClick: () {}),
+        MainButtonSub(
+            icon: Icons.person,
+            label: "Můj účet",
+            onClick: () => Navigator.of(context).push(MaterialPageRoute(
+                builder: (builder) =>
+                    UserPage(loggedUser: widget._loggedUser)))),
         MainButtonSub(
             icon: Icons.filter_alt,
             label: "Filtrovat",
