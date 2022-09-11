@@ -68,9 +68,7 @@ class _FilterPage extends State<FilterPage> {
           iconData: widget._name == null ? Icons.save : Icons.add,
           onPressed: () {
             if (widget._name == null) {
-              Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (context) => HomePage(
-                      loggedUser: widget._loggedUser, filters: getParams())));
+              Navigator.of(context).pop(getParams());
             } else {
               ModalWindow.showModalWindow(
                   context,
