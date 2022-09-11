@@ -103,22 +103,22 @@ class _UserPageState extends State<UserPage> {
                               }
                             })),
                     ItemColumn(
-                        fetch: () => RemoteItems.getAllItems(1,
-                            sellerId: widget._loggedUser.uid),
-                        user: widget._loggedUser),
-                    ItemColumn(
-                        fetch: () => RemoteItems.getAllItems(2,
-                            sellerId: widget._loggedUser.uid),
-                        user: widget._loggedUser),
-                    ItemColumn(
-                        fetch: () => RemoteItems.getAllItems(2,
-                            soldTo: widget._loggedUser.uid),
                         user: widget._loggedUser,
+                        itemStatus: 1,
+                        sellerId: widget._loggedUser.uid),
+                    ItemColumn(
+                        user: widget._loggedUser,
+                        itemStatus: 2,
+                        sellerId: widget._loggedUser.uid),
+                    ItemColumn(
+                        user: widget._loggedUser,
+                        itemStatus: 2,
+                        soldTo: widget._loggedUser.uid,
                         ratingController: ratingController),
                     ItemColumn(
-                        fetch: () => RemoteItems.getAllItems(3,
-                            soldTo: widget._loggedUser.uid),
                         user: widget._loggedUser,
+                        itemStatus: 3,
+                        soldTo: widget._loggedUser.uid,
                         touchable: false)
                   ]))
                 ])))

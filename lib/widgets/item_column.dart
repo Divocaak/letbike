@@ -2,23 +2,36 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:letbike/general/settings.dart';
 import 'package:letbike/objects/item.dart';
+import 'package:letbike/remote/items.dart';
 import 'package:letbike/widgets/error_widgets.dart';
 
 class ItemColumn extends StatefulWidget {
   ItemColumn(
       {Key? key,
       required User user,
-      required Function fetch,
+      required int itemStatus,
+      String? sellerId,
+      Map<String, String>? itemParams,
+      String? soldTo,
+      String? saverId,
       bool? touchable,
       TextEditingController? ratingController})
       : _user = user,
-        _fetch = fetch,
+        _itemStatus = itemStatus,
+        _sellerId = sellerId,
+        _itemParams = itemParams,
+        _soldTo = soldTo,
+        _saverId = saverId,
         _touchable = touchable ?? true,
         _ratingController = ratingController,
         super(key: key);
 
   final User _user;
-  final Function _fetch;
+  final int _itemStatus;
+  final String? _sellerId;
+  final Map<String, String>? _itemParams;
+  final String? _soldTo;
+  final String? _saverId;
   final bool _touchable;
   final TextEditingController? _ratingController;
 
@@ -31,10 +44,15 @@ class ItemColumnState extends State<ItemColumn> {
 
   @override
   void initState() {
-    items = widget._fetch();
+    items = RemoteItems.getAllItems(widget._itemStatus,
+        sellerId: widget._sellerId,
+        itemParams: widget._itemParams,
+        soldTo: widget._soldTo,
+        saverId: widget._saverId);
     super.initState();
   }
 
+// TODO use on homepage
   @override
   Widget build(BuildContext context) => Expanded(
       child: RefreshIndicator(
@@ -42,8 +60,12 @@ class ItemColumnState extends State<ItemColumn> {
           color: kPrimaryColor,
           strokeWidth: 5,
           onRefresh: () async {
-            // TODO otestovat proti db
-            items = widget._fetch();
+            items = RemoteItems.getAllItems(widget._itemStatus,
+                sellerId: widget._sellerId,
+                itemParams: widget._itemParams,
+                soldTo: widget._soldTo,
+                saverId: widget._saverId);
+            setState(() {});
           },
           child: FutureBuilder<List<Item>?>(
               future: items,
