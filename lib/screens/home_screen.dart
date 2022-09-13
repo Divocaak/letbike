@@ -126,10 +126,11 @@ class _HomePageState extends State<HomePage>
                 }
               } */
           ),
-          // TODO ukrast na homepage
-          //late Future<List<Item>?> savedItems;
-          //savedItems = RemoteItems.getAllItems(1, saverId: widget._loggedUser.uid);
-          Text("b"),
+          FutureCardList(
+              buildFunction: (object) =>
+                  (object as Item).buildCard(context, widget._loggedUser),
+              fetchFunction: () =>
+                  RemoteItems.getAllItems(1, saverId: widget._loggedUser.uid)),
           Text("c")
         ]))
       ]),
