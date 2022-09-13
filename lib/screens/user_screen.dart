@@ -24,11 +24,14 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPageState extends State<UserPage> {
-  // ignore: unused_field
-  // TODO vymyslet s tim boolem neco
-  bool _isSigningOut = false;
-
+  late bool _isSigningOut;
   final TextEditingController ratingController = TextEditingController();
+
+  @override
+  void initState() {
+    _isSigningOut = false;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) => PageBody(
@@ -38,16 +41,21 @@ class _UserPageState extends State<UserPage> {
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  ServerImage(path: widget._loggedUser.photoURL ?? ""),
-                  Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        // TODO style
-                        Text(widget._loggedUser.email ?? "",
-                            style: TextStyle(color: kWhite)),
-                        Text(widget._loggedUser.displayName ?? "",
-                            style: TextStyle(color: kWhite))
-                      ])
+                  Expanded(
+                      flex: 1,
+                      child:
+                          ServerImage(path: widget._loggedUser.photoURL ?? "")),
+                  Expanded(
+                      flex: 2,
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            // TODO style
+                            Text(widget._loggedUser.email ?? "",
+                                style: TextStyle(color: kWhite)),
+                            Text(widget._loggedUser.displayName ?? "",
+                                style: TextStyle(color: kWhite))
+                          ]))
                 ])),
         Expanded(
             child: DefaultTabController(
@@ -102,16 +110,19 @@ class _UserPageState extends State<UserPage> {
       ]),
       mainButton: MainButton(secondaryButtons: [
         MainButtonSub(
-            icon: Icons.logout,
-            label: "Odhlásit se",
+            icon: _isSigningOut ? Icons.hourglass_bottom : Icons.logout,
+            label: _isSigningOut ? "Odhlašujeme Vás" : "Odhlásit se",
             onClick: () async {
-              setState(() => _isSigningOut = true);
-              await Authentication.signOut(context: context);
-              setState(() => _isSigningOut = false);
+              if (!_isSigningOut) {
+                setState(() => _isSigningOut = true);
+                await Authentication.signOut(context: context);
+                setState(() => _isSigningOut = false);
+              }
             }),
-        MainButtonSub(
-            icon: Icons.arrow_back,
-            label: "Zpět",
-            onClick: () => Navigator.of(context).pop())
+        if (!_isSigningOut)
+          MainButtonSub(
+              icon: Icons.arrow_back,
+              label: "Zpět",
+              onClick: () => Navigator.of(context).pop())
       ]));
 }
