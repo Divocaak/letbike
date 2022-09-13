@@ -42,7 +42,6 @@ class _UserPageState extends State<UserPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Expanded(
-                      flex: 1,
                       child:
                           ServerImage(path: widget._loggedUser.photoURL ?? "")),
                   Expanded(

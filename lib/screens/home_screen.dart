@@ -60,7 +60,7 @@ class _HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) => PageBody(
-      body: Column(children: <Widget>[
+      body: Column(children: [
         ButtonsTabBar(
             // TODO do not repeat yourself
             controller: tabController,
