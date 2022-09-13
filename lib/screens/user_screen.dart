@@ -2,14 +2,14 @@ import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:letbike/general/authentification.dart';
+import 'package:letbike/objects/item.dart';
 import 'package:letbike/objects/rating.dart';
 import 'package:letbike/remote/items.dart';
 import 'package:letbike/remote/ratings.dart';
 import 'package:letbike/general/settings.dart';
 import 'package:letbike/widgets/new/button_main.dart';
-import 'package:letbike/widgets/error_widgets.dart';
 import 'package:letbike/widgets/image_server.dart';
-import 'package:letbike/widgets/item_column.dart';
+import 'package:letbike/widgets/new/future_card_list.dart';
 import 'package:letbike/widgets/new/button_main_sub.dart';
 import 'package:letbike/widgets/new/page_body.dart';
 
@@ -28,18 +28,7 @@ class _UserPageState extends State<UserPage> {
   // TODO vymyslet s tim boolem neco
   bool _isSigningOut = false;
 
-  // TODO ukrast na homepage
-  //late Future<List<Item>?> savedItems;
-  //savedItems = RemoteItems.getAllItems(1, saverId: widget._loggedUser.uid);
-  late Future<List<Rating>?> ratings;
-
   final TextEditingController ratingController = TextEditingController();
-
-  @override
-  void initState() {
-    ratings = RemoteRatings.getRatings(widget._loggedUser.uid);
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) => PageBody(
@@ -81,45 +70,33 @@ class _UserPageState extends State<UserPage> {
                       ]),
                   Expanded(
                       child: TabBarView(children: [
-                    Expanded(
-                        child: FutureBuilder<List<Rating>?>(
-                            future: ratings,
-                            builder: (context, snapshot) {
-                              switch (snapshot.connectionState) {
-                                case ConnectionState.waiting:
-                                  return Center(
-                                      child: Image.asset("assets/load.gif"));
-                                default:
-                                  if (snapshot.hasError)
-                                    return ErrorWidgets.futureBuilderError();
-                                  else if (!snapshot.hasData ||
-                                      (snapshot.hasData &&
-                                          snapshot.data!.length < 1))
-                                    return ErrorWidgets.futureBuilderEmpty();
-                                  return ListView.builder(
-                                      itemCount: snapshot.data!.length,
-                                      itemBuilder: (context, i) =>
-                                          snapshot.data![i].buildRow());
-                              }
-                            })),
-                    ItemColumn(
-                        user: widget._loggedUser,
-                        itemStatus: 1,
-                        sellerId: widget._loggedUser.uid),
-                    ItemColumn(
-                        user: widget._loggedUser,
-                        itemStatus: 2,
-                        sellerId: widget._loggedUser.uid),
-                    ItemColumn(
-                        user: widget._loggedUser,
-                        itemStatus: 2,
-                        soldTo: widget._loggedUser.uid,
-                        ratingController: ratingController),
-                    ItemColumn(
-                        user: widget._loggedUser,
-                        itemStatus: 3,
-                        soldTo: widget._loggedUser.uid,
-                        touchable: false)
+                    FutureCardList(
+                        buildFunction: (object) =>
+                            (object as Rating).buildRow(),
+                        fetchFunction: () =>
+                            RemoteRatings.getRatings(widget._loggedUser.uid)),
+                    FutureCardList(
+                        fetchFunction: () => RemoteItems.getAllItems(1,
+                            sellerId: widget._loggedUser.uid),
+                        buildFunction: (object) => (object as Item)
+                            .buildCard(context, widget._loggedUser)),
+                    FutureCardList(
+                        fetchFunction: () => RemoteItems.getAllItems(2,
+                            sellerId: widget._loggedUser.uid),
+                        buildFunction: (object) => (object as Item)
+                            .buildCard(context, widget._loggedUser)),
+                    FutureCardList(
+                        fetchFunction: () => RemoteItems.getAllItems(2,
+                            soldTo: widget._loggedUser.uid),
+                        buildFunction: (object) => (object as Item).buildCard(
+                            context, widget._loggedUser,
+                            ratingController: ratingController)),
+                    FutureCardList(
+                        fetchFunction: () => RemoteItems.getAllItems(3,
+                            soldTo: widget._loggedUser.uid),
+                        buildFunction: (object) => (object as Item).buildCard(
+                            context, widget._loggedUser,
+                            touchable: false))
                   ]))
                 ])))
       ]),
@@ -137,12 +114,4 @@ class _UserPageState extends State<UserPage> {
             label: "Zpět",
             onClick: () => Navigator.of(context).pop())
       ]));
-
-  Future<void> _pullRefresh() async {
-    Future<List<Rating>?> _ratings =
-        RemoteRatings.getRatings(widget._loggedUser.uid);
-    await Future.delayed(Duration(seconds: 1));
-    ratings = _ratings;
-    setState(() {});
-  }
 }

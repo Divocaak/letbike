@@ -33,7 +33,7 @@ class RemoteItems {
         : false;
   }
 
-  static Future<List<Item>?> getAllItems(int status,
+  static Future<List?> getAllItems(int status,
       {String? sellerId,
       Map<String, String>? itemParams,
       String? soldTo,

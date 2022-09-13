@@ -171,7 +171,8 @@ class _ItemPageState extends State<ItemPage>
                   child: Center(
                       child: Text(widget._item.sellerMail,
                           style: TextStyle(fontSize: 15, color: kWhite)))),
-              Padding(
+              // TODO future card list
+              /* Padding(
                   padding: EdgeInsets.only(top: 20),
                   child: Container(
                       height: MediaQuery.of(context).size.height / 2,
@@ -195,7 +196,7 @@ class _ItemPageState extends State<ItemPage>
                                     itemBuilder: (context, i) =>
                                         snapshot.data![i].buildRow());
                             }
-                          })))
+                          }))) */
             ])
         ])),
         MainButtonClicked(buttons: [

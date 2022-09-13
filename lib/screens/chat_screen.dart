@@ -81,7 +81,8 @@ class _ChatScreenState extends State<ChatScreen>
                                 style: TextStyle(color: kWhite)),
                             Text(widget._chat.buyMail,
                                 style: TextStyle(color: kWhite)),
-                            FutureBuilder<List<Rating>?>(
+                            // TODO future card list
+                            /* FutureBuilder<List<Rating>?>(
                                 future: RemoteRatings.getRatings(
                                     widget._chat.buyId),
                                 builder: (context, snapshot) {
@@ -104,7 +105,7 @@ class _ChatScreenState extends State<ChatScreen>
                                           itemBuilder: (context, i) =>
                                               snapshot.data![i].buildRow());
                                   }
-                                })
+                                }) */
                           ]))),
                 if (widget._loggedUser.uid == widget._item.sellerId)
                   SizedBox(width: 10),
