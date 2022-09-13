@@ -45,9 +45,10 @@ class FutureCardListState extends State<FutureCardList> {
               case ConnectionState.waiting:
                 return Center(child: Image.asset("assets/load.gif"));
               default:
-                if (snapshot.hasError)
+                if (snapshot.hasError) {
+                  print(snapshot.error);
                   return ErrorWidgets.futureBuilderError();
-                else if (!snapshot.hasData ||
+                } else if (!snapshot.hasData ||
                     (snapshot.hasData && snapshot.data!.length < 1))
                   return ErrorWidgets.futureBuilderEmpty();
                 return widget._separatorFunction == null

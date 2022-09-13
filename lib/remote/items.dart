@@ -52,7 +52,7 @@ class RemoteItems {
         }));
     return response.statusCode == 200
         ? jsonDecode(response.body)
-            .cast()
+            //.cast<String, dynamic>()
             .map<Item>((item) => Item.fromJson(item))
             .toList()
         : null;

@@ -72,28 +72,32 @@ class _ItemPageState extends State<ItemPage> {
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
                 color: kWhite.withOpacity(.6))),
-        if (widget._item.sellerId != widget._loggedUser.uid)
-          RoundedButton(
-              buttonName:
-                  "${!localSavedVal ? "Přidat do" : "Odebrat z"} oblíbených",
-              onClick: () => setState(() {
-                    localSavedVal = !localSavedVal;
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: FutureBuilder<String?>(
-                            future: RemoteSaves.setSave(widget._loggedUser.uid,
-                                widget._item.id, localSavedVal),
-                            builder: (context, snapshot) {
-                              switch (snapshot.connectionState) {
-                                case ConnectionState.waiting:
-                                  return Center(
-                                      child: Image.asset("assets/load.gif"));
-                                default:
-                                  if (snapshot.hasError || !snapshot.hasData)
-                                    return ErrorWidgets.snackBarError();
-                                  return Text(snapshot.data!);
-                              }
-                            })));
-                  })),
+        (widget._item.sellerId != widget._loggedUser.uid
+            ? RoundedButton(
+                buttonName:
+                    "${!localSavedVal ? "Přidat do" : "Odebrat z"} oblíbených",
+                onClick: () => setState(() {
+                      localSavedVal = !localSavedVal;
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: FutureBuilder<String?>(
+                              future: RemoteSaves.setSave(
+                                  widget._loggedUser.uid,
+                                  widget._item.id,
+                                  localSavedVal),
+                              builder: (context, snapshot) {
+                                switch (snapshot.connectionState) {
+                                  case ConnectionState.waiting:
+                                    return Center(
+                                        child: Image.asset("assets/load.gif"));
+                                  default:
+                                    if (snapshot.hasError || !snapshot.hasData)
+                                      return ErrorWidgets.snackBarError();
+                                    return Text(snapshot.data!);
+                                }
+                              })));
+                    }))
+            // TODO style
+            : Text("Toto je váš inzerát")),
         Text(widget._item.name,
             style: TextStyle(
                 fontSize: 40,
@@ -103,6 +107,7 @@ class _ItemPageState extends State<ItemPage> {
           Text(widget._item.description!,
               style: TextStyle(fontSize: 20, color: kWhite)),
         if (widget._item.sellerId != widget._loggedUser.uid) ...[
+          const SizedBox(height: 15),
           Text("O prodejci",
               style: TextStyle(
                   fontSize: 20,
@@ -116,16 +121,14 @@ class _ItemPageState extends State<ItemPage> {
               buildFunction: (object) => (object as Rating).buildRow(),
               fetchFunction: () =>
                   RemoteRatings.getRatings(widget._item.sellerId))
-        ]
+        ],
+        const SizedBox(height: 15),
+        widget._item.buildParams(context),
       ])),
       mainButton: MainButton(
           iconData: Icons.arrow_back,
           onPressed: () => Navigator.of(context).pop()));
   /* MainButtonClicked(buttons: [
-        SecondaryButtonData(
-            Icons.info,
-            () => ModalWindow.showModalWindow(
-                context, "Parametry", widget._item.buildParams(context))),
         SecondaryButtonData(
             Icons.arrow_back, () => Navigator.of(context).pop()),
         SecondaryButtonData(Icons.chat, () {

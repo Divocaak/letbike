@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:letbike/objects/categories.dart';
 import 'package:letbike/general/settings.dart';
+import 'package:letbike/objects/item_param.dart';
 import 'package:letbike/screens/item_screen.dart';
 import 'package:letbike/remote/items.dart';
 import 'package:letbike/remote/ratings.dart';
@@ -22,7 +22,7 @@ class Item {
   String? dateEnd;
   String imgs;
   int status;
-  Map<String, dynamic>? itemParams;
+  List<ItemParam>? itemParams;
   String sellerName;
   String sellerMail;
 
@@ -41,47 +41,39 @@ class Item {
       this.sellerName,
       this.sellerMail);
 
-  factory Item.fromJson(Map<String, dynamic> json) => Item(
-      int.parse(json["id"]),
-      json["sellerId"],
-      json["soldTo"],
-      json["name"],
-      json["description"],
-      int.parse(json["price"]),
-      json["dateStart"],
-      json["dateEnd"],
-      json["imgs"],
-      int.parse(json["status"]),
-      json["params"],
-      json["sellerName"],
-      json["sellerMail"]);
+  factory Item.fromJson(Map<String, dynamic> json) {
+/* jsonDecode(response.body)
+            .cast()
+            .map<Item>((item) => Item.fromJson(item))
+            .toList() */
 
-  Widget buildParams(BuildContext context) {
-    List<String> keys = itemParams!.keys.toList();
-    List<dynamic> values = itemParams!.values.toList();
-    return ListView.builder(
-        itemCount: itemParams!.length,
-        itemBuilder: (context, i) => Row(children: [
-              Expanded(
-                  child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 15),
-                      color: kPrimaryColor,
-                      child: Text(ParamRow.params[keys[i]]!.name,
-                          style: TextStyle(color: kWhite),
-                          textAlign: TextAlign.center))),
-              Expanded(
-                  child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 15),
-                      color: kSecondaryColor,
-                      child: Text(
-                          ParamRow.params[keys[i]]!.options[
-                              (values[i] == "true" || values[i] == "false")
-                                  ? (values[i] == "false" ? 0 : 1)
-                                  : int.parse(values[i])],
-                          style: TextStyle(color: kWhite),
-                          textAlign: TextAlign.center))),
-            ]));
+    List<ItemParam> params = json["params"]
+        .map<ItemParam>((sub) => ItemParam.fromJson(sub))
+        .toList();
+    print(params.toString());
+
+    return Item(
+        int.parse(json["id"]),
+        json["sellerId"],
+        json["soldTo"],
+        json["name"],
+        json["description"],
+        int.parse(json["price"]),
+        json["dateStart"],
+        json["dateEnd"],
+        json["imgs"],
+        int.parse(json["status"]),
+        [],
+        /* List<ItemParam>.from(json["params"]
+            .map<ItemParam>((par) => ItemParam.fromJson(par))
+            .toList()), */
+        json["sellerName"],
+        json["sellerMail"]);
   }
+
+  Widget buildParams(BuildContext context) => Column(
+      children:
+          itemParams!.map((ItemParam param) => param.buildParamRow()).toList());
 
   Widget buildCard(context, User loggedUser,
           {bool touchable = true, TextEditingController? ratingController}) =>
