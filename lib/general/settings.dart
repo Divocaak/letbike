@@ -21,7 +21,7 @@ const TextStyle kCaptionTextSatyle = TextStyle(color: Colors.purple);
 CarouselOptions carouselOptions(context) =>
     CarouselOptions(height: 1000, viewportFraction: .925, autoPlay: true);
 
-const String baseUrl = 'http://letbike.xf.cz/';
+const String baseUrl = 'http://10.0.2.2/letbike-serverside/';
 const String imgsFolder = baseUrl + 'imgs/';
 const String articlesFolder = baseUrl + 'articles/';
 const String docsFolder = baseUrl + 'docs/';

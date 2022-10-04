@@ -15,7 +15,7 @@ class BackgroundImage extends StatelessWidget {
           decoration: BoxDecoration(
               image: DecorationImage(
                   image: NetworkImage(imgsFolder +
-                      '/app/' +
+                      'app/' +
                       new Random().nextInt(8).toString() +
                       '.jpg'),
                   fit: BoxFit.cover,

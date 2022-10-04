@@ -39,9 +39,7 @@ class _FilterSwitchState extends State<FilterSwitch> {
           color: kBlack.withAlpha(128),
           border: Border.all(color: kWhite.withAlpha(128)),
           borderRadius: BorderRadius.circular(25)),
-      child: Row(children: [
-        Text(widget._label + ": " + widget._left,
-            style: TextStyle(color: kWhite)),
+      child: 
         Switch(
             inactiveTrackColor: kError,
             activeTrackColor: kGreen,
