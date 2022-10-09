@@ -123,7 +123,7 @@ class _ItemPageState extends State<ItemPage> {
                   RemoteRatings.getRatings(widget._item.sellerId))
         ],
         const SizedBox(height: 15),
-        widget._item.buildParams(context),
+        // TODO item params
       ])),
       mainButton: MainButton(
           iconData: Icons.arrow_back,

@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:letbike/general/settings.dart';
-import 'package:letbike/objects/item_param.dart';
 import 'package:letbike/screens/item_screen.dart';
 import 'package:letbike/remote/items.dart';
 import 'package:letbike/remote/ratings.dart';
@@ -22,9 +21,9 @@ class Item {
   String? dateEnd;
   String imgs;
   int status;
-  List<ItemParam>? itemParams;
   String sellerName;
   String sellerMail;
+  // TODO params
 
   Item(
       this.id,
@@ -37,43 +36,22 @@ class Item {
       this.dateEnd,
       this.imgs,
       this.status,
-      this.itemParams,
       this.sellerName,
       this.sellerMail);
 
-  factory Item.fromJson(Map<String, dynamic> json) {
-/* jsonDecode(response.body)
-            .cast()
-            .map<Item>((item) => Item.fromJson(item))
-            .toList() */
-
-    List<ItemParam> params = json["params"]
-        .map<ItemParam>((sub) => ItemParam.fromJson(sub))
-        .toList();
-    print(params.toString());
-
-    return Item(
-        int.parse(json["id"]),
-        json["sellerId"],
-        json["soldTo"],
-        json["name"],
-        json["description"],
-        int.parse(json["price"]),
-        json["dateStart"],
-        json["dateEnd"],
-        json["imgs"],
-        int.parse(json["status"]),
-        [],
-        /* List<ItemParam>.from(json["params"]
-            .map<ItemParam>((par) => ItemParam.fromJson(par))
-            .toList()), */
-        json["sellerName"],
-        json["sellerMail"]);
-  }
-
-  Widget buildParams(BuildContext context) => Column(
-      children:
-          itemParams!.map((ItemParam param) => param.buildParamRow()).toList());
+  factory Item.fromJson(Map<String, dynamic> json) => Item(
+      int.parse(json["id"]),
+      json["sellerId"],
+      json["soldTo"],
+      json["name"],
+      json["description"],
+      int.parse(json["price"]),
+      json["dateStart"],
+      json["dateEnd"],
+      json["imgs"],
+      int.parse(json["status"]),
+      json["sellerName"],
+      json["sellerMail"]);
 
   Widget buildCard(context, User loggedUser,
           {bool touchable = true, TextEditingController? ratingController}) =>
@@ -143,31 +121,30 @@ class Item {
                               borderRadius:
                                   BorderRadius.all(Radius.circular(25)),
                               borderSide: new BorderSide(color: kWhite)))))
-            ]), after: () {
-          Future<bool?> rateResponse = RemoteRatings.setRating(
-              sellerId, ratingBar.getRatingVal(), ratingController.text);
-          ModalWindow.showModalWindow(
-              context,
-              "Oznámení",
-              FutureBuilder<bool?>(
-                  future: rateResponse,
-                  builder: (context, snapshot) {
-                    switch (snapshot.connectionState) {
-                      case ConnectionState.waiting:
-                        return Center(child: Image.asset("assets/load.gif"));
-                      default:
-                        if (snapshot.hasError)
-                          return ErrorWidgets.futureBuilderError();
-                        else if (!snapshot.hasData)
-                          return ErrorWidgets.futureBuilderEmpty();
-                        return Text("Uživatel ohodnocen.",
-                            style: TextStyle(color: kWhite));
-                    }
-                  }), after: () {
-            RemoteItems.updateItemStatus(id, 3, soldTo: soldTo);
-            Navigator.of(context).pop();
-          });
-        });
+            ]),
+            after: () => ModalWindow.showModalWindow(
+                    context,
+                    "Oznámení",
+                    FutureBuilder<bool?>(
+                        future: RemoteRatings.setRating(sellerId,
+                            ratingBar.getRatingVal(), ratingController.text),
+                        builder: (context, snapshot) {
+                          switch (snapshot.connectionState) {
+                            case ConnectionState.waiting:
+                              return Center(
+                                  child: Image.asset("assets/load.gif"));
+                            default:
+                              if (snapshot.hasError)
+                                return ErrorWidgets.futureBuilderError();
+                              else if (!snapshot.hasData)
+                                return ErrorWidgets.futureBuilderEmpty();
+                              return Text("Uživatel ohodnocen.",
+                                  style: TextStyle(color: kWhite));
+                          }
+                        }), after: () {
+                  RemoteItems.updateItemStatus(id, 3, soldTo: soldTo);
+                  Navigator.of(context).pop();
+                }));
       }
     }
   }

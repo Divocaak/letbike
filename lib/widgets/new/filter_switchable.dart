@@ -21,10 +21,10 @@ class FilterSwitchable extends StatefulWidget {
     switch (_value) {
       case 0:
         return false;
-      case 1:
-        return null;
       case 2:
         return true;
+      default:
+        return null;
     }
   }
 
