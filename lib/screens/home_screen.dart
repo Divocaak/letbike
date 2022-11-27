@@ -5,10 +5,12 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:letbike/general/ad_handler.dart';
 import 'package:letbike/objects/item.dart';
 import 'package:letbike/objects/my_ad.dart';
+import 'package:letbike/objects/param.dart';
 import 'package:letbike/remote/items.dart';
+import 'package:letbike/remote/params.dart';
 import 'package:letbike/screens/add_item_screen.dart';
 import 'package:letbike/screens/articles_screen.dart';
-import 'package:letbike/screens/filter_screen.dart';
+import 'package:letbike/screens/params_screen.dart';
 import 'package:letbike/screens/user_screen.dart';
 import 'package:letbike/widgets/new/button_main.dart';
 import 'package:letbike/general/settings.dart';
@@ -38,6 +40,8 @@ class _HomePageState extends State<HomePage>
 
   late bool showResetFilterBtn;
 
+  late List<Param>? params;
+
   @override
   void initState() {
     showResetFilterBtn = false;
@@ -47,6 +51,8 @@ class _HomePageState extends State<HomePage>
         setState(() => (showResetFilterBtn = tabController.index == 0));
       }
     });
+
+    RemoteParams.getParams().then((value) => params = value);
 
     ads = [];
     MobileAds.instance.updateRequestConfiguration(RequestConfiguration(
@@ -152,8 +158,8 @@ class _HomePageState extends State<HomePage>
             label: "Filtrovat",
             onClick: () async {
               filters = await Navigator.of(context).push(MaterialPageRoute(
-                  builder: (builder) =>
-                      FilterPage(loggedUser: widget._loggedUser)));
+                  builder: (builder) => ParamsPage(
+                      loggedUser: widget._loggedUser, params: params)));
               if (!mounted) return;
               setState(() {});
               tabController.animateTo(0);

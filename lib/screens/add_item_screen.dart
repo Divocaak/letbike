@@ -1,7 +1,7 @@
 import 'package:emojis/emojis.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:letbike/screens/filter_screen.dart';
+import 'package:letbike/screens/params_screen.dart';
 import 'package:letbike/widgets/new/button_main.dart';
 import 'package:letbike/widgets/error_widgets.dart';
 import 'package:letbike/widgets/image_picker_controller.dart';
@@ -102,8 +102,10 @@ class _AddItem extends State<AddItem> {
                         descController.text != "" &&
                         priceController.text != "")
                     ? Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => FilterPage(
+                        builder: (context) => ParamsPage(
                             loggedUser: widget._loggedUser,
+                            // TODO parse params form homepage
+                            params: [],
                             name: nameController.text,
                             desc: descController.text,
                             price: priceController.text,

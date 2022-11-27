@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:letbike/general/settings.dart';
 
-class FilterSwitchable extends StatefulWidget {
-  FilterSwitchable(
+class ParamSwitchable extends StatefulWidget {
+  ParamSwitchable(
       {Key? key,
       required String label,
       required String leftOption,
@@ -29,10 +29,10 @@ class FilterSwitchable extends StatefulWidget {
   }
 
   @override
-  FilterSwitchableState createState() => FilterSwitchableState();
+  ParamSwitchableState createState() => ParamSwitchableState();
 }
 
-class FilterSwitchableState extends State<FilterSwitchable> {
+class ParamSwitchableState extends State<ParamSwitchable> {
   final List<bool> selected = [false, true, false];
   @override
   Widget build(BuildContext context) => Row(children: [
@@ -41,7 +41,7 @@ class FilterSwitchableState extends State<FilterSwitchable> {
             direction: Axis.horizontal,
             onPressed: (int index) => setState(() {
                   widget._value = index;
-                  for (int i = 0; i < 2; i++) {
+                  for (int i = 0; i <= 2; i++) {
                     selected[i] = i == index;
                   }
                 }),
