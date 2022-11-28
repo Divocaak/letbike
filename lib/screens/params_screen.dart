@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:letbike/objects/param.dart';
+import 'package:letbike/objects/params/param.dart';
 import 'package:letbike/screens/home_screen.dart';
 import 'package:letbike/widgets/new/button_main.dart';
 import 'package:letbike/remote/items.dart';
@@ -14,7 +14,7 @@ class ParamsPage extends StatefulWidget {
   ParamsPage(
       {Key? key,
       required User loggedUser,
-      required List<Param>? params,
+      required List<Param> params,
       String? name,
       String? desc,
       String? price,
@@ -28,7 +28,7 @@ class ParamsPage extends StatefulWidget {
         super(key: key);
 
   final User _loggedUser;
-  final List<Param>? _params;
+  final List<Param> _params;
   final String? _name;
   final String? _desc;
   final String? _price;
@@ -40,6 +40,8 @@ class ParamsPage extends StatefulWidget {
 
 // TODO load already set filters
 class _ParamsPage extends State<ParamsPage> {
+  late List<Param> params;
+
   @override
   void initState() {
     super.initState();
@@ -53,7 +55,9 @@ class _ParamsPage extends State<ParamsPage> {
           iconData: widget._name == null ? Icons.save : Icons.add,
           onPressed: () {
             if (widget._name == null) {
-              Navigator.of(context).pop(/* TODO getParams() */);
+              getParams();
+              // TODO uncomm
+              //Navigator.of(context).pop(getParams());
             } else {
               ModalWindow.showModalWindow(
                   context,
@@ -64,7 +68,7 @@ class _ParamsPage extends State<ParamsPage> {
                           widget._name!,
                           widget._desc!,
                           widget._price!,
-                          {}, // TODO getParams(),
+                          getParams(),
                           widget._images!),
                       builder: (context, snapshot) {
                         switch (snapshot.connectionState) {
@@ -82,15 +86,26 @@ class _ParamsPage extends State<ParamsPage> {
                       }),
                   after: () => Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
-                          builder: (context) =>
-                              HomePage(loggedUser: widget._loggedUser))));
+                          builder: (context) => HomePage(
+                              loggedUser: widget._loggedUser,
+                              params: widget._params))));
             }
           }));
 
   List<Widget> buildParams(BuildContext context) {
+    print("asd");
     List<Widget> toRet = [];
-    widget._params
-        ?.forEach((element) => toRet.add(element.buildParam(context)));
+    params = [];
+    widget._params.forEach((element) {
+      params.add(element);
+      toRet.add(element.buildParam(context));
+    });
     return toRet;
+  }
+
+  // TODO
+  Map<String, dynamic> getParams() {
+    print(params);
+    return {};
   }
 }

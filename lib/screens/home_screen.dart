@@ -5,9 +5,8 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:letbike/general/ad_handler.dart';
 import 'package:letbike/objects/item.dart';
 import 'package:letbike/objects/my_ad.dart';
-import 'package:letbike/objects/param.dart';
+import 'package:letbike/objects/params/param.dart';
 import 'package:letbike/remote/items.dart';
-import 'package:letbike/remote/params.dart';
 import 'package:letbike/screens/add_item_screen.dart';
 import 'package:letbike/screens/articles_screen.dart';
 import 'package:letbike/screens/params_screen.dart';
@@ -19,11 +18,13 @@ import 'package:letbike/widgets/new/future_card_list.dart';
 import 'package:letbike/widgets/new/page_body.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key? key, required User loggedUser})
+  HomePage({Key? key, required User loggedUser, required List<Param> params})
       : _loggedUser = loggedUser,
+        _params = params,
         super(key: key);
 
   final User _loggedUser;
+  final List<Param> _params;
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -40,8 +41,6 @@ class _HomePageState extends State<HomePage>
 
   late bool showResetFilterBtn;
 
-  late List<Param>? params;
-
   @override
   void initState() {
     showResetFilterBtn = false;
@@ -51,8 +50,6 @@ class _HomePageState extends State<HomePage>
         setState(() => (showResetFilterBtn = tabController.index == 0));
       }
     });
-
-    RemoteParams.getParams().then((value) => params = value);
 
     ads = [];
     MobileAds.instance.updateRequestConfiguration(RequestConfiguration(
@@ -159,7 +156,7 @@ class _HomePageState extends State<HomePage>
             onClick: () async {
               filters = await Navigator.of(context).push(MaterialPageRoute(
                   builder: (builder) => ParamsPage(
-                      loggedUser: widget._loggedUser, params: params)));
+                      loggedUser: widget._loggedUser, params: widget._params)));
               if (!mounted) return;
               setState(() {});
               tabController.animateTo(0);

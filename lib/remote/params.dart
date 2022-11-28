@@ -3,7 +3,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:http/http.dart';
 import 'package:letbike/general/settings.dart';
-import 'package:letbike/objects/param.dart';
+import 'package:letbike/objects/params/param.dart';
 
 class RemoteParams {
   static Future<List<Param>?> getParams() async {
