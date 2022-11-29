@@ -30,6 +30,8 @@ class ParamDropdown extends StatefulWidget {
   getKey() => _filterKey;
 
   ParamDropdownState createState() => ParamDropdownState();
+
+  int? getValue() => value;
 }
 
 class ParamDropdownState extends State<ParamDropdown> {

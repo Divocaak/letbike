@@ -37,19 +37,12 @@ class _HomePageState extends State<HomePage>
 
   late TabController tabController;
 
-  Map<String, String>? filters;
-
-  late bool showResetFilterBtn;
+  Map<String, int>? filters;
 
   @override
   void initState() {
-    showResetFilterBtn = false;
     tabController = TabController(length: 3, vsync: this);
-    tabController.addListener(() {
-      if (filters != null) {
-        setState(() => (showResetFilterBtn = tabController.index == 0));
-      }
-    });
+    tabController.addListener(() => setState(() {}));
 
     ads = [];
     MobileAds.instance.updateRequestConfiguration(RequestConfiguration(
@@ -80,17 +73,14 @@ class _HomePageState extends State<HomePage>
                       Icons.notifications /* Icons.notifications_active */),
                   text: "Oznámení")
             ]),
-        if (showResetFilterBtn)
+        if (filters != null && tabController.index == 0)
           Container(
               margin: EdgeInsets.symmetric(horizontal: 20),
               decoration: BoxDecoration(
                   color: kPrimaryColor,
                   borderRadius: BorderRadius.all(Radius.circular(7))),
               child: TextButton(
-                  onPressed: () => setState(() {
-                        filters = null;
-                        showResetFilterBtn = false;
-                      }),
+                  onPressed: () => setState(() => filters = null),
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

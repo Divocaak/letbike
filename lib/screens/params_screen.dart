@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:letbike/objects/params/param.dart';
@@ -43,11 +45,6 @@ class _ParamsPage extends State<ParamsPage> {
   late List<Param> params;
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) => PageBody(
       body:
           SingleChildScrollView(child: Column(children: buildParams(context))),
@@ -55,9 +52,7 @@ class _ParamsPage extends State<ParamsPage> {
           iconData: widget._name == null ? Icons.save : Icons.add,
           onPressed: () {
             if (widget._name == null) {
-              getParams();
-              // TODO uncomm
-              //Navigator.of(context).pop(getParams());
+              Navigator.of(context).pop(getParams());
             } else {
               ModalWindow.showModalWindow(
                   context,
@@ -93,7 +88,6 @@ class _ParamsPage extends State<ParamsPage> {
           }));
 
   List<Widget> buildParams(BuildContext context) {
-    print("asd");
     List<Widget> toRet = [];
     params = [];
     widget._params.forEach((element) {
@@ -103,9 +97,11 @@ class _ParamsPage extends State<ParamsPage> {
     return toRet;
   }
 
-  // TODO
-  Map<String, dynamic> getParams() {
-    print(params);
-    return {};
+  Map<String, int>? getParams() {
+    Map<String, int> toRet = {};
+    params.forEach((element) {
+      toRet.addAll(element.getParams());
+    });
+    return toRet.isNotEmpty ? toRet : null;
   }
 }

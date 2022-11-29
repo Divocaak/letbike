@@ -17,16 +17,7 @@ class ParamSwitchable extends StatefulWidget {
   final String _rightOption;
   int? _value;
 
-  bool? getValue() {
-    switch (_value) {
-      case 0:
-        return false;
-      case 2:
-        return true;
-      default:
-        return null;
-    }
-  }
+  int? getValue() => _value != 1 ? _value : null;
 
   @override
   ParamSwitchableState createState() => ParamSwitchableState();

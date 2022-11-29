@@ -11,7 +11,7 @@ class RemoteItems {
   static String url = scriptsUrl + 'item/';
 
   static Future<bool> createItem(String userId, String name, String desc,
-      String price, Map<String, dynamic> params, List<Asset> images) async {
+      String price, Map<String, int>? params, List<Asset> images) async {
     RemoteImages.uploadImages(
         images, "items", (userId + name.hashCode.toString()));
     final Response response = await post(
@@ -35,7 +35,7 @@ class RemoteItems {
 
   static Future<List?> getAllItems(int status,
       {String? sellerId,
-      Map<String, String>? itemParams,
+      Map<String, int>? itemParams,
       String? soldTo,
       String? saverId}) async {
     final Response response = await post(
