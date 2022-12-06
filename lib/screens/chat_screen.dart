@@ -70,7 +70,7 @@ class _ChatScreenState extends State<ChatScreen>
                     padding: EdgeInsets.symmetric(horizontal: 10),
                     child: Text(widget._item.name,
                         style: TextStyle(fontSize: 20))),
-                if (widget._item.sellerId == widget._loggedUser.uid)
+                if (widget._item.seller.id == widget._loggedUser.uid)
                   CircularButton(
                       icon: Icons.person_search,
                       onClick: () => ModalWindow.showModalWindow(
@@ -107,9 +107,9 @@ class _ChatScreenState extends State<ChatScreen>
                                   }
                                 }) */
                           ]))),
-                if (widget._loggedUser.uid == widget._item.sellerId)
+                if (widget._loggedUser.uid == widget._item.seller.id)
                   SizedBox(width: 10),
-                if (widget._loggedUser.uid == widget._item.sellerId)
+                if (widget._loggedUser.uid == widget._item.seller.id)
                   CircularButton(
                       icon:
                           (cancelTrade ? Icons.money_off : Icons.attach_money),

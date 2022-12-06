@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:letbike/general/settings.dart';
+import 'package:letbike/objects/person.dart';
 import 'package:letbike/screens/item_screen.dart';
 import 'package:letbike/remote/items.dart';
 import 'package:letbike/remote/ratings.dart';
@@ -12,8 +13,8 @@ import 'package:letbike/widgets/rating_bar.dart';
 
 class Item {
   int id;
-  String sellerId;
-  String? soldTo;
+  Person seller;
+  Person? buyer;
   String name;
   String? description;
   int price;
@@ -21,44 +22,29 @@ class Item {
   String? dateEnd;
   String imgs;
   int status;
-  String sellerName;
-  String sellerMail;
   // TODO params
 
-  Item(
-      this.id,
-      this.sellerId,
-      this.soldTo,
-      this.name,
-      this.description,
-      this.price,
-      this.dateStart,
-      this.dateEnd,
-      this.imgs,
-      this.status,
-      this.sellerName,
-      this.sellerMail);
+  Item(this.id, this.seller, this.buyer, this.name, this.description,
+      this.price, this.dateStart, this.dateEnd, this.imgs, this.status);
 
   factory Item.fromJson(Map<String, dynamic> json) => Item(
-      int.parse(json["id"]),
-      json["sellerId"],
-      json["soldTo"],
+      json["id"],
+      Person.fromJson(json["seller"]),
+      json["buyer"] != null ? Person.fromJson(json["buyer"]) : null,
       json["name"],
       json["description"],
-      int.parse(json["price"]),
+      json["price"],
       json["dateStart"],
       json["dateEnd"],
       json["imgs"],
-      int.parse(json["status"]),
-      json["sellerName"],
-      json["sellerMail"]);
+      json["status"]);
 
   Widget buildCard(context, User loggedUser,
           {bool touchable = true, TextEditingController? ratingController}) =>
       CardBody(
           onTap: () => onCardClick(context, loggedUser,
               touchable: touchable, ratingController: ratingController),
-          imgPath: imgsFolder + "items/" + sellerId + name.hashCode.toString(),
+          imgPath: imgsFolder + "items/" + seller.id + name.hashCode.toString(),
           child: Column(children: [
             Expanded(
                 flex: 1,
@@ -126,7 +112,7 @@ class Item {
                     context,
                     "Oznámení",
                     FutureBuilder<bool?>(
-                        future: RemoteRatings.setRating(sellerId,
+                        future: RemoteRatings.setRating(seller.id,
                             ratingBar.getRatingVal(), ratingController.text),
                         builder: (context, snapshot) {
                           switch (snapshot.connectionState) {
@@ -142,7 +128,7 @@ class Item {
                                   style: TextStyle(color: kWhite));
                           }
                         }), after: () {
-                  RemoteItems.updateItemStatus(id, 3, soldTo: soldTo);
+                  RemoteItems.updateItemStatus(id, 3, soldTo: buyer?.id);
                   Navigator.of(context).pop();
                 }));
       }

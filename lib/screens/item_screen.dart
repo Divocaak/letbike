@@ -38,7 +38,7 @@ class _ItemPageState extends State<ItemPage> {
         RemoteSaves.getSave(widget._loggedUser.uid, widget._item.id);
 
     localSavedVal = false;
-    if (widget._item.sellerId != widget._loggedUser.uid) {
+    if (widget._item.seller.id != widget._loggedUser.uid) {
       remoteSavedVal.then((data) => localSavedVal = data,
           onError: (e) => localSavedVal = false);
     }
@@ -58,11 +58,11 @@ class _ItemPageState extends State<ItemPage> {
                     for (int i = 0; i < int.parse(widget._item.imgs); i++)
                       ServerImage(
                           path:
-                              "${imgsFolder}items/${widget._item.sellerId + widget._item.name.hashCode.toString()}/${i.toString()}.jpg")
+                              "${imgsFolder}items/${widget._item.seller.id + widget._item.name.hashCode.toString()}/${i.toString()}.jpg")
                   ])
                 : ServerImage(
                     path:
-                        "${imgsFolder}items/${widget._item.sellerId + widget._item.name.hashCode.toString()}/0.jpg")),
+                        "${imgsFolder}items/${widget._item.seller.id + widget._item.name.hashCode.toString()}/0.jpg")),
         const SizedBox(height: 15),
         Text("Přidáno: ${widget._item.dateStart}",
             style: TextStyle(fontSize: 15, color: kWhite.withOpacity(.4))),
@@ -72,7 +72,7 @@ class _ItemPageState extends State<ItemPage> {
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
                 color: kWhite.withOpacity(.6))),
-        (widget._item.sellerId != widget._loggedUser.uid
+        (widget._item.seller.id != widget._loggedUser.uid
             ? RoundedButton(
                 buttonName:
                     "${!localSavedVal ? "Přidat do" : "Odebrat z"} oblíbených",
@@ -106,21 +106,21 @@ class _ItemPageState extends State<ItemPage> {
         if (widget._item.description != null)
           Text(widget._item.description!,
               style: TextStyle(fontSize: 20, color: kWhite)),
-        if (widget._item.sellerId != widget._loggedUser.uid) ...[
+        if (widget._item.seller.id != widget._loggedUser.uid) ...[
           const SizedBox(height: 15),
           Text("O prodejci",
               style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: kSecondaryColor)),
-          Text(widget._item.sellerName,
+          Text(widget._item.seller.name,
               style: TextStyle(fontSize: 20, color: kWhite)),
-          Text(widget._item.sellerMail,
+          Text(widget._item.seller.email,
               style: TextStyle(fontSize: 15, color: kWhite)),
           FutureCardList(
               buildFunction: (object) => (object as Rating).buildRow(),
               fetchFunction: () =>
-                  RemoteRatings.getRatings(widget._item.sellerId))
+                  RemoteRatings.getRatings(widget._item.seller.id))
         ],
         const SizedBox(height: 15),
         // TODO item params
@@ -132,15 +132,15 @@ class _ItemPageState extends State<ItemPage> {
         SecondaryButtonData(
             Icons.arrow_back, () => Navigator.of(context).pop()),
         SecondaryButtonData(Icons.chat, () {
-          if (widget._item.sellerId != widget._loggedUser.uid) {
+          if (widget._item.seller.id != widget._loggedUser.uid) {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => ChatScreen(
                     item: widget._item,
                     loggedUser: widget._loggedUser,
-                    chat: Chat(widget._item.sellerId, "", ""))));
+                    chat: Chat(widget._item.seller.id, "", ""))));
           } else {
             chats =
-                RemoteChats.getChats(widget._item.id, widget._item.sellerId);
+                RemoteChats.getChats(widget._item.id, widget._item.seller.id);
             ModalWindow.showModalWindow(
                 context,
                 "Vyberte chat",
@@ -190,7 +190,7 @@ class _ItemPageState extends State<ItemPage> {
                             }))));
           }
         }),
-        if (widget._item.sellerId == widget._loggedUser.uid)
+        if (widget._item.seller.id == widget._loggedUser.uid)
           SecondaryButtonData(
               Icons.delete,
               () => ModalWindow.showModalWindow(
