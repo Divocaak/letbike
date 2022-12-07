@@ -29,5 +29,5 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
                   builder: (context) => AuthGate(loggedUser: user)));
             }
           },
-          buttonName: "Přihlásit s Google");
+          label: "Přihlásit s Google");
 }

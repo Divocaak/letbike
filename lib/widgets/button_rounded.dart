@@ -4,30 +4,42 @@ import 'package:letbike/general/settings.dart';
 class RoundedButton extends StatelessWidget {
   const RoundedButton(
       {Key? key,
-      required String buttonName,
+      required String label,
       required Function onClick,
+      IconData? icon,
       Color? color,
+      Color? textColor,
       double? sizeMultiplier})
-      : _buttonName = buttonName,
+      : _label = label,
         _onClick = onClick,
-        _color = color,
+        _icon = icon,
+        _color = color ?? kPrimaryColor,
+        _textColor = textColor ?? kBlack,
         _sizeMultiplier = sizeMultiplier,
         super(key: key);
 
-  final String _buttonName;
+  final String _label;
   final Function _onClick;
-  final Color? _color;
+  final IconData? _icon;
+  final Color _color;
+  final Color _textColor;
   final double? _sizeMultiplier;
 
   @override
   Widget build(BuildContext context) => Container(
       height: MediaQuery.of(context).size.height * (_sizeMultiplier ?? 0.08),
       width: MediaQuery.of(context).size.width * 0.8,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          color: _color ?? kPrimaryColor),
+      decoration:
+          BoxDecoration(borderRadius: BorderRadius.circular(16), color: _color),
       child: TextButton(
           onPressed: () => _onClick(),
-          child: Text(_buttonName,
-              style: kMainButtonStyle.copyWith(fontWeight: FontWeight.bold))));
+          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            if (_icon != null) ...[
+              Icon(_icon!, color: _textColor),
+              SizedBox(width: 10)
+            ],
+            Text(_label,
+                style:
+                    TextStyle(color: _textColor, fontWeight: FontWeight.bold))
+          ])));
 }

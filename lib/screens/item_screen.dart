@@ -7,6 +7,7 @@ import 'package:letbike/objects/rating.dart';
 import 'package:letbike/remote/ratings.dart';
 import 'package:letbike/remote/saves.dart';
 import 'package:letbike/widgets/button_rounded.dart';
+import 'package:letbike/widgets/new/button_circular.dart';
 import 'package:letbike/widgets/new/button_main.dart';
 import 'package:letbike/widgets/error_widgets.dart';
 import 'package:letbike/widgets/image_server.dart';
@@ -74,8 +75,9 @@ class _ItemPageState extends State<ItemPage> {
                 color: kWhite.withOpacity(.6))),
         (widget._item.seller.id != widget._loggedUser.uid
             ? RoundedButton(
-                buttonName:
+                label:
                     "${!localSavedVal ? "Přidat do" : "Odebrat z"} oblíbených",
+                textColor: kWhite,
                 onClick: () => setState(() {
                       localSavedVal = !localSavedVal;
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -124,6 +126,18 @@ class _ItemPageState extends State<ItemPage> {
         ],
         const SizedBox(height: 15),
         // TODO item params
+        if (widget._item.seller.id != widget._loggedUser.uid)
+          RoundedButton(
+              icon: Icons.message,
+              label: "Napsat zprávu",
+              textColor: kWhite,
+              onClick: () {})
+        else
+          RoundedButton(
+              icon: Icons.delete,
+              label: "Odstranit",
+              textColor: kWhite,
+              onClick: () {})
       ])),
       mainButton: MainButton(
           iconData: Icons.arrow_back,

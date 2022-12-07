@@ -52,13 +52,13 @@ class _SignInScreenState extends State<SignInScreen> {
               Flexible(
                   child: Column(children: [
                 RoundedButton(
-                    buttonName: "Obchodní podmínky",
+                    label: "Obchodní podmínky",
                     color: kSecondaryColor,
                     sizeMultiplier: .06,
                     onClick: () => General.openUrl(docsFolder + "terms.pdf")),
                 SizedBox(height: 10),
                 RoundedButton(
-                    buttonName: "Navštívit web",
+                    label: "Navštívit web",
                     color: kSecondaryColor,
                     sizeMultiplier: .06,
                     onClick: () => General.openUrl(baseUrl))
