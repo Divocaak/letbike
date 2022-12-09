@@ -50,6 +50,13 @@ class RemoteItems {
           "soldTo": soldTo,
           "saverId": saverId
         }));
+    print(jsonEncode({
+      "sellerId": sellerId,
+      "status": status,
+      "params": itemParams,
+      "soldTo": soldTo,
+      "saverId": saverId
+    }));
     return response.statusCode == 200
         ? jsonDecode(response.body)
             //.cast<String, dynamic>()

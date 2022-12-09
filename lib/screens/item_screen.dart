@@ -33,6 +33,8 @@ class _ItemPageState extends State<ItemPage> {
 
   late bool localSavedVal;
 
+  late bool notMyItem;
+
   @override
   void initState() {
     Future<bool> remoteSavedVal =
@@ -43,6 +45,8 @@ class _ItemPageState extends State<ItemPage> {
       remoteSavedVal.then((data) => localSavedVal = data,
           onError: (e) => localSavedVal = false);
     }
+
+    notMyItem = widget._item.seller.id != widget._loggedUser.uid;
 
     super.initState();
   }
@@ -73,43 +77,47 @@ class _ItemPageState extends State<ItemPage> {
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
                 color: kWhite.withOpacity(.6))),
-        (widget._item.seller.id != widget._loggedUser.uid
-            ? RoundedButton(
-                label:
-                    "${!localSavedVal ? "Přidat do" : "Odebrat z"} oblíbených",
-                textColor: kWhite,
-                onClick: () => setState(() {
-                      localSavedVal = !localSavedVal;
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: FutureBuilder<String?>(
-                              future: RemoteSaves.setSave(
-                                  widget._loggedUser.uid,
-                                  widget._item.id,
-                                  localSavedVal),
-                              builder: (context, snapshot) {
-                                switch (snapshot.connectionState) {
-                                  case ConnectionState.waiting:
-                                    return Center(
-                                        child: Image.asset("assets/load.gif"));
-                                  default:
-                                    if (snapshot.hasError || !snapshot.hasData)
-                                      return ErrorWidgets.snackBarError();
-                                    return Text(snapshot.data!);
-                                }
-                              })));
-                    }))
-            // TODO style
-            : Text("Toto je váš inzerát")),
+        if (notMyItem)
+          Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: RoundedButton(
+                  label:
+                      "${!localSavedVal ? "Přidat do" : "Odebrat z"} oblíbených",
+                  textColor: kWhite,
+                  onClick: () => setState(() {
+                        localSavedVal = !localSavedVal;
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: FutureBuilder<String?>(
+                                future: RemoteSaves.setSave(
+                                    widget._loggedUser.uid,
+                                    widget._item.id,
+                                    localSavedVal),
+                                builder: (context, snapshot) {
+                                  switch (snapshot.connectionState) {
+                                    case ConnectionState.waiting:
+                                      return Center(
+                                          child:
+                                              Image.asset("assets/load.gif"));
+                                    default:
+                                      if (snapshot.hasError ||
+                                          !snapshot.hasData)
+                                        return ErrorWidgets.snackBarError();
+                                      return Text(snapshot.data!);
+                                  }
+                                })));
+                      }))),
+        widget._item.buildParamsBlock(),
         Text(widget._item.name,
             style: TextStyle(
                 fontSize: 40,
                 fontWeight: FontWeight.bold,
                 color: kPrimaryColor)),
         if (widget._item.description != null)
-          Text(widget._item.description!,
-              style: TextStyle(fontSize: 20, color: kWhite)),
-        if (widget._item.seller.id != widget._loggedUser.uid) ...[
-          const SizedBox(height: 15),
+          Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Text(widget._item.description!,
+                  style: TextStyle(fontSize: 20, color: kWhite))),
+        if (notMyItem) ...[
           Text("O prodejci",
               style: TextStyle(
                   fontSize: 20,
@@ -122,17 +130,13 @@ class _ItemPageState extends State<ItemPage> {
           FutureCardList(
               buildFunction: (object) => (object as Rating).buildRow(),
               fetchFunction: () =>
-                  RemoteRatings.getRatings(widget._item.seller.id))
-        ],
-        const SizedBox(height: 15),
-        // TODO item params
-        if (widget._item.seller.id != widget._loggedUser.uid)
+                  RemoteRatings.getRatings(widget._item.seller.id)),
           RoundedButton(
               icon: Icons.message,
               label: "Napsat zprávu",
               textColor: kWhite,
               onClick: () {})
-        else
+        ] else
           RoundedButton(
               icon: Icons.delete,
               label: "Odstranit",

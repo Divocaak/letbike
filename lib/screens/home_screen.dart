@@ -51,6 +51,8 @@ class _HomePageState extends State<HomePage>
           '0faf99b3cf596954617f26a2639b9681'
         ]));
 
+    print(" === ==== curr user uid: ${widget._loggedUser.uid}");
+
     super.initState();
   }
 

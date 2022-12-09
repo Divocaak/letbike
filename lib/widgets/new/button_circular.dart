@@ -28,7 +28,5 @@ class CircularButton extends StatelessWidget {
       width: _size,
       height: _size,
       child: IconButton(
-          icon: Icon(_icon, color: _iconColor),
-          enableFeedback: true,
-          onPressed: () => _onClick()));
+          icon: Icon(_icon, color: _iconColor), onPressed: () => _onClick()));
 }

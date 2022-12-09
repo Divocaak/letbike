@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:letbike/general/settings.dart';
+import 'package:letbike/objects/params/param_item.dart';
 import 'package:letbike/objects/person.dart';
 import 'package:letbike/screens/item_screen.dart';
 import 'package:letbike/remote/items.dart';
@@ -22,10 +23,20 @@ class Item {
   String? dateEnd;
   String imgs;
   int status;
-  // TODO params
+  List<ParamItem> params;
 
-  Item(this.id, this.seller, this.buyer, this.name, this.description,
-      this.price, this.dateStart, this.dateEnd, this.imgs, this.status);
+  Item(
+      this.id,
+      this.seller,
+      this.buyer,
+      this.name,
+      this.description,
+      this.price,
+      this.dateStart,
+      this.dateEnd,
+      this.imgs,
+      this.status,
+      this.params);
 
   factory Item.fromJson(Map<String, dynamic> json) => Item(
       json["id"],
@@ -37,7 +48,25 @@ class Item {
       json["dateStart"],
       json["dateEnd"],
       json["imgs"],
-      json["status"]);
+      json["status"],
+      getParams(json["params"]));
+
+  static List<ParamItem> getParams(Map<String, dynamic> json) {
+    List<ParamItem> toRet = [];
+    json.forEach((key, value) => toRet.add(ParamItem(key, value)));
+    return toRet;
+  }
+
+  Widget buildParamsBlock() {
+    List<Widget> chips = [];
+    params.forEach((element) => chips.add(element.buildChip()));
+    return chips.length > 0
+        ? Padding(
+            padding: const EdgeInsets.all(10),
+            child: Wrap(
+                spacing: 10, alignment: WrapAlignment.center, children: chips))
+        : Container();
+  }
 
   Widget buildCard(context, User loggedUser,
           {bool touchable = true, TextEditingController? ratingController}) =>
