@@ -18,8 +18,7 @@ class AuthGate extends StatefulWidget {
 
 class _AuthGateState extends State<AuthGate> {
   // NOTE wtf??
-  final TextStyle textStyle =
-      TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold);
+  final TextStyle textStyle = TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold);
   late BackgroundImage bgImage;
 
   @override
@@ -34,29 +33,23 @@ class _AuthGateState extends State<AuthGate> {
         bgImage,
         FutureBuilder(
             future: Future.wait({
-              RemoteUser.checkUserStatus(
-                  widget._loggedUser.uid,
-                  widget._loggedUser.displayName ?? "jméno",
+              RemoteUser.checkUserStatus(widget._loggedUser.uid, widget._loggedUser.displayName ?? "jméno",
                   widget._loggedUser.email ?? "email"),
               RemoteParams.getParams()
             }),
             builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
+              // TODO future returns int? => udpate == return value is nullable!
               if (snapshot.hasData) {
                 if (snapshot.data![0] == 1) {
-                  return HomePage(
-                      loggedUser: widget._loggedUser,
-                      params: snapshot.data![1]);
+                  return HomePage(loggedUser: widget._loggedUser, params: snapshot.data![1]);
                 } else {
-                  return Text("Jste zabanován, kontaktujte prosím podporu",
-                      style: textStyle);
+                  return Text("Jste zabanován, kontaktujte prosím podporu", style: textStyle);
                 }
               }
 
               if (snapshot.hasError) {
                 print(snapshot.error);
-                return Text(
-                    "Někde se stala chyba, zkuste to prosím později (0)",
-                    style: textStyle);
+                return Text("Někde se stala chyba, zkuste to prosím později (0)", style: textStyle);
               }
               return Center(child: Image.asset("assets/load.gif"));
             })

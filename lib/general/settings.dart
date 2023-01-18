@@ -25,7 +25,7 @@ const String baseUrl = 'http://10.0.2.2/letbike-serverside/';
 const String imgsFolder = baseUrl + 'imgs/';
 const String articlesFolder = baseUrl + 'articles/';
 const String docsFolder = baseUrl + 'docs/';
-const String scriptsUrl = baseUrl + 'scripts/app/';
+const String scriptsUrl = baseUrl + 'api/index.php/';
 const String imgUploadEndPoint = scriptsUrl + 'uploadImage.php';
 
 class General {
