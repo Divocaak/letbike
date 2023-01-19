@@ -31,69 +31,48 @@ class _AddItem extends State<AddItem> {
 
   final ImagePickerController imagePickerController = ImagePickerController();
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
 // TODO permissionhandler - ask every time until approved
   @override
   Widget build(BuildContext context) => GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: PageBody(
-          body: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                TextInput(
-                    icon: Icons.text_fields,
-                    hint: "Název předmětu",
-                    inputAction: TextInputAction.next,
-                    controller: nameController),
-                TextInput(
-                    icon: Icons.text_fields,
-                    hint: "Popis předmětu",
-                    inputAction: TextInputAction.next,
-                    controller: descController),
-                TextInput(
-                    icon: Icons.attach_money,
-                    hint: "Cena",
-                    inputAction: TextInputAction.done,
-                    inputType: TextInputType.number,
-                    controller: priceController),
-                Container(
-                    height: 400,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(color: Colors.white, width: 2),
-                        borderRadius: BorderRadius.circular(25)),
-                    padding: EdgeInsets.all(15),
-                    margin: EdgeInsets.symmetric(horizontal: 20),
-                    child: Column(children: [
-                      Text(
-                          "První vybraný obrázek se bude zobrazovat na domovské stránce."),
-                      Container(
-                          child: TextButton(
-                              child: Text("Vybrat fotografie (minimálně 1)"),
-                              onPressed: () async {
-                                await imagePickerController.loadAssets(
-                                    this,
-                                    widget._images,
-                                    9,
-                                    mounted,
-                                    context,
-                                    (List<Asset> a) => widget._images = a);
-                              })),
-                      Expanded(
-                          child: Container(
-                              child: imagePickerController.buildGridView(
-                                  widget._images, 3, 50)))
-                    ]))
-              ]),
+          body: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            TextInput(
+                icon: Icons.text_fields,
+                hint: "Název předmětu",
+                inputAction: TextInputAction.next,
+                controller: nameController),
+            TextInput(
+                icon: Icons.text_fields,
+                hint: "Popis předmětu",
+                inputAction: TextInputAction.next,
+                controller: descController),
+            TextInput(
+                icon: Icons.attach_money,
+                hint: "Cena",
+                inputAction: TextInputAction.done,
+                inputType: TextInputType.number,
+                controller: priceController),
+            Container(
+                height: 400,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(color: Colors.white, width: 2),
+                    borderRadius: BorderRadius.circular(25)),
+                padding: EdgeInsets.all(15),
+                margin: EdgeInsets.symmetric(horizontal: 20),
+                child: Column(children: [
+                  Text("První vybraný obrázek se bude zobrazovat na domovské stránce."),
+                  Container(
+                      child: TextButton(
+                          child: Text("Vybrat fotografie (minimálně 1)"),
+                          onPressed: () async => await imagePickerController.loadAssets(
+                              this, widget._images, 9, mounted, context, (List<Asset> a) => widget._images = a))),
+                  Expanded(child: Container(child: imagePickerController.buildGridView(widget._images, 3, 50)))
+                ]))
+          ]),
           mainButton: MainButton(secondaryButtons: [
-            MainButtonSub(
-                icon: Icons.arrow_back,
-                label: "Zpět",
-                onClick: () => Navigator.of(context).pop()),
+            MainButtonSub(icon: Icons.arrow_back, label: "Zpět", onClick: () => Navigator.of(context).pop()),
             MainButtonSub(
                 icon: Icons.add,
                 label: "Přidat inzerát",

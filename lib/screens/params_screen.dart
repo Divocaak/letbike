@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:letbike/objects/params/param.dart';
@@ -46,8 +44,7 @@ class _ParamsPage extends State<ParamsPage> {
 
   @override
   Widget build(BuildContext context) => PageBody(
-      body:
-          SingleChildScrollView(child: Column(children: buildParams(context))),
+      body: SingleChildScrollView(child: Column(children: buildParams(context))),
       mainButton: MainButton(
           iconData: widget._name == null ? Icons.save : Icons.add,
           onPressed: () {
@@ -58,32 +55,21 @@ class _ParamsPage extends State<ParamsPage> {
                   context,
                   "Oznámení",
                   FutureBuilder<bool>(
-                      future: RemoteItems.createItem(
-                          widget._loggedUser.uid,
-                          widget._name!,
-                          widget._desc!,
-                          widget._price!,
-                          getParams(),
-                          widget._images!),
+                      future: RemoteItems.addItem(widget._loggedUser.uid, widget._name!, widget._desc!, widget._price!,
+                          widget._images!, getParams()),
                       builder: (context, snapshot) {
                         switch (snapshot.connectionState) {
                           case ConnectionState.waiting:
-                            return Center(
-                                child: Image.asset("assets/load.gif"));
+                            return Center(child: Image.asset("assets/load.gif"));
                           default:
                             if (snapshot.hasError)
                               return ErrorWidgets.futureBuilderError();
-                            else if (!snapshot.hasData)
-                              return ErrorWidgets.futureBuilderEmpty();
-                            return Text("Inzerát úspěšně přidán",
-                                style: TextStyle(color: kWhite));
+                            else if (!snapshot.hasData) return ErrorWidgets.futureBuilderEmpty();
+                            return Text("Inzerát úspěšně přidán", style: TextStyle(color: kWhite));
                         }
                       }),
-                  after: () => Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                          builder: (context) => HomePage(
-                              loggedUser: widget._loggedUser,
-                              params: widget._params))));
+                  after: () => Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (context) => HomePage(loggedUser: widget._loggedUser, params: widget._params))));
             }
           }));
 
@@ -99,9 +85,7 @@ class _ParamsPage extends State<ParamsPage> {
 
   Map<String, int>? getParams() {
     Map<String, int> toRet = {};
-    params.forEach((element) {
-      toRet.addAll(element.getParams());
-    });
+    params.forEach((element) => toRet.addAll(element.getParams()));
     return toRet.isNotEmpty ? toRet : null;
   }
 }

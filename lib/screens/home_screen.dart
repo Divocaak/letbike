@@ -30,8 +30,7 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage>
-    with SingleTickerProviderStateMixin {
+class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
   late AdHandler adHandler;
   late List<MyAd?> ads;
 
@@ -45,11 +44,8 @@ class _HomePageState extends State<HomePage>
     tabController.addListener(() => setState(() {}));
 
     ads = [];
-    MobileAds.instance.updateRequestConfiguration(RequestConfiguration(
-        testDeviceIds: [
-          '33BE2250B43518CCDA7DE426D04EE231',
-          '0faf99b3cf596954617f26a2639b9681'
-        ]));
+    MobileAds.instance.updateRequestConfiguration(
+        RequestConfiguration(testDeviceIds: ['33BE2250B43518CCDA7DE426D04EE231', '0faf99b3cf596954617f26a2639b9681']));
 
     print(" === ==== curr user uid: ${widget._loggedUser.uid}");
 
@@ -70,33 +66,23 @@ class _HomePageState extends State<HomePage>
             tabs: [
               Tab(icon: Icon(Icons.directions_bike), text: "Všechny"),
               Tab(icon: Icon(Icons.favorite), text: "Oblíbené"),
-              Tab(
-                  icon: Icon(
-                      Icons.notifications /* Icons.notifications_active */),
-                  text: "Oznámení")
+              Tab(icon: Icon(Icons.notifications /* Icons.notifications_active */), text: "Oznámení")
             ]),
         if (filters != null && tabController.index == 0)
           Container(
               margin: EdgeInsets.symmetric(horizontal: 20),
-              decoration: BoxDecoration(
-                  color: kPrimaryColor,
-                  borderRadius: BorderRadius.all(Radius.circular(7))),
+              decoration: BoxDecoration(color: kPrimaryColor, borderRadius: BorderRadius.all(Radius.circular(7))),
               child: TextButton(
                   onPressed: () => setState(() => filters = null),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.filter_alt_off, color: kWhite),
-                        Text("Resetovat filtry",
-                            style: TextStyle(color: kWhite))
-                      ]))),
+                  child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    Icon(Icons.filter_alt_off, color: kWhite),
+                    Text("Resetovat filtry", style: TextStyle(color: kWhite))
+                  ]))),
         Expanded(
             child: TabBarView(controller: tabController, children: [
           FutureCardList(
-            buildFunction: (object) =>
-                (object as Item).buildCard(context, widget._loggedUser),
-            fetchFunction: () =>
-                RemoteItems.getAllItems(1, itemParams: filters),
+            buildFunction: (object) => (object as Item).buildCard(context, widget._loggedUser),
+            fetchFunction: () => RemoteItems.getItems(1, itemParams: filters),
             /* separatorFunction: (context, i) {
                 if ((i + 1) % 3 == 0) {
                   if (ads[i] == null) {
@@ -122,10 +108,8 @@ class _HomePageState extends State<HomePage>
               } */
           ),
           FutureCardList(
-              buildFunction: (object) =>
-                  (object as Item).buildCard(context, widget._loggedUser),
-              fetchFunction: () =>
-                  RemoteItems.getAllItems(1, saverId: widget._loggedUser.uid)),
+              buildFunction: (object) => (object as Item).buildCard(context, widget._loggedUser),
+              fetchFunction: () => RemoteItems.getItems(1, saverId: widget._loggedUser.uid)),
           Text("c")
         ]))
       ]),
@@ -134,21 +118,18 @@ class _HomePageState extends State<HomePage>
         MainButtonSub(
             icon: Icons.article,
             label: "Články",
-            onClick: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (builder) => ArticlesScreen()))),
+            onClick: () => Navigator.of(context).push(MaterialPageRoute(builder: (builder) => ArticlesScreen()))),
         MainButtonSub(
             icon: Icons.person,
             label: "Můj účet",
-            onClick: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (builder) =>
-                    UserPage(loggedUser: widget._loggedUser)))),
+            onClick: () => Navigator.of(context)
+                .push(MaterialPageRoute(builder: (builder) => UserPage(loggedUser: widget._loggedUser)))),
         MainButtonSub(
             icon: Icons.filter_alt,
             label: "Filtrovat",
             onClick: () async {
               filters = await Navigator.of(context).push(MaterialPageRoute(
-                  builder: (builder) => ParamsPage(
-                      loggedUser: widget._loggedUser, params: widget._params)));
+                  builder: (builder) => ParamsPage(loggedUser: widget._loggedUser, params: widget._params)));
               if (!mounted) return;
               setState(() {});
               tabController.animateTo(0);
@@ -156,7 +137,7 @@ class _HomePageState extends State<HomePage>
         MainButtonSub(
             icon: Icons.add,
             label: "Přidat inzerát",
-            onClick: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (builder) => AddItem(loggedUser: widget._loggedUser))))
+            onClick: () => Navigator.of(context)
+                .push(MaterialPageRoute(builder: (builder) => AddItem(loggedUser: widget._loggedUser))))
       ]));
 }

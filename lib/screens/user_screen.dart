@@ -38,24 +38,16 @@ class _UserPageState extends State<UserPage> {
       body: Column(children: [
         Padding(
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Expanded(
-                      child:
-                          ServerImage(path: widget._loggedUser.photoURL ?? "")),
-                  Expanded(
-                      flex: 2,
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            // TODO style
-                            Text(widget._loggedUser.email ?? "",
-                                style: TextStyle(color: kWhite)),
-                            Text(widget._loggedUser.displayName ?? "",
-                                style: TextStyle(color: kWhite))
-                          ]))
-                ])),
+            child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+              Expanded(child: ServerImage(path: widget._loggedUser.photoURL ?? "")),
+              Expanded(
+                  flex: 2,
+                  child: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                    // TODO style
+                    Text(widget._loggedUser.email ?? "", style: TextStyle(color: kWhite)),
+                    Text(widget._loggedUser.displayName ?? "", style: TextStyle(color: kWhite))
+                  ]))
+            ])),
         Expanded(
             child: DefaultTabController(
                 length: 5,
@@ -68,9 +60,7 @@ class _UserPageState extends State<UserPage> {
                       contentPadding: EdgeInsets.symmetric(horizontal: 10),
                       tabs: [
                         Tab(icon: Icon(Icons.reviews), text: "Hodnocení"),
-                        Tab(
-                            icon: Icon(Icons.directions_bike),
-                            text: "Moje inzeráty"),
+                        Tab(icon: Icon(Icons.directions_bike), text: "Moje inzeráty"),
                         Tab(icon: Icon(Icons.sell), text: "Prodané"),
                         Tab(icon: Icon(Icons.shopping_cart), text: "Zakoupené"),
                         Tab(icon: Icon(Icons.done), text: "Ohodnocené")
@@ -78,32 +68,22 @@ class _UserPageState extends State<UserPage> {
                   Expanded(
                       child: TabBarView(children: [
                     FutureCardList(
+                        buildFunction: (object) => (object as Rating).buildRow(),
+                        fetchFunction: () => RemoteRatings.getRatings(widget._loggedUser.uid)),
+                    FutureCardList(
+                        fetchFunction: () => RemoteItems.getItems(1, sellerId: widget._loggedUser.uid),
+                        buildFunction: (object) => (object as Item).buildCard(context, widget._loggedUser)),
+                    FutureCardList(
+                        fetchFunction: () => RemoteItems.getItems(2, sellerId: widget._loggedUser.uid),
+                        buildFunction: (object) => (object as Item).buildCard(context, widget._loggedUser)),
+                    FutureCardList(
+                        fetchFunction: () => RemoteItems.getItems(2, soldTo: widget._loggedUser.uid),
+                        buildFunction: (object) => (object as Item)
+                            .buildCard(context, widget._loggedUser, ratingController: ratingController)),
+                    FutureCardList(
+                        fetchFunction: () => RemoteItems.getItems(3, soldTo: widget._loggedUser.uid),
                         buildFunction: (object) =>
-                            (object as Rating).buildRow(),
-                        fetchFunction: () =>
-                            RemoteRatings.getRatings(widget._loggedUser.uid)),
-                    FutureCardList(
-                        fetchFunction: () => RemoteItems.getAllItems(1,
-                            sellerId: widget._loggedUser.uid),
-                        buildFunction: (object) => (object as Item)
-                            .buildCard(context, widget._loggedUser)),
-                    FutureCardList(
-                        fetchFunction: () => RemoteItems.getAllItems(2,
-                            sellerId: widget._loggedUser.uid),
-                        buildFunction: (object) => (object as Item)
-                            .buildCard(context, widget._loggedUser)),
-                    FutureCardList(
-                        fetchFunction: () => RemoteItems.getAllItems(2,
-                            soldTo: widget._loggedUser.uid),
-                        buildFunction: (object) => (object as Item).buildCard(
-                            context, widget._loggedUser,
-                            ratingController: ratingController)),
-                    FutureCardList(
-                        fetchFunction: () => RemoteItems.getAllItems(3,
-                            soldTo: widget._loggedUser.uid),
-                        buildFunction: (object) => (object as Item).buildCard(
-                            context, widget._loggedUser,
-                            touchable: false))
+                            (object as Item).buildCard(context, widget._loggedUser, touchable: false))
                   ]))
                 ])))
       ]),
@@ -119,9 +99,6 @@ class _UserPageState extends State<UserPage> {
               }
             }),
         if (!_isSigningOut)
-          MainButtonSub(
-              icon: Icons.arrow_back,
-              label: "Zpět",
-              onClick: () => Navigator.of(context).pop())
+          MainButtonSub(icon: Icons.arrow_back, label: "Zpět", onClick: () => Navigator.of(context).pop())
       ]));
 }

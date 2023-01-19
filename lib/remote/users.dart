@@ -10,6 +10,6 @@ class RemoteUser {
         headers: {HttpHeaders.contentTypeHeader: 'application/json'},
         body: jsonEncode({"userId": id, "name": name, "mail": mail}));
 
-    return response.statusCode == 200 ? jsonDecode(response.body)["status_id"] : null;
+    return response.statusCode == 200 ? jsonDecode(response.body)["id_status"] : null;
   }
 }

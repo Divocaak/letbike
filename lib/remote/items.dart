@@ -10,18 +10,24 @@ import 'package:multi_image_picker2/multi_image_picker2.dart';
 class RemoteItems {
   static String url = scriptsUrl + 'item/';
 
-  static Future<bool> createItem(
-      String userId, String name, String desc, String price, Map<String, int>? params, List<Asset> images) async {
+  static Future<bool> addItem(
+      String userId, String name, String desc, String price, List<Asset> images, Map<String, int>? params) async {
     RemoteImages.uploadImages(images, "items", (userId + name.hashCode.toString()));
-    final Response response = await post(Uri.parse(Uri.encodeFull(url + "itemSet.php")),
+    final Response response = await post(Uri.parse(Uri.encodeFull(url + "add")),
         headers: {HttpHeaders.contentTypeHeader: 'application/json;charset=UTF-8'},
-        body: jsonEncode(
-            {"userId": userId, "name": name, "desc": desc, "price": price, "params": params, "imgs": images.length}));
+        body: jsonEncode({
+          "id_user": userId,
+          "name": name,
+          "description": desc,
+          "price": price,
+          "imgs": images.length,
+          "params": params
+        }));
 
     return response.statusCode == 200 && response.body != "ERROR" ? true : false;
   }
 
-  static Future<List?> getAllItems(int status,
+  static Future<List?> getItems(int status,
       {String? sellerId, Map<String, int>? itemParams, String? soldTo, String? saverId}) async {
     // TODO limit
     final Response response = await post(Uri.parse(Uri.encodeFull(url + "list")),
@@ -35,16 +41,6 @@ class RemoteItems {
           "limit": 10
         }));
 
-    print(jsonEncode({
-      "sellerId": sellerId,
-      "statusId": status,
-      "params": itemParams,
-      "soldTo": soldTo,
-      "saverId": saverId,
-      "limit": 10
-    }));
-
-    print(response.body);
     return response.statusCode == 200
         ? jsonDecode(response.body).map<Item>((item) => Item.fromJson(item)).toList()
         : null;
