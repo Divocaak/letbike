@@ -21,7 +21,7 @@ class Item {
   int price;
   String dateStart;
   String? dateEnd;
-  String imgs;
+  int imgs;
   int status;
   List<ParamItem> params;
 
@@ -35,10 +35,10 @@ class Item {
       json["name"],
       json["description"],
       json["price"],
-      json["dateStart"],
-      json["dateEnd"],
+      json["dateAdded"],
+      json["dateSold"],
       json["imgs"],
-      json["status"],
+      json["id_status"],
       getParams(json["params"] ?? {}));
 
   static List<ParamItem> getParams(Map<String, dynamic> json) {

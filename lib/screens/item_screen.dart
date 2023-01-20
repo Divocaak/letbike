@@ -37,13 +37,11 @@ class _ItemPageState extends State<ItemPage> {
 
   @override
   void initState() {
-    Future<bool> remoteSavedVal =
-        RemoteSaves.getSave(widget._loggedUser.uid, widget._item.id);
+    Future<bool> remoteSavedVal = RemoteSaves.getSave(widget._loggedUser.uid, widget._item.id);
 
     localSavedVal = false;
     if (widget._item.seller.id != widget._loggedUser.uid) {
-      remoteSavedVal.then((data) => localSavedVal = data,
-          onError: (e) => localSavedVal = false);
+      remoteSavedVal.then((data) => localSavedVal = data, onError: (e) => localSavedVal = false);
     }
 
     notMyItem = widget._item.seller.id != widget._loggedUser.uid;
@@ -58,9 +56,9 @@ class _ItemPageState extends State<ItemPage> {
         Container(
             height: 300,
             width: MediaQuery.of(context).size.width,
-            child: int.parse(widget._item.imgs) > 1
+            child: widget._item.imgs > 1
                 ? CarouselSlider(options: carouselOptions(context), items: [
-                    for (int i = 0; i < int.parse(widget._item.imgs); i++)
+                    for (int i = 0; i < widget._item.imgs; i++)
                       ServerImage(
                           path:
                               "${imgsFolder}items/${widget._item.seller.id + widget._item.name.hashCode.toString()}/${i.toString()}.jpg")
@@ -69,83 +67,49 @@ class _ItemPageState extends State<ItemPage> {
                     path:
                         "${imgsFolder}items/${widget._item.seller.id + widget._item.name.hashCode.toString()}/0.jpg")),
         const SizedBox(height: 15),
-        Text("Přidáno: ${widget._item.dateStart}",
-            style: TextStyle(fontSize: 15, color: kWhite.withOpacity(.4))),
+        Text("Přidáno: ${widget._item.dateStart}", style: TextStyle(fontSize: 15, color: kWhite.withOpacity(.4))),
         const SizedBox(height: 15),
         Text("Očekávaná cena: ${widget._item.price.toString()} Kč",
-            style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-                color: kWhite.withOpacity(.6))),
+            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: kWhite.withOpacity(.6))),
         if (notMyItem)
           Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),
               child: RoundedButton(
-                  label:
-                      "${!localSavedVal ? "Přidat do" : "Odebrat z"} oblíbených",
+                  label: "${!localSavedVal ? "Přidat do" : "Odebrat z"} oblíbených",
                   textColor: kWhite,
                   onClick: () => setState(() {
                         localSavedVal = !localSavedVal;
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: FutureBuilder<String?>(
-                                future: RemoteSaves.setSave(
-                                    widget._loggedUser.uid,
-                                    widget._item.id,
-                                    localSavedVal),
+                                future: RemoteSaves.setSave(widget._loggedUser.uid, widget._item.id, localSavedVal),
                                 builder: (context, snapshot) {
                                   switch (snapshot.connectionState) {
                                     case ConnectionState.waiting:
-                                      return Center(
-                                          child:
-                                              Image.asset("assets/load.gif"));
+                                      return Center(child: Image.asset("assets/load.gif"));
                                     default:
-                                      if (snapshot.hasError ||
-                                          !snapshot.hasData)
-                                        return ErrorWidgets.snackBarError();
+                                      if (snapshot.hasError || !snapshot.hasData) return ErrorWidgets.snackBarError();
                                       return Text(snapshot.data!);
                                   }
                                 })));
                       }))),
         widget._item.buildParamsBlock(),
-        Text(widget._item.name,
-            style: TextStyle(
-                fontSize: 40,
-                fontWeight: FontWeight.bold,
-                color: kPrimaryColor)),
+        Text(widget._item.name, style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: kPrimaryColor)),
         if (widget._item.description != null)
           Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Text(widget._item.description!,
-                  style: TextStyle(fontSize: 20, color: kWhite))),
+              child: Text(widget._item.description!, style: TextStyle(fontSize: 20, color: kWhite))),
         if (notMyItem) ...[
-          Text("O prodejci",
-              style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: kSecondaryColor)),
-          Text(widget._item.seller.name,
-              style: TextStyle(fontSize: 20, color: kWhite)),
-          Text(widget._item.seller.email,
-              style: TextStyle(fontSize: 15, color: kWhite)),
+          Text("O prodejci", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: kSecondaryColor)),
+          Text(widget._item.seller.name, style: TextStyle(fontSize: 20, color: kWhite)),
+          Text(widget._item.seller.email, style: TextStyle(fontSize: 15, color: kWhite)),
           FutureCardList(
               buildFunction: (object) => (object as Rating).buildRow(),
-              fetchFunction: () =>
-                  RemoteRatings.getRatings(widget._item.seller.id)),
-          RoundedButton(
-              icon: Icons.message,
-              label: "Napsat zprávu",
-              textColor: kWhite,
-              onClick: () {})
+              fetchFunction: () => RemoteRatings.getRatings(widget._item.seller.id)),
+          RoundedButton(icon: Icons.message, label: "Napsat zprávu", textColor: kWhite, onClick: () {})
         ] else
-          RoundedButton(
-              icon: Icons.delete,
-              label: "Odstranit",
-              textColor: kWhite,
-              onClick: () {})
+          RoundedButton(icon: Icons.delete, label: "Odstranit", textColor: kWhite, onClick: () {})
       ])),
-      mainButton: MainButton(
-          iconData: Icons.arrow_back,
-          onPressed: () => Navigator.of(context).pop()));
+      mainButton: MainButton(iconData: Icons.arrow_back, onPressed: () => Navigator.of(context).pop()));
   /* MainButtonClicked(buttons: [
         SecondaryButtonData(
             Icons.arrow_back, () => Navigator.of(context).pop()),

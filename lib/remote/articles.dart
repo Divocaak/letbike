@@ -19,6 +19,7 @@ class RemoteArticles {
         : null;
   }
 
+  // TODO rework
   static Future<String?> getArticle(int id) async {
     var response = await get(
         Uri.parse(Uri.encodeFull(
