@@ -1,4 +1,3 @@
-import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:letbike/general/authentification.dart';
@@ -9,6 +8,7 @@ import 'package:letbike/remote/ratings.dart';
 import 'package:letbike/general/settings.dart';
 import 'package:letbike/widgets/new/button_main.dart';
 import 'package:letbike/widgets/image_server.dart';
+import 'package:letbike/widgets/new/buttons_tapbar.dart';
 import 'package:letbike/widgets/new/future_card_list.dart';
 import 'package:letbike/widgets/new/button_main_sub.dart';
 import 'package:letbike/widgets/new/page_body.dart';
@@ -52,19 +52,13 @@ class _UserPageState extends State<UserPage> {
             child: DefaultTabController(
                 length: 5,
                 child: Column(children: [
-                  ButtonsTabBar(
-                      backgroundColor: kPrimaryColor,
-                      unselectedBackgroundColor: kSecondaryColor,
-                      labelStyle: TextStyle(color: kWhite),
-                      unselectedLabelStyle: TextStyle(color: kWhite),
-                      contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                      tabs: [
-                        Tab(icon: Icon(Icons.reviews), text: "Hodnocení"),
-                        Tab(icon: Icon(Icons.directions_bike), text: "Moje inzeráty"),
-                        Tab(icon: Icon(Icons.sell), text: "Prodané"),
-                        Tab(icon: Icon(Icons.shopping_cart), text: "Zakoupené"),
-                        Tab(icon: Icon(Icons.done), text: "Ohodnocené")
-                      ]),
+                  ButtonsTapBarStyled(tabs: [
+                    Tab(icon: Icon(Icons.reviews), text: "Hodnocení"),
+                    Tab(icon: Icon(Icons.directions_bike), text: "Moje inzeráty"),
+                    Tab(icon: Icon(Icons.sell), text: "Prodané"),
+                    Tab(icon: Icon(Icons.shopping_cart), text: "Zakoupené"),
+                    Tab(icon: Icon(Icons.done), text: "Ohodnocené")
+                  ]),
                   Expanded(
                       child: TabBarView(children: [
                     FutureCardList(

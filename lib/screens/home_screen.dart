@@ -1,4 +1,3 @@
-import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -14,6 +13,7 @@ import 'package:letbike/screens/user_screen.dart';
 import 'package:letbike/widgets/new/button_main.dart';
 import 'package:letbike/general/settings.dart';
 import 'package:letbike/widgets/new/button_main_sub.dart';
+import 'package:letbike/widgets/new/buttons_tapbar.dart';
 import 'package:letbike/widgets/new/future_card_list.dart';
 import 'package:letbike/widgets/new/page_body.dart';
 
@@ -47,28 +47,18 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     MobileAds.instance.updateRequestConfiguration(
         RequestConfiguration(testDeviceIds: ['33BE2250B43518CCDA7DE426D04EE231', '0faf99b3cf596954617f26a2639b9681']));
 
-    print(" === ==== curr user uid: ${widget._loggedUser.uid}");
-
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) => PageBody(
       body: Column(children: [
-        ButtonsTabBar(
-            // TODO do not repeat yourself
-            controller: tabController,
-            backgroundColor: kPrimaryColor,
-            unselectedBackgroundColor: kSecondaryColor,
-            labelStyle: TextStyle(color: kWhite),
-            unselectedLabelStyle: TextStyle(color: kWhite),
-            contentPadding: EdgeInsets.symmetric(horizontal: 10),
-            tabs: [
-              Tab(icon: Icon(Icons.directions_bike), text: "Všechny"),
-              Tab(icon: Icon(Icons.favorite), text: "Oblíbené"),
-              // TODO notification icon change depending on unread notifs (Icons.notifications_active)
-              Tab(icon: Icon(Icons.notifications), text: "Oznámení")
-            ]),
+        ButtonsTapBarStyled(tabs: [
+          Tab(icon: Icon(Icons.directions_bike), text: "Všechny"),
+          Tab(icon: Icon(Icons.favorite), text: "Oblíbené"),
+          // TODO notification icon change depending on unread notifs (Icons.notifications_active)
+          Tab(icon: Icon(Icons.notifications), text: "Oznámení")
+        ], controller: tabController),
         if (filters != null && tabController.index == 0)
           Container(
               margin: EdgeInsets.symmetric(horizontal: 20),

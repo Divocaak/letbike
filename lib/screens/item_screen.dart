@@ -7,7 +7,6 @@ import 'package:letbike/objects/rating.dart';
 import 'package:letbike/remote/ratings.dart';
 import 'package:letbike/remote/saves.dart';
 import 'package:letbike/widgets/button_rounded.dart';
-import 'package:letbike/widgets/new/button_circular.dart';
 import 'package:letbike/widgets/new/button_main.dart';
 import 'package:letbike/widgets/error_widgets.dart';
 import 'package:letbike/widgets/image_server.dart';

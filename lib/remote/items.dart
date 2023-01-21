@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:async';
-import 'dart:developer';
 import 'dart:io';
 import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
