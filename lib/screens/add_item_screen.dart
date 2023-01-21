@@ -1,13 +1,13 @@
 import 'package:emojis/emojis.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:letbike/screens/params_screen.dart';
+import 'package:letbike/widgets/image_picker_controller.dart';
 import 'package:letbike/widgets/new/button_main.dart';
 import 'package:letbike/widgets/error_widgets.dart';
-import 'package:letbike/widgets/image_picker_controller.dart';
 import 'package:letbike/widgets/new/button_main_sub.dart';
 import 'package:letbike/widgets/new/page_body.dart';
-import 'package:multi_image_picker2/multi_image_picker2.dart';
 import 'package:letbike/widgets/text_input.dart';
 import 'package:letbike/general/settings.dart';
 
@@ -18,7 +18,6 @@ class AddItem extends StatefulWidget {
         super(key: key);
 
   final User _loggedUser;
-  List<Asset>? _images = [];
 
   @override
   _AddItem createState() => _AddItem();
@@ -29,9 +28,11 @@ class _AddItem extends State<AddItem> {
   final TextEditingController descController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
 
+  // TODO iOS settings - https://pub.dev/packages/image_picker
+  // TODO separate thumbnail and images
   final ImagePickerController imagePickerController = ImagePickerController();
+  List<XFile> images = [];
 
-// TODO permissionhandler - ask every time until approved
   @override
   Widget build(BuildContext context) => GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
@@ -67,8 +68,8 @@ class _AddItem extends State<AddItem> {
                       child: TextButton(
                           child: Text("Vybrat fotografie (minimálně 1)"),
                           onPressed: () async => await imagePickerController.loadAssets(
-                              this, widget._images, 9, mounted, context, (List<Asset> a) => widget._images = a))),
-                  Expanded(child: Container(child: imagePickerController.buildGridView(widget._images, 3, 50)))
+                              this, images, 9, mounted, context, (List<XFile> a) => images = a))),
+                  Expanded(child: Container(child: imagePickerController.buildGridView(images, 3, 50)))
                 ]))
           ]),
           mainButton: MainButton(secondaryButtons: [
@@ -76,19 +77,19 @@ class _AddItem extends State<AddItem> {
             MainButtonSub(
                 icon: Icons.add,
                 label: "Přidat inzerát",
-                onClick: () => (widget._images != null &&
+                // TODO better validations on textfields = impelemt validator
+                onClick: () => (images.isNotEmpty &&
                         nameController.text != "" &&
                         descController.text != "" &&
                         priceController.text != "")
                     ? Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => ParamsPage(
                             loggedUser: widget._loggedUser,
-                            // TODO parse params form homepage
                             params: [],
                             name: nameController.text,
                             desc: descController.text,
                             price: priceController.text,
-                            images: widget._images!)))
+                            images: images)))
                     : ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: ErrorWidgets.snackBarMessage(
                             'Vyplňte prosím název, popis a cenu inzerátu. Přidejte alespoň jeden obrázek. ' +

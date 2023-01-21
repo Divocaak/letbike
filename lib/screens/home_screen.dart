@@ -66,7 +66,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             tabs: [
               Tab(icon: Icon(Icons.directions_bike), text: "Všechny"),
               Tab(icon: Icon(Icons.favorite), text: "Oblíbené"),
-              Tab(icon: Icon(Icons.notifications /* Icons.notifications_active */), text: "Oznámení")
+              // TODO notification icon change depending on unread notifs (Icons.notifications_active)
+              Tab(icon: Icon(Icons.notifications), text: "Oznámení")
             ]),
         if (filters != null && tabController.index == 0)
           Container(

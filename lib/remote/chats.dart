@@ -2,12 +2,11 @@ import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
 import 'package:http/http.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:letbike/objects/chat.dart';
 import 'package:letbike/objects/item.dart';
 import 'package:letbike/objects/message.dart';
 import 'package:letbike/general/settings.dart';
-import 'package:letbike/remote/images.dart';
-import 'package:multi_image_picker2/multi_image_picker2.dart';
 
 class RemoteChats {
   static String url = scriptsUrl + 'chat/';
@@ -39,10 +38,9 @@ class RemoteChats {
   }
 
   static Future sendMessage(String from, String to, int itemId, String message,
-      List<Asset> images) async {
+      List<XFile> images) async {
     if (images.length != 0) {
-      RemoteImages.uploadImages(images, "messages",
-          (from.toString() + to.toString() + message.hashCode.toString()));
+      // TODO process images
     }
 
     final Response response = await post(

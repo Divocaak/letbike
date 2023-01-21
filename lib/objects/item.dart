@@ -21,7 +21,7 @@ class Item {
   int price;
   String dateStart;
   String? dateEnd;
-  int imgs;
+  List<String> imgs;
   int status;
   List<ParamItem> params;
 
@@ -37,7 +37,7 @@ class Item {
       json["price"],
       json["dateAdded"],
       json["dateSold"],
-      json["imgs"],
+      List<String>.from(json["imgs"]),
       json["id_status"],
       getParams(json["params"] ?? {}));
 

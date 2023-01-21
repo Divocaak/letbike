@@ -56,9 +56,9 @@ class _ItemPageState extends State<ItemPage> {
         Container(
             height: 300,
             width: MediaQuery.of(context).size.width,
-            child: widget._item.imgs > 1
+            child: widget._item.imgs.length > 1
                 ? CarouselSlider(options: carouselOptions(context), items: [
-                    for (int i = 0; i < widget._item.imgs; i++)
+                    for (int i = 0; i < widget._item.imgs.length; i++)
                       ServerImage(
                           path:
                               "${imgsFolder}items/${widget._item.seller.id + widget._item.name.hashCode.toString()}/${i.toString()}.jpg")

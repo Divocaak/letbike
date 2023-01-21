@@ -1,38 +1,41 @@
 import 'dart:convert';
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 import 'package:http/http.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:letbike/objects/item.dart';
 import 'package:letbike/general/settings.dart';
-import 'package:letbike/remote/images.dart';
-import 'package:multi_image_picker2/multi_image_picker2.dart';
 
 class RemoteItems {
   static String url = scriptsUrl + 'item/';
 
-  static Future<bool> addItem(
-      String userId, String name, String desc, String price, List<Asset> images, Map<String, int>? params) async {
-    // TODO rework
-    RemoteImages.uploadImages(images, "items", (userId + name.hashCode.toString()));
-    
+  static Future<bool> addItem(String userId, String name, String desc, String price, XFile thumbnail,
+      List<XFile> images, Map<String, int>? params) async {
+    List<String> imagesConverted = [];
+    images.forEach((element) async {
+      var data = base64Encode(await element.readAsBytes());
+      imagesConverted.add(data);
+    });
+
+    var body = jsonEncode({
+      "id_user": userId,
+      "name": name,
+      "description": desc,
+      "price": price,
+      "imgs": imagesConverted,
+      "params": params
+    });
+
     final Response response = await post(Uri.parse(Uri.encodeFull(url + "add")),
-        headers: {HttpHeaders.contentTypeHeader: 'application/json;charset=UTF-8'},
-        body: jsonEncode({
-          "id_user": userId,
-          "name": name,
-          "description": desc,
-          
-          "price": price,
-          "imgs": images.length,
-          "params": params
-        }));
+        headers: {HttpHeaders.contentTypeHeader: 'application/json;charset=UTF-8'}, body: body);
 
     return response.statusCode == 200 && response.body != "ERROR" ? true : false;
   }
 
   static Future<List?> getItems(int status,
       {String? sellerId, Map<String, int>? itemParams, String? soldTo, String? saverId}) async {
-    // TODO limit
+    // TODO limit, dynamic loading
     final Response response = await post(Uri.parse(Uri.encodeFull(url + "list")),
         headers: {HttpHeaders.contentTypeHeader: "application/json;charset=UTF-8"},
         body: jsonEncode({
@@ -45,7 +48,7 @@ class RemoteItems {
         }));
 
     return response.statusCode == 200
-        ? jsonDecode(response.body).map<Item>((item) => Item.fromJson(item)).toList()
+        ? jsonDecode(response.body)["items"].map<Item>((item) => Item.fromJson(item)).toList()
         : null;
   }
 

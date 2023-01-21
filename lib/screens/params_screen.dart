@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:letbike/objects/params/param.dart';
 import 'package:letbike/screens/home_screen.dart';
 import 'package:letbike/widgets/new/button_main.dart';
@@ -8,7 +9,6 @@ import 'package:letbike/general/settings.dart';
 import 'package:letbike/widgets/alert_box.dart';
 import 'package:letbike/widgets/error_widgets.dart';
 import 'package:letbike/widgets/new/page_body.dart';
-import 'package:multi_image_picker2/multi_image_picker2.dart';
 
 class ParamsPage extends StatefulWidget {
   ParamsPage(
@@ -18,7 +18,7 @@ class ParamsPage extends StatefulWidget {
       String? name,
       String? desc,
       String? price,
-      List<Asset>? images})
+      List<XFile>? images})
       : _loggedUser = loggedUser,
         _params = params,
         _name = name,
@@ -32,7 +32,7 @@ class ParamsPage extends StatefulWidget {
   final String? _name;
   final String? _desc;
   final String? _price;
-  final List<Asset>? _images;
+  final List<XFile>? _images;
 
   @override
   _ParamsPage createState() => _ParamsPage();
@@ -55,8 +55,9 @@ class _ParamsPage extends State<ParamsPage> {
                   context,
                   "Oznámení",
                   FutureBuilder<bool>(
+                      // TODO thumbnail separation
                       future: RemoteItems.addItem(widget._loggedUser.uid, widget._name!, widget._desc!, widget._price!,
-                          widget._images!, getParams()),
+                          widget._images![0], widget._images!, getParams()),
                       builder: (context, snapshot) {
                         switch (snapshot.connectionState) {
                           case ConnectionState.waiting:

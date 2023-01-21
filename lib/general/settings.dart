@@ -12,21 +12,18 @@ const kGreen = Color(0xFF50C878);
 
 const double kButtonCircleSmall = 40;
 
-const TextStyle kSignLinkButton =
-    TextStyle(fontSize: 22, color: Colors.white, height: 1.5);
+const TextStyle kSignLinkButton = TextStyle(fontSize: 22, color: Colors.white, height: 1.5);
 
 const TextStyle kMainButtonStyle = TextStyle(color: kBlack);
 const TextStyle kCaptionTextSatyle = TextStyle(color: Colors.purple);
 
-CarouselOptions carouselOptions(context) =>
-    CarouselOptions(height: 1000, viewportFraction: .925, autoPlay: true);
+CarouselOptions carouselOptions(context) => CarouselOptions(height: 1000, viewportFraction: .925, autoPlay: true);
 
 const String baseUrl = 'http://10.0.2.2/letbike-serverside/';
 const String imgsFolder = baseUrl + 'imgs/';
 const String articlesFolder = baseUrl + 'articles/';
 const String docsFolder = baseUrl + 'docs/';
 const String scriptsUrl = baseUrl + 'api/index.php/';
-const String imgUploadEndPoint = scriptsUrl + 'uploadImage.php';
 
 class General {
   static void openUrl(String url) async {
