@@ -1,7 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:letbike/objects/categories.dart';
 import 'package:letbike/general/settings.dart';
+import 'package:letbike/objects/params/param_item.dart';
+import 'package:letbike/objects/person.dart';
 import 'package:letbike/screens/item_screen.dart';
 import 'package:letbike/remote/items.dart';
 import 'package:letbike/remote/ratings.dart';
@@ -13,90 +14,55 @@ import 'package:letbike/widgets/rating_bar.dart';
 
 class Item {
   int id;
-  String sellerId;
-  String? soldTo;
+  Person seller;
+  Person? buyer;
   String name;
   String? description;
   int price;
   String dateStart;
   String? dateEnd;
-  String imgs;
+  List<String> imgs;
   int status;
-  Map<String, dynamic>? itemParams;
-  String sellerName;
-  String sellerMail;
+  List<ParamItem> params;
 
-  Item(
-      this.id,
-      this.sellerId,
-      this.soldTo,
-      this.name,
-      this.description,
-      this.price,
-      this.dateStart,
-      this.dateEnd,
-      this.imgs,
-      this.status,
-      this.itemParams,
-      this.sellerName,
-      this.sellerMail);
+  Item(this.id, this.seller, this.buyer, this.name, this.description, this.price, this.dateStart, this.dateEnd,
+      this.imgs, this.status, this.params);
 
   factory Item.fromJson(Map<String, dynamic> json) => Item(
-      int.parse(json["id"]),
-      json["sellerId"],
-      json["soldTo"],
+      json["id"],
+      Person.fromJson(json["seller"]),
+      json["buyer"] != null ? Person.fromJson(json["buyer"]) : null,
       json["name"],
       json["description"],
-      int.parse(json["price"]),
-      json["dateStart"],
-      json["dateEnd"],
-      json["imgs"],
-      int.parse(json["status"]),
-      json["params"],
-      json["sellerName"],
-      json["sellerMail"]);
+      json["price"],
+      json["dateAdded"],
+      json["dateSold"],
+      List<String>.from(json["imgs"]),
+      json["id_status"],
+      getParams(json["params"] ?? {}));
 
-  Widget buildParams(BuildContext context) {
-    List<String> keys = itemParams!.keys.toList();
-    List<dynamic> values = itemParams!.values.toList();
-    return ListView.builder(
-        itemCount: itemParams!.length,
-        itemBuilder: (context, i) => Row(children: [
-              Expanded(
-                  child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 15),
-                      color: kPrimaryColor,
-                      child: Text(ParamRow.params[keys[i]]!.name,
-                          style: TextStyle(color: kWhite),
-                          textAlign: TextAlign.center))),
-              Expanded(
-                  child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 15),
-                      color: kSecondaryColor,
-                      child: Text(
-                          ParamRow.params[keys[i]]!.options[
-                              (values[i] == "true" || values[i] == "false")
-                                  ? (values[i] == "false" ? 0 : 1)
-                                  : int.parse(values[i])],
-                          style: TextStyle(color: kWhite),
-                          textAlign: TextAlign.center))),
-            ]));
+  static List<ParamItem> getParams(Map<String, dynamic> json) {
+    List<ParamItem> toRet = [];
+    json.forEach((key, value) => toRet.add(ParamItem(key, value)));
+    return toRet;
   }
 
-  Widget buildCard(context, User loggedUser,
-          {bool touchable = true, TextEditingController? ratingController}) =>
+  Widget buildParamsBlock() {
+    List<Widget> chips = [];
+    params.forEach((element) => chips.add(element.buildChip()));
+    return chips.length > 0
+        ? Padding(
+            padding: const EdgeInsets.all(10),
+            child: Wrap(spacing: 10, alignment: WrapAlignment.center, children: chips))
+        : Container();
+  }
+
+  Widget buildCard(context, User loggedUser, {bool touchable = true, TextEditingController? ratingController}) =>
       CardBody(
-          onTap: () => onCardClick(context, loggedUser,
-              touchable: touchable, ratingController: ratingController),
-          imgPath: imgsFolder + "items/" + sellerId + name.hashCode.toString(),
+          onTap: () => onCardClick(context, loggedUser, touchable: touchable, ratingController: ratingController),
+          imgPath: imgsFolder + "items/" + seller.id + name.hashCode.toString(),
           child: Column(children: [
-            Expanded(
-                flex: 1,
-                child: CardText(
-                    text: name,
-                    fontSize: 32,
-                    offset: 2,
-                    fontWeight: FontWeight.bold)),
+            Expanded(flex: 1, child: CardText(text: name, fontSize: 32, offset: 2, fontWeight: FontWeight.bold)),
             Expanded(flex: 3, child: Container()),
             Expanded(
                 flex: 1,
@@ -105,36 +71,28 @@ class Item {
                       flex: 4,
                       child: Padding(
                           padding: EdgeInsets.symmetric(horizontal: 10),
-                          child:
-                              CardText(text: description ?? "", fontSize: 18))),
+                          child: CardText(text: description ?? "", fontSize: 18))),
                   Expanded(
                       flex: 2,
                       child: Padding(
                           padding: EdgeInsets.symmetric(horizontal: 10),
                           child: CardText(
-                              text: price.toString() + "Kč",
-                              fontSize: 24,
-                              offset: 2,
-                              fontWeight: FontWeight.bold)))
+                              text: price.toString() + "Kč", fontSize: 24, offset: 2, fontWeight: FontWeight.bold)))
                 ]))
           ]));
 
-  void onCardClick(context, User loggedUser,
-      {bool touchable = true, TextEditingController? ratingController}) {
+  void onCardClick(context, User loggedUser, {bool touchable = true, TextEditingController? ratingController}) {
     if (touchable) {
       if (ratingController == null) {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) =>
-                ItemPage(item: this, loggedUser: loggedUser)));
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => ItemPage(item: this, loggedUser: loggedUser)));
       } else {
         RatingBar ratingBar = RatingBar();
         ModalWindow.showModalWindow(
             context,
             "Ohodnoťte prodejce",
             ListView(children: [
-              Text(
-                  "Prodejce ohodnoťte až poté, co Vám přijde zakoupený předmět.",
-                  style: TextStyle(color: kWhite)),
+              Text("Prodejce ohodnoťte až poté, co Vám přijde zakoupený předmět.", style: TextStyle(color: kWhite)),
               ratingBar,
               Expanded(
                   child: TextField(
@@ -148,34 +106,28 @@ class Item {
                           hintStyle: TextStyle(color: kWhite),
                           counterStyle: TextStyle(color: kWhite),
                           border: new OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(25)),
+                              borderRadius: BorderRadius.all(Radius.circular(25)),
                               borderSide: new BorderSide(color: kWhite)))))
-            ]), after: () {
-          Future<bool?> rateResponse = RemoteRatings.setRating(
-              sellerId, ratingBar.getRatingVal(), ratingController.text);
-          ModalWindow.showModalWindow(
-              context,
-              "Oznámení",
-              FutureBuilder<bool?>(
-                  future: rateResponse,
-                  builder: (context, snapshot) {
-                    switch (snapshot.connectionState) {
-                      case ConnectionState.waiting:
-                        return Center(child: Image.asset("assets/load.gif"));
-                      default:
-                        if (snapshot.hasError)
-                          return ErrorWidgets.futureBuilderError();
-                        else if (!snapshot.hasData)
-                          return ErrorWidgets.futureBuilderEmpty();
-                        return Text("Uživatel ohodnocen.",
-                            style: TextStyle(color: kWhite));
-                    }
-                  }), after: () {
-            RemoteItems.updateItemStatus(id, 3, soldTo: soldTo);
-            Navigator.of(context).pop();
-          });
-        });
+            ]),
+            after: () => ModalWindow.showModalWindow(
+                    context,
+                    "Oznámení",
+                    FutureBuilder<bool?>(
+                        future: RemoteRatings.setRating(seller.id, ratingBar.getRatingVal(), ratingController.text),
+                        builder: (context, snapshot) {
+                          switch (snapshot.connectionState) {
+                            case ConnectionState.waiting:
+                              return Center(child: Image.asset("assets/load.gif"));
+                            default:
+                              if (snapshot.hasError)
+                                return ErrorWidgets.futureBuilderError();
+                              else if (!snapshot.hasData) return ErrorWidgets.futureBuilderEmpty();
+                              return Text("Uživatel ohodnocen.", style: TextStyle(color: kWhite));
+                          }
+                        }), after: () {
+                  RemoteItems.updateItemStatus(id, 3, soldTo: buyer?.id);
+                  Navigator.of(context).pop();
+                }));
       }
     }
   }

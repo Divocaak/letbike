@@ -20,7 +20,7 @@ class RemoteRatings {
     return response.statusCode == 200 && response.body != "ERROR" ? true : null;
   }
 
-  static Future<List<Rating>?> getRatings(String userId) async {
+  static Future<List?> getRatings(String userId) async {
     final Response response = await post(
         Uri.parse(Uri.encodeFull(url + "ratingGet.php")),
         headers: {

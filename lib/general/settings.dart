@@ -10,21 +10,20 @@ const kError = Color(0xFFFF101F);
 const kWarning = Color(0xFFFFFC31);
 const kGreen = Color(0xFF50C878);
 
-const TextStyle kSignLinkButton =
-    TextStyle(fontSize: 22, color: Colors.white, height: 1.5);
+const double kButtonCircleSmall = 40;
+
+const TextStyle kSignLinkButton = TextStyle(fontSize: 22, color: Colors.white, height: 1.5);
 
 const TextStyle kMainButtonStyle = TextStyle(color: kBlack);
 const TextStyle kCaptionTextSatyle = TextStyle(color: Colors.purple);
 
-CarouselOptions carouselOptions(context) =>
-    CarouselOptions(height: 1000, viewportFraction: .925, autoPlay: true);
+CarouselOptions carouselOptions(context) => CarouselOptions(height: 1000, viewportFraction: .925, autoPlay: true);
 
-const String baseUrl = 'http://letbike.xf.cz/';
+const String baseUrl = 'http://10.0.2.2/letbike-serverside/';
 const String imgsFolder = baseUrl + 'imgs/';
 const String articlesFolder = baseUrl + 'articles/';
 const String docsFolder = baseUrl + 'docs/';
-const String scriptsUrl = baseUrl + 'scripts/app/';
-const String imgUploadEndPoint = scriptsUrl + 'uploadImage.php';
+const String scriptsUrl = baseUrl + 'api/index.php/';
 
 class General {
   static void openUrl(String url) async {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:letbike/general/settings.dart';
-import 'package:letbike/widgets/button_circular.dart';
+import 'package:letbike/widgets/new/button_circular.dart';
 
 // ignore: must_be_immutable
 class MainButtonClicked extends StatefulWidget {

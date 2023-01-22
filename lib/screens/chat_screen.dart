@@ -1,28 +1,22 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:letbike/objects/chat.dart';
 import 'package:letbike/objects/item.dart';
 import 'package:letbike/objects/message.dart';
-import 'package:letbike/objects/rating.dart';
 import 'package:letbike/remote/chats.dart';
 import 'package:letbike/remote/items.dart';
-import 'package:letbike/remote/ratings.dart';
 import 'package:letbike/widgets/image_picker_controller.dart';
-import 'package:multi_image_picker2/multi_image_picker2.dart';
 import 'package:letbike/widgets/text_input.dart';
 import 'package:letbike/widgets/error_widgets.dart';
-import 'package:letbike/widgets/button_circular.dart';
+import 'package:letbike/widgets/new/button_circular.dart';
 import 'package:letbike/widgets/alert_box.dart';
 import 'package:letbike/general/settings.dart';
 
 // ignore: must_be_immutable
 class ChatScreen extends StatefulWidget {
-  ChatScreen(
-      {Key? key,
-      required Item item,
-      required User loggedUser,
-      required Chat chat})
+  ChatScreen({Key? key, required Item item, required User loggedUser, required Chat chat})
       : _item = item,
         _loggedUser = loggedUser,
         _chat = chat,
@@ -31,14 +25,13 @@ class ChatScreen extends StatefulWidget {
   final Item _item;
   final User _loggedUser;
   final Chat _chat;
-  List<Asset> _images = [];
+  List<XFile> _images = [];
 
   @override
   _ChatScreenState createState() => _ChatScreenState();
 }
 
-class _ChatScreenState extends State<ChatScreen>
-    with SingleTickerProviderStateMixin {
+class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateMixin {
   final TextEditingController chatInputController = TextEditingController();
 
   final ImagePickerController imagePickerController = ImagePickerController();
@@ -48,8 +41,7 @@ class _ChatScreenState extends State<ChatScreen>
 
   @override
   void initState() {
-    messagesStream = RemoteChats.getMessages(
-        widget._loggedUser.uid, widget._chat.buyId, widget._item);
+    messagesStream = RemoteChats.getMessages(widget._loggedUser.uid, widget._chat.buyId, widget._item);
     cancelTrade = (widget._item.status == 2 ? true : false);
     super.initState();
   }
@@ -63,25 +55,21 @@ class _ChatScreenState extends State<ChatScreen>
               backgroundColor: cancelTrade ? kGreen : kPrimaryColor,
               automaticallyImplyLeading: false,
               title: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                CircularButton(
-                    icon: Icons.arrow_back,
-                    onClick: () => Navigator.of(context).pop()),
+                CircularButton(icon: Icons.arrow_back, onClick: () => Navigator.of(context).pop()),
                 Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: Text(widget._item.name,
-                        style: TextStyle(fontSize: 20))),
-                if (widget._item.sellerId == widget._loggedUser.uid)
+                    child: Text(widget._item.name, style: TextStyle(fontSize: 20))),
+                if (widget._item.seller.id == widget._loggedUser.uid)
                   CircularButton(
                       icon: Icons.person_search,
                       onClick: () => ModalWindow.showModalWindow(
                           context,
                           "O zájemci",
                           Column(children: [
-                            Text(widget._chat.buyName,
-                                style: TextStyle(color: kWhite)),
-                            Text(widget._chat.buyMail,
-                                style: TextStyle(color: kWhite)),
-                            FutureBuilder<List<Rating>?>(
+                            Text(widget._chat.buyName, style: TextStyle(color: kWhite)),
+                            Text(widget._chat.buyMail, style: TextStyle(color: kWhite)),
+                            // TODO future card list
+                            /* FutureBuilder<List<Rating>?>(
                                 future: RemoteRatings.getRatings(
                                     widget._chat.buyId),
                                 builder: (context, snapshot) {
@@ -104,29 +92,22 @@ class _ChatScreenState extends State<ChatScreen>
                                           itemBuilder: (context, i) =>
                                               snapshot.data![i].buildRow());
                                   }
-                                })
+                                }) */
                           ]))),
-                if (widget._loggedUser.uid == widget._item.sellerId)
-                  SizedBox(width: 10),
-                if (widget._loggedUser.uid == widget._item.sellerId)
+                if (widget._loggedUser.uid == widget._item.seller.id) SizedBox(width: 10),
+                if (widget._loggedUser.uid == widget._item.seller.id)
                   CircularButton(
-                      icon:
-                          (cancelTrade ? Icons.money_off : Icons.attach_money),
+                      icon: (cancelTrade ? Icons.money_off : Icons.attach_money),
                       onClick: () => ModalWindow.showModalWindow(
                               context,
                               "Opravdu?",
                               Text(
                                   "Opravdu chcete " +
-                                      (cancelTrade
-                                          ? "zrušit prodej předmětu"
-                                          : "prodat předmět") +
+                                      (cancelTrade ? "zrušit prodej předmětu" : "prodat předmět") +
                                       " této osobě?",
                                   style: TextStyle(color: kWhite)), onTrue: () {
-                            Future<bool?> updateRes =
-                                RemoteItems.updateItemStatus(
-                                    widget._item.id, cancelTrade ? 1 : 2,
-                                    soldTo:
-                                        cancelTrade ? "" : widget._chat.buyId);
+                            Future<bool?> updateRes = RemoteItems.updateItemStatus(widget._item.id, cancelTrade ? 1 : 2,
+                                soldTo: cancelTrade ? "" : widget._chat.buyId);
                             ModalWindow.showModalWindow(
                                 context,
                                 "Oznámení",
@@ -135,20 +116,12 @@ class _ChatScreenState extends State<ChatScreen>
                                     builder: (context, snapshot) {
                                       switch (snapshot.connectionState) {
                                         case ConnectionState.waiting:
-                                          return Center(
-                                              child: Image.asset(
-                                                  "assets/load.gif"));
+                                          return Center(child: Image.asset("assets/load.gif"));
                                         default:
                                           if (snapshot.hasError)
-                                            return ErrorWidgets
-                                                .futureBuilderError();
-                                          else if (!snapshot.hasData)
-                                            return ErrorWidgets
-                                                .futureBuilderEmpty();
-                                          return Text(
-                                              cancelTrade
-                                                  ? "Zrušeno!"
-                                                  : "Prodáno!",
+                                            return ErrorWidgets.futureBuilderError();
+                                          else if (!snapshot.hasData) return ErrorWidgets.futureBuilderEmpty();
+                                          return Text(cancelTrade ? "Zrušeno!" : "Prodáno!",
                                               style: TextStyle(color: kWhite));
                                       }
                                     }),
@@ -160,51 +133,34 @@ class _ChatScreenState extends State<ChatScreen>
             Expanded(
                 child: StreamBuilder(
                     stream: messagesStream,
-                    builder: (context, stream) =>
-                        (stream.connectionState == ConnectionState.waiting
-                            ? Center(child: Image.asset("assets/load.gif"))
-                            : (stream.hasData
-                                ? ListView.builder(
-                                    itemCount: (stream.data as List).length,
-                                    itemBuilder: (context, i) =>
-                                        (stream.data as List)[i].buildMessage(
-                                            context, widget._loggedUser))
-                                : (stream.hasError
-                                    ? ErrorWidgets.futureBuilderError()
-                                    : ErrorWidgets.futureBuilderEmpty()))))),
+                    builder: (context, stream) => (stream.connectionState == ConnectionState.waiting
+                        ? Center(child: Image.asset("assets/load.gif"))
+                        : (stream.hasData
+                            ? ListView.builder(
+                                itemCount: (stream.data as List).length,
+                                itemBuilder: (context, i) =>
+                                    (stream.data as List)[i].buildMessage(context, widget._loggedUser))
+                            : (stream.hasError
+                                ? ErrorWidgets.futureBuilderError()
+                                : ErrorWidgets.futureBuilderEmpty()))))),
             Row(children: [
               Expanded(
                   child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 5),
-                      child: TextInput(
-                          icon: Icons.chat,
-                          hint: "Napište zprávu",
-                          controller: chatInputController))),
+                      child: TextInput(icon: Icons.chat, hint: "Napište zprávu", controller: chatInputController))),
               CircularButton(
-                  color: widget._images.length > 0
-                      ? kPrimaryColor
-                      : kSecondaryColor,
+                  color: widget._images.length > 0 ? kPrimaryColor : kSecondaryColor,
                   icon: Icons.image,
                   onClick: () => imagePickerController.loadAssets(
-                      this,
-                      widget._images,
-                      1,
-                      mounted,
-                      context,
-                      (List<Asset> a) => widget._images = a)),
+                      this, widget._images, 1, mounted, context, (List<XFile> a) => widget._images = a)),
               Padding(
                   padding: EdgeInsets.symmetric(horizontal: 5),
                   child: CircularButton(
                       icon: Icons.send,
                       onClick: () {
-                        if (widget._images.length > 0 ||
-                            chatInputController.text != "") {
-                          RemoteChats.sendMessage(
-                              widget._loggedUser.uid,
-                              widget._chat.buyId,
-                              widget._item.id,
-                              chatInputController.text,
-                              widget._images);
+                        if (widget._images.length > 0 || chatInputController.text != "") {
+                          RemoteChats.sendMessage(widget._loggedUser.uid, widget._chat.buyId, widget._item.id,
+                              chatInputController.text, widget._images);
 
                           widget._images = [];
                           chatInputController.clear();
