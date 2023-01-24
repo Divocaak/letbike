@@ -16,8 +16,8 @@ class ButtonsTapBarStyled extends StatelessWidget {
       controller: _controller,
       backgroundColor: kPrimaryColor,
       unselectedBackgroundColor: kSecondaryColor,
-      labelStyle: TextStyle(color: kWhite),
-      unselectedLabelStyle: TextStyle(color: kWhite),
-      contentPadding: EdgeInsets.symmetric(horizontal: 10),
+      labelStyle: const TextStyle(color: kWhite),
+      unselectedLabelStyle: const TextStyle(color: kWhite),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 10),
       tabs: _tabs);
 }

@@ -6,12 +6,12 @@ import 'package:letbike/screens/sign_in_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
-      .then((_) =>
-          MobileAds.instance.initialize().then((__) => runApp(LetBike())));
+      .then((_) => MobileAds.instance.initialize().then((__) => runApp(const LetBike())));
 }
 
 class LetBike extends StatelessWidget {
+  const LetBike({super.key});
+
   @override
-  Widget build(BuildContext context) =>
-      MaterialApp(title: 'LetBike', home: SignInScreen());
+  Widget build(BuildContext context) => const MaterialApp(title: 'LetBike', home: SignInScreen());
 }

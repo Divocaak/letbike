@@ -7,15 +7,15 @@ import 'package:letbike/objects/item.dart';
 import 'package:letbike/general/settings.dart';
 
 class RemoteItems {
-  static String url = scriptsUrl + 'item/';
+  static String url = '${scriptsUrl}item/';
 
   static Future<bool> addItem(String userId, String name, String desc, String price, XFile thumbnail,
       List<XFile> images, Map<String, int>? params) async {
     List<String> imagesConverted = [];
-    images.forEach((element) async {
+    for (var element in images) {
       var data = base64Encode(await element.readAsBytes());
       imagesConverted.add(data);
-    });
+    }
 
     var body = jsonEncode({
       "id_user": userId,
@@ -26,7 +26,7 @@ class RemoteItems {
       "params": params
     });
 
-    final Response response = await post(Uri.parse(Uri.encodeFull(url + "add")),
+    final Response response = await post(Uri.parse(Uri.encodeFull("${url}add")),
         headers: {HttpHeaders.contentTypeHeader: 'application/json;charset=UTF-8'}, body: body);
 
     return response.statusCode == 200 && response.body != "ERROR" ? true : false;
@@ -34,8 +34,8 @@ class RemoteItems {
 
   static Future<List?> getItems(int status,
       {String? sellerId, Map<String, int>? itemParams, String? soldTo, String? saverId}) async {
-    // TODO limit, dynamic loading
-    final Response response = await post(Uri.parse(Uri.encodeFull(url + "list")),
+    // TODO APP L8R limit, dynamic loading
+    final Response response = await post(Uri.parse(Uri.encodeFull("${url}list")),
         headers: {HttpHeaders.contentTypeHeader: "application/json;charset=UTF-8"},
         body: jsonEncode({
           "id_seller": sellerId,
@@ -52,7 +52,7 @@ class RemoteItems {
   }
 
   static Future<bool?> updateItemStatus(int itemId, int newStatus, {String? soldTo}) async {
-    final Response response = await post(Uri.parse(Uri.encodeFull(url + "updateStatus")),
+    final Response response = await post(Uri.parse(Uri.encodeFull("${url}updateStatus")),
         headers: {HttpHeaders.contentTypeHeader: 'application/json'},
         body: jsonEncode({"id_item": itemId, "id_status": newStatus, "id_buyer": soldTo}));
 

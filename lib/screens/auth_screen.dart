@@ -6,31 +6,23 @@ import 'package:letbike/remote/users.dart';
 import 'package:letbike/widgets/image_background.dart';
 
 class AuthGate extends StatefulWidget {
-  AuthGate({Key? key, required User loggedUser})
+  const AuthGate({Key? key, required User loggedUser})
       : _loggedUser = loggedUser,
         super(key: key);
 
   final User _loggedUser;
 
   @override
-  _AuthGateState createState() => _AuthGateState();
+  AuthGateState createState() => AuthGateState();
 }
 
-class _AuthGateState extends State<AuthGate> {
-  // NOTE wtf??
-  final TextStyle textStyle = TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold);
-  late BackgroundImage bgImage;
-
-  @override
-  void initState() {
-    bgImage = BackgroundImage();
-    super.initState();
-  }
+class AuthGateState extends State<AuthGate> {
+  final TextStyle textStyle = const TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold);
 
   @override
   Widget build(BuildContext context) => Scaffold(
           body: Stack(alignment: Alignment.center, children: [
-        bgImage,
+        const BackgroundImage(),
         FutureBuilder(
             future: Future.wait({
               RemoteUser.checkUserStatus(widget._loggedUser.uid, widget._loggedUser.displayName ?? "jméno",
@@ -38,7 +30,6 @@ class _AuthGateState extends State<AuthGate> {
               RemoteParams.getParams()
             }),
             builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
-              // TODO future returns int? => udpate == return value is nullable!
               if (snapshot.hasData) {
                 if (snapshot.data![0] == 1) {
                   return HomePage(loggedUser: widget._loggedUser, params: snapshot.data![1]);

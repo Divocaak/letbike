@@ -18,7 +18,7 @@ import 'package:letbike/widgets/new/future_card_list.dart';
 import 'package:letbike/widgets/new/page_body.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key? key, required User loggedUser, required List<Param> params})
+  const HomePage({Key? key, required User loggedUser, required List<Param> params})
       : _loggedUser = loggedUser,
         _params = params,
         super(key: key);
@@ -27,10 +27,10 @@ class HomePage extends StatefulWidget {
   final List<Param> _params;
 
   @override
-  _HomePageState createState() => _HomePageState();
+  HomePageState createState() => HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
+class HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
   late AdHandler adHandler;
   late List<MyAd?> ads;
 
@@ -53,19 +53,19 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   @override
   Widget build(BuildContext context) => PageBody(
       body: Column(children: [
-        ButtonsTapBarStyled(tabs: [
+        ButtonsTapBarStyled(tabs: const [
           Tab(icon: Icon(Icons.directions_bike), text: "Všechny"),
           Tab(icon: Icon(Icons.favorite), text: "Oblíbené"),
-          // TODO notification icon change depending on unread notifs (Icons.notifications_active)
+          // TODO APP L8R notification icon change depending on unread notifs (Icons.notifications_active)
           Tab(icon: Icon(Icons.notifications), text: "Oznámení")
         ], controller: tabController),
         if (filters != null && tabController.index == 0)
           Container(
-              margin: EdgeInsets.symmetric(horizontal: 20),
-              decoration: BoxDecoration(color: kPrimaryColor, borderRadius: BorderRadius.all(Radius.circular(7))),
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              decoration: const BoxDecoration(color: kPrimaryColor, borderRadius: BorderRadius.all(Radius.circular(7))),
               child: TextButton(
                   onPressed: () => setState(() => filters = null),
-                  child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  child: Row(mainAxisAlignment: MainAxisAlignment.center, children: const [
                     Icon(Icons.filter_alt_off, color: kWhite),
                     Text("Resetovat filtry", style: TextStyle(color: kWhite))
                   ]))),
@@ -101,7 +101,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           FutureCardList(
               buildFunction: (object) => (object as Item).buildCard(context, widget._loggedUser),
               fetchFunction: () => RemoteItems.getItems(1, saverId: widget._loggedUser.uid)),
-          Text("c")
+          const Text("c")
         ]))
       ]),
       mainButton: MainButton(secondaryButtons: [
@@ -109,7 +109,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         MainButtonSub(
             icon: Icons.article,
             label: "Články",
-            onClick: () => Navigator.of(context).push(MaterialPageRoute(builder: (builder) => ArticlesScreen()))),
+            onClick: () => Navigator.of(context).push(MaterialPageRoute(builder: (builder) => const ArticlesScreen()))),
         MainButtonSub(
             icon: Icons.person,
             label: "Můj účet",

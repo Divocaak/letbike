@@ -5,28 +5,29 @@ import 'package:letbike/screens/auth_screen.dart';
 import 'package:letbike/widgets/button_rounded.dart';
 
 class GoogleSignInButton extends StatefulWidget {
+  const GoogleSignInButton({super.key});
+
   @override
-  _GoogleSignInButtonState createState() => _GoogleSignInButtonState();
+  GoogleSignInButtonState createState() => GoogleSignInButtonState();
 }
 
-class _GoogleSignInButtonState extends State<GoogleSignInButton> {
+class GoogleSignInButtonState extends State<GoogleSignInButton> {
   bool _isSigningIn = false;
 
   @override
   Widget build(BuildContext context) => _isSigningIn
-      ? CircularProgressIndicator()
+      ? const CircularProgressIndicator()
       : RoundedButton(
           onClick: () async {
             setState(() => _isSigningIn = true);
 
-            User? user =
-                await Authentication.signInWithGoogle(context: context);
+            User? user = await Authentication.signInWithGoogle(context: context);
 
             setState(() => _isSigningIn = false);
 
             if (user != null) {
-              Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (context) => AuthGate(loggedUser: user)));
+              Navigator.of(context)
+                  .pushReplacement(MaterialPageRoute(builder: (context) => AuthGate(loggedUser: user)));
             }
           },
           label: "Přihlásit s Google");

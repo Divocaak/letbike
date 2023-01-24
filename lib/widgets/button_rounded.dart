@@ -29,17 +29,11 @@ class RoundedButton extends StatelessWidget {
   Widget build(BuildContext context) => Container(
       height: MediaQuery.of(context).size.height * (_sizeMultiplier ?? 0.08),
       width: MediaQuery.of(context).size.width * 0.8,
-      decoration:
-          BoxDecoration(borderRadius: BorderRadius.circular(16), color: _color),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(16), color: _color),
       child: TextButton(
           onPressed: () => _onClick(),
           child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            if (_icon != null) ...[
-              Icon(_icon!, color: _textColor),
-              SizedBox(width: 10)
-            ],
-            Text(_label,
-                style:
-                    TextStyle(color: _textColor, fontWeight: FontWeight.bold))
+            if (_icon != null) ...[Icon(_icon!, color: _textColor), const SizedBox(width: 10)],
+            Text(_label, style: TextStyle(color: _textColor, fontWeight: FontWeight.bold))
           ])));
 }

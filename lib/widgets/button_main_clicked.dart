@@ -4,10 +4,7 @@ import 'package:letbike/widgets/new/button_circular.dart';
 
 // ignore: must_be_immutable
 class MainButtonClicked extends StatefulWidget {
-  MainButtonClicked(
-      {Key? key,
-      required List<SecondaryButtonData> buttons,
-      required double volume})
+  MainButtonClicked({Key? key, required List<SecondaryButtonData> buttons, required double volume})
       : _buttons = buttons,
         _volume = volume,
         super(key: key);
@@ -22,6 +19,7 @@ class MainButtonClicked extends StatefulWidget {
     {"x": 200, "y": 100}
   ];
 
+  @override
   State<StatefulWidget> createState() => MainButtonClickedState();
 }
 
@@ -32,17 +30,14 @@ class MainButtonClickedState extends State<MainButtonClicked> {
       child: Container(
           color: Colors.black.withOpacity(widget._volume),
           child: TextButton(
-              onPressed: () => setState(() {
-                    widget._volume = 0;
-                  }),
+              onPressed: () => setState(() => widget._volume = 0),
               child: Stack(children: [
                 for (int i = 0; i < widget._buttons.length; i++)
                   Positioned(
                       bottom: MainButtonClicked.positions[i]["x"],
                       right: MainButtonClicked.positions[i]["y"],
                       child: CircularButton(
-                          color:
-                              kSecondaryColor.withOpacity(widget._volume * 2),
+                          color: kSecondaryColor.withOpacity(widget._volume * 2),
                           icon: widget._buttons[i].icon,
                           iconColor: kWhite.withOpacity(widget._volume * 2),
                           onClick: widget._buttons[i].onClick))

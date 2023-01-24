@@ -5,6 +5,5 @@ class Person {
 
   Person(this.id, this.email, this.name);
 
-  factory Person.fromJson(Map<String, dynamic> json) =>
-      Person(json["id"], json["name"], json["mail"]);
+  factory Person.fromJson(Map<String, dynamic> json) => Person(json["id"], json["name"], json["mail"]);
 }

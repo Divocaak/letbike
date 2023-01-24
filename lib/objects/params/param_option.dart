@@ -6,9 +6,6 @@ class ParamOption {
 
   ParamOption(this.label, this.params);
 
-  factory ParamOption.fromJson(Map<String, dynamic> json) => ParamOption(
-      json["label"],
-      json["options"] != null
-          ? json["options"].map<Param>((data) => Param.fromJson(data)).toList()
-          : null);
+  factory ParamOption.fromJson(Map<String, dynamic> json) => ParamOption(json["label"],
+      json["options"] != null ? json["options"].map<Param>((data) => Param.fromJson(data)).toList() : null);
 }

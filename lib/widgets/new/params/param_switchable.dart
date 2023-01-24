@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:letbike/general/settings.dart';
 
 class ParamSwitchable extends StatefulWidget {
-  ParamSwitchable(
-      {Key? key,
-      required String label,
-      required String leftOption,
-      required String rightOption})
+  ParamSwitchable({Key? key, required String label, required String leftOption, required String rightOption})
       : _label = label,
         _leftOption = leftOption,
         _rightOption = rightOption,
@@ -27,7 +23,7 @@ class ParamSwitchableState extends State<ParamSwitchable> {
   final List<bool> selected = [false, true, false];
   @override
   Widget build(BuildContext context) => Row(children: [
-        Text(widget._label + ": ", style: TextStyle(color: kWhite)),
+        Text("${widget._label}: ", style: const TextStyle(color: kWhite)),
         ToggleButtons(
             direction: Axis.horizontal,
             onPressed: (int index) => setState(() {
@@ -42,10 +38,6 @@ class ParamSwitchableState extends State<ParamSwitchable> {
             fillColor: kPrimaryColor,
             color: kWhite,
             isSelected: selected,
-            children: [
-              Text(widget._leftOption),
-              Text("-"),
-              Text(widget._rightOption)
-            ])
+            children: [Text(widget._leftOption), const Text("-"), Text(widget._rightOption)])
       ]);
 }

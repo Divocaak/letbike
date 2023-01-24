@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-// TODO rework (extends State, wtf?)
+// TODO APP IMGPICKER rework (extends State, wtf?)
 class ImagePickerController extends State {
   @override
   build(context) => Container();
@@ -29,7 +29,7 @@ class ImagePickerController extends State {
     if (await checkPerm() == 1) {
       try {
         resultList = await ImagePicker().pickMultiImage(imageQuality: 75, requestFullMetadata: false);
-        // TODO max images
+        // TODO APP IMGPICKER max images
       } on Exception catch (e) {
         error = e.toString();
       }
@@ -42,16 +42,16 @@ class ImagePickerController extends State {
       }
 
       if (error != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Chyba: " + error)));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Chyba: $error")));
       }
     }
   }
 
-// TODO show selected
+// TODO APP IMGPICKER show selected
   Widget buildGridView(List<XFile>? images, int crossAxisCount, int size) => (images != null
       ? GridView.count(
           crossAxisCount: crossAxisCount,
-          children: List.generate(
-              images.length, (index) => Text("todo") /* AssetThumb(asset: images[index], width: size, height: size) */))
+          children: List.generate(images.length,
+              (index) => const Text("todo") /* AssetThumb(asset: images[index], width: size, height: size) */))
       : Container());
 }

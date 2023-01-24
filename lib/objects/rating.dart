@@ -8,8 +8,7 @@ class Rating {
 
   Rating(this.value, this.text, this.dateAdded);
 
-  factory Rating.fromJson(Map<String, dynamic> json) =>
-      Rating(int.parse(json["val"]), json["text"], json["date"]);
+  factory Rating.fromJson(Map<String, dynamic> json) => Rating(int.parse(json["val"]), json["text"], json["date"]);
 
   Widget buildRow() => SizedBox(
       height: 50,
@@ -19,12 +18,9 @@ class Rating {
               flex: 2,
               child: Text(value.toString(),
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, color: kPrimaryColor))),
-          Expanded(flex: 8, child: Text(text, style: TextStyle(color: kWhite)))
+                  style: const TextStyle(fontWeight: FontWeight.bold, color: kPrimaryColor))),
+          Expanded(flex: 8, child: Text(text, style: const TextStyle(color: kWhite)))
         ]),
-        Expanded(
-            child: Text(dateAdded,
-                style: TextStyle(color: kWhite.withOpacity(.7))))
+        Expanded(child: Text(dateAdded, style: TextStyle(color: kWhite.withOpacity(.7))))
       ]));
 }

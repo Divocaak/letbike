@@ -3,7 +3,7 @@ import 'package:letbike/general/settings.dart';
 import 'package:letbike/widgets/error_widgets.dart';
 
 class FutureCardList extends StatefulWidget {
-  FutureCardList(
+  const FutureCardList(
       {Key? key,
       required Function(dynamic objectToCard) buildFunction,
       required Function fetchFunction,
@@ -48,20 +48,17 @@ class FutureCardListState extends State<FutureCardList> {
                 if (snapshot.hasError) {
                   print(snapshot.error);
                   return ErrorWidgets.futureBuilderError();
-                } else if (!snapshot.hasData ||
-                    (snapshot.hasData && snapshot.data!.length < 1))
+                } else if (!snapshot.hasData || (snapshot.hasData && snapshot.data!.isEmpty)) {
                   return ErrorWidgets.futureBuilderEmpty();
+                }
                 return widget._separatorFunction == null
                     ? ListView.builder(
                         itemCount: snapshot.data!.length,
-                        itemBuilder: (context, i) =>
-                            widget._buildFunction(snapshot.data![i]))
+                        itemBuilder: (context, i) => widget._buildFunction(snapshot.data![i]))
                     : ListView.separated(
                         itemCount: snapshot.data!.length,
-                        itemBuilder: (context, i) =>
-                            widget._buildFunction(snapshot.data![i]),
-                        separatorBuilder: (context, i) =>
-                            widget._separatorFunction!(context, i));
+                        itemBuilder: (context, i) => widget._buildFunction(snapshot.data![i]),
+                        separatorBuilder: (context, i) => widget._separatorFunction!(context, i));
             }
           }));
 }

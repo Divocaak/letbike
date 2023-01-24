@@ -15,8 +15,7 @@ class Article {
       Article(int.parse(json["id"]), json["name"], json["dateAdded"]);
 
   Widget buildCard(context) => CardBody(
-      onTap: () => Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => ArticlePage(article: this))),
+      onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => ArticlePage(article: this))),
       imgPath: articlesFolder + id.toString(),
       child: Positioned(
           left: 16,
@@ -25,11 +24,7 @@ class Article {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CardText(
-                    text: name,
-                    fontSize: 32,
-                    offset: 2,
-                    fontWeight: FontWeight.bold),
+                CardText(text: name, fontSize: 32, offset: 2, fontWeight: FontWeight.bold),
                 CardText(text: dateAdded, fontSize: 18)
               ])));
 }

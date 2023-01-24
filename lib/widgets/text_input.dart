@@ -28,9 +28,8 @@ class TextInput extends StatelessWidget {
       child: Container(
           height: 10 * 5.5,
           width: MediaQuery.of(context).size.width * 0.8,
-          padding: EdgeInsets.symmetric(horizontal: 10),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30), color: kSecondaryColor),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: kSecondaryColor),
           child: Center(
               child: TextFormField(
                   controller: _controller,

@@ -9,14 +9,13 @@ class RatingBar extends StatefulWidget {
   getRatingVal() => rating.toInt();
 
   @override
-  _RatingBarState createState() => _RatingBarState();
+  RatingBarState createState() => RatingBarState();
 }
 
-class _RatingBarState extends State<RatingBar> {
+class RatingBarState extends State<RatingBar> {
   @override
   Widget build(BuildContext context) => Column(children: [
-        Text("Hodnocení: " + widget.rating.toInt().toString(),
-            style: TextStyle(color: kWhite)),
+        Text("Hodnocení: ${widget.rating.toInt()}", style: const TextStyle(color: kWhite)),
         Slider(
             value: widget.rating,
             min: 0,
@@ -24,7 +23,6 @@ class _RatingBarState extends State<RatingBar> {
             divisions: 10,
             inactiveColor: kSecondaryColor,
             activeColor: kPrimaryColor,
-            onChanged: (double value) => setState(
-                () => widget.rating = double.parse(value.toStringAsFixed(1))))
+            onChanged: (double value) => setState(() => widget.rating = double.parse(value.toStringAsFixed(1))))
       ]);
 }

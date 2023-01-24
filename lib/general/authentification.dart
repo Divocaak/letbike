@@ -6,15 +6,13 @@ import 'package:letbike/screens/auth_screen.dart';
 import 'package:letbike/screens/sign_in_screen.dart';
 
 class Authentication {
-  static Future<FirebaseApp> initializeFirebase(
-      {required BuildContext context}) async {
+  static Future<FirebaseApp> initializeFirebase({required BuildContext context}) async {
     FirebaseApp firebaseApp = await Firebase.initializeApp();
 
     User? user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
-      Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => AuthGate(loggedUser: user)));
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => AuthGate(loggedUser: user)));
     }
 
     return firebaseApp;
@@ -26,12 +24,10 @@ class Authentication {
 
     final GoogleSignIn googleSignIn = GoogleSignIn();
 
-    final GoogleSignInAccount? googleSignInAccount =
-        await googleSignIn.signIn();
+    final GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
 
     if (googleSignInAccount != null) {
-      final GoogleSignInAuthentication googleSignInAuthentication =
-          await googleSignInAccount.authentication;
+      final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
 
       final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleSignInAuthentication.accessToken,
@@ -39,26 +35,20 @@ class Authentication {
       );
 
       try {
-        final UserCredential userCredential =
-            await auth.signInWithCredential(credential);
+        final UserCredential userCredential = await auth.signInWithCredential(credential);
 
         user = userCredential.user;
       } on FirebaseAuthException catch (e) {
         if (e.code == 'account-exists-with-different-credential') {
           ScaffoldMessenger.of(context).showSnackBar(
-              Authentication.customSnackBar(
-                  content:
-                      'The account already exists with a different credential.'));
+              Authentication.customSnackBar(content: 'The account already exists with a different credential.'));
         } else if (e.code == 'invalid-credential') {
           ScaffoldMessenger.of(context).showSnackBar(
-              Authentication.customSnackBar(
-                  content:
-                      'Error occurred while accessing credentials. Try again.'));
+              Authentication.customSnackBar(content: 'Error occurred while accessing credentials. Try again.'));
         }
       } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            Authentication.customSnackBar(
-                content: 'Error occurred using Google Sign-In. Try again.'));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(Authentication.customSnackBar(content: 'Error occurred using Google Sign-In. Try again.'));
       }
     }
 
@@ -67,19 +57,15 @@ class Authentication {
 
   static Future<void> signOut({required BuildContext context}) async {
     try {
-      await GoogleSignIn().disconnect().whenComplete(() async {
-        await FirebaseAuth.instance.signOut().then((value) =>
-            Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => SignInScreen())));
-      });
+      await GoogleSignIn().disconnect().whenComplete(() async => await FirebaseAuth.instance.signOut().then((value) =>
+          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const SignInScreen()))));
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(Authentication.customSnackBar(
-          content: 'Error signing out. Try again.'));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(Authentication.customSnackBar(content: 'Error signing out. Try again.'));
     }
   }
 
   static SnackBar customSnackBar({required String content}) => SnackBar(
       backgroundColor: Colors.black,
-      content: Text(content,
-          style: TextStyle(color: Colors.redAccent, letterSpacing: 0.5)));
+      content: Text(content, style: const TextStyle(color: Colors.redAccent, letterSpacing: 0.5)));
 }

@@ -9,15 +9,14 @@ class MyAd {
   MyAd(this.loaded, this.ad);
 
   Widget buildAd() => loaded
-      ? Container(
+      ? SizedBox(
           height: 150,
           child: Card(
               clipBehavior: Clip.antiAlias,
               elevation: 0,
               color: kWhite.withOpacity(.2),
               margin: const EdgeInsets.all(5),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
               child: AdWidget(ad: ad)))
-      : CircularProgressIndicator();
+      : const CircularProgressIndicator();
 }

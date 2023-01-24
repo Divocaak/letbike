@@ -10,16 +10,13 @@ class ParamItem {
   Widget buildChip() => Chip(
         label: RichText(
             text: TextSpan(children: [
-          TextSpan(text: label, style: TextStyle(color: kSecondaryColor)),
-          TextSpan(text: ": "),
-          TextSpan(
-              text: value,
-              style:
-                  TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold))
+          TextSpan(text: label, style: const TextStyle(color: kSecondaryColor)),
+          const TextSpan(text: ": "),
+          TextSpan(text: value, style: const TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold))
         ])),
         backgroundColor: kBlack,
         shadowColor: kPrimaryColor,
         elevation: 7,
-        side: BorderSide(color: kPrimaryColor),
+        side: const BorderSide(color: kPrimaryColor),
       );
 }

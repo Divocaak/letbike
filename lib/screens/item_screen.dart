@@ -15,7 +15,7 @@ import 'package:letbike/widgets/new/future_card_list.dart';
 import 'package:letbike/widgets/new/page_body.dart';
 
 class ItemPage extends StatefulWidget {
-  ItemPage({Key? key, required Item item, required User loggedUser})
+  const ItemPage({Key? key, required Item item, required User loggedUser})
       : _item = item,
         _loggedUser = loggedUser,
         super(key: key);
@@ -24,10 +24,10 @@ class ItemPage extends StatefulWidget {
   final User _loggedUser;
 
   @override
-  _ItemPageState createState() => _ItemPageState();
+  ItemPageState createState() => ItemPageState();
 }
 
-class _ItemPageState extends State<ItemPage> {
+class ItemPageState extends State<ItemPage> {
   late Future<List<Chat>?> chats;
 
   late bool localSavedVal;
@@ -52,7 +52,7 @@ class _ItemPageState extends State<ItemPage> {
   Widget build(BuildContext context) => PageBody(
       body: SingleChildScrollView(
           child: Column(children: [
-        Container(
+        SizedBox(
             height: 300,
             width: MediaQuery.of(context).size.width,
             child: widget._item.imgs.length > 1
@@ -92,15 +92,16 @@ class _ItemPageState extends State<ItemPage> {
                                 })));
                       }))),
         widget._item.buildParamsBlock(),
-        Text(widget._item.name, style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: kPrimaryColor)),
+        Text(widget._item.name,
+            style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: kPrimaryColor)),
         if (widget._item.description != null)
           Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Text(widget._item.description!, style: TextStyle(fontSize: 20, color: kWhite))),
+              child: Text(widget._item.description!, style: const TextStyle(fontSize: 20, color: kWhite))),
         if (notMyItem) ...[
-          Text("O prodejci", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: kSecondaryColor)),
-          Text(widget._item.seller.name, style: TextStyle(fontSize: 20, color: kWhite)),
-          Text(widget._item.seller.email, style: TextStyle(fontSize: 15, color: kWhite)),
+          const Text("O prodejci", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: kSecondaryColor)),
+          Text(widget._item.seller.name, style: const TextStyle(fontSize: 20, color: kWhite)),
+          Text(widget._item.seller.email, style: const TextStyle(fontSize: 15, color: kWhite)),
           FutureCardList(
               buildFunction: (object) => (object as Rating).buildRow(),
               fetchFunction: () => RemoteRatings.getRatings(widget._item.seller.id)),

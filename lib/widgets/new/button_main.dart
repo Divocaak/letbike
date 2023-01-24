@@ -4,11 +4,7 @@ import 'package:letbike/widgets/new/button_circular.dart';
 import 'package:letbike/widgets/new/button_main_sub.dart';
 
 class MainButton extends StatefulWidget {
-  MainButton(
-      {Key? key,
-      IconData? iconData,
-      Function? onPressed,
-      List<MainButtonSub>? secondaryButtons})
+  const MainButton({Key? key, IconData? iconData, Function? onPressed, List<MainButtonSub>? secondaryButtons})
       : _iconData = iconData,
         _onPressed = onPressed,
         _secondaryButtons = secondaryButtons,
@@ -19,10 +15,10 @@ class MainButton extends StatefulWidget {
   final List<MainButtonSub>? _secondaryButtons;
 
   @override
-  _MainButtonState createState() => _MainButtonState();
+  MainButtonState createState() => MainButtonState();
 }
 
-class _MainButtonState extends State<MainButton> {
+class MainButtonState extends State<MainButton> {
   late bool showButtons;
 
   @override
@@ -32,42 +28,31 @@ class _MainButtonState extends State<MainButton> {
   }
 
   @override
-  Widget build(BuildContext context) =>
-      Stack(alignment: AlignmentDirectional.bottomEnd, children: [
-        IgnorePointer(
-            ignoring: !showButtons,
-            child: Container(color: kBlack.withOpacity(showButtons ? 0.7 : 0))),
+  Widget build(BuildContext context) => Stack(alignment: AlignmentDirectional.bottomEnd, children: [
+        IgnorePointer(ignoring: !showButtons, child: Container(color: kBlack.withOpacity(showButtons ? 0.7 : 0))),
         Padding(
-            padding: EdgeInsets.only(right: 25, bottom: 25),
-            child: Column(
-                verticalDirection: VerticalDirection.up,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  CircularButton(
-                      color: kPrimaryColor,
-                      size: 50,
-                      icon: getSelfIcon(),
-                      onClick: () {
-                        if (widget._onPressed != null) {
-                          widget._onPressed!();
-                        } else {
-                          setState(() => showButtons = !showButtons);
-                        }
-                      }),
-                  if (widget._secondaryButtons != null)
-                    Visibility(
-                        visible: showButtons,
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              for (MainButtonSub button
-                                  in widget._secondaryButtons!)
-                                button
-                            ]))
-                ]))
+            padding: const EdgeInsets.only(right: 25, bottom: 25),
+            child:
+                Column(verticalDirection: VerticalDirection.up, crossAxisAlignment: CrossAxisAlignment.end, children: [
+              CircularButton(
+                  color: kPrimaryColor,
+                  size: 50,
+                  icon: getSelfIcon(),
+                  onClick: () {
+                    if (widget._onPressed != null) {
+                      widget._onPressed!();
+                    } else {
+                      setState(() => showButtons = !showButtons);
+                    }
+                  }),
+              if (widget._secondaryButtons != null)
+                Visibility(
+                    visible: showButtons,
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [for (MainButtonSub button in widget._secondaryButtons!) button]))
+            ]))
       ]);
 
-  IconData getSelfIcon() => widget._iconData == null
-      ? (showButtons ? Icons.close : Icons.menu)
-      : widget._iconData!;
+  IconData getSelfIcon() => widget._iconData == null ? (showButtons ? Icons.close : Icons.menu) : widget._iconData!;
 }

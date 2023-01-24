@@ -7,8 +7,7 @@ import 'package:letbike/general/settings.dart';
 
 class RemoteArticles {
   static Future<List<Article>?> getAllArticles() async {
-    final Response response = await get(
-        Uri.parse(Uri.encodeFull(scriptsUrl + "articleGetAll.php")),
+    final Response response = await get(Uri.parse(Uri.encodeFull("${scriptsUrl}articleGetAll.php")),
         headers: {HttpHeaders.contentTypeHeader: "application/json"});
 
     return response.statusCode == 200
@@ -19,12 +18,10 @@ class RemoteArticles {
         : null;
   }
 
-  // TODO rework
+  // URGENT APP rework
   static Future<String?> getArticle(int id) async {
-    var response = await get(
-        Uri.parse(Uri.encodeFull(
-            articlesFolder + '/' + id.toString() + '/article.md')),
+    var response = await get(Uri.parse(Uri.encodeFull('$articlesFolder/$id/article.md')),
         headers: {HttpHeaders.acceptHeader: "application/json;charset=UTF-8"});
-    return Utf8Decoder().convert(response.body.codeUnits);
+    return const Utf8Decoder().convert(response.body.codeUnits);
   }
 }

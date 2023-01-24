@@ -3,12 +3,7 @@ import 'package:letbike/general/settings.dart';
 
 class CircularButton extends StatelessWidget {
   const CircularButton(
-      {Key? key,
-      required IconData icon,
-      required Function onClick,
-      Color? color,
-      double? size,
-      Color? iconColor})
+      {Key? key, required IconData icon, required Function onClick, Color? color, double? size, Color? iconColor})
       : _icon = icon,
         _onClick = onClick,
         _color = color ?? kSecondaryColor,
@@ -27,6 +22,5 @@ class CircularButton extends StatelessWidget {
       decoration: BoxDecoration(color: _color, shape: BoxShape.circle),
       width: _size,
       height: _size,
-      child: IconButton(
-          icon: Icon(_icon, color: _iconColor), onPressed: () => _onClick()));
+      child: IconButton(icon: Icon(_icon, color: _iconColor), onPressed: () => _onClick()));
 }

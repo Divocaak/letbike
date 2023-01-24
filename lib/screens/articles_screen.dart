@@ -6,14 +6,12 @@ import 'package:letbike/widgets/new/future_card_list.dart';
 import 'package:letbike/widgets/new/page_body.dart';
 
 class ArticlesScreen extends StatelessWidget {
-  ArticlesScreen({Key? key}) : super(key: key);
+  const ArticlesScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => PageBody(
       body: FutureCardList(
           buildFunction: (object) => (object as Article).buildCard(context),
           fetchFunction: () => RemoteArticles.getAllArticles()),
-      mainButton: MainButton(
-          iconData: Icons.arrow_back,
-          onPressed: () => Navigator.of(context).pop()));
+      mainButton: MainButton(iconData: Icons.arrow_back, onPressed: () => Navigator.of(context).pop()));
 }

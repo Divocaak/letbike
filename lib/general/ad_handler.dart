@@ -3,25 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:letbike/general/settings.dart';
 
-
-// TODO fix
+// TODO APP L8R fix
 class AdHandler extends StatefulWidget {
   AdHandler({Key? key}) : super(key: key);
 
   final Map<int, Map<String, dynamic>> ads = {};
-  void initAds() {
-    MobileAds.instance.updateRequestConfiguration(RequestConfiguration(
-        testDeviceIds: [
-          '33BE2250B43518CCDA7DE426D04EE231',
-          '0faf99b3cf596954617f26a2639b9681'
-        ]));
-  }
+  void initAds() => MobileAds.instance.updateRequestConfiguration(
+      RequestConfiguration(testDeviceIds: ['33BE2250B43518CCDA7DE426D04EE231', '0faf99b3cf596954617f26a2639b9681']));
 
   @override
-  _AdHandlerState createState() => _AdHandlerState();
+  AdHandlerState createState() => AdHandlerState();
 }
 
-class _AdHandlerState extends State<AdHandler> {
+class AdHandlerState extends State<AdHandler> {
   @override
   Widget build(BuildContext context) {
     int i = 4;
@@ -36,8 +30,7 @@ class _AdHandlerState extends State<AdHandler> {
                 : "ca-app-pub-8451063166378874/2462469041",
             factoryId: "listTile",
             listener: NativeAdListener(
-                onAdLoaded: (Ad ad) =>
-                    setState(() => currentAd!["loaded"] = true),
+                onAdLoaded: (Ad ad) => setState(() => currentAd!["loaded"] = true),
                 onAdFailedToLoad: (ad, e) {
                   ad.dispose();
                   print(e);
@@ -47,17 +40,16 @@ class _AdHandlerState extends State<AdHandler> {
       }
 
       return currentAd["loaded"]
-          ? Container(
+          ? SizedBox(
               height: 150,
               child: Card(
                   clipBehavior: Clip.antiAlias,
                   elevation: 0,
                   color: kWhite.withOpacity(.2),
                   margin: const EdgeInsets.all(5),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                   child: AdWidget(ad: currentAd["ad"])))
-          : CircularProgressIndicator();
+          : const CircularProgressIndicator();
     } else {
       return Container();
     }

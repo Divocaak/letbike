@@ -3,7 +3,7 @@ import 'package:letbike/general/settings.dart';
 import 'package:letbike/objects/params/param_option.dart';
 import 'package:letbike/screens/params_screen.dart';
 
-// URGENT rework
+// TODO APP L8R rework
 // ignore: must_be_immutable
 class ParamDropdown extends StatefulWidget {
   ParamDropdown(
@@ -29,6 +29,7 @@ class ParamDropdown extends StatefulWidget {
   setFp(input) => _fp = input;
   getKey() => _filterKey;
 
+  @override
   ParamDropdownState createState() => ParamDropdownState();
 
   int? getValue() => value;
@@ -48,8 +49,9 @@ class ParamDropdownState extends State<ParamDropdown> {
     if (widget._hasValues && widget.value != null) {
       ParamOption paramOption = widget._options[widget.value!];
       if (paramOption.params != null) {
-        paramOption.params!
-            .forEach((param) => toRet.add(param.buildParam(context)));
+        for (var param in paramOption.params!) {
+          toRet.add(param.buildParam(context));
+        }
       }
     }
 
@@ -59,14 +61,14 @@ class ParamDropdownState extends State<ParamDropdown> {
   @override
   Widget build(BuildContext context) => Column(children: [
         Container(
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            margin: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
             decoration: BoxDecoration(
                 color: kBlack.withAlpha(128),
                 border: Border.all(color: kWhite.withAlpha(128)),
                 borderRadius: BorderRadius.circular(12)),
             child: DropdownButton(
-                hint: Text(widget._hint, style: TextStyle(color: kWhite)),
+                hint: Text(widget._hint, style: const TextStyle(color: kWhite)),
                 dropdownColor: kBlack,
                 value: widget.value,
                 onChanged: (int? newValue) {
@@ -81,12 +83,9 @@ class ParamDropdownState extends State<ParamDropdown> {
     List<DropdownMenuItem<int>> toRet = [];
     for (int i = 0; i < widget._options.length; i++) {
       toRet.add(DropdownMenuItem(
-          child: Text(
-              (!widget._hasValues)
-                  ? widget._options[i]
-                  : widget._options[i].label,
-              style: TextStyle(color: kWhite)),
-          value: i));
+          value: i,
+          child: Text((!widget._hasValues) ? widget._options[i] : widget._options[i].label,
+              style: const TextStyle(color: kWhite))));
     }
     return toRet;
   }

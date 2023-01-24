@@ -3,8 +3,7 @@ import 'package:letbike/general/settings.dart';
 import 'package:letbike/widgets/new/button_main.dart';
 
 class PageBody extends StatelessWidget {
-  const PageBody(
-      {Key? key, required Widget body, required MainButton mainButton})
+  const PageBody({Key? key, required Widget body, required MainButton mainButton})
       : _body = body,
         _mainButton = mainButton,
         super(key: key);
@@ -12,7 +11,7 @@ class PageBody extends StatelessWidget {
   final Widget _body;
   final MainButton _mainButton;
 
-// TODO ability to use background image widget
+// TODO APP TEST ability to use background image widget
   @override
   Widget build(BuildContext context) => Scaffold(
       resizeToAvoidBottomInset: false,

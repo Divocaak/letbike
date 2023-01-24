@@ -49,8 +49,11 @@ class Item {
 
   Widget buildParamsBlock() {
     List<Widget> chips = [];
-    params.forEach((element) => chips.add(element.buildChip()));
-    return chips.length > 0
+    for (var element in params) {
+      chips.add(element.buildChip());
+    }
+
+    return chips.isNotEmpty
         ? Padding(
             padding: const EdgeInsets.all(10),
             child: Wrap(spacing: 10, alignment: WrapAlignment.center, children: chips))
@@ -60,7 +63,7 @@ class Item {
   Widget buildCard(context, User loggedUser, {bool touchable = true, TextEditingController? ratingController}) =>
       CardBody(
           onTap: () => onCardClick(context, loggedUser, touchable: touchable, ratingController: ratingController),
-          imgPath: imgsFolder + "items/" + seller.id + name.hashCode.toString(),
+          imgPath: "${imgsFolder}items/${seller.id}${name.hashCode}",
           child: Column(children: [
             Expanded(flex: 1, child: CardText(text: name, fontSize: 32, offset: 2, fontWeight: FontWeight.bold)),
             Expanded(flex: 3, child: Container()),
@@ -70,14 +73,13 @@ class Item {
                   Expanded(
                       flex: 4,
                       child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
                           child: CardText(text: description ?? "", fontSize: 18))),
                   Expanded(
                       flex: 2,
                       child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10),
-                          child: CardText(
-                              text: price.toString() + "Kč", fontSize: 24, offset: 2, fontWeight: FontWeight.bold)))
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: CardText(text: "${price}Kč", fontSize: 24, offset: 2, fontWeight: FontWeight.bold)))
                 ]))
           ]));
 
@@ -92,22 +94,23 @@ class Item {
             context,
             "Ohodnoťte prodejce",
             ListView(children: [
-              Text("Prodejce ohodnoťte až poté, co Vám přijde zakoupený předmět.", style: TextStyle(color: kWhite)),
+              const Text("Prodejce ohodnoťte až poté, co Vám přijde zakoupený předmět.",
+                  style: TextStyle(color: kWhite)),
               ratingBar,
               Expanded(
                   child: TextField(
                       keyboardType: TextInputType.multiline,
                       maxLines: 10,
                       maxLength: 100,
-                      style: TextStyle(color: kWhite),
+                      style: const TextStyle(color: kWhite),
                       controller: ratingController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           hintText: "Ohodnoťte uživatele a předmět",
                           hintStyle: TextStyle(color: kWhite),
                           counterStyle: TextStyle(color: kWhite),
-                          border: new OutlineInputBorder(
+                          border: OutlineInputBorder(
                               borderRadius: BorderRadius.all(Radius.circular(25)),
-                              borderSide: new BorderSide(color: kWhite)))))
+                              borderSide: BorderSide(color: kWhite)))))
             ]),
             after: () => ModalWindow.showModalWindow(
                     context,
@@ -119,10 +122,12 @@ class Item {
                             case ConnectionState.waiting:
                               return Center(child: Image.asset("assets/load.gif"));
                             default:
-                              if (snapshot.hasError)
+                              if (snapshot.hasError) {
                                 return ErrorWidgets.futureBuilderError();
-                              else if (!snapshot.hasData) return ErrorWidgets.futureBuilderEmpty();
-                              return Text("Uživatel ohodnocen.", style: TextStyle(color: kWhite));
+                              } else if (!snapshot.hasData) {
+                                return ErrorWidgets.futureBuilderEmpty();
+                              }
+                              return const Text("Uživatel ohodnocen.", style: TextStyle(color: kWhite));
                           }
                         }), after: () {
                   RemoteItems.updateItemStatus(id, 3, soldTo: buyer?.id);

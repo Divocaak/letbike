@@ -14,6 +14,5 @@ class ServerImage extends StatelessWidget {
           fit: BoxFit.fitWidth,
           placeholder: 'assets/load.gif',
           image: _path,
-          imageErrorBuilder: (context, exception, stackTrace) =>
-              ErrorWidgets.imageLoadingError(Icons.image)));
+          imageErrorBuilder: (context, exception, stackTrace) => ErrorWidgets.imageLoadingError(Icons.image)));
 }

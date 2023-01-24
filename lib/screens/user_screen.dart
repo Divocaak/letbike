@@ -20,10 +20,10 @@ class UserPage extends StatefulWidget {
 
   final User _loggedUser;
   @override
-  _UserPageState createState() => _UserPageState();
+  UserPageState createState() => UserPageState();
 }
 
-class _UserPageState extends State<UserPage> {
+class UserPageState extends State<UserPage> {
   late bool _isSigningOut;
   final TextEditingController ratingController = TextEditingController();
 
@@ -37,22 +37,22 @@ class _UserPageState extends State<UserPage> {
   Widget build(BuildContext context) => PageBody(
       body: Column(children: [
         Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
             child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
               Expanded(child: ServerImage(path: widget._loggedUser.photoURL ?? "")),
               Expanded(
                   flex: 2,
                   child: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                    // TODO style
-                    Text(widget._loggedUser.email ?? "", style: TextStyle(color: kWhite)),
-                    Text(widget._loggedUser.displayName ?? "", style: TextStyle(color: kWhite))
+                    // TODO APP style
+                    Text(widget._loggedUser.email ?? "", style: const TextStyle(color: kWhite)),
+                    Text(widget._loggedUser.displayName ?? "", style: const TextStyle(color: kWhite))
                   ]))
             ])),
         Expanded(
             child: DefaultTabController(
                 length: 5,
                 child: Column(children: [
-                  ButtonsTapBarStyled(tabs: [
+                  const ButtonsTapBarStyled(tabs: [
                     Tab(icon: Icon(Icons.reviews), text: "Hodnocení"),
                     Tab(icon: Icon(Icons.directions_bike), text: "Moje inzeráty"),
                     Tab(icon: Icon(Icons.sell), text: "Prodané"),

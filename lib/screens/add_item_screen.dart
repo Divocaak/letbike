@@ -13,23 +13,23 @@ import 'package:letbike/general/settings.dart';
 
 // ignore: must_be_immutable
 class AddItem extends StatefulWidget {
-  AddItem({Key? key, required User loggedUser})
+  const AddItem({Key? key, required User loggedUser})
       : _loggedUser = loggedUser,
         super(key: key);
 
   final User _loggedUser;
 
   @override
-  _AddItem createState() => _AddItem();
+  AddItemState createState() => AddItemState();
 }
 
-class _AddItem extends State<AddItem> {
+class AddItemState extends State<AddItem> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController descController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
 
-  // TODO iOS settings - https://pub.dev/packages/image_picker
-  // TODO separate thumbnail and images
+  // TODO APP iOS settings - https://pub.dev/packages/image_picker
+  // TODO APP separate thumbnail and images
   final ImagePickerController imagePickerController = ImagePickerController();
   List<XFile> images = [];
 
@@ -60,15 +60,14 @@ class _AddItem extends State<AddItem> {
                     color: Colors.white,
                     border: Border.all(color: Colors.white, width: 2),
                     borderRadius: BorderRadius.circular(25)),
-                padding: EdgeInsets.all(15),
-                margin: EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.all(15),
+                margin: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(children: [
-                  Text("První vybraný obrázek se bude zobrazovat na domovské stránce."),
-                  Container(
-                      child: TextButton(
-                          child: Text("Vybrat fotografie (minimálně 1)"),
-                          onPressed: () async => await imagePickerController.loadAssets(
-                              this, images, 9, mounted, context, (List<XFile> a) => images = a))),
+                  const Text("První vybraný obrázek se bude zobrazovat na domovské stránce."),
+                  TextButton(
+                      child: const Text("Vybrat fotografie (minimálně 1)"),
+                      onPressed: () async => await imagePickerController.loadAssets(
+                          this, images, 9, mounted, context, (List<XFile> a) => images = a)),
                   Expanded(child: Container(child: imagePickerController.buildGridView(images, 3, 50)))
                 ]))
           ]),
@@ -77,7 +76,7 @@ class _AddItem extends State<AddItem> {
             MainButtonSub(
                 icon: Icons.add,
                 label: "Přidat inzerát",
-                // TODO better validations on textfields = impelemt validator
+                // TODO APP better validations on textfields = impelemt validator
                 onClick: () => (images.isNotEmpty &&
                         nameController.text != "" &&
                         descController.text != "" &&
@@ -85,15 +84,14 @@ class _AddItem extends State<AddItem> {
                     ? Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => ParamsPage(
                             loggedUser: widget._loggedUser,
-                            params: [],
+                            params: const [],
                             name: nameController.text,
                             desc: descController.text,
                             price: priceController.text,
                             images: images)))
                     : ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: ErrorWidgets.snackBarMessage(
-                            'Vyplňte prosím název, popis a cenu inzerátu. Přidejte alespoň jeden obrázek. ' +
-                                Emojis.foldedHands,
+                            'Vyplňte prosím název, popis a cenu inzerátu. Přidejte alespoň jeden obrázek. ${Emojis.foldedHands}',
                             kWarning,
                             Icons.warning))))
           ])));

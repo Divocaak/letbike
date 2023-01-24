@@ -11,7 +11,7 @@ import 'package:letbike/widgets/error_widgets.dart';
 import 'package:letbike/widgets/new/page_body.dart';
 
 class ParamsPage extends StatefulWidget {
-  ParamsPage(
+  const ParamsPage(
       {Key? key,
       required User loggedUser,
       required List<Param> params,
@@ -35,11 +35,11 @@ class ParamsPage extends StatefulWidget {
   final List<XFile>? _images;
 
   @override
-  _ParamsPage createState() => _ParamsPage();
+  ParamsPageState createState() => ParamsPageState();
 }
 
-// TODO load already set filters
-class _ParamsPage extends State<ParamsPage> {
+// TODO APP load already set filters
+class ParamsPageState extends State<ParamsPage> {
   late List<Param> params;
 
   @override
@@ -55,7 +55,7 @@ class _ParamsPage extends State<ParamsPage> {
                   context,
                   "Oznámení",
                   FutureBuilder<bool>(
-                      // TODO thumbnail separation
+                      // TODO APP thumbnail separation
                       future: RemoteItems.addItem(widget._loggedUser.uid, widget._name!, widget._desc!, widget._price!,
                           widget._images![0], widget._images!, getParams()),
                       builder: (context, snapshot) {
@@ -63,10 +63,12 @@ class _ParamsPage extends State<ParamsPage> {
                           case ConnectionState.waiting:
                             return Center(child: Image.asset("assets/load.gif"));
                           default:
-                            if (snapshot.hasError)
+                            if (snapshot.hasError) {
                               return ErrorWidgets.futureBuilderError();
-                            else if (!snapshot.hasData) return ErrorWidgets.futureBuilderEmpty();
-                            return Text("Inzerát úspěšně přidán", style: TextStyle(color: kWhite));
+                            } else if (!snapshot.hasData) {
+                              return ErrorWidgets.futureBuilderEmpty();
+                            }
+                            return const Text("Inzerát úspěšně přidán", style: TextStyle(color: kWhite));
                         }
                       }),
                   after: () => Navigator.of(context).pushReplacement(MaterialPageRoute(
@@ -77,16 +79,18 @@ class _ParamsPage extends State<ParamsPage> {
   List<Widget> buildParams(BuildContext context) {
     List<Widget> toRet = [];
     params = [];
-    widget._params.forEach((element) {
+    for (var element in widget._params) {
       params.add(element);
       toRet.add(element.buildParam(context));
-    });
+    }
     return toRet;
   }
 
   Map<String, int>? getParams() {
     Map<String, int> toRet = {};
-    params.forEach((element) => toRet.addAll(element.getParams()));
+    for (var element in params) {
+      toRet.addAll(element.getParams());
+    }
     return toRet.isNotEmpty ? toRet : null;
   }
 }

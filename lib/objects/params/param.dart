@@ -17,27 +17,19 @@ class Param {
     bool hasMoreParams = json["values"][0].runtimeType != String;
     List<ParamOption>? valuesParams;
     if (hasMoreParams) {
-      valuesParams = json["values"]
-          .map<ParamOption>((data) => ParamOption.fromJson(data))
-          .toList();
+      valuesParams = json["values"].map<ParamOption>((data) => ParamOption.fromJson(data)).toList();
     }
 
-    return Param(
-        json["key"],
-        json["isSwitch"],
-        json["label"],
-        hasMoreParams ? valuesParams! : List<String>.from(json["values"]),
-        hasMoreParams);
+    return Param(json["key"], json["isSwitch"], json["label"],
+        hasMoreParams ? valuesParams! : List<String>.from(json["values"]), hasMoreParams);
   }
 
   Widget buildParam(BuildContext context) {
     Widget toRet;
     if (isSwitch != null && isSwitch!) {
-      toRet = ParamSwitchable(
-          label: label, leftOption: options[0], rightOption: options[1]);
+      toRet = ParamSwitchable(label: label, leftOption: options[0], rightOption: options[1]);
     } else {
-      toRet = ParamDropdown(
-          hint: label, options: options, filterKey: key, hasValues: hasValues);
+      toRet = ParamDropdown(hint: label, options: options, filterKey: key, hasValues: hasValues);
     }
     formWidget = toRet;
     return toRet;
@@ -62,9 +54,9 @@ class Param {
     Map<String, int> toRet = {};
     int? myVal = getValue();
     if (hasValues && myVal != null) {
-      (options[myVal] as ParamOption).params!.forEach((param) {
+      for (var param in (options[myVal] as ParamOption).params!) {
         toRet.addAll(param.getParams());
-      });
+      }
     }
     return toRet;
   }
